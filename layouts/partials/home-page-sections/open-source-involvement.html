@@ -10,8 +10,8 @@
       <p class="f5">plgd is an open-source IoT platform implementing <a class="link mh2" href="https://openconnectivity.org">Open Connectivity Foundation</a> specification. plgd has been endorsed by some of the world's best companies and is released under the Apache 2.0 license. We remain committed to our community and will always be vendor neutral.</p>
     </div>
 
-    <div class="mv4 center-flex">
-      <a class="f5 db link bg-blue white ph3 pv2 br1 mh2 bg-animate hover-bg-accent-color" href="https://github.com/plgd-dev/cloud">Start contributing to plgd today!</a>
+    <div class="mv4 justify-center items-center flex flex-column">
+      {{- with .Site.Params.ghrepo -}}<a class="f5 db link bg-blue white ph3 pv2 br1 mh2 bg-animate hover-bg-accent-color" href="{{ . }}">Start contributing to plgd today!</a>{{- end -}}
     </div>
   </div>
 

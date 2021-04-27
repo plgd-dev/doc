@@ -3,20 +3,17 @@
       <div class="pb3 pt1 center">
 
           <div class="center w4">
-            <img src="/images/plgd-logo-short-white.svg" alt="Hugo Logo">
+            <img src="/images/plgd-logo-short-white.svg" alt="plgd Logo">
           </div>
 
           <ul class="center f6 list ma0 mv3 pa0 tc">
             {{- with .Site.Params.github_repo -}}<li class="dib mr3"><a href="{{ . }}" class="dim link light-gray pv2">File an Issue</a></li>{{- end -}}
-            {{- with .Site.Params.forum -}}<li class="dib mr3"><a href="{{ . }}" class="dim link light-gray pv2">Get Help</a></li>{{- end -}}
-            {{- with .Site.Params.gitter -}}<li class="dib"><a href="{{ . }}" class="dim link light-gray pv2">Discuss Source Code</a></li>{{- end -}}
+            {{- with .Site.Params.gitter -}}<li class="dib mr3"><a href="{{ . }}" class="dim link light-gray pv2">Discuss Source Code</a></li>{{- end -}}
+            {{- with .Site.Params.plgd_try -}}<li class="dib"><a href="{{ . }}" class="dim link light-gray pv2">Try plgd Cloud</a></li>{{- end -}}
           </ul>
 
-          {{ with  getenv "REPOSITORY_URL" -}}
-          <p class="center f6 tc w-70"><a href="https://www.netlify.com"><img src="/images/netlify-dark.svg" alt="Netlify badge"></a></p>
-          {{- end }}
-          <div class="f7 gray mb5 mb0-ns ph3"> 
-            <p class="dib">The Hugo logos are copyright © Steve Francia 2013–{{ now.Year }}.</p>
+          <div class="center f7 gray tc"> 
+            <p class="dib">© plgd.dev 2018–{{ now.Year }}</p>
           </div>
       </div>
     </div>

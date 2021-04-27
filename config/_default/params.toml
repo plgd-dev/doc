@@ -3,20 +3,22 @@ description = "Let Things experience the Internet"
 ## Setting this to true will add a "noindex" to *EVERY* page on the site..
 removefromexternalsearch = false
 ## Gh repo for site footer (include trailing slash)
-ghrepo = "https://github.com/gohugoio/hugoDocs/"
+ghrepo = "https://github.com/plgd-dev/cloud/"
 ## GH Repo for filing a new issue
-github_repo = "https://github.com/gohugoio/hugo/issues/new"
+github_repo = "https://github.com/plgd-dev/cloud/issues/new/"
 ### Edit content repo (set to automatically enter "edit" mode; this is good for "improve this page" links)
-ghdocsrepo = "https://github.com/gohugoio/hugoDocs/tree/master/docs"
+ghdocsrepo = "https://github.com/plgd-dev/plgd.dev/"
 ## Gitter URL
-gitter = "https://gitter.im/spf13/hugo"
+gitter = "https://gitter.im/ocfcloud/Lobby"
 ## Discuss Forum URL
-forum = "https://discourse.gohugo.io/"
+forum = ""
 ## Google Tag Manager
 gtmid = ""
+## plgd try endpoint
+plgd_try = "https://try.plgd.cloud"
 
 # First one is picked as the Twitter card image if not set on page.
-images = ["images/gohugoio-card.png"]
+images = ["images/plgd-logo-full-white.png"]
 
 flex_box_interior_classes = "flex-auto w-100 w-40-l mr3 mb3 bg-white ba b--moon-gray nested-copy-line-height"
 

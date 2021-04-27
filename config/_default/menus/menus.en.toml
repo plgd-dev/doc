@@ -124,25 +124,19 @@
     identifier = "news"
     url = "/news/"
 
-  [[global]]
-    name = "Themes"
-    weight = 10
-    identifier = "themes"
-    url = "https://themes.gohugo.io/"
-
   # Anything with a weight > 100 gets an external icon
   [[global]]
     name = "Community"
-    weight = 150
+    weight = 10
     icon = true
     identifier = "community"
     post = "external"
-    url = "https://discourse.gohugo.io/"
-
+    url = "https://gitter.im/ocfcloud/Lobby/"
 
   [[global]]
-    name = "GitHub"
-    weight = 200
-    identifier = "github"
+    name = "Try LIVE"
+    weight = 20
+    icon = true
+    identifier = "themes"
     post = "external"
-    url = "https://github.com/gohugoio/hugo"
+    url = "https://try.plgd.cloud"

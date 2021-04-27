@@ -19,13 +19,6 @@ header {
     position: relative;
 }
 
-.center-flex {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
 .plgd-font {
     font-family: 'Montserrat Alternates', sans-serif;
     font-weight: 600;
