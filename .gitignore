@@ -6,9 +6,9 @@
 *.code-workspace
 .history/
 
-/public
-!/public/CNAME
-/resources
+public/*
+!public/CNAME
+resources/*
 nohup.out
 .DS_Store
 trace.out
