@@ -114,9 +114,15 @@
 
   [[global]]
     name = "Docs"
-    weight = 5
+    weight = 1
     identifier = "docs"
     url = "/documentation/"
+
+  [[global]]
+    name = "News"
+    weight = 5
+    identifier = "news"
+    url = "/news/"
 
   [[global]]
     name = "Themes"
