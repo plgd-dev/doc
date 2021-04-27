@@ -7,6 +7,7 @@
 .history/
 
 /public
+!/public/CNAME
 /resources
 nohup.out
 .DS_Store
