@@ -1,21 +1,3 @@
----
-title: plgd Documentation
-linktitle: plgd
-description: plgd is the industry-standard Internet of Things platform with an emphasis on security, interoperability and resiliency.
-date: 2021-05-03
-publishdate: 2021-05-03
-menu:
-  main:
-    parent: "section name"
-    weight: 01
-weight: 01	#rem
-draft: false
-slug:
-aliases: []
-toc: false
-layout: documentation-home
----
-
 # Introduction
 What are the biggest problems in IoT? Where do current market IoT solutions fall short?  How should IoT be considered?
 

@@ -10,9 +10,9 @@
           {{if .logo}}
             <div class="{{$classes_box}} o-100"{{ with .bgcolor }} style="background-color: {{ . }};"{{ end}}>
               {{with .link -}}
-                {{ $url := printf "%s?%s" . (querify "utm_source" "homepage" "utm_medium" "banner" "utm_campaign" "hugosponsor") | safeURL }}
+                {{ $url := printf "%s?%s" . (querify "utm_source" "homepage" "utm_medium" "banner" "utm_campaign" "plgdpartners") | safeURL }}
                 {{ if eq (getenv "HUGO_ENV") "production" | or (eq $.cx.Site.Params.env "production")  }}
-                   {{ $gtagID := printf "Sponsor %s %s" $banner.name $gtag | title }}
+                   {{ $gtagID := printf "Partners %s %s" $banner.name $gtag | title }}
                    <a href="{{ $url }}" onclick="trackOutboundLink({{ printf "'%s', '%s'" $gtagID $url | safeJS }});" class="grow">
                 {{ else }}
                    <a href="{{ $url }}" class="grow">
