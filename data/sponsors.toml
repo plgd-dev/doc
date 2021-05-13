@@ -1,19 +1,19 @@
 [[banners]]
-name = "jojo"
-link = "https://www.linode.com/"
-logo = "/images/sponsors/linode-logo_standard_light_medium.png"
+name = "Open Connectivity Foundation"
+link = "http://openconnectivity.org/"
+logo = "/images/partners/ocf.png"
 copy = ""
 
 [[banners]]
-name = "lolo"
+name = "Cascoda"
+link = "https://www.cascoda.com/"
+logo = "/images/partners/cascoda.svg"
+bgcolor = "#696b6e"
+copy = ""
+
+[[banners]]
+name = "pulse systems"
 link = "https://esolia.com/post/why-did-esolia-choose-hugo/"
-logo = "/images/sponsors/esolia-logo.svg"
-copy = ""
-
-
-[[banners]]
-name = "Brave"
-link = "https://brave.com/"
-logo = "/images/sponsors/brave-logo.svg"
-bgcolor = "#5A2FA1"
+logo = "/images/partners/pulse-systems.svg"
+bgcolor = "#ffffff"
 copy = ""
