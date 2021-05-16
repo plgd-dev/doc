@@ -3,82 +3,41 @@ title: 'What is plgd'
 description: 'What is plgd and how it help you?'
 date: '2021-05-13'
 lastmod: '2021-05-13'
-categories: [getting started, fundamentals]
-keywords: [configuration, highlighting]
+categories: [overview, fundamentals]
+keywords: [overview, introduction]
 menu:
   docs:
     parent: introduction
-    weight: 65
+    weight: 10
 toc: true
 ---
 
-# 1. Deploy plgd Cloud
-There are multiple options how to start using / testing the plgd Cloud. If you're just trying to get in touch with this Cloud Native IoT framework, jump right to the [try.plgd.cloud](#Try plgd.cloud) instance and onboard your device right away. In case you want to **get in touch** with the system localy and you have the [Docker installed](https://docs.docker.com/get-docker/), use our [plgd cloud #Bundle](#bundle).
-::: tip Join us!
-Helm chart for the k8s deployment is in progress. [Contributions welcome!](https://github.com/plgd-dev/cloud)
-:::
+What are the biggest problems in IoT? Where do current market IoT solutions fall short?  How should IoT be considered?
 
-## Try.plgd.cloud
-The plgd team operates their own instance of the plgd cloud for free. This cloud instance is integrated with the plgd mobile application available for both iOS and Android based devices. Together with our IoTivity-Lite sample you're able to onboard and work with your device remotely in couple of seconds. To start right away, follow [try.plgd.cloud](https://try.plgd.cloud). More information about the mobile application is available in the [Onboard](./2-onboard.md) Getting Started section.
+Put another way, _"What are the most common issues preventing companies from fully realizing the benefits of IoT?"_  This question was answered at [DZone](https://dzone.com/articles/most-common-problems-with-iot) by 23 executives involved with the Internet of Things.
 
-<trycloud/>
+## Observations
+- Companies are not able, or do not have the talent, to complete the end-to-end solution.
+- The unrealized complexity of deployment and the lack of skills to do so.
+- Lack of seamless and secure data fabric platform.
+- Challenging to make something at scale while maintaining quality.
+- Creating scalable devices that connect to everything they need to.
+- Large amount of the data that will run the IoT will be stored in the cloud.
 
-## Bundle
-Bundle deployment hosts core plgd Cloud Services with mocked OAuth Server in a single Docker image. All services which hosts the gRPC or HTTP API are proxied through the NGINX with configurable `NGINX_PORT` and `FQDN`. Mobile application documented in the [Onboard](./2-onboard.md) Getting Started section works also with the Bundle.
 
-::: danger
-Bundle version of plgd services should be used only for simple testing and development purposes. Performance evaluations, production environment or other sensitive deployments should deploy plgd services using the plgd HELM chart.
-:::
-### Run on localhost
-To deploy and access plgd cloud on your local PC using bundle, run single command:
-```bash
-docker run -d --name plgd -p 443:443 -p 5683:5683 -p 5684:5684 plgd/bundle:v2next
-```
-After couple of seconds your plgd cloud will become available. The plgd dashboard can be opened in your browser at [https://localhost/](https://localhost/).
->Note that bundle issues it's own **self-signed certificate** which needs to be accepted in the browser.
+The IoT industry, across numerous market verticals, is at an impasse where customers are demanding increasing sophistication at lower prices. Given the complexity and importance of IoT, no single company can or should be dictating the path forward for the entire industry.
 
-### Authorization
-The plgd cloud doesn't work without OAuth Server. To not require developers not interested in sharing bundle instance with other users, simple mocked OAuth Server is included in the bundle. Authentication to the plgd is therefore not required and test user is automatically logged in. Same applies also to device connections; in case you're using the bundle, devices connecting to the CoAP Gateway can use random/static onboarding code as it's not verified. Onboarding of devices is therefore much simpler.
+The only viable path forward is collaboration between companies and market verticals to collaborate on developing, testing and standardizing the non-differentiating functionality. The [Open Connectivity Foundation](https://openconnectivity.org/) is currently working to achieve that, however the device-cloud communication represents a unique challenge for the engineers involved because there has never been a historical need for engineers to become knowledgeable in both embedded systems and cloud native application development. The proposed solution to this problem is to emulate the container runtime interface (CRI) architecture and embody Conway’s law to establish a loose coupling between the "IoT code" (CoAP/IoTivity cloud interface) and the portions of the system that are much more familiar to the cloud developers (ex: db/messaging/auth) which will also vary more depending on the use case.
 
-::: warning
-Authorization Service which is part of the plgd is only for testing and development purposes. For the production, integration of the plgd device identity management API is required.
-:::
+# Challenges
+- Embedded systems engineering and cloud native application development are likely orthogonal skill sets for the organizations whose products would benefit the most from internet connectivity
+- The immense complexity of managing your own deployment means the market requires managed services
+- There is no seamless portability for IoT devices between clouds
+    - Extremely important if we want to decouple the networking costs from hardware costs for customers, like we do for cell phones
+- Lack of an industry standard IoT cloud increases the attack surface of the industry
 
-Even for the development and testing, more complex scenarios are supported by the built-in authorization service. Read more in the [Developing with plgd](../developing/authorization.md).
+# plgd Goals
 
-### Troubleshooting
-- By default the plgd cloud bundle hosts the NGINX proxy on port `443`. This port might be already occupied by other process, e.g. Skype. Default port can be changed by environment variable `-e NGINX_PORT=8443`. Please be aware that the port needs to be exposed from the container -> `-p 443:443` needs to be changed to match a new port, e.g. `-p 8443:8443`.
-- Logs and data are by default stored at `/data` path. Run the container with `-v $PWD/vol/plgd/data:/data` to be able to analyze the logs in case of an issue.
-- In case you need support, we are happy to support you on [Gitter](http://gitter.im/ocfcloud/Lobby)
-- OCF UCI (Cloud2Cloud Gateway) is not part of the bundle
-
-## Kubernetes
-{{< plantuml id="eg" >}}
-@startuml Sequence
-skinparam backgroundColor transparent
-hide footbox
-
-participant D as "Device"
-participant CGW as "CoAP Gateway"
-participant GGW as "gRPC Gateway"
-participant RA as "Resource Aggregate"
-participant EB as "Event Bus"
-participant C as "Mobile App"
-
-C -> GGW ++: Update device/light resource
-activate C
-GGW -> RA ++: Update device/light resource
-RA --> EB: Publish ResourceUpdateRequestEvent
-return
-EB --> CGW: ResourceUpdateRequestEvent
-activate CGW
-CGW -> D ++: Update /light resource
-return Update successful
-CGW -> RA ++: Update device/light successful
-return Publish ResourceUpdateSuccessfulEvent
-deactivate CGW
-EB --> GGW: ResourceUpdateSuccessfulEvent
-return Updated
-
-@enduml
-{{< /plantuml >}}
+- Address these challenges in a way that is easy for companies and public clouds to adopt and offer as a managed service
+- Ensure a loose coupling between the database / messaging / auth and the plgd Cloud implementation
+- Run a system that demonstrates how to integrate the database / messaging / auth and serve as the default choice for companies with common OLTP use cases
