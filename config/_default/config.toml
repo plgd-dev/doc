@@ -1,4 +1,4 @@
-baseURL = "https://next.plgd.dev/"
+baseURL = "https://plgd.dev/"
 paginate = 100
 defaultContentLanguage = "en"
 enableEmoji = true
