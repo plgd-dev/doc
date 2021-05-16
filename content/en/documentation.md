@@ -1,18 +1,9 @@
 ---
-title: plgd Documentation
+title: 'plgd Documentation'
 linktitle: plgd
-description: plgd is the industry-standard Internet of Things platform with an emphasis on security, interoperability and resiliency.
-date: 2021-05-03
-publishdate: 2021-05-03
-menu:
-  main:
-    parent: "section name"
-    weight: 01
-weight: 01	#rem
-draft: false
-slug:
-aliases: []
-toc: false
+description: 'plgd is the industry-standard Internet of Things platform with an emphasis on security, interoperability and resiliency.'
+date: '2021-05-03'
+lastmod: '2021-05-13'
 layout: documentation-home
 ---
 

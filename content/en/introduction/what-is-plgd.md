@@ -1,21 +1,15 @@
 ---
-title: 1-Deploy
-description: "`Deploy` slices an array to only the items after the <em>N</em>th item."
-godocref:
-date: 2017-02-01
-publishdate: 2017-02-01
-lastmod: 2017-02-01
-categories: [functions]
+title: 'What is plgd'
+description: 'What is plgd and how it help you?'
+date: '2021-05-13'
+lastmod: '2021-05-13'
+categories: [getting started, fundamentals]
+keywords: [configuration, highlighting]
 menu:
   docs:
-    parent: "functions"
-keywords: [iteration]
-signature: ["after INDEX COLLECTION"]
-workson: []
-hugoversion:
-relatedfuncs: [last,first,seq]
-deprecated: false
-aliases: []
+    parent: introduction
+    weight: 65
+toc: true
 ---
 
 # 1. Deploy plgd Cloud
