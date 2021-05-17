@@ -13,7 +13,7 @@ title = "plgd"
   [[module.imports]]
     path = "gohugoioTheme"
 
-googleAnalytics = "UA-165501387-1"
+googleAnalytics = "G-T40LQW2EKC"
 
 pluralizeListTitles = false
 
