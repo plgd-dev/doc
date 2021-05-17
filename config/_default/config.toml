@@ -7,12 +7,6 @@ footnotereturnlinkcontents = "↩"
 languageCode = "en-us"
 title = "plgd"
 
-[module]
-  [module.hugoVersion]
-    min = "0.56.0"
-  [[module.imports]]
-    path = "gohugoioTheme"
-
 googleAnalytics = "G-PS70WYYFKX"
 
 pluralizeListTitles = false
@@ -82,3 +76,9 @@ anchor = "smart"
 
 [taxonomies]
 category = "categories"
+
+[module]
+  [module.hugoVersion]
+    min = "0.56.0"
+  [[module.imports]]
+    path = "gohugoioTheme"
