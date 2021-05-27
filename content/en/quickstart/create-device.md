@@ -26,12 +26,12 @@ You will need the following:
 3. Start up your Raspberry Pi as described [here](https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up/4)
 4. Configuring your Raspberry Pi described [here](https://projects.raspberrypi.org/en/projects/raspberry-pi-using/9)
     
-    #### Configure SSH(Remote Access)
+    #### Configure SSH(Remote Access Setting)
     You make sure to enable SSH to allow remote access to your Raspberry Pi from another computer using SSH. 
     
     Simple way to enable SSH as described [here](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md) is to select `Enable` next to `SSH` in the interface tap of `Raspberry Pi configuration` from the `Preferences` menu.
     
-    ![Interfaces] (https://projects-static.raspberrypi.org/projects/raspberry-pi-using/e3d1233ee773b4f80821995131420119ddb7e40c/en/images/pi-configuration-interfaces.png)
+    ![Interfaces] (/images/quickstart/pi-configuration-interfaces.png)
     
     Or 
     
@@ -55,7 +55,7 @@ You will need the following:
     ```
     If the ping command doesn't reach raspberrypi.local due to DNS issues, you can connect a keyboard and monitor to the Raspberry Pi and run `ifconfig` command in the terminal.
 
-3. Connect to the Pi via SSH using these commands.
+3. Connect to the Raspberry Pi via SSH.
 
     For Linux or macOS, use either of these commands:
     ```shell script
@@ -99,13 +99,13 @@ You will need the following:
     api			onboarding_tool		tests
     ```
 
-2. build cloud server in the iotivity-lite folder. 
+2. Build cloud server in the iotivity-lite folder. 
     ```shell script
     cd port/linux
     make CLOUD=1 SECURE=1 MNT=1 cloud_server 
     ```   
 
-3. run cloud server in the iotivity-lite folder.
+3. Run cloud server in the iotivity-lite folder.
     ```shell script
     cd port/linux
     # execution arguments format : <device-name> <auth-code> <cis> <sid> <apn>
