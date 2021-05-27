@@ -31,6 +31,7 @@ Use [plgd.ocfclient](https://github.com/plgd-dev/sdk) or sample [Apple](https://
 
 {{< plantuml id="device-onboarding" >}}
 @startuml Sequence
+skinparam backgroundColor transparent
 hide footbox
 
 participant D as "Device"
@@ -61,6 +62,7 @@ TCP connection which device established to the CoAP Gateway is now authenticated
 
 {{< plantuml id="cloud-registration" >}}
 @startuml Sequence
+skinparam backgroundColor transparent
 hide footbox
 
 participant D as "Device"
@@ -87,6 +89,7 @@ Successful registration to the plgd.dev is followed by authorization request cal
 
 {{< plantuml id="device-authorization" >}}
 @startuml Sequence
+skinparam backgroundColor transparent
 hide footbox
 
 participant D as "Device"
@@ -147,6 +150,7 @@ As the response to the resource observation request contains actual [representat
 
 {{< plantuml id="resource-publish" >}}
 @startuml Sequence
+skinparam backgroundColor transparent
 hide footbox
 
 participant D as "Device"
@@ -177,6 +181,7 @@ From this moment on, device is reachable to all authorized clients and devices. 
 
 {{< plantuml id="resource-update" >}}
 @startuml Sequence
+skinparam backgroundColor transparent
 hide footbox
 
 participant D as "Device"
@@ -226,6 +231,7 @@ Every transaction on the device's resource is scoped to the single [aggregate](h
 
 {{< plantuml id="commands-events-overview" >}}
 @startuml
+skinparam backgroundColor transparent
 
 left to right direction
 skinparam usecase {
