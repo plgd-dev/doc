@@ -11,82 +11,68 @@ menu:
     weight: 10
 toc: true
 ---
-This guide will cover how to get the first steps while using the plgd cloud in the Raspberry Pi. This includes how to create cloud server (OCF Device) available from IoTivity-Lite open source project on the Github.
+This guide will walk you through the process of starting your secure [OCF Device](https://openconnectivity.org/specs/OCF_Device_Specification_v2.2.3.pdf) using [IoTivity](https://iotivity.org/) library on the Raspberry Pi.
 
 ## Requirements
-You will need the following: 
 - Raspberry Pi board with a microSD card with [Raspberry Pi OS](https://www.raspberrypi.org/software/operating-systems/#raspberry-pi-os-32-bit)
 - Optional: HDMI monitor and cable, USB keyboard and mouse for the Pi
 - Ethernet or Wi-Fi connection between a DHCP-enabled network and the Pi
 - Personal computer(Linux/MacOS recommended) on the same network as the Pi
 
 ## Setting up the Raspberry Pi
-1. Set up your SD card as described [here](https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up/2)
-2. Connect your Raspberry Pi as described [here](https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up/3)
-3. Start up your Raspberry Pi as described [here](https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up/4)
-4. Configuring your Raspberry Pi described [here](https://projects.raspberrypi.org/en/projects/raspberry-pi-using/9)
+To set up your Raspberry Pi, please follow [this step-by-step tutorial](https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up).
     
-    #### Configure SSH(Remote Access Setting)
-    You make sure to enable SSH to allow remote access to your Raspberry Pi from another computer using SSH. 
-    
-    Simple way to enable SSH as described [here](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md) is to select `Enable` next to `SSH` in the interface tap of `Raspberry Pi configuration` from the `Preferences` menu.
-    
-    ![Interfaces] (/images/quickstart/pi-configuration-interfaces.png)
-    
-    Or 
-    
-    You can also configure SSH via `raspi-config` on the Pi terminal. 
-    ```shell script
-    sudo raspi-config
-   
-    # Select 'Interfacing Options'
-    # Navigate to and select 'SSH'
-    # Choose 'Yes'
-    # Select 'Ok'
-    # Choose 'Finish'
-    ```
+{{% note %}}
+Enabling SSH is highly recommended as it simplifies access to device and fast adoption of the code if required. More information available [here](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md).
+{{% note %}}
 
-## Connect to the Raspberry Pi via SSH described [here](https://www.raspberrypi.org/documentation/remote-access/ssh/unix.md)
-1. Open a terminal on your computer.  
-2. Get IP address of the Raspberry Pi board by following command on the terminal. 
+More simple way to enable SSH is to use the `Preferences` menu on the Desktop window.
+```
+1. Launch 'Raspberry Pi Configuration' from the 'Preferences' menu
+2. Navigate to the 'Interfaces tab'
+3. Select 'Enabled' next to 'SSH'
+4. Click 'OK'
+```
 
-    ```
-    ping raspberrypi.local 
-    ```
-    If the ping command doesn't reach raspberrypi.local due to DNS issues, you can connect a keyboard and monitor to the Raspberry Pi and run `ifconfig` command in the terminal.
+![Interfaces] (/images/quickstart/pi-configuration-interfaces.png)
 
-3. Connect to the Raspberry Pi via SSH.
+Or 
 
-    For Linux or macOS, use either of these commands:
-    ```shell script
-    # replace with current hostname if changed.
-    ssh pi@raspberrypi.local  
-    ```
-    Or 
-    ```shell script
-    # use IP address from previous step
-    ssh pi@ipaddress  
-    ```
-4. Type the password when prompted. Default login username is `pi` and password is `raspberry`.
+You can also enable SSH via `raspi-config` on the Pi terminal. 
+```
+1. Enter 'sudo raspi-config' in a terminal window
+2. Select 'Interfacing Options'
+3. Navigate to and select 'SSH'
+4. Choose 'Yes'
+5. Select 'Ok'
+6. Choose 'Finish'
+```
+
+## Connect to the Raspberry Pi via SSH
+More information how to access Raspberry Pi remotely can be found [here](https://www.raspberrypi.org/documentation/remote-access/ssh/unix.md).
+
+For Linux or macOS, use this commands:
+```shell script
+# use IP address of the Raspberry Pi.
+ssh pi@ipaddress  
+```
+{{% note %}}
+Default login username is `pi` and password is `raspberry` if you didn't change.
+{{% note %}}
 
 ## Install essential build tools
-1. Update & upgrade all the installed packages.
-    ```shell script
-    sudo apt-get update
-    sudo apt-get upgrade
-    ```
-2. Install build tools and so on.
-    ```shell script
-    sudo apt-get install build-essential git curl openssl vim jq tac awk
-    ```
+Before you install Cloud Server example, you'd better update available package information and install build tools and so on.
+```shell script
+sudo apt-get update & apt-get install build-essential git curl openssl
+```
 
-## Install cloud server (OCF cloud enabled device) 
-1. Download IoTivity-Lite open soure from the GitHub. 
+## Install IoTivity Cloud Server example 
+1. Checkout [IoTivity-Lite](https://github.com/iotivity/iotivity-lite) libaray. 
 
-    Continue on your personal PC, from the SSH prompt, go to the home directory and clone the latest open source of IoTivity-Lite.
+    Execute commands on the Raspberry PI.
     
     ```shell script
-    git clone https://gitlab.iotivity.org/iotivity/iotivity-lite.git
+    git clone https://gitlab.iotivity.org/iotivity/iotivity-lite.git --recursive
     ```
     Enter in the iotivity-lite folder you just cloned.
     ```shell script
@@ -99,17 +85,17 @@ You will need the following:
     api			onboarding_tool		tests
     ```
 
-2. Build cloud server in the iotivity-lite folder. 
+2. Build Cloud Server example in the iotivity-lite folder. 
     ```shell script
     cd port/linux
     make CLOUD=1 SECURE=1 MNT=1 cloud_server 
     ```   
 
-3. Run cloud server in the iotivity-lite folder.
+3. Run Cloud Server example in the iotivity-lite folder.
     ```shell script
     cd port/linux
     # execution arguments format : <device-name> <auth-code> <cis> <sid> <apn>
     ./cloud_server 
     ```
     
-    Now, cloud server are ready to be on-boarded and be provisioned to connect to the plgd cloud.   
+Now, Cloud Server example are ready to be on-boarded and be provisioned to connect to the plgd cloud.   
