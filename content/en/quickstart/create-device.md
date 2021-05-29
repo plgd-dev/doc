@@ -23,10 +23,10 @@ This guide will walk you through the process of starting your secure [OCF Device
 To set up your Raspberry Pi, please follow [this step-by-step tutorial](https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up).
     
 {{% note %}}
-Enabling SSH is highly recommended as it simplifies access to device and fast adoption of the code if required. More information available [here](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md).
+Enabling SSH is highly recommended as it simplifies access to the device and alows you to make changes quickly. More information available [here](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md).
 {{% note %}}
 
-More simple way to enable SSH is to use the `Preferences` menu on the Desktop window.
+Simpler way to enable SSH:
 ```
 1. Launch 'Raspberry Pi Configuration' from the 'Preferences' menu
 2. Navigate to the 'Interfaces tab'
@@ -36,9 +36,7 @@ More simple way to enable SSH is to use the `Preferences` menu on the Desktop wi
 
 ![Interfaces] (/images/quickstart/pi-configuration-interfaces.png)
 
-Or 
-
-You can also enable SSH via `raspi-config` on the Pi terminal. 
+Or enable SSH via `raspi-config` on the Pi terminal:
 ```
 1. Enter 'sudo raspi-config' in a terminal window
 2. Select 'Interfacing Options'
@@ -51,51 +49,35 @@ You can also enable SSH via `raspi-config` on the Pi terminal.
 ## Connect to the Raspberry Pi via SSH
 More information how to access Raspberry Pi remotely can be found [here](https://www.raspberrypi.org/documentation/remote-access/ssh/unix.md).
 
-For Linux or macOS, use this commands:
 ```shell script
-# use IP address of the Raspberry Pi.
-ssh pi@ipaddress  
+ssh pi@{raspberryPiIpAddress}  
 ```
 {{% note %}}
 Default login username is `pi` and password is `raspberry` if you didn't change.
 {{% note %}}
 
 ## Install essential build tools
-Before you install Cloud Server example, you'd better update available package information and install build tools and so on.
 ```shell script
 sudo apt-get update & apt-get install build-essential git curl openssl
 ```
 
 ## Install IoTivity Cloud Server example 
-1. Checkout [IoTivity-Lite](https://github.com/iotivity/iotivity-lite) libaray. 
-
-    Execute commands on the Raspberry PI.
-    
+1. Checkout [IoTivity-Lite](https://github.com/iotivity/iotivity-lite):
     ```shell script
+    # execute commands on the Raspberry PI
     git clone https://gitlab.iotivity.org/iotivity/iotivity-lite.git --recursive
-    ```
-    Enter in the iotivity-lite folder you just cloned.
-    ```shell script
     cd iotivity-lite
-    ls 
-    Architecture.png	apps			patches			tools
-    LICENSE.md		deps			port			util
-    Porting.png		include			security
-    README.rst		messaging		swig
-    api			onboarding_tool		tests
     ```
 
-2. Build Cloud Server example in the iotivity-lite folder. 
+2. Build Cloud Server example:
     ```shell script
     cd port/linux
     make CLOUD=1 SECURE=1 MNT=1 cloud_server 
     ```   
 
-3. Run Cloud Server example in the iotivity-lite folder.
+3. Run Cloud Server example in the iotivity-lite folder:
     ```shell script
-    cd port/linux
-    # execution arguments format : <device-name> <auth-code> <cis> <sid> <apn>
     ./cloud_server 
     ```
     
-Now, Cloud Server example are ready to be on-boarded and be provisioned to connect to the plgd cloud.   
+Now, the Cloud Server example running on your Raspberry Pi allows you to discover your device and connect it to the plgd cloud.
