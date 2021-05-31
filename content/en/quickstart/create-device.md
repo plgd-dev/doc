@@ -23,8 +23,8 @@ This guide will walk you through the process of starting your secure [OCF Device
 To set up your Raspberry Pi, please follow [this step-by-step tutorial](https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up).
     
 {{% note %}}
-Enabling SSH is highly recommended as it simplifies access to the device and alows you to make changes quickly. More information available [here](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md).
-{{% note %}}
+Enabling SSH is highly recommended as it simplifies access to the device and allows you to make changes quickly. More information available [here](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md).
+{{% /note %}}
 
 Simpler way to enable SSH:
 ```
@@ -54,7 +54,7 @@ ssh pi@{raspberryPiIpAddress}
 ```
 {{% note %}}
 Default login username is `pi` and password is `raspberry` if you didn't change.
-{{% note %}}
+{{% /note %}}
 
 ## Install essential build tools
 ```shell script
@@ -64,7 +64,7 @@ sudo apt-get update & apt-get install build-essential git curl openssl
 ## Install IoTivity Cloud Server example 
 1. Checkout [IoTivity-Lite](https://github.com/iotivity/iotivity-lite):
     ```shell script
-    # execute commands on the Raspberry PI
+    # execute commands on the Raspberry Pi
     git clone https://gitlab.iotivity.org/iotivity/iotivity-lite.git --recursive
     cd iotivity-lite
     ```
