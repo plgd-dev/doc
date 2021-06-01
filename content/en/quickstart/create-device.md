@@ -33,9 +33,6 @@ Enabling SSH is highly recommended as it simplifies access to the device and all
 3. Select 'Enabled' next to 'SSH'
 4. Click 'OK'
 
-
-![Interfaces](/images/quickstart/pi-configuration-interfaces.png "width:30%")
-
 ### Or enable SSH via `raspi-config` on the terminal:
 
 1. Enter 'sudo raspi-config' in a terminal window
@@ -44,7 +41,6 @@ Enabling SSH is highly recommended as it simplifies access to the device and all
 4. Choose 'Yes'
 5. Select 'Ok'
 6. Choose 'Finish'
-
 
 ## Connect to the Raspberry Pi via SSH
 More information how to access Raspberry Pi remotely can be found [here](https://www.raspberrypi.org/documentation/remote-access/ssh/unix.md).
@@ -71,6 +67,7 @@ sudo apt-get update & apt-get install build-essential git curl openssl
 
 2. Build Cloud Server example in the `port/linux` folder:
     ```shell script
+    cd port/linux
     make CLOUD=1 SECURE=1 MNT=1 cloud_server 
     ```   
 
