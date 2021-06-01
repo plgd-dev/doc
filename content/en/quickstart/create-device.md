@@ -26,25 +26,25 @@ To set up your Raspberry Pi, please follow [this step-by-step tutorial](https://
 Enabling SSH is highly recommended as it simplifies access to the device and allows you to make changes quickly. More information available [here](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md).
 {{% /note %}}
 
-Simpler way to enable SSH:
-```
+### Enable SSH via the Desktop:
+
 1. Launch 'Raspberry Pi Configuration' from the 'Preferences' menu
 2. Navigate to the 'Interfaces tab'
 3. Select 'Enabled' next to 'SSH'
 4. Click 'OK'
-```
 
-![Interfaces] (/images/quickstart/pi-configuration-interfaces.png)
 
-Or enable SSH via `raspi-config` on the Pi terminal:
-```
+![Interfaces] (https://plgd.dev/images/quickstart/pi-configuration-interfaces.png)
+
+### Or enable SSH via `raspi-config` on the terminal:
+
 1. Enter 'sudo raspi-config' in a terminal window
 2. Select 'Interfacing Options'
 3. Navigate to and select 'SSH'
 4. Choose 'Yes'
 5. Select 'Ok'
 6. Choose 'Finish'
-```
+
 
 ## Connect to the Raspberry Pi via SSH
 More information how to access Raspberry Pi remotely can be found [here](https://www.raspberrypi.org/documentation/remote-access/ssh/unix.md).
