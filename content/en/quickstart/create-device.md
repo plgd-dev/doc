@@ -34,7 +34,7 @@ Enabling SSH is highly recommended as it simplifies access to the device and all
 4. Click 'OK'
 
 
-![Interfaces] (https://plgd.dev/images/quickstart/pi-configuration-interfaces.png)
+![Interfaces](/images/quickstart/pi-configuration-interfaces.png)
 
 ### Or enable SSH via `raspi-config` on the terminal:
 
