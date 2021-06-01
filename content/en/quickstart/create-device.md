@@ -34,7 +34,7 @@ Enabling SSH is highly recommended as it simplifies access to the device and all
 4. Click 'OK'
 
 
-![Interfaces](/images/quickstart/pi-configuration-interfaces.png)
+![Interfaces](/images/quickstart/pi-configuration-interfaces.png "width:30%")
 
 ### Or enable SSH via `raspi-config` on the terminal:
 
@@ -69,13 +69,12 @@ sudo apt-get update & apt-get install build-essential git curl openssl
     cd iotivity-lite
     ```
 
-2. Build Cloud Server example:
+2. Build Cloud Server example in the `port/linux` folder:
     ```shell script
-    cd port/linux
     make CLOUD=1 SECURE=1 MNT=1 cloud_server 
     ```   
 
-3. Run Cloud Server example in the iotivity-lite folder:
+3. Run Cloud Server example in the `port/linux` folder:
     ```shell script
     ./cloud_server 
     ```
