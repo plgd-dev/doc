@@ -4,11 +4,11 @@ description: 'Getting back online and in-sync'
 date: '2021-06-16'
 lastmod: '2021-06-16'
 categories: [features]
-keywords: ["disaster recovery", "data reconciliation" , "jetstream"]
+keywords: ['disaster recovery', 'data reconciliation' , 'jetstream']
 menu:
- docs:
- parent: tutorials
- weight: 100
+  docs:
+    parent: tutorials
+    weight: 100
 toc: true
 ---
 
