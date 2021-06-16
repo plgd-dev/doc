@@ -7,8 +7,8 @@ categories: [features]
 keywords: ['disaster recovery', 'data reconciliation' , 'jetstream']
 menu:
   docs:
-    parent: tutorials
-    weight: 100
+    parent: features
+    weight: 10
 toc: true
 ---
 
