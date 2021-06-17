@@ -35,6 +35,7 @@ This guide will walk you through the process of discovering/on-boarding/controll
     ```
 
 ## Discover device on local network 
+To discover OCF devices (i.e. Cloud Server example), please follow below step: 
 ```shell script
 #################### OCF Client for D2D ####################
 [0] Display this menu
@@ -77,7 +78,8 @@ Discovered devices :
 ]
 ```
 
-## Transfer ownership
+## Transfer ownership (On-boarding)
+To transfer ownership to the OCF device, please follow below step: 
 ```shell script
 #################### OCF Client for D2D ####################
 [0] Display this menu
@@ -102,6 +104,7 @@ e2f7b281-d919-4e4b-4ed9-6156caead050
 
 
 ## Interact with the device locally
+To interact with OCF device including retrieving, updating via CoAP over udp message, please follow below step: 
 1. Retrieve resources of the device:
     ```shell script
     #################### OCF Client for D2D ####################
@@ -224,7 +227,8 @@ e2f7b281-d919-4e4b-4ed9-6156caead050
     Updating resource property of e2f7b281-d919-4e4b-4ed9-6156caead050/light/1 was successful
     ```
       
-## Removing ownership 
+## Reset ownership (Off-boarding)
+To reset ownership of the OCF device, please follow below step: 
 ```shell script
 #################### OCF Client for D2D ####################
 [0] Display this menu
