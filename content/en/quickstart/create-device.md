@@ -65,7 +65,7 @@ sudo apt-get update & apt-get install build-essential git curl openssl
 1. Checkout [IoTivity-Lite](https://github.com/iotivity/iotivity-lite):
     ```shell script
     # execute commands on the Raspberry Pi
-    git clone https://gitlab.iotivity.org/iotivity/iotivity-lite.git --recursive
+    git clone -b plgd.dev https://github.com/iotivity/iotivity-lite.git --recursive
     cd iotivity-lite
     ```
 
