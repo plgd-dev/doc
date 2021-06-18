@@ -5,7 +5,7 @@ features:
   - heading: Genuine
     image_path: /images/genuine.svg
     tagline: IoT without IP is like a cheeseburger without the cheese
-    copy: The era where MCUs supporting IP protocol was too expensive and is now over, along with proprietary so-called "IoT" solutions. Leveraging the tried-and-true Internet Protocol in combination with CoAP and CBOR makes it easier for developers to leverage their experience and solutions in their IoT projects. This reduces not only development costs, but more importantly, limits points of attack and system weaknesses.
+    copy: The era where MCUs supporting IP protocol was too expensive is now over, along with proprietary so-called "IoT" solutions. Leveraging the tried-and-true Internet Protocol in combination with CoAP and CBOR makes it easier for developers to leverage their experience and solutions in their IoT projects. This reduces not only development costs, but more importantly, limits points of attack and system weaknesses.
 
   - heading: Secure
     image_path: /images/secure.svg
