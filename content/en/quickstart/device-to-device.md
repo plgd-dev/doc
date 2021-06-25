@@ -1,8 +1,8 @@
 ---
 title: 'Discover & control device locally'
 description: 'Discover devices using UDP CoAP multicast and control them locally'
-date: '2021-05-13'
-lastmod: '2021-06-18'
+date: '2021-06-14'
+lastmod: '2021-06-25'
 categories: [quickstart]
 keywords: [quickstart, discovery, coap, multicast, d2d]
 menu:
@@ -33,7 +33,7 @@ This guide will walk you through the process of discovering, on-boarding, contro
     ```shell script
     ./ocfclient 
     ```
-Now, the OCF Client is running on your PC to discover your device and so on. More information about full application sources can be found [here](https://github.com/plgd-dev/sdk/tree/v2/cmd/ocfclient).
+The OCF Client is now running on your PC. It's a console application that allows you to communicate with the device on your local network, without the plgd cloud. Code is available [here](https://github.com/plgd-dev/sdk/tree/v2/cmd/ocfclient).
 
 ## How to use OCF Client example
 ### Discover devices on local network 
@@ -411,6 +411,7 @@ func (c *OCFClient) GetResource(deviceID, href string) (string, error) {
 	return string(resourceJSON.Bytes()), nil
 }
 ```
+
 ### Update a resource of the device 
 ```gotemplate
 func (c *OCFClient) UpdateResource(deviceID string, href string, data interface{}) (string, error) {
