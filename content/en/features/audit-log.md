@@ -61,9 +61,9 @@ The resources in the `ResourceLinksPublished` event are examined and only newly 
 for Resource in the event {
     if Resource is in the snapshot map and
       Resource data is equal to the resource data in the snapshot map {
-        Remove Resource from the event
+        remove Resource from the event
     } else {
-      Add or update Resource in the snapshot map
+      add or update Resource in the snapshot map
     }
 }
 ```
@@ -72,8 +72,33 @@ If no resources to be published remain in the event then the event is skipped an
 
 ## ResourceLinksUnpublished
 
-Event is added to event store only if at least one resource was unpublished.
+The `ResourceLinksUnpublished` event contains a list of resource `href`s to be unpublished. To avoid the storing of unnecessary unpublish events in the event store, the snapshot map from `ResourceLinksPublished` is used to determine which resources are currently published and thus can be unpublished. The algorithm works as follows:
+
+```pseudocode
+for Resource-Href in the event {
+    if Resource-Href exists as key in the snapshot map {
+        remove Resource-Href from the snapshot map
+    } else {
+        remove Resource-Href from the event
+    }
+}
+```
+
+After the algorithm only `href`s that were previously published remain in the event which is added to the event store. Also the unpublished `href`s are removed from the snapshot map.
+
+Additionally, there is one special case if the `ResourceLinksUnpublished` event contains an empty list of `href`s then all currently published resources are unpublished and the snapshot map is cleared.
 
 ## DeviceMetadataUpdated
 
-TODO
+A similar technique to the one utilized for `ResourceChanged` is used to avoid adding duplicate subsequent `DeviceMetadataUpdated` events to the event store. The last handled `DeviceMetadataUpdated` event is saved and used to skip unnecessary events.
+
+```pseudocode
+hasTheSameData := compare event data with the saved event data
+if hasTheSameData {
+    return false
+}
+overwrite the saved event data with the current event data
+return true
+```
+
+Thus subsequent `DeviceMetadataUpdated` events without any data changes are skipped and not added to the event store.
