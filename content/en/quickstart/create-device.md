@@ -2,7 +2,7 @@
 title: 'Create device'
 description: 'Start your own device and host resources'
 date: '2021-05-13'
-lastmod: '2021-05-13'
+lastmod: '2021-06-17'
 categories: [quickstart]
 keywords: [quickstart, device, iotivity]
 menu:
@@ -61,7 +61,7 @@ sudo apt-get update & apt-get install build-essential git curl openssl
 1. Checkout [IoTivity-Lite](https://github.com/iotivity/iotivity-lite):
     ```shell script
     # execute commands on the Raspberry Pi
-    git clone https://gitlab.iotivity.org/iotivity/iotivity-lite.git --recursive
+    git clone -b plgd.dev https://github.com/iotivity/iotivity-lite.git --recursive
     cd iotivity-lite
     ```
 
