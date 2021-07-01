@@ -1,26 +1,22 @@
 ---
-title: 'Device shadow'
+title: 'Device Shadow'
 description: 'What is device shadow?'
 date: '2021-05-13'
 lastmod: '2021-07-01'
 categories: [features]
-keywords: [features, device-shadow, resource-shadow]
+keywords: [twin, shadow, cache, history]
 menu:
   docs:
     parent: features
-    weight: 10
+    weight: 50
 toc: true
 ---
 
-# Device shadow
+## Device Shadow
+The device shadow represents represents the current state of each device's resource. Each connected device notifies the plgd Cloud about every change using the CoAP Gateway observations, which are started right after the device successfuly connects and authenticates. All changes are persisted in form of an audit log in the EventStore, from which is the latest version returned to clients through the Resource Directory.
 
-The device shadow mirrors contents of published resources by the device to the cloud through CoAP Gateway. CoAP Gateway starts observations of all published resources so the device is responsible to send notifications about change with the full content of the resource. The notification is stored in the Event Store by resource aggregate.
-
-## Projection
-
-Contents of resources are projected by resource-directory.
-
-## Update a resource from CoAP Gateway
+### Operation overview
+#### Update a resource from CoAP Gateway
 
 {{< plantuml id="update-device-shadow-from-cloud" >}}
 @startuml Sequence
@@ -69,7 +65,7 @@ Server -> Gateway : [NOTIFY] 'oic.r.temperature' changed
 @enduml
 {{< /plantuml >}}
 
-## Update a resource from OCF Client
+#### Update a resource from OCF Client
 
 {{< plantuml id="update-device-shadow" >}}
 @startuml Sequence
@@ -101,10 +97,10 @@ Server -> Gateway : [NOTIFY] 'oic.r.temperature' changed
 @enduml
 {{< /plantuml >}}
 
-## Disable/Enable device shadow
+## Disable Device Shadow feature
+All changes that occur on the connected device are observed and stored in the EventStore. There are few use cases where Device Shadow - active observation of all changes is not desired. For example, if the device is in the maintenance state and produces test data that shall not be part of the audit log, Device Shadow should be for this device disabled. To do so, a client needs to send the request `UpdateDeviceMetadataRequest` with `ShadowSynchronization` and `CorrelationId`.
 
-When the client wants to disable/enable the device shadow, for eg maintenance reasons, it needs to send the request `UpdateDeviceMetadataRequest` with `ShadowSynchronization` and `CorrelationId`. The disable/enable device shadows occur only when the device is connected. For confirmation, the client needs to wait for the event `DeviceMetadataUpdated`, where `CorrelationId` will be the same as was sent in `UpdateDeviceMetadataRequest`.
-
+The Device Shadow feature is disabled only after the successful recipient of the `DeviceMetadataUpdated` event containing the same correlation id used in the Update request. This confirmation event is received only if the device is/comes online.
 
 {{< plantuml id="update-shadow-synchronization" >}}
 @startuml Sequence
