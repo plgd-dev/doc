@@ -2,7 +2,7 @@
 title: 'Device shadow'
 description: 'What is device shadow?'
 date: '2021-05-13'
-lastmod: '2021-05-13'
+lastmod: '2021-07-01'
 categories: [features]
 keywords: [features, device-shadow, resource-shadow]
 menu:
@@ -11,7 +11,6 @@ menu:
     weight: 10
 toc: true
 ---
-
 
 # Device shadow
 
