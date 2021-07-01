@@ -1,28 +1,30 @@
 ---
 title: 'JetStream'
-description: 'What is device jetstream?'
+description: 'How to persist plgd events in the JetStream'
 date: '2021-07-01'
 lastmod: '2021-07-01'
 categories: [features]
-keywords: [features, resource-aggregate, jetstream]
+keywords: ['persistance', 'message log', 'nats']
 menu:
   docs:
     parent: features
-    weight: 20
+    weight: 60
 toc: true
 ---
 
-# Jetstream
+By default, plgd cloud services use NATS as an EventBus and MongoDB as an EventStore. Some use-cases require subscription directly to the internal messaging system instead of communicating with the plgd using it's gateways. To simplify the data reconciliation and scale consumers easier, plgd supports [JetStream
+(https://github.com/nats-io/jetstream) technology as an alternative EventBus. JetStream is built on top of NATS, persisting all published events. Using JetStream as an EventBus allows you to access older, not yet processed messages without accessing the EventStore.
 
-By default, the internal cloud services use nats as an event bus and event store for recovery, because nats don't persist messages. Jetstream(nats-jetstream) adds the ability to persist data in event-bus so your application can read all events in the cloud from the stream. Of course, sometimes the data was lost in-stream but for that grpc-gateway provides you API to get events from a certain time.
+{{ % note % }}
+There are still some edge-cases when the plgd event couldn't be published to the JetStream but it was stored to the EventStore. In such a case you need to identify that one event was lost and if needed, retrieve it using plgd gRPC Gateway.
+{{ % /note % }}
 
-[`More information about jetstream`](https://docs.nats.io/jetstream).
+{{ % note % }}
+More information about the JetStream can be found [here](https://docs.nats.io/jetstream).
+{{ % /note % }}
 
-## Subject of streams/nats
 
-### Publisher
-
-Resource-aggregate publish events to 3 type subject of subjects:
+## NATS subjects overview
 - `events.{deviceID}.resource-links.{eventType}` publishes resource-links events of types `resourcelinkspublished`, `resourcelinksunpublished`,
 `resourcelinkssnapshottaken` for device `deviceID`
 - `events.{deviceID}.metadata.{eventType}` publishes metadata events of types `devicemetadataupdatepending`, `devicemetadataupdated`,
@@ -30,10 +32,9 @@ Resource-aggregate publish events to 3 type subject of subjects:
 - `events.{deviceID}.resources.{resourceID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`,
 `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceID`, which is calculated as `uuid.NewV5(uuid.NamespaceURL, deviceID+href)` for device `deviceID`.
 
-Each event is compressed by [snappy](https://github.com/google/snappy) and wrapped by [event protobuf](https://github.com/plgd-dev/cloud/blob/v2/resource-aggregate/cqrs/eventbus/pb/eventbus.proto) in `Event.data` property and event type is described in `Event.event_type` property.
+Each event is compressed by [snappy](https://github.com/google/snappy) and encoded in protobuf [event envelope](https://github.com/plgd-dev/cloud/blob/v2/resource-aggregate/cqrs/eventbus/pb/eventbus.proto). The event envelope consist of `Event.data` containing the event and `Event.event_type` describing type of the event.
 
-### Consumer
-
+### Consumer subscriptions options
 For consumer of events you can subscribe to:
 - `events.>` gets all events of all devices
 - `events.{deviceID}.>` gets all events of device `deviceID`
@@ -49,9 +50,14 @@ For consumer of events you can subscribe to:
 - `events.{deviceID}.resources.*.resourcechanged` gets `resourcechanged` events of all resources for device `deviceID`
 - `events.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices
 
-## Enable jetstream
+## Enable JetStream
+{{ % note % }}
+Deployment of the JetStream as an EventBus will be controlled by a single configuration option available in the plgd HELM chart. This is currently WIP. 
+{{ % /note % }}
 
-At first, you need to set up nats-server 2.3+ to server jetstream.
+{{ % warning % }}
+It's required from you to create event streams before the JetStream can be used as the plgd EventBus. If streams are not created, plgd services won't work.
+{{ % /warning % }}
 
 ### Deploy JetStream Controller for K8S
 Creates NATS Server with JetStream enabled as a leaf node connection.
@@ -79,7 +85,7 @@ spec:
   subjects: ["events.*"]
 ```
 
-### Enable jetstream at resource-aggregate
+### Enable JetStream at Resource Aggregate
 
 Set `clients.eventBus.nats.jetstream` to true value.
 ```yaml
@@ -91,7 +97,7 @@ clients:
 ...
 ```
 
-### Enable jetstream at bundle
+### Enable jetstream at plgd #bundle
 Set env variable `JETSTREAM=true` of bundle
 
 ```bash
