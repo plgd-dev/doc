@@ -15,11 +15,11 @@ toc: true
 
 # Device shadow
 
-The device shadow mirrors contents of published resources by the device to the cloud thought CoAP Gateway. CoAP Gateway starts observations of all published resources so device is responsible to send notification about change with full content of resource. The notification is stored to Event Store by resource aggregate.
+The device shadow mirrors contents of published resources by the device to the cloud through CoAP Gateway. CoAP Gateway starts observations of all published resources so the device is responsible to send notifications about change with the full content of the resource. The notification is stored in the Event Store by resource aggregate.
 
 ## Projection
 
-Contents of resources is projected by resource-directory.
+Contents of resources are projected by resource-directory.
 
 ## Update a resource from CoAP Gateway
 
@@ -104,7 +104,7 @@ Server -> Gateway : [NOTIFY] 'oic.r.temperature' changed
 
 ## Disable/Enable device shadow
 
-When client want to disable/enable the device shadow for eg maintenance reason, it needs to send the request `UpdateDeviceMetadataRequest` with `ShadowSynchronization` and `CorrelationId`. The disable/enable device shadows occurs only when device is connected. For confirmation it,  client need to wait for event `DeviceMetadataUpdated` where `CorrelationId` will be same as was send in `UpdateDeviceMetadataRequest`.
+When the client wants to disable/enable the device shadow, for eg maintenance reasons, it needs to send the request `UpdateDeviceMetadataRequest` with `ShadowSynchronization` and `CorrelationId`. The disable/enable device shadows occur only when the device is connected. For confirmation, the client needs to wait for the event `DeviceMetadataUpdated`, where `CorrelationId` will be the same as was sent in `UpdateDeviceMetadataRequest`.
 
 
 {{< plantuml id="update-shadow-synchronization" >}}
