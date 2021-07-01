@@ -69,7 +69,7 @@ The `GetResourceLinks` command supports various filter options. If all of them a
 To return only binary switches resources hosted by devices with ids `deviceID1` and `deviceID2`, following options shall be set: `GetResourceLinksRequest.device_ids_filter("[deviceID1, deviceID2]") && GetResourceLinksRequest.type_filter([oic.r.switch.binary])`.
 
 ## Get Resource Content
-The `GetResources` command supports various filter options. If all of them are **unset**, all resource contents of all devices user is authorized to use are returned from the resource-shadow. 
+The `GetResources` command supports various filter options. If all of them are **unset**, all resource contents (shadows) of all devices user is authorized to use are returned. 
 
 **Example usages of filter options:**
 - to retrieve of resources identified by their hrefs use `GetResourcesRequest.resource_ids_filter` where combinations `deviceID` and `href` is required  in format `deviceID/href`
@@ -79,9 +79,9 @@ The `GetResources` command supports various filter options. If all of them are *
 To return values of binary switch resources hosted by devices with ids `deviceID1` and `deviceID2`, following options shall be set: `GetResources.device_ids_filter("[deviceID1, deviceID2]") && GetResources.type_filter([oic.r.switch.binary])`.
 
 ## Subscribe to Events
-The `SubscribeToEvents` command opens the stream which content is controlled by sending messages with filter options.
+The `SubscribeToEvents` command opens the stream which content is driven by the control message.
 
-**To control what will be pushed to the stream, send a `SubscribeToEvents` message with the option:**
+**To control content of the stream, send a `SubscribeToEvents` message with following options:**
 - `action.create_subscription.events_filter` set to e.g. `ONLINE` to receive **devices events** which changed their status to `ONLINE`
 - `action.create_subscription.{device_ids_filter, events_filter}` set to e.g. `RESOURCE_PUBLISHED` to receive **device events**
 - `action.create_subscription.{resource_ids_filter, events_filter}` set to e.g. `CONTENT_CHANGED` to receive **resource events**
