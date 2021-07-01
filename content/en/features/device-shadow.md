@@ -12,11 +12,10 @@ menu:
 toc: true
 ---
 
-## Device Shadow
 The device shadow represents represents the current state of each device's resource. Each connected device notifies the plgd Cloud about every change using the CoAP Gateway observations, which are started right after the device successfuly connects and authenticates. All changes are persisted in form of an audit log in the EventStore, from which is the latest version returned to clients through the Resource Directory.
 
-### Operation overview
-#### Update a resource from CoAP Gateway
+## Operation overview
+### Update a resource from CoAP Gateway
 
 {{< plantuml id="update-device-shadow-from-cloud" >}}
 @startuml Sequence
@@ -65,7 +64,7 @@ Server -> Gateway : [NOTIFY] 'oic.r.temperature' changed
 @enduml
 {{< /plantuml >}}
 
-#### Update a resource from OCF Client
+### Update a resource from OCF Client
 
 {{< plantuml id="update-device-shadow" >}}
 @startuml Sequence
