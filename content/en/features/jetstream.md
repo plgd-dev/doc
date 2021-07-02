@@ -12,8 +12,7 @@ menu:
 toc: true
 ---
 
-By default, plgd cloud services use NATS as an EventBus and MongoDB as an EventStore. Some use-cases require subscription directly to the internal messaging system instead of communicating with the plgd using it's gateways. To simplify the data reconciliation and scale consumers easier, plgd supports [JetStream
-(https://github.com/nats-io/jetstream) technology as an alternative EventBus. JetStream is built on top of NATS, persisting all published events. Using JetStream as an EventBus allows you to access older, not yet processed messages without accessing the EventStore.
+By default, plgd cloud services use NATS as an EventBus and MongoDB as an EventStore. Some use-cases require subscription directly to the internal messaging system instead of communicating with the plgd using it's gateways. To simplify the data reconciliation and scale consumers easier, plgd supports [JetStream](https://github.com/nats-io/jetstream) technology as an alternative EventBus. JetStream is built on top of NATS, persisting all published events. Using JetStream as an EventBus allows you to access older, not yet processed messages without accessing the EventStore.
 
 {{% note %}}
 There are still some edge-cases when the plgd event couldn't be published to the JetStream but it was stored to the EventStore. In such a case you need to identify that one event was lost and if needed, retrieve it using plgd gRPC Gateway.
