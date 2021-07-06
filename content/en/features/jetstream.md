@@ -81,7 +81,7 @@ metadata:
   name: events
 spec:
   name: events
-  subjects: ["events.*"]
+  subjects: ["events.>"]
 ```
 
 ### Enable JetStream at Resource Aggregate
