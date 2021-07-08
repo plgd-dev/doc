@@ -124,7 +124,7 @@ The `GetDevicesMetadata` command supports various filter options. If all of them
 - to retrieve metadata a specific type of devices use `GetDevicesMetadataRequest.type_filter`
 
 ## Update Device Metadata
-The `UpdateResource` command requests enable/disable shadow synchronization on the device. This command is asynchronous so for confirmation you need to wait for event `DEVICE_METADATA_UPDATED` with same `DeviceMetadataUpdated.audit_context.correlation_id` from `SubscribeToEvents`/EventBus. 
+The `UpdateDeviceMetadata` command requests enable/disable shadow synchronization on the device.
 
 # Contracts
 
