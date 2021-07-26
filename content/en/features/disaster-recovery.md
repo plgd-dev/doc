@@ -16,8 +16,8 @@ Resiliency is understood as a way to readapt to a "crisis situation", which appl
 
 plgd Cloud offers to users various techniques on how to approach disaster recovery in case an error or system failure was detected. Let's have a look at them.
 
-
 ## Event Data Loss
+
 {{% note %}}
 plgd Cloud is an event-driven system, implemented using [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) and [EventSourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) design patterns. Each event that occurs in the system, _e.g. when the content of resource changes, when a new resource is published, or when a new device is registered with the plgd cloud,_ is stored in the EventStore and published to the EventBus.
 
@@ -27,24 +27,28 @@ plgd Gateways are subscribed to the EventBus to notify you through the gRPC stre
 An active subscription to plgd events, using gRPC, WebSockets, NATS, or JetStream might fail. Same as the publish operation executed by the plgd service. There are multiple reasons which we cannot prevent - infrastructure failure when the node went down, service crash, or operator failure during the roll-out. To be able to get your system back to the in-sync state, failure has to be detected and the data reconciliation process started.
 
 ### Missing Events Detection
+
 Sometimes it might be obvious that some events might be lost. If your service consuming plgd events restarted due to a crash, network outage, or infrastructure failure, there is a high chance that you missed some events. In such a scenario, the service shall start right away it's up and running with the data reconciliation process.
 
 Another, not so obvious event data loss might occur due to EventBus service disruptions or during a very short network outage. Your service wasn't restarted; your messaging client just missed one event.
 If your service is subscribed to events and requires the processing of all events in the correct order - skipping one event is not accepted, your service needs to track the version of each [event](https://github.com/plgd-dev/cloud/blob/v2/resource-aggregate/pb/events.proto). In case the **received event's version isn't incremented by one compared to your latest event**, your service shall start the resource reconciliation process.
 
 ### Data Reconciliation using gRPC
+
 #### Interest in the latest resource content only
-The plgd gRPC Gateway exposes an RPC call(TODO) to retrieve the latest version of the resource. In case you are not interested in all the changes which occurred during your outage, this is the right way how to get in sync. Additionally, to optimize this operation, timestamp ETag can be specified. Just take the latest event you have persisted in and pass the `timestamp_ms` from the `EventMetadata` as an argument. If no update of that resource occurred after the specified time, you won't receive any resource data.
+
+The plgd gRPC Gateway exposes `GetEvents` RPC call to retrieve the latest version of the resource. In case you are not interested in all the changes which occurred during your outage, this is the right way how to get in sync. Additionally, to optimize this operation, timestamp ETag can be specified. Just take the latest event you have persisted in and pass the `timestamp_ns` from the `EventMetadata` as an argument. If no update of that resource occurred after the specified time, you won't receive any resource data.
 
 #### Interest in all missed events
-If you require retrieval of all events which occurred during your outage, the same RPC call(TODO) can be used. Your responsibility is to find the newest `timestamp_ms` among your events and retrieve all resources with global timestamp ETag set to this value. As a response, you get all events that were published after the specified time.
+
+If you require retrieval of all events which occurred during your outage, the same `GetEvents` RPC call can be used. Your responsibility is to find the newest `timestamp_ns` among your events and retrieve all resources with global timestamp ETag set to this value. As a response, you get all events that were published after the specified time.
 
 {{% note %}}
-Described RPC call of the plgd gRPC Gateway supports both global ETag as well as ETag per resource. Additionally, you can apply device id or resource id filters to limit your request to the predefined set of devices and/or resources. 
+Described RPC call of the plgd gRPC Gateway supports both global ETag as well as ETag per resource. Additionally, you can apply device id or resource id filters to limit your request to the predefined set of devices and/or resources.
 {{% /note %}}
 
-
 ### Data Reconciliation using JetStream
+
 The plgd cloud uses NATS as an EventBus while keeping the events persisted in our EventStore, the MongoDB. There are use-cases where plgd cloud users are interested in using JetStream as an EventBus and subscribe to it. This option is built-in in the deployment and can be easily enabled by configuring the helm chart (TODO).
 
 Having JetStream as an EventBus gives you the possibility to read stored events after your service outage right from the JetStream instead of requesting the data from the plgd gRPC Gateway.
