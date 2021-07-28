@@ -37,11 +37,11 @@ If your service is subscribed to events and requires the processing of all event
 
 #### Interest in the latest resource content only
 
-The plgd gRPC Gateway exposes `GetEvents` RPC call to retrieve the latest version of the resource. In case you are not interested in all the changes which occurred during your outage, this is the right way how to get in sync. Additionally, to optimize this operation, timestamp ETag can be specified. Just take the latest event you have persisted in and pass the `timestamp_ns` from the `EventMetadata` as an argument. If no update of that resource occurred after the specified time, you won't receive any resource data.
+The plgd gRPC Gateway exposes `GetEvents` RPC call to retrieve the latest version of the resource. In case you are not interested in all the changes which occurred during your outage, this is the right way how to get in sync. Additionally, to optimize this operation, timestamp ETag can be specified. Just take the latest event you have persisted in and pass the `timestamp` from the `EventMetadata` as an argument. If no update of that resource occurred after the specified time, you won't receive any resource data.
 
 #### Interest in all missed events
 
-If you require retrieval of all events which occurred during your outage, the same `GetEvents` RPC call can be used. Your responsibility is to find the newest `timestamp_ns` among your events and retrieve all resources with global timestamp ETag set to this value. As a response, you get all events that were published after the specified time.
+If you require retrieval of all events which occurred during your outage, the same `GetEvents` RPC call can be used. Your responsibility is to find the newest `timestamp` among your events and retrieve all resources with global timestamp ETag set to this value. The expected format of the timestamps is Unix time in nanoseconds. As a response, you get all events that were published after the specified time.
 
 {{% note %}}
 Described RPC call of the plgd gRPC Gateway supports both global ETag as well as ETag per resource. Additionally, you can apply device id or resource id filters to limit your request to the predefined set of devices and/or resources.
