@@ -103,20 +103,20 @@ If the user loses a device _(unregistered / no more shared with the user)_, the 
 
 ### Get Resource from Device
 
-The `GetResourceFromDevice` retrieves resource content directly from the device - resource shadow value is not returned.
+The `GetResourceFromDevice` retrieves resource content directly from the device - resource shadow value is not returned. To define the expiration of command, set `GetResourceFromDeviceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `GetResourceFromDevice.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the cloud skips it and will be removed by creating a new snapshot event.
 > This command execution is "expensive" as it has to reach the real device while your client synchronously waits for a response.
 
 ### Update Resource Content
 
-The `UpdateResource` command requests resource updates on the device.
+The `UpdateResource` command requests resource updates on the device. To define the expiration of command, set `UpdateResourceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `ResourceUpdatePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the cloud skips it and will be removed by creating a new snapshot event.
 
 ### Create Resource
 
-The `Create Resource` command requests the creation of a new resource on a specific collection on the device.
+The `Create Resource` command requests the creation of a new resource on a specific collection on the device. To define the expiration of command, set `CreateResourceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `ResourceCreatePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the cloud skips it and will be removed by creating a new snapshot event.
 
 ### Delete Resource
 
-The `DeleteResource` command requests the device to delete a specific resource. A confirmation message doesn't mean that the resource was deleted. After successful deletion, the device unpublishes its resource. This information is propagated to the client in form of a `RESOURCE_UNPUBLISHED` event.
+The `DeleteResource` command requests the device to delete a specific resource. A confirmation message doesn't mean that the resource was deleted. After successful deletion, the device unpublishes its resource. This information is propagated to the client in form of a `RESOURCE_UNPUBLISHED` event. To define the expiration of command, set `DeleteResourceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `ResourceDeletePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the cloud skips it and will be removed by creating a new snapshot event.
 
 ### Get pending commands
 
@@ -142,7 +142,7 @@ The `GetDevicesMetadata` command supports various filter options. If all of them
 
 ### Update Device Metadata
 
-The `UpdateDeviceMetadata` command requests enable/disable shadow synchronization on the device.
+The `UpdateDeviceMetadata` command requests enable/disable shadow synchronization on the device. To define the expiration of command, set `UpdateDeviceMetadata.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `DeviceMetadataUpdatePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the cloud skips it and will be removed by creating a new snapshot event.
 
 ### Get events
 
