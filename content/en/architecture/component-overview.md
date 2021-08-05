@@ -71,18 +71,14 @@ hide footbox
 participant D as "Device"
 participant CGW as "CoAP Gateway"
 participant AS as "Authorization Server"
-participant RA as "Resource Aggregate"
 
 D -> CGW ++: Sign Up
 group OAuth2.0 Authorization Code Grant Flow
-    CGW -> AS ++: Exchange authorization code for access token
-    AS -> AS: Verify Authorization Code
-    return Ok\n(Access Token, Refresh Token, ...)
+    CGW -> CGW: Verify and exchange authorization code for access token
 end
-CGW -> RA ++: Register device resource
-return Registered
+CGW -> AS ++: Add device resource
+return Added
 return Signed up\n(Access Token, Refresh Token, ...)
-
 @enduml
 {{< /plantuml >}}
 
