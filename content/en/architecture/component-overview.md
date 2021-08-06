@@ -78,7 +78,7 @@ group OAuth2.0 Authorization Code Grant Flow
     CGW -> O ++: Verify and exchange authorization code for access token
     return Ok\n(Access Token, Refresh Token, ...)
 end
-CGW -> AS ++: Register device resource
+CGW -> AS ++: Register and assign device to user
 return Registered
 return Signed up\n(Access Token, Refresh Token, ...)
 @enduml
