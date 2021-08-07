@@ -75,16 +75,17 @@ participant AS as "Authorization Server"
 
 D -> CGW ++: Sign Up
 group OAuth2.0 Authorization Code Grant Flow
-    CGW -> O ++: Verify and exchange authorization code for access token
-    return Ok\n(Access Token, Refresh Token, ...)
+    CGW -> O ++: Verify and exchange authorization code for JWT access token
+    return Ok\n(JWT Access Token, Refresh Token, ...)
 end
 CGW -> AS ++: Register and assign device to user
 return Registered
-return Signed up\n(Access Token, Refresh Token, ...)
+return Signed up\n(JWT Access Token, Refresh Token, ...)
 @enduml
 {{< /plantuml >}}
 
-Successful registration to the plgd.dev is followed by authorization request called Sign In. Sign In is required right after sucessfully established TCP connection to the CoAP Gateway, otherwise the device won't be reachable - marked as online. Other device requests are blocked as well unless the device successfully Signs In. Successful autorization precedes validation of the [Access Token](https://tools.ietf.org/html/rfc6749#section-1.4).
+Successful registration to the plgd.dev is followed by authorization request called Sign In. Sign In is required right after sucessfully established TCP connection to the CoAP Gateway, otherwise the device won't be reachable - marked as online. Other device requests are blocked as well unless the device successfully Signs In. Successful autorization precedes validation of the [JWT Access Token](https://tools.ietf.org/html/rfc6749#section-1.4).
+Only JWT access tokens are supported on the device.
 
 #### Device Authorization
 
@@ -98,7 +99,7 @@ participant CGW as "CoAP Gateway"
 participant RA as "Resource Aggregate"
 
 D -> CGW ++: Sign In
-CGW -> CGW: Validate Access Token
+CGW -> CGW: Validate JWT Access Token
 CGW -> RA ++: Declare device as online
 return
 return Signed In
