@@ -255,6 +255,8 @@ usecase (Resource\nAggregate) as Aggregate
 (DeleteResource) << Command >>
 (ConfirmResourceDelete) << Command >>
 (NotifyResourceChanged) << Command >>
+(CancelPendingCommands) << Command >>
+(CancelPendingMetadataUpdates) << Command >>
 
 (ResourceLinksPublished) << Event >>
 (ResourceLinksUnpublished) << Event >>
@@ -269,6 +271,9 @@ usecase (Resource\nAggregate) as Aggregate
 (ResourceDeleted) << Event >>
 (ResourceChanged) << Event >>
 (ResourceStateSnapshotTaken) << Event >>
+(DeviceMetadataUpdatePending) << Event >>
+(DeviceMetadataUpdated) << Event >>
+(DeviceMetadataSnapshotTaken) << Event >>
 
 (PublishResourceLinks) -down-> Aggregate
 (UnpublishResourceLinks) -down-> Aggregate
@@ -281,6 +286,8 @@ usecase (Resource\nAggregate) as Aggregate
 (DeleteResource) -down-> Aggregate
 (ConfirmResourceDelete) -down-> Aggregate
 (NotifyResourceChanged) -down-> Aggregate
+(CancelPendingCommands) -down-> Aggregate
+(CancelPendingMetadataUpdates) -down-> Aggregate
 
 Aggregate -down-> (ResourceLinksPublished)
 Aggregate -down-> (ResourceLinksUnpublished)
@@ -295,6 +302,9 @@ Aggregate -down-> (ResourceDeletePending)
 Aggregate -down-> (ResourceDeleted)
 Aggregate -down-> (ResourceChanged)
 Aggregate -down-> (ResourceStateSnapshotTaken)
+Aggregate -down-> (DeviceMetadataUpdatePending)
+Aggregate -down-> (DeviceMetadataUpdated)
+Aggregate -down-> (DeviceMetadataSnapshotTaken)
 
 @enduml
 {{< /plantuml >}}
