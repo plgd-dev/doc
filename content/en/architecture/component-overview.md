@@ -85,7 +85,10 @@ return Signed up\n(JWT Access Token, Refresh Token, ...)
 {{< /plantuml >}}
 
 Successful registration to the plgd.dev is followed by authorization request called Sign In. Sign In is required right after sucessfully established TCP connection to the CoAP Gateway, otherwise the device won't be reachable - marked as online. Other device requests are blocked as well unless the device successfully Signs In. Successful autorization precedes validation of the [JWT Access Token](https://tools.ietf.org/html/rfc6749#section-1.4).
+
+{{% warning %}}
 Only JWT access tokens are supported on the device.
+{{% /warning %}}
 
 #### Device Authorization
 
