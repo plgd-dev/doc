@@ -154,6 +154,15 @@ The `GetEvents` command returns events that occurred on a resource. The command 
 - to retrieve events for resources from selected user device(s) after given time combine `GetEventsRequest.device_id_filter` and `GetEventsRequest.timestamp_filter`. To return events from devices with ids `deviceID1` and `deviceID2` that occurred after given time do the following steps. Set the device filter to `GetEventsRequest.device_id_filter("[deviceID1, deviceID2]")`, then transform the desired time into Unix `timestamp` in nanoseconds and set `GetEventsRequest.timestamp_filter(timestamp)`.
 - to retrieve events for selected user resources after given time combine `GetEventsRequest.resource_id_filter` and `GetEventsRequest.timestamp_filter`. The required format for `resource_id_filter` of a given resource is `deviceID/href`, where `deviceID` is the id of the device by which the resource is hosted and `href` is the location of the resource on the host device. To return events from resources `deviceID1/href1` and `deviceID2/href2` set resource filter to `GetEventsRequest.resource_id_filter("[deviceID1/href1, deviceID2/href2]")`.
 
+### Delete devices
+
+The `DeleteDevices` command requests delete entries of selected devices in authorization and events databases. The command supports filtering by setting `deviceIdFilter` value. List of deleted device ids is returned in the response.
+
+**Example usages of filter options:**
+
+- to delete entries for devices owned by the user with ids `deviceID1` and `deviceID2` use `DeleteDevicesRequest.device_id_filter("[deviceID1, deviceID2]")`.
+- to delete entries for all devices owned by the user use `DeleteDevicesRequest` with empty `device_id_filter`.
+
 ## Contracts
 
 - [service](https://github.com/plgd-dev/cloud/blob/v2/grpc-gateway/pb/service.proto)
