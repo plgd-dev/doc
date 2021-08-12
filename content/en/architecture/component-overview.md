@@ -75,16 +75,20 @@ participant AS as "Authorization Server"
 
 D -> CGW ++: Sign Up
 group OAuth2.0 Authorization Code Grant Flow
-    CGW -> O ++: Verify and exchange authorization code for access token
-    return Ok\n(Access Token, Refresh Token, ...)
+    CGW -> O ++: Verify and exchange authorization code for JWT access token
+    return Ok\n(JWT Access Token, Refresh Token, ...)
 end
 CGW -> AS ++: Register and assign device to user
 return Registered
-return Signed up\n(Access Token, Refresh Token, ...)
+return Signed up\n(JWT Access Token, Refresh Token, ...)
 @enduml
 {{< /plantuml >}}
 
-Successful registration to the plgd.dev is followed by authorization request called Sign In. Sign In is required right after sucessfully established TCP connection to the CoAP Gateway, otherwise the device won't be reachable - marked as online. Other device requests are blocked as well unless the device successfully Signs In. Successful autorization precedes validation of the [Access Token](https://tools.ietf.org/html/rfc6749#section-1.4).
+Successful registration to the plgd.dev is followed by authorization request called Sign In. Sign In is required right after sucessfully established TCP connection to the CoAP Gateway, otherwise the device won't be reachable - marked as online. Other device requests are blocked as well unless the device successfully Signs In. Successful autorization precedes validation of the [JWT Access Token](https://tools.ietf.org/html/rfc6749#section-1.4).
+
+{{% warning %}}
+Only JWT access tokens are supported on the device.
+{{% /warning %}}
 
 #### Device Authorization
 
@@ -98,7 +102,7 @@ participant CGW as "CoAP Gateway"
 participant RA as "Resource Aggregate"
 
 D -> CGW ++: Sign In
-CGW -> CGW: Validate Access Token
+CGW -> CGW: Validate JWT Access Token
 CGW -> RA ++: Declare device as online
 return
 return Signed In
@@ -195,16 +199,17 @@ participant C as "Mobile App"
 C -> GGW ++: Update device/light resource
 activate C
 GGW -> RA ++: Update device/light resource
-RA --> EB: Publish ResourceUpdateRequestEvent
+RA --> EB: Publish ResourceUpdatePending event
 return
-EB --> CGW: ResourceUpdateRequestEvent
+EB --> CGW: ResourceUpdatePending event
 activate CGW
 CGW -> D ++: Update /light resource
 return Update successful
 CGW -> RA ++: Update device/light successful
-return Publish ResourceUpdateSuccessfulEvent
+RA --> EB: Publish ResourceUpdated event
+return
 deactivate CGW
-EB --> GGW: ResourceUpdateSuccessfulEvent
+EB --> GGW: ResourceUpdated event
 return Updated
 
 @enduml
@@ -255,6 +260,8 @@ usecase (Resource\nAggregate) as Aggregate
 (DeleteResource) << Command >>
 (ConfirmResourceDelete) << Command >>
 (NotifyResourceChanged) << Command >>
+(CancelPendingCommands) << Command >>
+(CancelPendingMetadataUpdates) << Command >>
 
 (ResourceLinksPublished) << Event >>
 (ResourceLinksUnpublished) << Event >>
@@ -269,6 +276,9 @@ usecase (Resource\nAggregate) as Aggregate
 (ResourceDeleted) << Event >>
 (ResourceChanged) << Event >>
 (ResourceStateSnapshotTaken) << Event >>
+(DeviceMetadataUpdatePending) << Event >>
+(DeviceMetadataUpdated) << Event >>
+(DeviceMetadataSnapshotTaken) << Event >>
 
 (PublishResourceLinks) -down-> Aggregate
 (UnpublishResourceLinks) -down-> Aggregate
@@ -281,6 +291,8 @@ usecase (Resource\nAggregate) as Aggregate
 (DeleteResource) -down-> Aggregate
 (ConfirmResourceDelete) -down-> Aggregate
 (NotifyResourceChanged) -down-> Aggregate
+(CancelPendingCommands) -down-> Aggregate
+(CancelPendingMetadataUpdates) -down-> Aggregate
 
 Aggregate -down-> (ResourceLinksPublished)
 Aggregate -down-> (ResourceLinksUnpublished)
@@ -295,6 +307,9 @@ Aggregate -down-> (ResourceDeletePending)
 Aggregate -down-> (ResourceDeleted)
 Aggregate -down-> (ResourceChanged)
 Aggregate -down-> (ResourceStateSnapshotTaken)
+Aggregate -down-> (DeviceMetadataUpdatePending)
+Aggregate -down-> (DeviceMetadataUpdated)
+Aggregate -down-> (DeviceMetadataSnapshotTaken)
 
 @enduml
 {{< /plantuml >}}
