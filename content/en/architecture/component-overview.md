@@ -195,16 +195,17 @@ participant C as "Mobile App"
 C -> GGW ++: Update device/light resource
 activate C
 GGW -> RA ++: Update device/light resource
-RA --> EB: Publish ResourceUpdateRequestEvent
+RA --> EB: Publish ResourceUpdatePending event
 return
-EB --> CGW: ResourceUpdateRequestEvent
+EB --> CGW: ResourceUpdatePending event
 activate CGW
 CGW -> D ++: Update /light resource
 return Update successful
 CGW -> RA ++: Update device/light successful
-return Publish ResourceUpdateSuccessfulEvent
+RA --> EB: Publish ResourceUpdated event
+return
 deactivate CGW
-EB --> GGW: ResourceUpdateSuccessfulEvent
+EB --> GGW: ResourceUpdated event
 return Updated
 
 @enduml
