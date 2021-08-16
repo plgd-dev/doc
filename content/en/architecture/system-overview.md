@@ -12,8 +12,10 @@ menu:
 toc: true
 ---
 
-# System Context Diagram
+## System Context Diagram
+
 ![L1](/images/diagrams/system-plgd.svg "medium-zoom-image")
 
-# plgd Context Diagram
+## plgd Context Diagram
+
 ![L2](/images/diagrams/container-plgd.svg "medium-zoom-image")

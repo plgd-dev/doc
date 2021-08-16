@@ -179,7 +179,7 @@ CGW -> RA ++: Update resource representation
 return
 @enduml
 {{< /plantuml >}}
-
+MD013
 From this moment on, device is reachable to all authorized clients and devices. Resource update requests received by particular Gateway where the client is connected are forwarded to the [Resource Aggregate](#resource-aggregate). Successful command validation precede storing and publishing of this event to the [Event Bus](#event-bus), to which is the CoAP Gateway subscribed. If the update request event targets the device hosted by this instance of the CoAP Gateway, [UPDATE](https://tools.ietf.org/html/rfc7252#section-5.8.2) is forwarded over the authorized TCP channel to the device. Device response is forwarded to the [Resource Aggregate](#resource-aggregate) which issues resource updated event updating the resource projection and informing client that the update was successful.
 
 #### Resource Update
