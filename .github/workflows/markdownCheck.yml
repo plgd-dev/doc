@@ -1,0 +1,17 @@
+name: Lint markdown
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install and run mdl
+        run: |
+          sudo snap install mdl
+          mdl .
