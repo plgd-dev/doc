@@ -16,7 +16,7 @@ toc: true
 
 The CoAP gateway acts act as a CoAP Client, communicating with IoT devices - CoAP Servers following the [OCF specification](https://openconnectivity.org/developer/specifications/). As the component diagram describes, responsibilities of the gateway are:
 
-- handle and maintain TCP connections comming from devices
+- handle and maintain TCP connections coming from devices
 - forward [authentication and authorization requests (see 5.5.5)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=15)  to the Authorization Service
 - process device CRUDN operations which are by its nature forwarded to the [Resource Aggregate](#resource-aggregate) or [Resource Directory](#resource-directory)
 
@@ -84,7 +84,7 @@ return Signed up\n(JWT Access Token, Refresh Token, ...)
 @enduml
 {{< /plantuml >}}
 
-Successful registration to the plgd.dev is followed by authorization request called Sign In. Sign In is required right after sucessfully established TCP connection to the CoAP Gateway, otherwise the device won't be reachable - marked as online. Other device requests are blocked as well unless the device successfully Signs In. Successful autorization precedes validation of the [JWT Access Token](https://tools.ietf.org/html/rfc6749#section-1.4).
+Successful registration to the plgd.dev is followed by authorization request called Sign In. Sign In is required right after successfully established TCP connection to the CoAP Gateway, otherwise the device won't be reachable - marked as online. Other device requests are blocked as well unless the device successfully Signs In. Successful autorization precedes validation of the [JWT Access Token](https://tools.ietf.org/html/rfc6749#section-1.4).
 
 {{% warning %}}
 Only JWT access tokens are supported on the device.
@@ -147,7 +147,7 @@ Information which is published doesn't contain resource representation, only res
 ```
 
 Resource publish request is forwarded to the [Resource Aggregate](#resource-aggregate) which registers a new resource. This process makes the resource discoverable.
-The plgd.cloud starts observation of **every successfuly published resource** by sending the [OBSERVE request](https://tools.ietf.org/html/rfc7641#section-1.2). Each of the received notification from the device is send to the [Resource Aggregate](#resource-aggregate) to record the change.
+The plgd.cloud starts observation of **every successfully published resource** by sending the [OBSERVE request](https://tools.ietf.org/html/rfc7641#section-1.2). Each of the received notification from the device is send to the [Resource Aggregate](#resource-aggregate) to record the change.
 
 As the response to the resource observation request contains actual [representation](https://tools.ietf.org/html/rfc7641#section-1.1), CoAP Gateway doesn't have to pull the data at all. Additional responses called [notifications](https://tools.ietf.org/html/rfc7641#section-3.2) are by the device send whenever the representation of the device changes.
 
@@ -346,7 +346,7 @@ plgd cloud uses [NATS](https://nats.io) messaging system as it's event bus.
 ## Event Store
 
 plgd cloud persist events in an event store, which is a database of events. The store has an API for adding and retrieving device's events. Events needs to be versioned and written in a correct order. To achieve the consistency, optimistic concurrency control method is applied during each write.
-After the event is successfuly written into the event store, it's distributed to the event bus which notifies all subscribers about the change asynchronously.
+After the event is successfully written into the event store, it's distributed to the event bus which notifies all subscribers about the change asynchronously.
 
 The plgd cloud defines an [EventStore](https://github.com/plgd-dev/cloud/blob/v2/resource-aggregate/cqrs/eventstore/eventstore.go#L23) interface what allows integration of different technologies to store the events. During the last 2 years the project evaluated multiple technologies for both EventStore and EventBus:
 

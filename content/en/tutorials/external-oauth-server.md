@@ -28,12 +28,12 @@ To skip internal mocked OAuth Server and switch to your external one, configure 
 ```
 
 # How to configure Auth0
-Assuming you have an account in the Auth0 OAuth as a service, you need to create 2 Applications and one API. Follow these steps to successfuly configure bundle to run against your Auth0 instance.
+Assuming you have an account in the Auth0 OAuth as a service, you need to create 2 Applications and one API. Follow these steps to successfully configure bundle to run against your Auth0 instance.
 1. Create new **API** in the APIs section
     1. Use name of your choice
     1. Set a unique API identifier (e.g. `https://api.example.com`)
     1. After saving open details of newly created api and **Enable Offline Access**
-    1. Store the internal Auth0 API Id required for the step 2c 
+    1. Store the internal Auth0 API Id required for the step 2c
     1. Switch to **Permissions** tab and add `openid` scope to the list
 1. Create new **Regular Web Application** in the Application section
     1. Make sure **Token Endpoint Authentication Method** is set to `None`
