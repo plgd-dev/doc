@@ -12,38 +12,45 @@ menu:
 toc: true
 ---
 
-# Creating Resources
-## Description
-Device with collection resource allows dynamic creation of resources. The created resource can only be of a well defined type (see call to `oc_collections_add_rt_factory` in [Guide](#define-constructor-and-destructor)) and all created resources are contained within the collection.
+## Creating resources
 
-## Guide
-To develop your own device you can examine the example in [cloud_server](https://github.com/iotivity/iotivity-lite/blob/master/apps/cloud_server.c). Lets examine the example to identify the necessary steps that allow a device to dynamically create resources on a collection.
+Device with a collection resource allows dynamic creation of resources. The created resource can only be of a well defined type (see call to `oc_collections_add_rt_factory` in [Guide](#define-constructor-and-destructor)) and all created resources are contained within the collection.
 
-### Create a collection resource
+### How to create a resource
+
+To develop your own device you can check the example in [cloud_server](https://github.com/iotivity/iotivity-lite/blob/master/apps/cloud_server.c). Lets examine the code to identify the necessary steps that allow a device to dynamically create resources in a collection.
+
+#### Create a collection resource
+
 ```C
 oc_resource_t* col = oc_new_collection(NULL, "/switches", 1, 0);
 oc_resource_bind_resource_type(col, "oic.wk.col");
 ```
-For precise description of arguments of given functions please refer to the iotivity-lite documentation.
 
-### Determine which resource types can populate the collection
+For precise description of the arguments of the given functions please refer to the iotivity-lite documentation.
+
+#### Determine which resource types can populate the collection
+
 ```C
 oc_collection_add_supported_rt(col, "oic.r.switch.binary");
 ```
 
-Supported resource types are visible through `oic.if.baseline` interface in a property `rts` of the collection.
+Supported resource types are visible through `oic.if.baseline` interface in the `rts` property of the collection.
 
-### Enable create operation on the collection resource
+#### Enable create operation on the collection resource
+
 ```C
 oc_resource_bind_resource_interface(col, OC_IF_CREATE);
 ```
 
-Supporting creating resource is visible through `oic.if.baseline` interface in a property `if` of the collection. The property must contains `oic.if.create` interface.
+Supporting creating of resources is visible through `oic.if.baseline` interface in the `if` property of the collection. To support creation of resources the property must contain the `oic.if.create` interface.
 
-### Define constructor and destructor
+#### Define constructor and destructor
+
 ```C
 oc_collections_add_rt_factory("oic.r.switch.binary", new_switch_instance, free_switch_instance);
 ```
+
 ```C
 typedef struct oc_switch_t
 {
@@ -107,28 +114,33 @@ free_switch_instance(oc_resource_t *resource)
 }
 ```
 
-### Compile and link
-To enable create operation in iotivity-light library compile with CREATE=1 option.
+#### Compile and link
+
+To enable create operation in iotivity-lite library compile with CREATE=1 option.
 
 ```make
 make cloud_server CLOUD=1 SECURE=0 CREATE=1
 ```
 
-### Create a resource
-When you have a cloud backend and cloud_server binary running. You can use cloud client to create a resource.
+#### Create a resource
 
-### Using go grpc client
+When you have a cloud backend and a cloud_server binary running, you can use a cloud client to create a resource.
+
+#### Create by go grpc client
+
 Go [grpc client](https://github.com/plgd-dev/cloud/tree/master/bundle/client/grpc) is a simple tool that supports several useful commands we can combine to create a resource.
 
-1. Use the get command to identify the collection device
+- Use the get command to identify the collection device
 
-The get command retrieves data of all available devices. To correctly call the create command the device id and href properties are necessary. In the output find the item with type "oic.wk.col".
+The get command retrieves data of all available devices. To correctly call the create command the device `id` and `href` properties are necessary. In the output find the item with type `oic.wk.col`.
 
 ```bash
 // retrieves all resources of all devices
 ./grpc -get
 ```
+
 Output:
+
 ```json
 ...
 {
@@ -147,7 +159,9 @@ Output:
 }
 ...
 ```
-2. Create a binary switch resource in the collection
+
+- Create a binary switch resource in the collection
+
 ```bash
 ./grpc -create -deviceid 2b9ed3ed-ddf3-4c9c-4d21-9ec1f6ba6b03 -href /switches <<EOF
 {
@@ -168,15 +182,17 @@ Output:
 EOF
 ```
 
-The command creates a binary switch ("oic.r.switch.binary"), which supports actuator interface ("oic.if.a") and has two possible states ("value": true/false). The switch is set to be discoverable and observable ("bm": 3; mask value 3 equals `OC_DISCOVERABLE | OC_OBSERVABLE`).
+The command creates a binary switch (`oic.r.switch.binary`), which supports actuator interface (`oic.if.a`) and has two possible states ("value": `true`/`false`). The switch is set to be discoverable and observable (`bm`: 3; mask value 3 equals `OC_DISCOVERABLE | OC_OBSERVABLE`).
 
-3. Use the get command again to examine the newly created switch
+- Use the get command again to examine the newly created switch
+
 ```bash
 // retrieves all resources of all devices
 ./grpc -get
 ```
 
 Output:
+
 ```json
 ...
 {
@@ -196,14 +212,16 @@ Output:
 ...
 ```
 
-# Deleting Resources
-## Description
+## Deleting resources
+
 Device with collection resource allows to delete dynamically created resource. To delete resource you need to set delete handler during creating resource.
 
-## Guide
-To develop your own device you can examine the example in [cloud_server](https://github.com/iotivity/iotivity-lite/blob/master/apps/cloud_server.c). Lets examine the example to identify the necessary steps that allow a device to delete dynamically created resource at a collection.
+### How to delete a resource
 
-### Set delete handler at constructor
+To develop your own device check the example in [cloud_server](https://github.com/iotivity/iotivity-lite/blob/master/apps/cloud_server.c). Lets examine the code to identify the necessary steps that allow a device to delete a dynamically created resource from a collection.
+
+#### Set delete handler at constructor
+
 ```C
 // delete handler of switch
 static void
@@ -243,7 +261,8 @@ new_switch_instance(const char* href, oc_string_array_t *types,
 }
 ```
 
-### Using go grpc client
+#### Delete by go grpc client
+
 Delete a created binary switch resource from the collection.
 
 ```bash

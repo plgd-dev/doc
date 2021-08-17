@@ -12,8 +12,6 @@ menu:
 toc: true
 ---
 
-# Audit Log
-
 TODO
 
 ## Event Deduplication

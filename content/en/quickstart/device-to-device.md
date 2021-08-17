@@ -14,32 +14,41 @@ toc: true
 This guide will walk you through the process of discovering, on-boarding, controlling your secure [OCF Device](https://openconnectivity.org/specs/OCF_Device_Specification_v2.2.3.pdf) using **plgd/sdk** library on your PC.
 
 ## Prerequisite
+
 - The Cloud Server runs on your Raspberry Pi
 
 ## Install OCF Client example
+
 1. Checkout [plgd/sdk](https://github.com/plgd-dev/sdk/tree/v2) library:
+
     ```shell script
     # execute commands on your PC
     git clone -b v2 https://github.com/plgd-dev/sdk.git --recursive
     cd sdk
     ```
+
 2. Build OCF Client example:
+
     ```shell script
     cd cmd/ocfclient
     go build
-    ```   
+    ```
 
 3. Run OCF Client example in the same folder:
+
     ```shell script
-    ./ocfclient 
+    ./ocfclient
     ```
+
 The OCF Client is now running on your PC. It's a console application that allows you to communicate with the device on your local network, without the plgd cloud. Code is available [here](https://github.com/plgd-dev/sdk/tree/v2/cmd/ocfclient).
 
 ## How to use OCF Client example
-### Discover devices on local network 
 
-To discover OCF devices (i.e. Cloud Server example), please follow below step: 
-```shell script
+### Discover devices on local network
+
+To discover OCF devices (i.e. Cloud Server example), please follow below step:
+
+```shell
 #################### OCF Client for D2D ####################
 [0] Display this menu
 --------------------------------------------------------------
@@ -55,7 +64,7 @@ To discover OCF devices (i.e. Cloud Server example), please follow below step:
 
 Select menu : 1
 
-Discovered devices : 
+Discovered devices :
 [
     {
         "details": {
@@ -82,8 +91,10 @@ Discovered devices :
 ```
 
 ### Transfer ownership (On-boarding)
-To transfer ownership to the OCF device, please follow below step: 
-```shell script
+
+To transfer ownership to the OCF device, please follow below step:
+
+```shell
 #################### OCF Client for D2D ####################
 [0] Display this menu
 --------------------------------------------------------------
@@ -101,15 +112,17 @@ Select menu : 2
 
 Input device ID : e2f7b281-d919-4e4b-4ed9-6156caead050
 
-Transferring Ownership of e2f7b281-d919-4e4b-4ed9-6156caead050 was successful  : 
+Transferring Ownership of e2f7b281-d919-4e4b-4ed9-6156caead050 was successful  :
 e2f7b281-d919-4e4b-4ed9-6156caead050
 ```
 
-
 ### Interact with the device locally
-To interact with OCF device including retrieving, updating via CoAP over udp message, please follow below step: 
+
+To interact with OCF device including retrieving, updating via CoAP over udp message, please follow below step:
+
 1. Retrieve resources of the device:
-    ```shell script
+
+   ```shell
     #################### OCF Client for D2D ####################
     [0] Display this menu
     --------------------------------------------------------------
@@ -122,12 +135,12 @@ To interact with OCF device including retrieving, updating via CoAP over udp mes
     --------------------------------------------------------------
     [99] Exit
     ##############################################################
-    
+
     Select menu : 3
-    
+
     Input device ID : e2f7b281-d919-4e4b-4ed9-6156caead050
-    
-    Resources of e2f7b281-d919-4e4b-4ed9-6156caead050 : 
+
+    Resources of e2f7b281-d919-4e4b-4ed9-6156caead050 :
     [
         {   "href": "/oic/p"   },
         {   "href": "/oic/res"   },
@@ -151,7 +164,8 @@ To interact with OCF device including retrieving, updating via CoAP over udp mes
     ```
 
 2. Retrieve a resource of the device:
-    ```shell script
+
+    ```shell
     #################### OCF Client for D2D ####################
     [0] Display this menu
     --------------------------------------------------------------
@@ -164,14 +178,14 @@ To interact with OCF device including retrieving, updating via CoAP over udp mes
     --------------------------------------------------------------
     [99] Exit
     ##############################################################
-    
+
     Select menu : 4
-    
+
     Input device ID : e2f7b281-d919-4e4b-4ed9-6156caead050
     ...
     Input resource href : /light/1
-    
-    Resource properties of e2f7b281-d919-4e4b-4ed9-6156caead050/light/1 : 
+
+    Resource properties of e2f7b281-d919-4e4b-4ed9-6156caead050/light/1 :
     {
         "if": [
             "oic.if.rw",
@@ -187,7 +201,8 @@ To interact with OCF device including retrieving, updating via CoAP over udp mes
     ```
 
 3. Update a resource of the device:
-    ```shell script
+
+    ```shell
     #################### OCF Client for D2D ####################
     [0] Display this menu
     --------------------------------------------------------------
@@ -200,14 +215,14 @@ To interact with OCF device including retrieving, updating via CoAP over udp mes
     --------------------------------------------------------------
     [99] Exit
     ##############################################################
-    
+
     Select menu : 5
-    
+
     Input device ID : e2f7b281-d919-4e4b-4ed9-6156caead050
     ...
     Input resource href : /light/1
-   
-    Resource properties of e2f7b281-d919-4e4b-4ed9-6156caead050/light/1 : 
+
+    Resource properties of e2f7b281-d919-4e4b-4ed9-6156caead050/light/1 :
     {
         "if": [
             "oic.if.rw",
@@ -220,19 +235,21 @@ To interact with OCF device including retrieving, updating via CoAP over udp mes
         ],
         "state": true
     }
-   
+
     Input property name : power
-    
+
     Input property value : 55
-    
+
     Property data to update : {"power":55}
-    
+
     Updating resource property of e2f7b281-d919-4e4b-4ed9-6156caead050/light/1 was successful
     ```
-      
+
 ### Reset ownership (Off-boarding)
-To reset ownership of the OCF device, please follow below step: 
-```shell script
+
+To reset ownership of the OCF device, please follow below step:
+
+```shell
 #################### OCF Client for D2D ####################
 [0] Display this menu
 --------------------------------------------------------------
@@ -252,11 +269,13 @@ Input device ID : e2f7b281-d919-4e4b-4ed9-6156caead050
 
 Off-boarding e2f7b281-d919-4e4b-4ed9-6156caead050 was successful
 ```
-  
+
 ## How to make OCF Client on your own
+
 To make your own OCF Client application, you can use following codes included in [main.go](https://github.com/plgd-dev/sdk/blob/v2/cmd/ocfclient/main.go), [ocfclient.go](https://github.com/plgd-dev/sdk/blob/v2/cmd/ocfclient/ocfclient.go).
 
-### Initialize OCF Client 
+### Initialize OCF Client
+
 ```gotemplate
 func (c *OCFClient) Initialize() error {
 
@@ -277,7 +296,8 @@ func (c *OCFClient) Close() error {
 }
 ```
 
-### Create secure SDK Client: 
+### Create secure SDK Client
+
 ```gotemplate
 func NewSDKClient() (*local.Client, error) {
     mfgTrustedCABlock, _ := pem.Decode(MfgTrustedCA)
@@ -327,113 +347,119 @@ func NewSDKClient() (*local.Client, error) {
 
     return client, nil
 }
-``` 
+```
 
 ### Discover devices on the local network
+
 ```gotemplate
 func (c *OCFClient) Discover(timeoutSeconds int) (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeoutSeconds)*time.Second)
-	defer cancel()
-	res, err := c.client.GetDevices(ctx, local.WithError(func(error) {}))
-	if err != nil {
-		return "", err
-	}
+    ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeoutSeconds)*time.Second)
+    defer cancel()
+    res, err := c.client.GetDevices(ctx, local.WithError(func(error) {}))
+    if err != nil {
+        return "", err
+    }
 
-	deviceInfo := []interface{}{}
-	devices := []local.DeviceDetails{}
-	for _, device := range res {
-		if device.IsSecured {
-			devices = append(devices, device)
-			devInfo := map[string]interface{}{"id":device.ID, "name":device.Ownership.Name, "owned":device.Ownership.Owned,
-				"ownerID":device.Ownership.OwnerID, "details":device.Details}
-			deviceInfo = append(deviceInfo, devInfo)
-		}
-	}
-	c.devices = devices
+    deviceInfo := []interface{}{}
+    devices := []local.DeviceDetails{}
+        for _, device := range res {
+            if device.IsSecured {
+                devices = append(devices, device)
+                devInfo := map[string]interface{}{"id":device.ID, "name":device.Ownership.Name, "owned":device.Ownership.Owned,
+                    "ownerID":device.Ownership.OwnerID, "details":device.Details}
+                deviceInfo = append(deviceInfo, devInfo)
+            }
+        }
+        c.devices = devices
 
-	devicesJSON, err := enjson.MarshalIndent(deviceInfo, "", "    ")
-	if err != nil {
-		return "", err
-	}
-	return string(devicesJSON), nil
+        devicesJSON, err := enjson.MarshalIndent(deviceInfo, "", "    ")
+        if err != nil {
+            return "", err
+        }
+        return string(devicesJSON), nil
 }
 ```
 
 ### Transfer ownership to the device
+
 ```gotemplate
 func (c *OCFClient) OwnDevice(deviceID string) (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-	return c.client.OwnDevice(ctx, deviceID, local.WithOTM(local.OTMType_JustWorks))
+    ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+    defer cancel()
+    return c.client.OwnDevice(ctx, deviceID, local.WithOTM(local.OTMType_JustWorks))
 }
 ```
 
-### Get resources of the device 
+### Get resources of the device
+
 ```gotemplate
 func (c *OCFClient) GetResources(deviceID string) (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), Timeout)
-	defer cancel()
-	_, links, err := c.client.GetRefDevice(ctx, deviceID)
+    ctx, cancel := context.WithTimeout(context.Background(), Timeout)
+    defer cancel()
+    _, links, err := c.client.GetRefDevice(ctx, deviceID)
 
-	resourcesInfo := []map[string]interface{}{}
-	for _, link := range links {
-		info := map[string]interface{}{"href":link.Href} 
-		resourcesInfo = append(resourcesInfo, info)
-	}
+    resourcesInfo := []map[string]interface{}{}
+    for _, link := range links {
+        info := map[string]interface{}{"href":link.Href}
+        resourcesInfo = append(resourcesInfo, info)
+    }
 
-	linksJSON, err := enjson.MarshalIndent(resourcesInfo, "", "    ")
-	if err != nil {
-		return "", err
-	}
-	return string(linksJSON), nil
+    linksJSON, err := enjson.MarshalIndent(resourcesInfo, "", "    ")
+    if err != nil {
+        return "", err
+    }
+    return string(linksJSON), nil
 }
 ```
 
-### Get a resource of the device 
+### Get a resource of the device
+
 ```gotemplate
 func (c *OCFClient) GetResource(deviceID, href string) (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), Timeout)
-	defer cancel()
+    ctx, cancel := context.WithTimeout(context.Background(), Timeout)
+    defer cancel()
 
-	var got interface{} 
-	opts := []local.GetOption{local.WithInterface("oic.if.baseline")}
-	err := c.client.GetResource(ctx, deviceID, href, &got, opts...)
-	if err != nil {
-		return "", err
-	}
+    var got interface{}
+    opts := []local.GetOption{local.WithInterface("oic.if.baseline")}
+    err := c.client.GetResource(ctx, deviceID, href, &got, opts...)
+    if err != nil {
+        return "", err
+    }
 
-	var resourceJSON bytes.Buffer
-	resourceBytes, err := json.Encode(got)
-	err = enjson.Indent(&resourceJSON, resourceBytes, "", "    ")
-	if err != nil {
-		return "", err
-	}
-	return string(resourceJSON.Bytes()), nil
+    var resourceJSON bytes.Buffer
+    resourceBytes, err := json.Encode(got)
+    err = enjson.Indent(&resourceJSON, resourceBytes, "", "    ")
+    if err != nil {
+        return "", err
+    }
+    return string(resourceJSON.Bytes()), nil
 }
 ```
 
-### Update a resource of the device 
+### Update a resource of the device
+
 ```gotemplate
 func (c *OCFClient) UpdateResource(deviceID string, href string, data interface{}) (string, error) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), Timeout)
-	defer cancel()
+    ctx, cancel := context.WithTimeout(context.Background(), Timeout)
+    defer cancel()
 
-	opts := []local.UpdateOption{local.WithInterface("oic.if.rw")}
-	err := c.client.UpdateResource(ctx, deviceID, href, data, nil, opts...)
-	if err != nil {
-		return "", err
-	}
+    opts := []local.UpdateOption{local.WithInterface("oic.if.rw")}
+    err := c.client.UpdateResource(ctx, deviceID, href, data, nil, opts...)
+    if err != nil {
+        return "", err
+    }
 
-	return "", nil
+    return "", nil
 }
 ```
 
-### Reset ownership of the device 
+### Reset ownership of the device
+
 ```gotemplate
 func (c *OCFClient) DisownDevice(deviceID string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-	return c.client.DisownDevice(ctx, deviceID)
+    ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+    defer cancel()
+    return c.client.DisownDevice(ctx, deviceID)
 }
 ```

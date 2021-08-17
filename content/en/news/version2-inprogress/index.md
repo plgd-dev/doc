@@ -1,4 +1,3 @@
-
 ---
 date: 2021-02-02
 title: "v2 in progress"
@@ -8,8 +7,9 @@ categories: ["Releases"]
 
 We are receiving many questions about the ongoing plgd activities. If you are looking at the master branch, you might be asking why we didn't commit anything for the last weeks?
 
-It's because we are havily working on the **plgd cloud 2.0**!
+It's because we are heavily working on the **plgd cloud 2.0**!
 There will be more detailed post about new features and changes, but to give you some insights into what you can expect:
+
 - rapid memory optimization
 - optimized device connection handling
 - new event store model designed together with the MongoDB team

@@ -14,27 +14,33 @@ toc: true
 
 Devices are in the authorization service organized by the owner ID retrieved from the JWT token. The plgd API will based on this value identify the user and grant him the permission only to devices he owns. By default, JWT claim `sub` is used as the owner ID. In case you connect the plgd authorization service with the Auth0, each logged-in user can access only his devices. This behaviour can be changed by changing the `OWNER_CLAIM` configuration property and adding custom claim to your Auth0 users.
 
-# How to use custom claim with Auth0
-## Assign claim to user
+## How to use custom claim with Auth0
+
+### Assign claim to user
+
 1. Go to **Users & Roles**
 1. Find your user and edit his details
 1. Extend the **user_metadata** by a custom claim, e.g.
+
     ```json
     {
         "tenant": "e3e0102d-a45b-5cb2-a22e-3a0410deb8d6"
     }
     ```
 
-## Assign wildcard permission to your service client
+### Assign wildcard permission to your service client
+
 1. Go to **Applications**
 1. Edit your **Machine to Machine** application
 1. Open **Advanced Settings**, switch to **Application Metadata** and add entry:
     - `Key`: `tenant`
     - `Value`: `*`
 
-## Include custom claim to access token
+### Include custom claim to access token
+
 1. Go to **Rules** and crete new one
 1. Copy paste the function below which uses custom claim `https://plgd.dev/tenant`
+
     ```js
     function addTenantToAccessToken(user, context, callback) {
         var tenantClaim = 'https://plgd.dev/tenant';

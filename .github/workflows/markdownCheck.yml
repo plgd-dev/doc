@@ -14,4 +14,4 @@ jobs:
       - name: Install and run mdl
         run: |
           sudo snap install mdl
-          mdl .
+          mdl --ignore-front-matter .
