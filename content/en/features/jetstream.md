@@ -22,19 +22,18 @@ There are still some edge-cases when the plgd event couldn't be published to the
 More information about the JetStream can be found [here](https://docs.nats.io/jetstream).
 {{% /note %}}
 
-
 ## NATS subjects overview
-- `events.{deviceID}.resource-links.{eventType}` publishes resource-links events of types `resourcelinkspublished`, `resourcelinksunpublished`,
-`resourcelinkssnapshottaken` for device `deviceID`
-- `events.{deviceID}.metadata.{eventType}` publishes metadata events of types `devicemetadataupdatepending`, `devicemetadataupdated`,
-`devicemetadatasnapshottaken` for device `deviceID`
-- `events.{deviceID}.resources.{resourceID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`,
-`resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceID`, which is calculated as `uuid.NewV5(uuid.NamespaceURL, deviceID+href)` for device `deviceID`.
+
+- `events.{deviceID}.resource-links.{eventType}` publishes resource-links events of types `resourcelinkspublished`, `resourcelinksunpublished`, `resourcelinkssnapshottaken` for device `deviceID`
+- `events.{deviceID}.metadata.{eventType}` publishes metadata events of types `devicemetadataupdatepending`,`devicemetadataupdated`, `devicemetadatasnapshottaken` for device `deviceID`
+- `events.{deviceID}.resources.{resourceID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceID`, which is calculated as `uuid.NewV5(uuid.NamespaceURL, deviceID+href)` for device `deviceID`.
 
 Each event is compressed by [snappy](https://github.com/google/snappy) and encoded in protobuf [event envelope](https://github.com/plgd-dev/cloud/blob/v2/resource-aggregate/cqrs/eventbus/pb/eventbus.proto). The event envelope consist of `Event.data` containing the event and `Event.event_type` describing the type of the event.
 
 ### Consumer subscriptions options
+
 For consumer of events you can subscribe to:
+
 - `events.>` gets all events of all devices
 - `events.{deviceID}.>` gets all events of device `deviceID`
 - `events.{deviceID}.resource-links.>` go get all resource links events of device `deviceID`
@@ -50,8 +49,9 @@ For consumer of events you can subscribe to:
 - `events.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices
 
 ## Enable JetStream
+
 {{% note %}}
-Deployment of the JetStream as an EventBus will be controlled by a single configuration option available in the plgd HELM chart. This is currently WIP. 
+Deployment of the JetStream as an EventBus will be controlled by a single configuration option available in the plgd HELM chart. This is currently WIP.
 {{% /note %}}
 
 {{% warning %}}
@@ -59,6 +59,7 @@ It's required from you to create event streams before the JetStream can be used 
 {{% /warning %}}
 
 ### Enable jetstream at plgd #bundle
+
 Set env variable `JETSTREAM=true` of bundle
 
 ```bash
@@ -75,6 +76,7 @@ Required [nats client](https://github.com/nats-io/natscli/releases/latest)
 #### Enable jetstream at nats-server
 
 Append jetstream configuration to `nats.config` of nats-server:
+
 ```jsonc
 ...
 jetstream: {
@@ -105,7 +107,7 @@ Setup events stream `stream.json` where all events of cloud will be stored:
 {
   "name": "EVENTS", // A name for the Stream that may not have spaces, tabs, period (.), greater than (>), or asterisk (*).
   "subjects": [ // A list of subjects to consume, supports wildcards.
-    "events.>" 
+    "events.>"
   ],
   "retention": "limits",  // How message retention is considered, limits (default), interest or workQueue.
   "max_consumers": -1, // How many Consumers can be defined for a given Stream, -1 for unlimited.
@@ -126,25 +128,29 @@ More [information](https://docs.nats.io/jetstream/concepts/streams) about stream
 {{% /note %}}
 
 And then apply the configuration to the nats-server via:
+
 ```bash
 nats str add EVENTS --config /configs/jetstream.json
 ```
 
 ### Deploy JetStream Controller for K8S
+
 Creates NATS Server with JetStream enabled as a leaf node connection.
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/nats-io/k8s/master/nats-server/nats-js-leaf.yml
+kubectl apply -f https://raw.githubusercontent.com/nats-io/k8s/master/nats-server/nats-js-leaf.yml
 ```
 
 Now install the JetStream CRDs and Controller:
-``` 
+
+```bash
 helm repo add nats https://nats-io.github.io/k8s/helm/charts/
 helm install nats nats/nats --set nats.image=synadia/nats-server:nightly --set=nats.jetstream.enabled=true
 helm install nack nats/nack --set=jetstream.nats.url=nats://nats:4222
 ```
 
 Create one events stream
+
 ```yaml
 ---
 apiVersion: jetstream.nats.io/v1beta1
@@ -159,6 +165,7 @@ spec:
 ### Enable JetStream at Resource Aggregate
 
 Set `clients.eventBus.nats.jetstream` to true value.
+
 ```yaml
 ...
 clients:
@@ -167,5 +174,3 @@ clients:
       jetstream: true
 ...
 ```
-
-

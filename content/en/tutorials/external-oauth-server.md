@@ -14,6 +14,7 @@ toc: true
 
 Even though the bundle start core plgd services as processes in a single container, a user has still a possibility to configure most of the services parameters. **For testing purposes**, the external OAuth Server (e.g. [Auth0](https://auth0.com)) can be set up.
 To skip internal mocked OAuth Server and switch to your external one, configure following environment variables:
+
 ```yaml
     OAUTH_AUDIENCE: https://api.example.com
     OAUTH_ENDPOINT_AUTH_URL: https://auth.example.com/authorize
@@ -27,8 +28,10 @@ To skip internal mocked OAuth Server and switch to your external one, configure 
     OWNER_CLAIM: sub
 ```
 
-# How to configure Auth0
+## How to configure Auth0
+
 Assuming you have an account in the Auth0 OAuth as a service, you need to create 2 Applications and one API. Follow these steps to successfully configure bundle to run against your Auth0 instance.
+
 1. Create new **API** in the APIs section
     1. Use name of your choice
     1. Set a unique API identifier (e.g. `https://api.example.com`)

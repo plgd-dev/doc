@@ -1,4 +1,3 @@
-
 ---
 date: 2020-08-26
 title: "First certified Cloud-to-Cloud solution"
