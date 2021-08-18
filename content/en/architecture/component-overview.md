@@ -99,10 +99,15 @@ hide footbox
 
 participant D as "Device"
 participant CGW as "CoAP Gateway"
+participant AS as "Authorization Server"
+participant EB as "Event Bus"
 participant RA as "Resource Aggregate"
 
 D -> CGW ++: Sign In
 CGW -> CGW: Validate JWT Access Token
+CGW -> AS ++: Is device registered?
+return Ok
+CGW -> EB: Subscribe to device & owner events
 CGW -> RA ++: Declare device as online
 return
 return Signed In
@@ -240,32 +245,37 @@ User might decide to delete the device directly using the plgd API. This approac
 skinparam backgroundColor transparent
 hide footbox
 
-entity "Client" as Client
-participant "Gateway" as Gateway
-participant "Resource Aggregate" as ResourceAggregate
-participant "Authorization Server" as AuthServer
-control "Event Bus" as Bus
-participant "CoAP Gateway" as CGateway
-entity "OCF Server" as Server
+participant C as "Client"
+participant GGW as "gRPC Gateway"
+participant RA as "Resource Aggregate"
+participant AS as "Authorization Server"
+participant EB as "Event Bus"
+participant CGW as "CoAP Gateway"
+participant D as "Device"
 
-Client -> Gateway: DeleteDevicesRequest
-activate Client
-activate Gateway
-Gateway -> ResourceAggregate : DeleteDevicesRequest
-activate ResourceAggregate
-ResourceAggregate -> Gateway : DeleteDevicesResponse
-deactivate ResourceAggregate
-Gateway -> AuthServer : DeleteDevicesRequest
-activate AuthServer
-AuthServer -> Gateway : DeleteDevicesResponse
-deactivate AuthServer
-AuthServer --> Bus: DevicesDeleted
-Gateway -> Client: DeleteDevicesResponse
-deactivate Gateway
-deactivate Client
-Bus --> CGateway: DevicesDeleted
-CGateway -> Server : Disconnect
-destroy Server
+C -> GGW ++: DeleteDevicesRequest
+GGW -> RA ++: DeleteDevicesRequest
+return DeleteDevicesResponse
+GGW -> AS ++: DeleteDevicesRequest
+return DeleteDevicesResponse
+AS --> EB: DevicesDeleted
+return DeleteDevicesResponse
+EB --> CGW: DevicesDeleted
+CGW -> D: Disconnect
+destroy D
+
+D -> CGW ++: Sign In
+CGW -> CGW: Validate JWT Access Token
+CGW -> AS ++: Is device registered?
+return Not registered
+note right
+  Revoke Refresh Token
+end note
+return Unauthorized
+CGW -> D: Disconnect
+destroy D
+
+D -> D: Cleanup cloud configuration
 @enduml
 {{< /plantuml >}}
 
