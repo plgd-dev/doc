@@ -99,10 +99,15 @@ hide footbox
 
 participant D as "Device"
 participant CGW as "CoAP Gateway"
+participant AS as "Authorization Server"
+participant EB as "Event Bus"
 participant RA as "Resource Aggregate"
 
 D -> CGW ++: Sign In
 CGW -> CGW: Validate JWT Access Token
+CGW -> AS ++: Is device registered?
+return Ok
+CGW -> EB: Subscribe to device & owner events
 CGW -> RA ++: Declare device as online
 return
 return Signed In
@@ -218,6 +223,61 @@ return Updated
 {{% note %}}
 Client requesting resource observation will immediately start to receive notifications without additional request to the device over CoAP Gateway. As the plgd.cloud is by default observing resources of all connected devices, responsible Gateway will just subscribe to the [Event Bus](#event-bus) and forward requested notifications. **Handling of CRUDN operations is same for every Gateway.**
 {{% /note %}}
+
+#### Delete a device
+
+At some point, user might want to delete the device from the plgd Cloud. There are two possibilities how to achieve it.
+
+##### Disconnect the device from the plgd Cloud using Onboarding Tool
+
+Device is at this point requested to disconnect from the plgd Cloud from the local network, by the Onboarding tool. This process covers multiple steps:
+
+1. Send the SignOff message which deregisters the device
+2. Close the TCP connection
+3. Cleanup of the cloud configuration resource
+
+##### Force disconnect by the plgd Cloud
+
+User might decide to delete the device directly using the plgd API. This approach is handy when it comes to stale devices, which cannot be anymore requested by the Onboarding Tool to disconnect and you want to cleanup your list of devices in the plgd Cloud.
+
+{{< plantuml id="device-delete" >}}
+@startuml
+skinparam backgroundColor transparent
+hide footbox
+
+participant C as "Client"
+participant GGW as "gRPC Gateway"
+participant RA as "Resource Aggregate"
+participant AS as "Authorization Server"
+participant EB as "Event Bus"
+participant CGW as "CoAP Gateway"
+participant D as "Device"
+
+C -> GGW ++: DeleteDevicesRequest
+GGW -> RA ++: DeleteDevicesRequest
+return DeleteDevicesResponse
+GGW -> AS ++: DeleteDevicesRequest
+return DeleteDevicesResponse
+AS --> EB: DevicesDeleted
+return DeleteDevicesResponse
+EB --> CGW: DevicesDeleted
+CGW -> D: Disconnect
+destroy D
+
+D -> CGW ++: Sign In
+CGW -> CGW: Validate JWT Access Token
+CGW -> AS ++: Is device registered?
+return Not registered
+note right
+  Revoke Refresh Token
+end note
+return Unauthorized
+CGW -> D: Disconnect
+destroy D
+
+D -> D: Cleanup cloud configuration
+@enduml
+{{< /plantuml >}}
 
 ## gRPC Gateway
 
