@@ -237,7 +237,8 @@ User might decide to delete the device directly using the plgd API. This approac
 
 {{< plantuml id="device-delete" >}}
 @startuml
-title "Delete Devices"
+skinparam backgroundColor transparent
+hide footbox
 
 entity "Client" as Client
 participant "Gateway" as Gateway
