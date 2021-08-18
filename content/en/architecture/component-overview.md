@@ -219,6 +219,51 @@ return Updated
 Client requesting resource observation will immediately start to receive notifications without additional request to the device over CoAP Gateway. As the plgd.cloud is by default observing resources of all connected devices, responsible Gateway will just subscribe to the [Event Bus](#event-bus) and forward requested notifications. **Handling of CRUDN operations is same for every Gateway.**
 {{% /note %}}
 
+#### Delete a device
+At some point, user might want to delete the device from the plgd Cloud. There are two possibilities how to achieve it.
+
+##### Disconnect the device from the plgd Cloud using Onboarding Tool
+Device is at this point requested to disconnect from the plgd Cloud. This process covers multiple steps:
+1. Unpublish Resources
+2. Send the SignOff message which deregisters the device
+3. Cleanup of the cloud configuration resource
+
+##### Force disconnect by the plgd Cloud
+User might decide to delete the device directly using the plgd API. This approach is handy when it comes to stale devices, which cannot be anymore requested by the Onboarding Tool to disconnect and you want to cleanup your list of devices in the plgd Cloud.
+
+{{< plantuml id="device-delete" >}}
+@startuml
+title "Delete Devices"
+
+entity "Client" as Client
+participant "Gateway" as Gateway
+participant "Resource Aggregate" as ResourceAggregate
+participant "Authorization Server" as AuthServer
+control "Event Bus" as Bus
+participant "CoAP Gateway" as CGateway
+entity "OCF Server" as Server
+
+Client -> Gateway: DeleteDevicesRequest
+activate Client
+activate Gateway
+Gateway -> ResourceAggregate : DeleteDevicesRequest
+activate ResourceAggregate
+ResourceAggregate -> Gateway : DeleteDevicesResponse
+deactivate ResourceAggregate
+Gateway -> AuthServer : DeleteDevicesRequest
+activate AuthServer
+AuthServer -> Gateway : DeleteDevicesResponse
+deactivate AuthServer
+AuthServer --> Bus: DevicesDeleted
+Gateway -> Client: DeleteDevicesResponse
+deactivate Gateway
+deactivate Client
+Bus --> CGateway: DevicesDeleted
+CGateway -> Server : Disconnect
+destroy Server
+@enduml
+{{< /plantuml >}}
+
 ## gRPC Gateway
 
 ![L3](/images/diagrams/component-grpcgateway.svg "medium-zoom-image")
