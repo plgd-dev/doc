@@ -226,6 +226,7 @@ At some point, user might want to delete the device from the plgd Cloud. There a
 ##### Disconnect the device from the plgd Cloud using Onboarding Tool
 
 Device is at this point requested to disconnect from the plgd Cloud. This process covers multiple steps:
+
 1. Unpublish Resources
 2. Send the SignOff message which deregisters the device
 3. Cleanup of the cloud configuration resource
