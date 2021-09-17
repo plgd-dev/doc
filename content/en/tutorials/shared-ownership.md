@@ -38,7 +38,7 @@ Devices are in the authorization service organized by the owner ID retrieved fro
 
 ### Include custom claim to access token
 
-1. Go to **Rules** and crete new one
+1. Go to **Rules** and create new one
 1. Copy paste the function below which uses custom claim `https://plgd.dev/tenant`
 
     ```js
