@@ -12,7 +12,7 @@ menu:
 toc: true
 ---
 
-Devices are in the authorization service organized by the owner ID retrieved from the JWT token. The plgd API will based on this value identify the user and grant him the permission only to devices he owns. By default, JWT claim `sub` is used as the owner ID. In case you connect the plgd authorization service with the Auth0, each logged-in user can access only his devices. This behaviour can be changed by changing the `OWNER_CLAIM` configuration property and adding custom claim to your Auth0 users.
+Devices are organized in the identity service by the owner ID retrieved from the JWT token. The plgd API will be based on this value to identify the user and grant him the permissions only to devices he owns. By default, JWT claim `sub` is used as the owner ID. In case you connect the plgd authorization service with the Auth0, each logged-in user can access only his devices. This behaviour can be changed by changing the `OWNER_CLAIM` configuration property and adding custom claim to your Auth0 users.
 
 ## How to use custom claim with Auth0
 
@@ -39,7 +39,7 @@ Devices are in the authorization service organized by the owner ID retrieved fro
 ### Include custom claim to access token
 
 1. Go to **Rules** and create new one
-1. Copy paste the function below which uses custom claim `https://plgd.dev/tenant`
+1. Copy and paste the function below, which uses custom claim `https://plgd.dev/tenant`
 
     ```js
     function addTenantToAccessToken(user, context, callback) {
@@ -53,7 +53,7 @@ Devices are in the authorization service organized by the owner ID retrieved fro
     }
     ```
 
-After the rule is created, Auth0 include into every access tokens custom claim `https://plgd.dev/tenant` used to group users and "their" devices. In case the custom `OWNER_CLAIM` is configured, devices are no more owned by a single user, but in this case, by the **tenant**. Each user who is member of the tenant A will be able to access all the devices of this tenant.
+After the rule is created, Auth0 include into every access tokens custom claim `https://plgd.dev/tenant` used to group users and "their" devices. In case the custom `OWNER_CLAIM` is configured, devices are no more owned by a single user, but in this case, by the **tenant**. Each user who is a member of the tenant A will be able to access all the devices of this tenant.
 
 {{% warning %}}
 If the configuration property `OWNER_CLAIM` is changed, each user is required to have this claim present.
