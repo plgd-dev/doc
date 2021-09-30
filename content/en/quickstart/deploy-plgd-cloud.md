@@ -39,7 +39,7 @@ After couple of seconds your plgd cloud will become available. The plgd dashboar
 
 ### Authorization
 
-The plgd cloud doesn't work without OAuth Server. To not require developers not interested in sharing bundle instance with other users, simple mocked OAuth Server is included in the bundle. Authentication to the plgd is therefore not required and test user is automatically logged in. Same applies also to device connections; in case you're using the bundle, devices connecting to the CoAP Gateway can use random/static onboarding code as it's not verified. Onboarding of devices is therefore much simpler.
+The plgd cloud doesn't work without OAuth Server. To not require developers not interested in sharing bundle instances with other users, a simple mocked OAuth Server is included in the bundle. Authentication to the plgd is therefore not required, and the test user is automatically logged in. The same applies also to device connections; in case you're using the bundle, devices connecting to the CoAP Gateway can use random/static onboarding code as it's not verified. Onboarding of devices is therefore much simpler.
 
 {{% warning %}}
 Authorization Service which is part of the plgd is only for testing and development purposes. For the production, integration of the plgd device identity management API is required.
@@ -49,7 +49,7 @@ Even for the development and testing, more complex scenarios are supported by th
 
 ### Troubleshooting
 
-- By default the plgd cloud bundle hosts the NGINX proxy on port `443`. This port might be already occupied by other process, e.g. Skype. Default port can be changed by environment variable `-e NGINX_PORT=8443`. Please be aware that the port needs to be exposed from the container -> `-p 443:443` needs to be changed to match a new port, e.g. `-p 8443:8443`.
+- By default, the plgd cloud bundle hosts the NGINX proxy on port `443`. This port might be already occupied by other process, e.g. Skype. Default port can be changed by environment variable `-e NGINX_PORT=8443`. Please be aware that the port needs to be exposed from the container -> `-p 443:443` needs to be changed to match a new port, e.g. `-p 8443:8443`.
 - Logs and data are by default stored at `/data` path. Run the container with `-v $PWD/vol/plgd/data:/data` to be able to analyze the logs in case of an issue.
 - In case you need support, we are happy to support you on [Gitter](http://gitter.im/ocfcloud/Lobby)
 - OCF UCI (Cloud2Cloud Gateway) is not part of the bundle
