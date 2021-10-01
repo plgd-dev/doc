@@ -405,49 +405,6 @@ plgd cloud uses [NATS](https://nats.io) messaging system as it's event bus.
 
 ## Event Store
 
-plgd cloud persist events in an event store, which is a database of events. The store has an API for adding and retrieving device's events. Events needs to be versioned and written in a correct order. To achieve the consistency, optimistic concurrency control method is applied during each write.
-After the event is successfully written into the event store, it's distributed to the event bus which notifies all subscribers about the change asynchronously.
+The plgd Cloud stores each resource state mutation as a separate record called event. This enables us to reconstructs past states, use events as a foundation to understand user's behaviour or even explore an tamper-proof audit log. The plgd Cloud adopts [Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) and [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) patterns to support flexibility, scalability and trackability of the system.
 
-The plgd cloud defines an [EventStore](https://github.com/plgd-dev/cloud/blob/v2/resource-aggregate/cqrs/eventstore/eventstore.go#L23) interface what allows integration of different technologies to store the events. During the last 2 years the project evaluated multiple technologies for both EventStore and EventBus:
-
-- CockroachDB
-- Apache Kafka
-- MongoDB
-- NATS Jetstream
-- Google Firestore
-- Amazon Kinesis
-
-{{% note %}}
-Currently supported and preffered solution is MongoDB. Read further to know more about the database scheme and how we are Event Sourcing!
-{{% /note %}}
-
-### MongoDB
-
-Device's data are in the MongoDB organized per devices. For each connected device a new collection is created. Each event is modeled as a new document.
-{{% warning %}}
-This model is now being evaluated by the MondoDB team and is likely to be improved in Q1-2021.
-{{% /warning %}}
-
-#### Schema Overview
-
-![L3](/images/diagrams/mongodb-schema.png "medium-zoom-image")
-
-#### Event Organization
-
-![L3](/images/diagrams/mongodb-eventsourcing.png "medium-zoom-image")
-
-#### Queries
-
-- Details Query resources B of device d9dd7...
-
-1. Get latest snapshot
-    a. Find document `where _id == B.s`
-    b. Get `version` of latest snapshot event
-2. Find documents `where aggregateID == B && version >= latestSnapshot.version`
-
-- Details Query all resources of device d9dd7...
-
-1. Get latest snapshots of all resources
-    a. Find documents `where aggregateID == snapshot && version == -1`
-    b. Get `versions` of latest snapshot events per each resource
-2. Find all documents **per each resource** `where aggregateID == snapshot.aggregateID && version >= latestSnapshot.version`
+Accepted commands are represented as PendingChange events; resource state changes received from connected devices are represented as ResourceChanged events. All these events are persisted in the EventStore, with possibility to define your own cleanup policies to remove old events in case they are no more needed.
