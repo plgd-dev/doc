@@ -25,6 +25,7 @@ A configuration template is available on [test/oauth-server/config.yaml](https:/
 | `log.debug` | bool | `Set to true if you would like to see extra information on logs.` | `false` |
 
 ### HTTP API
+
 HTTP API of the OAuth Server service as defined [here](https://github.com/plgd-dev/cloud/blob/v2/test/oauth-server/uri/uri.go)
 
 | Property | Type | Description | Default |
@@ -36,6 +37,7 @@ HTTP API of the OAuth Server service as defined [here](https://github.com/plgd-d
 | `api.http.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
 
 ### OAuth Signer
+
 Signer configuration to issue ID/access tokens of OAuth provider for mock testing.
 
 | Property | Type | Description | Default |
