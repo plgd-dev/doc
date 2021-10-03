@@ -405,6 +405,6 @@ plgd cloud uses [NATS](https://nats.io) messaging system as it's event bus.
 
 ## Event Store
 
-The plgd Cloud stores each resource state mutation as a separate record called event. This enables us to reconstructs past states, use events as a foundation to understand user's behaviour or even explore an tamper-proof audit log. The plgd Cloud adopts [Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) and [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) patterns to support flexibility, scalability and trackability of the system.
+The plgd Cloud stores each resource state mutation as a separate record called event. This enables us to reconstruct past states, use events as a foundation to understand user's behaviour or even explore a tamper-proof audit log. The plgd Cloud adopts [Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) and [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) patterns to support flexibility, scalability and trackability of the system.
 
 Accepted commands are represented as PendingChange events; resource state changes received from connected devices are represented as ResourceChanged events. All these events are persisted in the EventStore, with possibility to define your own cleanup policies to remove old events in case they are no more needed.
