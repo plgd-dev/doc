@@ -1,8 +1,8 @@
 ---
-title: 'Identity Server'
+title: 'Identity Store'
 description: 'Service configuration overview'
-date: '2021-10-01'
-lastmod: '2021-10-01'
+date: '2021-10-04'
+lastmod: '2021-10-04'
 categories: [configuration, deployment]
 keywords: [configuration]
 menu:
@@ -12,17 +12,17 @@ menu:
 toc: true
 ---
 
-Identity Server manages devices and their owners.
+Identity Store manages devices and their owners.
 
 ## Docker Image
 
 ```bash
-docker pull plgd/identity:latest
+docker pull plgd/identity-store:latest
 ```
 
 ## YAML Configuration
 
-A configuration template is available on [identity/config.yaml](https://github.com/plgd-dev/cloud/blob/v2/identity/config.yaml).
+A configuration template is available on [identity-store/config.yaml](https://github.com/plgd-dev/cloud/blob/v2/identity-store/config.yaml).
 
 ### Logging
 
@@ -32,7 +32,7 @@ A configuration template is available on [identity/config.yaml](https://github.c
 
 ### gRPC API
 
-gRPC API of the Identity Server service as defined [here](https://github.com/plgd-dev/cloud/blob/v2/identity/pb/service_grpc.pb.go#L19).
+gRPC API of the Identity Store service as defined [here](https://github.com/plgd-dev/cloud/blob/v2/identity-store/pb/service_grpc.pb.go#L19).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

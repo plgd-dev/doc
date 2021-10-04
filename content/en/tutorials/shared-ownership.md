@@ -12,7 +12,7 @@ menu:
 toc: true
 ---
 
-Devices are in the authorization service organized by the owner ID retrieved from the JWT token. The plgd API will based on this value identify the user and grant him the permission only to devices he owns. By default, JWT claim `sub` is used as the owner ID. In case you connect the plgd authorization service with the Auth0, each logged-in user can access only his devices. This behaviour can be changed by changing the `OWNER_CLAIM` configuration property and adding custom claim to your Auth0 users.
+Devices are in the Identity Store service organized by the owner ID retrieved from the JWT token. The plgd API will based on this value identify the user and grant him the permission only to devices he owns. By default, JWT claim `sub` is used as the owner ID. In case you configure your plgd Cloud instance to use the Auth0, each logged-in user can access only his devices. This behaviour can be changed by changing the `OWNER_CLAIM` configuration property and adding custom claim to your Auth0 users.
 
 ## How to use custom claim with Auth0
 

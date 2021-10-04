@@ -12,7 +12,7 @@ menu:
 toc: true
 ---
 
-C2C Gateway implements [Open Connectivity Foundation's Cloud API for Cloud Services](https://openconnectivity.org/developer/specifications/) providing API's to mirror user's devices to a different OCF standardized cloud.
+C2C Gateway implements [Open Connectivity Foundation's Cloud API for Cloud Services](https://openconnectivity.org/specs/OCF_Cloud_API_For_Cloud_Services_Specification.pdf) providing API's to mirror user's devices to a different OCF standardized cloud.
 
 ## Docker Image
 

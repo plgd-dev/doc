@@ -17,7 +17,7 @@ toc: true
 The CoAP gateway acts act as a CoAP Client, communicating with IoT devices - CoAP Servers following the [OCF specification](https://openconnectivity.org/developer/specifications/). As the component diagram describes, responsibilities of the gateway are:
 
 - handle and maintain TCP connections coming from devices
-- forward [authentication and authorization requests (see 5.5.5)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=15)  to the Authorization Service
+- [authenticates and authorizes requests (see 5.5.5)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=15) from the device in conjuction with an OAuth2.0 Server
 - process device CRUDN operations which are by its nature forwarded to the [Resource Aggregate](#resource-aggregate) or [Resource Directory](#resource-directory)
 
 ![L3](/images/diagrams/component-coapgateway.svg "medium-zoom-image")
@@ -39,7 +39,7 @@ hide footbox
 
 participant D as "Device"
 participant CGW as "CoAP Gateway"
-participant AS as "Authorization Server"
+participant IS as "Identity Store"
 participant OBT as "Onboarding Tool"
 
 OBT -->[: Discover devices
@@ -71,14 +71,14 @@ hide footbox
 participant D as "Device"
 participant CGW as "CoAP Gateway"
 participant O as "OAuth 2.0 Server"
-participant AS as "Authorization Server"
+participant IS as "Identity Store"
 
 D -> CGW ++: Sign Up
 group OAuth2.0 Authorization Code Grant Flow
     CGW -> O ++: Verify and exchange authorization code for JWT access token
     return Ok\n(JWT Access Token, Refresh Token, ...)
 end
-CGW -> AS ++: Register and assign device to user
+CGW -> IS ++: Register and assign device to user
 return Registered
 return Signed up\n(JWT Access Token, Refresh Token, ...)
 @enduml
@@ -99,13 +99,13 @@ hide footbox
 
 participant D as "Device"
 participant CGW as "CoAP Gateway"
-participant AS as "Authorization Server"
+participant IS as "Identity Server"
 participant EB as "Event Bus"
 participant RA as "Resource Aggregate"
 
 D -> CGW ++: Sign In
 CGW -> CGW: Validate JWT Access Token
-CGW -> AS ++: Is device registered?
+CGW -> IS ++: Is device registered?
 return Ok
 CGW -> EB: Subscribe to device & owner events
 CGW -> RA ++: Declare device as online
@@ -248,7 +248,7 @@ hide footbox
 participant C as "Client"
 participant GGW as "gRPC Gateway"
 participant RA as "Resource Aggregate"
-participant AS as "Authorization Server"
+participant IS as "Identity Server"
 participant EB as "Event Bus"
 participant CGW as "CoAP Gateway"
 participant D as "Device"
@@ -256,9 +256,9 @@ participant D as "Device"
 C -> GGW ++: DeleteDevicesRequest
 GGW -> RA ++: DeleteDevicesRequest
 return DeleteDevicesResponse
-GGW -> AS ++: DeleteDevicesRequest
+GGW -> IS ++: DeleteDevicesRequest
 return DeleteDevicesResponse
-AS --> EB: DevicesDeleted
+IS --> EB: DevicesDeleted
 return DeleteDevicesResponse
 EB --> CGW: DevicesDeleted
 CGW -> D: Disconnect
@@ -266,7 +266,7 @@ destroy D
 
 D -> CGW ++: Sign In
 CGW -> CGW: Validate JWT Access Token
-CGW -> AS ++: Is device registered?
+CGW -> IS ++: Is device registered?
 return Not registered
 note right
   Revoke Refresh Token

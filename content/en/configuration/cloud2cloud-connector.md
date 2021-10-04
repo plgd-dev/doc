@@ -63,20 +63,20 @@ A configuration template is available in [cloud2cloud-connector/config.yaml](htt
 You might have one client, but multiple APIs in the OAuth system. What you want to prevent is to be able to contact all the APIs of your system with one token. This audience allows you to request the token for a specific API. If you configure it to myplgdc2c.api in the Auth0, you have to set it here if you want to also validate it.
 :::
 
-### Identity Server Client
+### Identity Store Client
 
-Client configurations to internally connect to Identity Server service.
+Client configurations to internally connect to Identity Store service.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.identityServer.grpc.address` | string | `Identity service address.` | `"127.0.0.1:9100"` |
-| `clients.identityServer.grpc.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
-| `clients.identityServer.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `clients.identityServer.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `clients.identityServer.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
-| `clients.identityServer.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
-| `clients.identityServer.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
-| `clients.identityServer.grpc.keepAlive.permitWithoutStream` | bool | `If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent.` | `false` |
+| `clients.identityStore.grpc.address` | string | `Identity Store service address.` | `"127.0.0.1:9100"` |
+| `clients.identityStore.grpc.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
+| `clients.identityStore.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
+| `clients.identityStore.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
+| `clients.identityStore.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `clients.identityStore.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
+| `clients.identityStore.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
+| `clients.identityStore.grpc.keepAlive.permitWithoutStream` | bool | `If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent.` | `false` |
 
 ### Event Bus
 
