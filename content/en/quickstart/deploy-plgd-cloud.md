@@ -42,10 +42,8 @@ After couple of seconds your plgd cloud will become available. The plgd dashboar
 The plgd cloud doesn't work without OAuth Server. To not require developers not interested in sharing bundle instances with other users, a simple mocked OAuth Server is included in the bundle. Authentication to the plgd is therefore not required, and the test user is automatically logged in. The same applies also to device connections; in case you're using the bundle, devices connecting to the CoAP Gateway can use random/static onboarding code as it's not verified. Onboarding of devices is therefore much simpler.
 
 {{% warning %}}
-Authorization Service which is part of the plgd is only for testing and development purposes. For the production, integration of the plgd device identity management API is required.
+OAuth Server which is part of the plgd is only for testing and development purposes. For the production, integration of the plgd with the external OAuth2.0 server is required.
 {{% /warning %}}
-
-Even for the development and testing, more complex scenarios are supported by the built-in authorization service. Read more in the [Tutorials](../../tutorials/).
 
 ### Troubleshooting
 

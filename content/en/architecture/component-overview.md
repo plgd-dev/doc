@@ -17,8 +17,8 @@ toc: true
 The CoAP gateway acts as a CoAP Client, communicating with IoT devices - CoAP Servers following the [OCF specification](https://openconnectivity.org/developer/specifications/). As the component diagram describes, the responsibilities of the gateway are:
 
 - handle and maintain TCP connections coming from devices
-- forward [authentication and authorization requests (see 5.5.5)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=15) to the Authorization Service
-- process device CRUDN operations, which are by its nature forwarded to the [Resource Aggregate](#resource-aggregate) or [Resource Directory](#resource-directory)
+- [authenticates and authorizes requests (see 5.5.5)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=15) from the device in conjunction with an OAuth2.0 Server
+- process device CRUDN operations which are by its nature forwarded to the [Resource Aggregate](#resource-aggregate) or [Resource Directory](#resource-directory)
 
 ![L3](/images/diagrams/component-coapgateway.svg "medium-zoom-image")
 
@@ -39,7 +39,7 @@ hide footbox
 
 participant D as "Device"
 participant CGW as "CoAP Gateway"
-participant IS as "Identity Server"
+participant IS as "Identity Store"
 participant OBT as "Onboarding Tool"
 
 OBT -->[: Discover devices
@@ -71,7 +71,7 @@ hide footbox
 participant D as "Device"
 participant CGW as "CoAP Gateway"
 participant O as "OAuth 2.0 Server"
-participant IS as "Identity Server"
+participant IS as "Identity Store"
 
 D -> CGW ++: Sign Up
 group OAuth2.0 Authorization Code Grant Flow
@@ -99,7 +99,7 @@ hide footbox
 
 participant D as "Device"
 participant CGW as "CoAP Gateway"
-participant IS as "Identity Server"
+participant IS as "Identity Store"
 participant EB as "Event Bus"
 participant RA as "Resource Aggregate"
 
@@ -248,7 +248,7 @@ hide footbox
 participant C as "Client"
 participant GGW as "gRPC Gateway"
 participant RA as "Resource Aggregate"
-participant IS as "Identity Server"
+participant IS as "Identity Store"
 participant EB as "Event Bus"
 participant CGW as "CoAP Gateway"
 participant D as "Device"
@@ -405,49 +405,6 @@ plgd cloud uses [NATS](https://nats.io) messaging system as it's event bus.
 
 ## Event Store
 
-plgd cloud persist events in an event store, which is a database of events. The store has an API for adding and retrieving device's events. Events need to be versioned and written in a correct order. To achieve the consistency, optimistic concurrency control method is applied during each write.
-After the event is successfully written into the event store, it's distributed to the event bus, which notifies all subscribers about the change asynchronously.
+The plgd Cloud persists each resource state mutation as a separate record called event. This enables us to reconstruct past states, use events as a foundation to understand user's behaviour or even explore a tamper-proof audit log. The plgd Cloud adopts [Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) and [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) patterns to support flexibility, scalability and trackability of the system.
 
-The plgd cloud defines an [EventStore](https://github.com/plgd-dev/cloud/blob/v2/resource-aggregate/cqrs/eventstore/eventstore.go#L23) interface what allows integration of different technologies to store the events. During the last 2 years, the project evaluated multiple technologies for both EventStore and EventBus:
-
-- CockroachDB
-- Apache Kafka
-- MongoDB
-- NATS Jetstream
-- Google Firestore
-- Amazon Kinesis
-
-{{% note %}}
-Currently, supported and preferred solution is MongoDB. Read further to know more about the database scheme and how we are Event Sourcing!
-{{% /note %}}
-
-### MongoDB
-
-Device's data are in the MongoDB organized per devices. For each connected device a new collection is created. Each event is modeled as a new document.
-{{% warning %}}
-This model is now being evaluated by the MondoDB team and is likely to be improved in Q1-2021.
-{{% /warning %}}
-
-#### Schema Overview
-
-![L3](/images/diagrams/mongodb-schema.png "medium-zoom-image")
-
-#### Event Organization
-
-![L3](/images/diagrams/mongodb-eventsourcing.png "medium-zoom-image")
-
-#### Queries
-
-- Details Query resources B of device d9dd7...
-
-1. Get latest snapshot
-    a. Find document `where _id == B.s`
-    b. Get `version` of the latest snapshot event
-2. Find documents `where aggregateID == B && version >= latestSnapshot.version`
-
-- Details Query all resources of device d9dd7...
-
-1. Get latest snapshots of all resources
-    a. Find documents `where aggregateID == snapshot && version == -1`
-    b. Get `versions` of latest snapshot events per each resource
-2. Find all documents **per each resource** `where aggregateID == snapshot.aggregateID && version >= latestSnapshot.version`
+Accepted commands are represented as PendingChange events; resource state changes received from connected devices are represented as ResourceChanged events. All these events are persisted in the EventStore, with possibility to define your own cleanup policies to remove old events in case they are no more needed.

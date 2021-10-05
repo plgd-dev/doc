@@ -14,4 +14,6 @@ toc: true
 
 ## try.plgd.cloud
 
-The plgd team operates their own instance of the plgd cloud for free. This cloud instance is integrated with the plgd mobile application available for both iOS and Android based devices. Together with our IoTivity-Lite sample you're able to onboard and work with your device remotely in couple of seconds. To start right away, follow [try.plgd.cloud](https://try.plgd.cloud).
+To try the plgd Cloud without downloading a single docker container, [try.plgd.cloud](https://try.plgd.cloud) instance is available for you for free. To onboard any IoTivitiy-Lite or any OCF standardized device to the plgd Cloud, the mobile application **plgd** is available for you in both, [Apple](https://apps.apple.com/us/app/plgd/id1536315811) and [Google Play](https://play.google.com/store/apps/details?id=dev.plgd.client&hl=en&gl=US) stores.
+
+> It's simple as 1-2-3. Install, discover, onboard!
