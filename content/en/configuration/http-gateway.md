@@ -72,7 +72,7 @@ These configurations are for `PLGD Dashboard` as described in [here](https://git
 | ---------- | -------- | -------------- | ------- |
 | `ui.enabled` | string | `Set to true if you would like to run the web UI.` | `false` |
 | `ui.directory` | string | `Path to default web ui built by nodejs` | `"/usr/local/var/www"` |
-| `ui.webConfiguration.domain` | string | `Domain address of OAuth Provider.` | `""` |
+| `ui.webConfiguration.authority` | string | `Authority is the address of the token-issuing authentication server.` | `""` |
 | `ui.webConfiguration.httpGatewayAddress` | string | `External address of Http gateway service.` | `""` |
 | `ui.webConfiguration.webOAuthClient.clientID` | string | `Client ID to exchange an authorization code for an access token.` | `""` |
 | `ui.webConfiguration.webOAuthClient.audience` | string | `Identifier of the API configured in your OAuth provider.` | `""` |
