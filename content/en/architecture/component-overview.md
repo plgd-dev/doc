@@ -14,7 +14,7 @@ toc: true
 
 ## CoAP Gateway
 
-The CoAP gateway acts act as a CoAP Client, communicating with IoT devices - CoAP Servers following the [OCF specification](https://openconnectivity.org/developer/specifications/). As the component diagram describes, responsibilities of the gateway are:
+The CoAP gateway acts as a CoAP Client, communicating with IoT devices - CoAP Servers following the [OCF specification](https://openconnectivity.org/developer/specifications/). As the component diagram describes, the responsibilities of the gateway are:
 
 - handle and maintain TCP connections coming from devices
 - [authenticates and authorizes requests (see 5.5.5)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=15) from the device in conjunction with an OAuth2.0 Server
@@ -59,7 +59,7 @@ D -> CGW ++: Establish TCP connection
 @enduml
 {{< /plantuml >}}
 
-TCP connection which device established to the CoAP Gateway is now authenticated but not authorized. Before the devices becomes reachable, TCP connection needs to be authorized. As this flow describes operation of a new device, device needs within the first connection Sign Up - [register with the plgd.cloud (see 8.1.4)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=33). The [authorization code](https://tools.ietf.org/html/rfc6749#section-4.1) received during the OCF Cloud Provisioning process described in the diagram above is be by the CoAP Gateway exchanged for an access and refresh token and returned back to the device. This process is in more detail described in the [OCF Cloud Security Specification (see 6.2)](https://openconnectivity.org/specs/OCF_Cloud_Security_Specification_v2.2.1.pdf#page=12).
+The TCP connection which the device established to the CoAP Gateway is now authenticated, but not authorized. Before the device becomes reachable, the TCP connection needs to be authorized. As this flow describes operation of a new device, device needs within the first connection Sign Up - [register with the plgd.cloud (see 8.1.4)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=33). The [authorization code](https://tools.ietf.org/html/rfc6749#section-4.1) received during the OCF Cloud Provisioning process described in the diagram above is exchanged by the CoAP Gateway for an access and refresh token and returned to the device. This process is in more detail described in the [OCF Cloud Security Specification (see 6.2)](https://openconnectivity.org/specs/OCF_Cloud_Security_Specification_v2.2.1.pdf#page=12).
 
 #### Cloud Registration
 
@@ -84,7 +84,7 @@ return Signed up\n(JWT Access Token, Refresh Token, ...)
 @enduml
 {{< /plantuml >}}
 
-Successful registration to the plgd.dev is followed by authorization request called Sign In. Sign In is required right after successfully established TCP connection to the CoAP Gateway, otherwise the device won't be reachable - marked as online. Other device requests are blocked as well unless the device successfully Signs In. Successful autorization precedes validation of the [JWT Access Token](https://tools.ietf.org/html/rfc6749#section-1.4).
+Successful registration to the plgd.dev is followed by authorization request called Sign In. Sign In is required right after successfully established TCP connection to the CoAP Gateway, otherwise the device won't be reachable - marked as online. Other device requests are blocked as well unless the device successfully Signs In. Successful authorization precedes validation of the [JWT Access Token](https://tools.ietf.org/html/rfc6749#section-1.4).
 
 {{% warning %}}
 Only JWT access tokens are supported on the device.
@@ -99,7 +99,7 @@ hide footbox
 
 participant D as "Device"
 participant CGW as "CoAP Gateway"
-participant IS as "Identity Server"
+participant IS as "Identity Store"
 participant EB as "Event Bus"
 participant RA as "Resource Aggregate"
 
@@ -115,8 +115,8 @@ return Signed In
 @enduml
 {{< /plantuml >}}
 
-Device capabilities are represented in form of resources. Configuration if the resource is published (remotely accessible over plgd.cloud) or not is part of the [IoTivity-Lite API](https://github.com/iotivity/iotivity-lite/blob/master/include/oc_cloud.h#L128). If the resource is publised or not is up to the device vendor which might want to have some resources accessible only on the proximity network. Resources information which are published to the plgd.cloud provides insights into device capabilities. Clients are interested not only in the resource href - location on which they can request resource representation, but mainly in the resource type as this allows them to filter only capabilities they are able to control.
-As an example, if you have an client application which controls the light, it will search the Resource Directory for all lights user have at home - filter resources by resource type `oic.r.switch.binary`. Other resources like temperature, moisture, etc. are not of any interest, as application doesn't understand their representation.
+Device capabilities are represented in the form of resources. Configuration if the resource is published (remotely accessible over plgd.cloud) or not is part of the [IoTivity-Lite API](https://github.com/iotivity/iotivity-lite/blob/master/include/oc_cloud.h#L128). If the resource is published or not is up to the device vendor, which might want to have some resources accessible only on the proximity network. Resources information which are published to the plgd.cloud provides insights into device capabilities. Clients are interested not only in the resource href - location on which they can request resource representation, but mainly in the resource type, as this allows them to filter only capabilities they are able to control.
+As an example, if you have a client application which controls the light, it will search the Resource Directory for all lights the user has at home - filter resources by resource type `oic.r.switch.binary`. Other resources like temperature, moisture, etc. are not of any interest, as the application doesn't understand their representation.
 Information which is published doesn't contain resource representation, only resource information as described [here (see 6.1.3.2.2)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.0.pdf#page=21).
 
 ```json
@@ -151,10 +151,10 @@ Information which is published doesn't contain resource representation, only res
 }
 ```
 
-Resource publish request is forwarded to the [Resource Aggregate](#resource-aggregate) which registers a new resource. This process makes the resource discoverable.
-The plgd.cloud starts observation of **every successfully published resource** by sending the [OBSERVE request](https://tools.ietf.org/html/rfc7641#section-1.2). Each of the received notification from the device is send to the [Resource Aggregate](#resource-aggregate) to record the change.
+Resource publish request is forwarded to the [Resource Aggregate](#resource-aggregate), which registers a new resource. This process makes the resource discoverable.
+The plgd.cloud starts observation of **every successfully published resource** by sending the [OBSERVE request](https://tools.ietf.org/html/rfc7641#section-1.2). Each of the received notification from the device is sent to the [Resource Aggregate](#resource-aggregate) to record the change.
 
-As the response to the resource observation request contains actual [representation](https://tools.ietf.org/html/rfc7641#section-1.1), CoAP Gateway doesn't have to pull the data at all. Additional responses called [notifications](https://tools.ietf.org/html/rfc7641#section-3.2) are by the device send whenever the representation of the device changes.
+As the response to the resource observation request contains actual [representation](https://tools.ietf.org/html/rfc7641#section-1.1), CoAP Gateway doesn't have to pull the data at all. Additional responses called [notifications](https://tools.ietf.org/html/rfc7641#section-3.2) are sent by the device  whenever the representation of the device changes.
 
 #### Resource Publish & Subscription
 
@@ -184,8 +184,8 @@ CGW -> RA ++: Update resource representation
 return
 @enduml
 {{< /plantuml >}}
-MD013
-From this moment on, device is reachable to all authorized clients and devices. Resource update requests received by particular Gateway where the client is connected are forwarded to the [Resource Aggregate](#resource-aggregate). Successful command validation precede storing and publishing of this event to the [Event Bus](#event-bus), to which is the CoAP Gateway subscribed. If the update request event targets the device hosted by this instance of the CoAP Gateway, [UPDATE](https://tools.ietf.org/html/rfc7252#section-5.8.2) is forwarded over the authorized TCP channel to the device. Device response is forwarded to the [Resource Aggregate](#resource-aggregate) which issues resource updated event updating the resource projection and informing client that the update was successful.
+
+From this moment on, the device is reachable to all authorized clients and devices. Resource update requests received by a particular Gateway where the client is connected are forwarded to the [Resource Aggregate](#resource-aggregate). Successful command validation precede storing and publishing of this event to the [Event Bus](#event-bus), to which is the CoAP Gateway subscribed. If the update request event targets the device hosted by this instance of the CoAP Gateway, [UPDATE](https://tools.ietf.org/html/rfc7252#section-5.8.2) is forwarded over the authorized TCP channel to the device. The device response is forwarded to the [Resource Aggregate](#resource-aggregate), which issues a resource updated event, updating the resource projection and informing the client that the update was successful.
 
 #### Resource Update
 
@@ -238,7 +238,7 @@ Device is at this point requested to disconnect from the plgd Cloud from the loc
 
 ##### Force disconnect by the plgd Cloud
 
-User might decide to delete the device directly using the plgd API. This approach is handy when it comes to stale devices, which cannot be anymore requested by the Onboarding Tool to disconnect and you want to cleanup your list of devices in the plgd Cloud.
+User might decide to delete the device directly using the plgd API. This approach is handy when it comes to stale devices, which cannot be any more requested by the Onboarding Tool to disconnect, and you want to clean up your list of devices in the plgd Cloud.
 
 {{< plantuml id="device-delete" >}}
 @startuml
@@ -248,7 +248,7 @@ hide footbox
 participant C as "Client"
 participant GGW as "gRPC Gateway"
 participant RA as "Resource Aggregate"
-participant IS as "Identity Server"
+participant IS as "Identity Store"
 participant EB as "Event Bus"
 participant CGW as "CoAP Gateway"
 participant D as "Device"
@@ -289,9 +289,9 @@ D -> D: Cleanup cloud configuration
 
 ## Resource Aggregate
 
-Every transaction on the device's resource is scoped to the single [aggregate](https://martinfowler.com/bliki/DDD_Aggregate.html) - Resource Aggregate. The RA builds it's internal state, which is a projection of a single fine-grained event stream. When the aggregate receives a new command from any of the plgd gateway, the command is validated and after successful validation event describing the action is created and persisted in the [EventStore](#event-store). After successful write to the [EventStore](#event-store), event is published to the [EventBus](#event-bus).
+Every transaction on the device's resource is scoped to the single [aggregate](https://martinfowler.com/bliki/DDD_Aggregate.html) - Resource Aggregate. The RA builds its internal state, which is a projection of a single fine-grained event stream. When the aggregate receives a new command from any of the plgd gateways, the command is validated and after successful validation event describing the action is created and persisted in the [EventStore](#event-store). After successful write to the [EventStore](#event-store), the event is published to the [EventBus](#event-bus).
 
-> To prevent the conflicts during the write to EventStore, [Optimistic concurrency control](https://en.wikipedia.org/wiki/Optimistic_concurrency_control) method is used
+> To prevent the conflicts during the write to EventStore, [Optimistic concurrency control](https://en.wikipedia.org/wiki/Optimistic_concurrency_control) method is used.
 
 ### Commands and Events Overview
 
@@ -405,6 +405,6 @@ plgd cloud uses [NATS](https://nats.io) messaging system as it's event bus.
 
 ## Event Store
 
-The plgd Cloud stores each resource state mutation as a separate record called event. This enables us to reconstruct past states, use events as a foundation to understand user's behaviour or even explore a tamper-proof audit log. The plgd Cloud adopts [Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) and [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) patterns to support flexibility, scalability and trackability of the system.
+The plgd Cloud persists each resource state mutation as a separate record called event. This enables us to reconstruct past states, use events as a foundation to understand user's behaviour or even explore a tamper-proof audit log. The plgd Cloud adopts [Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) and [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) patterns to support flexibility, scalability and trackability of the system.
 
 Accepted commands are represented as PendingChange events; resource state changes received from connected devices are represented as ResourceChanged events. All these events are persisted in the EventStore, with possibility to define your own cleanup policies to remove old events in case they are no more needed.

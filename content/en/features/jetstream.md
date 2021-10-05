@@ -24,29 +24,57 @@ More information about the JetStream can be found [here](https://docs.nats.io/je
 
 ## NATS subjects overview
 
-- `events.{deviceID}.resource-links.{eventType}` publishes resource-links events of types `resourcelinkspublished`, `resourcelinksunpublished`, `resourcelinkssnapshottaken` for device `deviceID`
-- `events.{deviceID}.metadata.{eventType}` publishes metadata events of types `devicemetadataupdatepending`,`devicemetadataupdated`, `devicemetadatasnapshottaken` for device `deviceID`
-- `events.{deviceID}.resources.{resourceID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceID`, which is calculated as `uuid.NewV5(uuid.NamespaceURL, deviceID+href)` for device `deviceID`.
+### Definitions
 
-Each event is compressed by [snappy](https://github.com/google/snappy) and encoded in protobuf [event envelope](https://github.com/plgd-dev/cloud/blob/v2/resource-aggregate/cqrs/eventbus/pb/eventbus.proto). The event envelope consist of `Event.data` containing the event and `Event.event_type` describing the type of the event.
+- `ownerID` is the owner of the device. It is calculated as `uuid.NewV5(uuid.NamespaceURL, value of JWT ownerClaim)`.
+- `deviceID` is the UUID of the device.
+- `resourceID` is the unique identifier of resource over the whole cloud. It is calculated as `uuid.NewV5(uuid.NamespaceURL, deviceID+href)`, where the `href` is a resource path. (eg "/oic/d").
+
+### Device events
+
+Each event is compressed by [snappy](https://github.com/google/snappy) and encoded in protobuf [devices event envelope](https://github.com/plgd-dev/cloud/blob/v2/resource-aggregate/cqrs/eventbus/pb/eventbus.proto). The event envelope consist of `Event.data` containing the event and `Event.event_type` describing the type of the event.
+
+#### Resource links
+
+- `plgd.owners.{ownerID}.devices.{deviceID}.resource-links.{eventType}` publishes resource-links events of types `resourcelinkspublished`, `resourcelinksunpublished`, `resourcelinkssnapshottaken` for device `deviceID` and `ownerID`
+
+#### Metadata events
+
+- `plgd.owners.{ownerID}.devices.{deviceID}.metadata.{eventType}` publishes metadata events of types `devicemetadataupdatepending`,`devicemetadataupdated`, `devicemetadatasnapshottaken` for device `deviceID` and `ownerID`
+
+#### Resources events
+
+- `plgd.owners.{ownerID}.devices.{deviceID}.resources.{resourceID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceID`, `deviceID` and `ownerID`.
+
+### Owner events
+
+Each event is encoded in protobuf [event envelope](https://github.com/plgd-dev/cloud/blob/v2/authorization/pb/events.proto) and then compressed by [snappy](https://github.com/google/snappy).
+
+#### Registration events
+
+- `plgd.owners.{ownerID}.registrations.{eventType}` publishes owner events of types `devicesregistered`,`devicesunregistered` for `ownerID`.
 
 ### Consumer subscriptions options
 
-For consumer of events you can subscribe to:
+For the consumers of events you can subscribe to:
 
-- `events.>` gets all events of all devices
-- `events.{deviceID}.>` gets all events of device `deviceID`
-- `events.{deviceID}.resource-links.>` go get all resource links events of device `deviceID`
-- `events.{deviceID}.resource-links.resourcelinkspublished` gets `resourcelinkspublished` event of device `deviceID`
-- `events.*.resource-links.>` gets all resource links events of all devices
-- `events.{deviceID}.metadata.>` gets all metadata events of device `deviceID`
-- `events.{deviceID}.metadata.devicemetadataupdated` gets `devicemetadataupdated` event of device `deviceID`
-- `events.*.metadata.>` to gets all metadata events of all devices
-- `events.{deviceID}.resources.>` gets all resources events of device `deviceID`
-- `events.{deviceID}.resources.{resourceID}.>` gets all events of resource `resourceID` for device `deviceID`
-- `events.{deviceID}.resources.{resourceID}.resourcechanged` gets `resourcechanged` events of resource `resourceID` for device `deviceID`
-- `events.{deviceID}.resources.*.resourcechanged` gets `resourcechanged` events of all resources for device `deviceID`
-- `events.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices
+- `plgd.owners.>` gets all events of cloud
+- `plgd.owners.{ownerId}.>` gets all events of owner `ownerId`
+- `plgd.owners.*.devices.{deviceID}.>` gets all events of device `deviceID`
+- `plgd.owners.*.devices.{deviceID}.resource-links.>` go get all resource links events of device `deviceID`
+- `plgd.owners.*.devices.{deviceID}.resource-links.resourcelinkspublished` gets `resourcelinkspublished` event of device `deviceID`
+- `plgd.owners.*.devices.*.resource-links.>` gets all resource links events of all devices
+- `plgd.owners.{ownerId}.devices.*.resource-links.>`  gets all resource links events of all devices of owner `ownerId`
+- `plgd.owners.*.devices.{deviceID}.metadata.>` gets all metadata events of device `deviceID`
+- `plgd.owners.*.devices.{deviceID}.metadata.devicemetadataupdated` gets `devicemetadataupdated` event of device `deviceID`
+- `plgd.owners.*.devices.*.metadata.>` to gets all metadata events of all devices
+- `plgd.owners.{ownerId}.devices.*.metadata.>` to gets all metadata events of all devices of owner `ownerId`
+- `plgd.owners.*.devices.{deviceID}.resources.>` gets all resources events of device `deviceID`
+- `plgd.owners.*.devices.{deviceID}.resources.{resourceID}.>` gets all events of resource `resourceID` for device `deviceID`
+- `plgd.owners.*.devices.{deviceID}.resources.{resourceID}.resourcechanged` gets `resourcechanged` events of resource `resourceID` for device `deviceID`
+- `plgd.owners.*.devices.{deviceID}.resources.*.resourcechanged` gets `resourcechanged` events of all resources for device `deviceID`
+- `plgd.owners.*.devices.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices
+- `plgd.owners.{ownerId}.devices.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices of owner `ownerId`
 
 ## Enable JetStream
 
@@ -107,7 +135,7 @@ Setup events stream `stream.json` where all events of cloud will be stored:
 {
   "name": "EVENTS", // A name for the Stream that may not have spaces, tabs, period (.), greater than (>), or asterisk (*).
   "subjects": [ // A list of subjects to consume, supports wildcards.
-    "events.>"
+    "plgd.>"
   ],
   "retention": "limits",  // How message retention is considered, limits (default), interest or workQueue.
   "max_consumers": -1, // How many Consumers can be defined for a given Stream, -1 for unlimited.
@@ -159,7 +187,7 @@ metadata:
   name: events
 spec:
   name: events
-  subjects: ["events.>"]
+  subjects: ["plgd.>"]
 ```
 
 ### Enable JetStream at Resource Aggregate
