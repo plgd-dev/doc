@@ -14,6 +14,12 @@ toc: true
 
 HTTP Gateway exposes the client's [REST API](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/http-gateway/swagger.yaml) to manage user's devices, as well as the Web UI known as [plgd Dashboard](https://try.plgd.cloud).
 
+## Docker Image
+
+```bash
+docker pull plgd/http-gateway:latest
+```
+
 ## YAML Configuration
 
 A configuration template is available on [http-gateway/config.yaml](https://github.com/plgd-dev/hub/blob/main/http-gateway/config.yaml).

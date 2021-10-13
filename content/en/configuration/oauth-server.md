@@ -14,6 +14,12 @@ toc: true
 
 Mocked OAuth2.0 Server used for automated tests, [bundle container](../quickstart/deploy-plgd-hub/#plgd-bundle) and optionally deployment using the HELM chart for the **development purposes**.
 
+## Docker Image
+
+```bash
+docker pull plgd/mock-oauth-server:latest
+```
+
 ## YAML Configuration
 
 A configuration template is available on [test/oauth-server/config.yaml](https://github.com/plgd-dev/hub/blob/main/test/oauth-server/config.yaml).
@@ -45,5 +51,9 @@ Signer configuration to issue ID/access tokens of OAuth provider for mock testin
 | `oauthSigner.idTokenKeyFile` | string | `File path to a private RSA key in PEM format required for ID token signing.` | `""` |
 | `oauthSigner.accessTokenKeyFile` | string | `File path to a private ECDSA key in PEM format required for access token signing.` | `""` |
 | `oauthSigner.domain` | string | `Domain address <host>:<port> for OAuth APIs.` | `""` |
+| `oauthSigner.clients[0].id` | string | `client id which is used by oauth clients.` | `"test"` |
+| `oauthSigner.clients[0].authorizationCodeLifetime` | string | `validity of generated authorization code` | `"10m0s"` |
+| `oauthSigner.clients[0].accessTokenLifetime` | string | `validity of generated access token lifetime. 0s means forever.` | `"0s"` |
+| `oauthSigner.clients[0].codeRestrictionLifetime` | string | `define period how long cannot be used again authorization code in exchange after first use.` | `"0s"` |
 
 > Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
