@@ -15,12 +15,12 @@ features:
   - heading: Comprehensive
     image_path: /images/comprehensive.svg
     tagline: Addressing various opportunities across multiple vertical markets
-    copy: plgd didn't went a path where an IoT device is just a messaging client. Our ecosystem includes cloud services, device libraries, local and remote clients and tools. Our building blocks and supported deployment options allows you to design the system in a way it fulfills your most complex requirements.
+    copy: plgd didn't went a path where an IoT device is just a messaging client. Our ecosystem includes hub services, device libraries, local and remote clients and tools. Our building blocks and supported deployment options allows you to design the system in a way it fulfills your most complex requirements.
 
   - heading: Standardized
     image_path: /images/standardized.svg
     tagline: Building on existing foundations
-    copy: APIs have revolutionized how we use the web. Emergence of IoT Technology at scale requires adoption of the similar paradigms in the IoT world as well. We adopted this route and are based on open and well-founded standards. Accessing your plgd IoT device is therefore the same as accessing your favorite web API. Yes, even on the local network without cloud services.
+    copy: APIs have revolutionized how we use the web. Emergence of IoT Technology at scale requires adoption of the similar paradigms in the IoT world as well. We adopted this route and are based on open and well-founded standards. Accessing your plgd IoT device is therefore the same as accessing your favorite web API. Yes, even on the local network without hub services.
 
   - heading: Transparent
     image_path: /images/transparent.svg

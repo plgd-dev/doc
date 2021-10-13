@@ -12,7 +12,7 @@ menu:
 toc: true
 ---
 
-C2C Gateway implements [Open Connectivity Foundation's Cloud API for Cloud Services](https://openconnectivity.org/specs/OCF_Cloud_API_For_Cloud_Services_Specification.pdf) providing API's to mirror user's devices to a different OCF standardized cloud.
+C2C Gateway implements [Open Connectivity Foundation's Cloud API for Cloud Services](https://openconnectivity.org/specs/OCF_Cloud_API_For_Cloud_Services_Specification.pdf) providing API's to mirror user's devices to a different OCF standardized hub.
 
 ## Docker Image
 
@@ -22,7 +22,7 @@ docker pull plgd/cloud2cloud-gateway:latest
 
 ## YAML Configuration
 
-A configuration template is available in [cloud2cloud-gateway/config.yaml](https://github.com/plgd-dev/cloud/blob/v2/cloud2cloud-gateway/config.yaml).
+A configuration template is available in [cloud2cloud-gateway/config.yaml](https://github.com/plgd-dev/hub/blob/main/cloud2cloud-gateway/config.yaml).
 
 ### Logging
 
@@ -53,7 +53,7 @@ A configuration template is available in [cloud2cloud-gateway/config.yaml](https
 
 ### Event Bus
 
-Plgd cloud uses NATS messaging system as an event bus.
+Plgd hub uses NATS messaging system as an event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -97,7 +97,7 @@ Client configurations to internally connect to the Resource Aggregate service.
 
 ### Storage
 
-Plgd cloud uses MongoDB database as the owner's device store.
+Plgd hub uses MongoDB database as the owner's device store.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

@@ -22,7 +22,7 @@ docker pull plgd/resource-directory:latest
 
 ## YAML Configuration
 
-A configuration template is available on [resource-directory/config.yaml](https://github.com/plgd-dev/cloud/blob/v2/resource-directory/config.yaml).
+A configuration template is available on [resource-directory/config.yaml](https://github.com/plgd-dev/hub/blob/main/resource-directory/config.yaml).
 
 ### Logging
 
@@ -64,7 +64,7 @@ gRPC API of the Resource Directory service.
 
 ### Event Bus
 
-Plgd cloud uses NATS messaging system as a event bus.
+Plgd hub uses NATS messaging system as a event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -79,7 +79,7 @@ Plgd cloud uses NATS messaging system as a event bus.
 
 ### Event Store
 
-Plgd cloud uses MongoDB database as a event store.
+Plgd hub uses MongoDB database as a event store.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -111,8 +111,8 @@ Client configurations to internally connect to Identity Store service.
 
 ### Public Configuration
 
-These configurations are `Coap Cloud Conf` information for device registration to plgd cloud as well as root CA certificate, certificate authority address to get identity certificate for ssl connection to plgd cloud before device registration.
-This will be served by HTTP Gateway API as defined [here](https://github.com/plgd-dev/cloud/blob/v2/http-gateway/uri/uri.go#L14) and also see [cloud-configuration](https://try.plgd.cloud/.well-known/cloud-configuration).
+These configurations are `Coap Cloud Conf` information for device registration to plgd hub as well as root CA certificate, certificate authority address to get identity certificate for ssl connection to plgd hub before device registration.
+This will be served by HTTP Gateway API as defined [here](https://github.com/plgd-dev/hub/blob/main/http-gateway/uri/uri.go#L14) and also see [hub-configuration](https://try.plgd.cloud/.well-known/hub-configuration).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

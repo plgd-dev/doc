@@ -12,11 +12,11 @@ menu:
 toc: true
 ---
 
-HTTP Gateway exposes the client's [REST API](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/cloud/v2/http-gateway/swagger.yaml) to manage user's devices, as well as the Web UI known as [plgd Dashboard](https://try.plgd.cloud).
+HTTP Gateway exposes the client's [REST API](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/http-gateway/swagger.yaml) to manage user's devices, as well as the Web UI known as [plgd Dashboard](https://try.plgd.cloud).
 
 ## YAML Configuration
 
-A configuration template is available on [http-gateway/config.yaml](https://github.com/plgd-dev/cloud/blob/v2/http-gateway/config.yaml).
+A configuration template is available on [http-gateway/config.yaml](https://github.com/plgd-dev/hub/blob/main/http-gateway/config.yaml).
 
 ### Logging
 
@@ -26,7 +26,7 @@ A configuration template is available on [http-gateway/config.yaml](https://gith
 
 ### HTTP API
 
-APIs of the HTTP Gateway service as defined [uri](https://github.com/plgd-dev/cloud/blob/v2/http-gateway/uri/uri.go) and [swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/cloud/v2/http-gateway/swagger.yaml) for REST API.
+APIs of the HTTP Gateway service as defined [uri](https://github.com/plgd-dev/hub/blob/main/http-gateway/uri/uri.go) and [swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/http-gateway/swagger.yaml) for REST API.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -66,7 +66,7 @@ Client configurations to internally connect to GRPC Gateway service.
 
 ### Web UI
 
-These configurations are for `PLGD Dashboard` as described in [here](https://github.com/plgd-dev/cloud/blob/v2/docs/guide/developing/dashboard.md).
+These configurations are for `PLGD Dashboard` as described in [here](https://github.com/plgd-dev/hub/blob/main/docs/guide/developing/dashboard.md).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -80,6 +80,6 @@ These configurations are for `PLGD Dashboard` as described in [here](https://git
 | `ui.webConfiguration.deviceOAuthClient.clientID` | string | `Client ID to get an authorization code for the device.` | `""` |
 | `ui.webConfiguration.deviceOAuthClient.audience` | string | `Identifier of the API configured in your OAuth provider.` | `""` |
 | `ui.webConfiguration.deviceOAuthClient.scopes` | string array | `List of required scopes.` | `""` |
-| `ui.webConfiguration.deviceOAuthClient.providerName` | string | `Name of provider, which needs to be set to cloud resource during cloud provisioning.` | `"plgd"` |
+| `ui.webConfiguration.deviceOAuthClient.providerName` | string | `Name of provider, which needs to be set to hub resource during hub provisioning.` | `"plgd"` |
 
 > Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".

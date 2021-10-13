@@ -12,7 +12,7 @@ menu:
 toc: true
 ---
 
-This service is used to sign identity certificates for devices and [plgd-dev/sdk](https://github.com/plgd-dev/sdk) client.
+This service is used to sign identity certificates for devices and [plgd-dev/device](https://github.com/plgd-dev/device) client.
 
 Initialization of the SDK requires an Identity Certificate issued by this service after successful user authorization. The SDK is then able to discover and configure the ownership as described [here](https://openconnectivity.org/specs/OCF_Security_Specification_v2.2.3.pdf#page=37). During this process, a CSR (Certificate Signing Request) is sent to the Certificate Authority which returns device's Identity Certificate.
 
@@ -24,7 +24,7 @@ docker pull plgd/certificate-authority:latest
 
 ## YAML Configuration
 
-A configuration template is available on [certificate-authority/config.yaml](https://github.com/plgd-dev/cloud/blob/v2/certificate-authority/config.yaml).
+A configuration template is available on [certificate-authority/config.yaml](https://github.com/plgd-dev/hub/blob/main/certificate-authority/config.yaml).
 
 ### Logging
 
@@ -34,7 +34,7 @@ A configuration template is available on [certificate-authority/config.yaml](htt
 
 ### gRPC API
 
-gRPC API of the Certificate Authority service as defined [here](https://github.com/plgd-dev/cloud/blob/v2/certificate-authority/pb/service_grpc.pb.go#L19).
+gRPC API of the Certificate Authority service as defined [here](https://github.com/plgd-dev/hub/blob/main/certificate-authority/pb/service_grpc.pb.go#L19).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

@@ -22,7 +22,7 @@ docker pull plgd/resource-aggregate:latest
 
 ## YAML Configuration
 
-A configuration template is available on [resource-aggregate/config.yaml](https://github.com/plgd-dev/cloud/blob/v2/resource-aggregate/config.yaml).
+A configuration template is available on [resource-aggregate/config.yaml](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/config.yaml).
 
 ### Logging
 
@@ -32,7 +32,7 @@ A configuration template is available on [resource-aggregate/config.yaml](https:
 
 ### gRPC API
 
-gRPC API of the Resource Aggregate service as defined [here](https://github.com/plgd-dev/cloud/blob/v2/resource-aggregate/service/service_grpc.pb.go#L20).
+gRPC API of the Resource Aggregate service as defined [here](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/service/service_grpc.pb.go#L20).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -63,7 +63,7 @@ gRPC API of the Resource Aggregate service as defined [here](https://github.com/
 
 ### Event Bus
 
-Plgd cloud uses NATS messaging system as a event bus.
+Plgd hub uses NATS messaging system as a event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -76,7 +76,7 @@ Plgd cloud uses NATS messaging system as a event bus.
 
 ### Event Store
 
-Plgd cloud uses MongoDB database as a event store.
+Plgd hub uses MongoDB database as a event store.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

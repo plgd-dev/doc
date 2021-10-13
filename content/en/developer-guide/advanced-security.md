@@ -25,7 +25,7 @@ api:
       clientCertificateRequired: true
 ```
 
-After that, only devices which have signed identity certificates by CA configured in coap-gateway can access the cloud.
+After that, only devices which have signed identity certificates by CA configured in coap-gateway can access the hub.
 
 ## How coap-gateway resolves device ID
 

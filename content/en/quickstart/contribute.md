@@ -34,15 +34,15 @@ go version
 
 The command should succeed and print out the currently installed version of go.
 
-### Checkout cloud in your go workspace and install go modules dependencies
+### Checkout hub in your go workspace and install go modules dependencies
 
-Some parts of the `cloud` repository are sensitive to location of the code. The source code of the repository must reside in your go workspace, at `$HOME/go/src/plgd-dev/cloud`.
+Some parts of the `hub` repository are sensitive to location of the code. The source code of the repository must reside in your go workspace, at `$HOME/go/src/plgd-dev/hub`.
 
 You can use older form of the `go get` command to download the source code to expected location:
 
 ```shell
 export GO111MODULE=off
-go get -d github.com/plgd-dev/cloud
+go get -d github.com/plgd-dev/hub
 ```
 
 Alternative option is to manually create the folder structure and use `git clone`:
@@ -51,13 +51,13 @@ Alternative option is to manually create the folder structure and use `git clone
 cd $HOME/go
 mkdir -p src/github.com/plgd-dev
 cd src/github.com/plgd-dev
-git clone git@github.com:plgd-dev/cloud.git
+git clone git@github.com:plgd-dev/hub.git
 ```
 
 After a successful checkout use `go mod download` and `go mod tidy` commands to download dependencies.
 
 ```shell
-cd $HOME/go/src/plgd-dev/cloud
+cd $HOME/go/src/plgd-dev/hub
 go mod download
 go mod tidy
 ```
@@ -86,15 +86,15 @@ Services use protobuf messages to communicate. To generate `.pb` files from `.pr
  b) move the contents of the extracted `include` folder to `/usr/local/include`
 3. Set permissions of the copied files and folders by chmod to `0755` (read+write+execute for owner, read+execute for group and world)
 
-These steps are automated in convenience script `cloud/tools/install/install-latest-protoc.py`.
+These steps are automated in convenience script `hub/tools/install/install-latest-protoc.py`.
 
 ### Install protoc modules to generate protobuf definitions for gRPC-Gateway
 
 To automatically generate API clients and server stubs in golang protoc plugins from [gRPC-Gateway](https://github.com/grpc-ecosystem/grpc-gateway) are used. To install them run:
 
 ```shell
-go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
-    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
+go install github.com/grpc-ecosystem/grpc-gateway/main/protoc-gen-grpc-gateway \
+    github.com/grpc-ecosystem/grpc-gateway/main/protoc-gen-openapiv2 \
     google.golang.org/protobuf/cmd/protoc-gen-go \
     google.golang.org/grpc/cmd/protoc-gen-go-grpc
 ```

@@ -3,9 +3,9 @@ description = "Let Things experience the Internet"
 ## Setting this to true will add a "noindex" to *EVERY* page on the site..
 removefromexternalsearch = false
 ## Gh repo for site footer (include trailing slash)
-ghrepo = "https://github.com/plgd-dev/cloud/"
+ghrepo = "https://github.com/plgd-dev/hub/"
 ## GH Repo for filing a new issue
-github_repo = "https://github.com/plgd-dev/cloud/issues/new/"
+github_repo = "https://github.com/plgd-dev/hub/issues/new/"
 ### Edit content repo (set to automatically enter "edit" mode; this is good for "improve this page" links)
 ghdocsrepo = "https://github.com/plgd-dev/plgd.dev/"
 ## Gitter URL

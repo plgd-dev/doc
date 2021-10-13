@@ -12,14 +12,14 @@ menu:
 toc: true
 ---
 
-For creating grpc-client you need to generate a code for your language from proto files, which are stored at [plgd cloud](https://github.com/plgd-dev/cloud/tree/v2/grpc-gateway/pb). The plgd gRPC Gateway uses TLS. The client needs to have therefore properly configured TLS. Here is a simple example how to create a secured gRPC client communicating with the plgd gRPC Gateway.
+For creating grpc-client you need to generate a code for your language from proto files, which are stored at [plgd hub](https://github.com/plgd-dev/hub/tree/main/grpc-gateway/pb). The plgd gRPC Gateway uses TLS. The client needs to have therefore properly configured TLS. Here is a simple example how to create a secured gRPC client communicating with the plgd gRPC Gateway.
 
 ```go
 import (
     "google.golang.org/grpc"
     "google.golang.org/grpc/credentials"
-    "github.com/plgd-dev/cloud/grpc-gateway/pb"
-    "github.com/plgd-dev/cloud/grpc-gateway/client"
+    "github.com/plgd-dev/hub/grpc-gateway/pb"
+    "github.com/plgd-dev/hub/grpc-gateway/client"
 )
 
     ...
@@ -41,7 +41,7 @@ import (
 
 ## Using extended gRPC Client
 
-More info in [doc](https://pkg.go.dev/github.com/plgd-dev/cloud/grpc-gateway/client).
+More info in [doc](https://pkg.go.dev/github.com/plgd-dev/hub/grpc-gateway/client).
 
 ## API
 
@@ -95,7 +95,7 @@ The `SubscribeToEvents` command opens the stream, which content is driven by the
 - `action.create_subscription.event_filter` set to `ONLINE` to receive **devices events** which changed their status to `ONLINE`
 - `action.create_subscription.{device_id_filter, event_filter}` set to `RESOURCE_PUBLISHED` to receive **device events**
 - `action.create_subscription.{resource_id_filter, event_filter}` set to `CONTENT_CHANGED` to receive **resource events**
-- `action.create_subscription` without any set of filters will receive all devices events from the cloud.
+- `action.create_subscription` without any set of filters will receive all devices events from the hub.
 
 The first event returned after the successful subscription is of type `OperationProcessed`. Property `OperationProcessed.error_status.code` contains information if the subscription was successful. If it was successful, property `subscriptionId` is set. All events belonging to a single `SubscribeToEvents` request are then identified by this `subscriptionId`.
 
@@ -103,20 +103,20 @@ If the user loses a device _(unregistered / no more shared with the user)_, the 
 
 ### Get Resource from Device
 
-The `GetResourceFromDevice` retrieves resource content directly from the device - resource shadow value is not returned. To define the expiration of command, set `GetResourceFromDeviceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `GetResourceFromDevice.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the cloud skips it and will be removed by creating a new snapshot event.
+The `GetResourceFromDevice` retrieves resource content directly from the device - resource shadow value is not returned. To define the expiration of command, set `GetResourceFromDeviceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `GetResourceFromDevice.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the hub skips it and will be removed by creating a new snapshot event.
 > This command execution is "expensive" as it has to reach the real device while your client synchronously waits for a response.
 
 ### Update Resource Content
 
-The `UpdateResource` command requests resource updates on the device. To define the expiration of command, set `UpdateResourceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `ResourceUpdatePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the cloud skips it and will be removed by creating a new snapshot event.
+The `UpdateResource` command requests resource updates on the device. To define the expiration of command, set `UpdateResourceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `ResourceUpdatePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the hub skips it and will be removed by creating a new snapshot event.
 
 ### Create Resource
 
-The `Create Resource` command requests the creation of a new resource on a specific collection on the device. To define the expiration of command, set `CreateResourceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `ResourceCreatePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the cloud skips it and will be removed by creating a new snapshot event.
+The `Create Resource` command requests the creation of a new resource on a specific collection on the device. To define the expiration of command, set `CreateResourceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `ResourceCreatePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the hub skips it and will be removed by creating a new snapshot event.
 
 ### Delete Resource
 
-The `DeleteResource` command requests the device to delete a specific resource. A confirmation message doesn't mean that the resource was deleted. After successful deletion, the device unpublishes its resource. This information is propagated to the client in the form of a `RESOURCE_UNPUBLISHED` event. To define the expiration of command, set `DeleteResourceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `ResourceDeletePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the cloud skips it and will be removed by creating a new snapshot event.
+The `DeleteResource` command requests the device to delete a specific resource. A confirmation message doesn't mean that the resource was deleted. After successful deletion, the device unpublishes its resource. This information is propagated to the client in the form of a `RESOURCE_UNPUBLISHED` event. To define the expiration of command, set `DeleteResourceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `ResourceDeletePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the hub skips it and will be removed by creating a new snapshot event.
 
 ### Get pending commands
 
@@ -142,7 +142,7 @@ The `GetDevicesMetadata` command supports various filter options. If all of them
 
 ### Update Device Metadata
 
-The `UpdateDeviceMetadata` command requests enable/disable shadow synchronization on the device. To define the expiration of command, set `UpdateDeviceMetadata.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `DeviceMetadataUpdatePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the cloud skips it and will be removed by creating a new snapshot event.
+The `UpdateDeviceMetadata` command requests enable/disable shadow synchronization on the device. To define the expiration of command, set `UpdateDeviceMetadata.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `DeviceMetadataUpdatePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the hub skips it and will be removed by creating a new snapshot event.
 
 ### Get events
 
@@ -173,7 +173,7 @@ Pending metadata update is identified by `correlationId`. If a `correlationIdFil
 
 ## Contracts
 
-- [service](https://github.com/plgd-dev/cloud/blob/v2/grpc-gateway/pb/service.proto)
-- [requests/responses](https://github.com/plgd-dev/cloud/blob/v2/grpc-gateway/pb/devices.proto)
-- [get events request/response](https://github.com/plgd-dev/cloud/blob/v2/grpc-gateway/pb/events.proto)
-- [client configuration](https://github.com/plgd-dev/cloud/blob/v2/grpc-gateway/pb/clientConfiguration.proto)
+- [service](https://github.com/plgd-dev/hub/blob/main/grpc-gateway/pb/service.proto)
+- [requests/responses](https://github.com/plgd-dev/hub/blob/main/grpc-gateway/pb/devices.proto)
+- [get events request/response](https://github.com/plgd-dev/hub/blob/main/grpc-gateway/pb/events.proto)
+- [client configuration](https://github.com/plgd-dev/hub/blob/main/grpc-gateway/pb/clientConfiguration.proto)

@@ -12,7 +12,7 @@ menu:
 toc: true
 ---
 
-By default, plgd cloud services use NATS as an EventBus and MongoDB as an EventStore. Some use-cases require subscription directly to the internal messaging system instead of communicating with the plgd using its gateways. To simplify the data reconciliation and scale consumers easier, plgd supports [JetStream](https://github.com/nats-io/jetstream) technology as an alternative EventBus. JetStream is built on top of NATS, persisting all published events. Using JetStream as an EventBus allows you to access older, not yet processed messages without accessing the EventStore.
+By default, plgd hub services use NATS as an EventBus and MongoDB as an EventStore. Some use-cases require subscription directly to the internal messaging system instead of communicating with the plgd using its gateways. To simplify the data reconciliation and scale consumers easier, plgd supports [JetStream](https://github.com/nats-io/jetstream) technology as an alternative EventBus. JetStream is built on top of NATS, persisting all published events. Using JetStream as an EventBus allows you to access older, not yet processed messages without accessing the EventStore.
 
 {{% note %}}
 There are still some edge-cases when the plgd event couldn't be published to the JetStream but it was stored to the EventStore. In such a case you need to identify that one event was lost and if needed, retrieve it using plgd gRPC Gateway.
@@ -28,11 +28,11 @@ More information about the JetStream can be found [here](https://docs.nats.io/je
 
 - `ownerID` is the owner of the device. It is calculated as `uuid.NewV5(uuid.NamespaceURL, value of JWT ownerClaim)`.
 - `deviceID` is the UUID of the device.
-- `resourceID` is the unique identifier of resource over the whole cloud. It is calculated as `uuid.NewV5(uuid.NamespaceURL, deviceID+href)`, where the `href` is a resource path. (eg "/oic/d").
+- `resourceID` is the unique identifier of resource over the whole hub. It is calculated as `uuid.NewV5(uuid.NamespaceURL, deviceID+href)`, where the `href` is a resource path. (eg "/oic/d").
 
 ### Device events
 
-Each event is compressed by [snappy](https://github.com/google/snappy) and encoded in protobuf [devices event envelope](https://github.com/plgd-dev/cloud/blob/v2/resource-aggregate/cqrs/eventbus/pb/eventbus.proto). The event envelope consist of `Event.data` containing the event and `Event.event_type` describing the type of the event.
+Each event is compressed by [snappy](https://github.com/google/snappy) and encoded in protobuf [devices event envelope](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/cqrs/eventbus/pb/eventbus.proto). The event envelope consist of `Event.data` containing the event and `Event.event_type` describing the type of the event.
 
 #### Resource links
 
@@ -48,7 +48,7 @@ Each event is compressed by [snappy](https://github.com/google/snappy) and encod
 
 ### Owner events
 
-Each event is encoded in protobuf [event envelope](https://github.com/plgd-dev/cloud/blob/v2/authorization/pb/events.proto) and then compressed by [snappy](https://github.com/google/snappy).
+Each event is encoded in protobuf [event envelope](https://github.com/plgd-dev/hub/blob/main/authorization/pb/events.proto) and then compressed by [snappy](https://github.com/google/snappy).
 
 #### Registration events
 
@@ -58,7 +58,7 @@ Each event is encoded in protobuf [event envelope](https://github.com/plgd-dev/c
 
 For the consumers of events you can subscribe to:
 
-- `plgd.owners.>` gets all events of cloud
+- `plgd.owners.>` gets all events of hub
 - `plgd.owners.{ownerId}.>` gets all events of owner `ownerId`
 - `plgd.owners.*.devices.{deviceID}.>` gets all events of device `deviceID`
 - `plgd.owners.*.devices.{deviceID}.resource-links.>` go get all resource links events of device `deviceID`
@@ -91,7 +91,7 @@ It's required from you to create event streams before the JetStream can be used 
 Set env variable `JETSTREAM=true` of bundle
 
 ```bash
-docker run -it --rm -e JETSTREAM=true --network=host -v `pwd`/.tmp/data:/data plgd/bundle:v2next)
+docker run -it --rm -e JETSTREAM=true --network=host -v `pwd`/.tmp/data:/data plgd/bundle:vnext)
 ```
 
 ### Enable jetstream manually
@@ -129,7 +129,7 @@ nats-server -c nats.config
 
 #### Setup and create stream
 
-Setup events stream `stream.json` where all events of cloud will be stored:
+Setup events stream `stream.json` where all events of hub will be stored:
 
 ```jsonc
 {

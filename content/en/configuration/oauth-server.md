@@ -12,11 +12,11 @@ menu:
 toc: true
 ---
 
-Mocked OAuth2.0 Server used for automated tests, [bundle container](../quickstart/deploy-plgd-cloud/#plgd-bundle) and optionally deployment using the HELM chart for the **development purposes**.
+Mocked OAuth2.0 Server used for automated tests, [bundle container](../quickstart/deploy-plgd-hub/#plgd-bundle) and optionally deployment using the HELM chart for the **development purposes**.
 
 ## YAML Configuration
 
-A configuration template is available on [test/oauth-server/config.yaml](https://github.com/plgd-dev/cloud/blob/v2/test/oauth-server/config.yaml).
+A configuration template is available on [test/oauth-server/config.yaml](https://github.com/plgd-dev/hub/blob/main/test/oauth-server/config.yaml).
 
 ### Logging
 
@@ -26,7 +26,7 @@ A configuration template is available on [test/oauth-server/config.yaml](https:/
 
 ### HTTP API
 
-HTTP API of the OAuth Server service as defined [here](https://github.com/plgd-dev/cloud/blob/v2/test/oauth-server/uri/uri.go)
+HTTP API of the OAuth Server service as defined [here](https://github.com/plgd-dev/hub/blob/main/test/oauth-server/uri/uri.go)
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
