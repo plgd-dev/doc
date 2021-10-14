@@ -12,7 +12,7 @@ menu:
 toc: true
 ---
 
-Mocked OAuth2.0 Server used for automated tests, [bundle container](../quickstart/deploy-plgd-hub/#plgd-bundle) and optionally deployment using the HELM chart for the **development purposes**.
+OAuth2.0 Mock Server used for automated tests, [bundle container](../quickstart/deploy-plgd-hub/#plgd-bundle) and optionally deployment using the HELM chart for the **development purposes**.
 
 ## Docker Image
 

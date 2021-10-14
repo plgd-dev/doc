@@ -39,7 +39,7 @@ After couple of seconds your plgd hub will become available. The plgd dashboard 
 
 ### Authorization
 
-The plgd hub doesn't work without OAuth Server. To not require developers not interested in sharing bundle instances with other users, a simple mocked OAuth Server is included in the bundle. Authentication to the plgd is therefore not required, and the test user is automatically logged in. The same applies also to device connections; in case you're using the bundle, devices connecting to the CoAP Gateway can use random/static onboarding code as it's not verified. Onboarding of devices is therefore much simpler.
+The plgd hub doesn't work without OAuth Server. To not require developers not interested in sharing bundle instances with other users, a simple OAuth2.0 Mock Server is included in the bundle. Authentication to the plgd is therefore not required, and the test user is automatically logged in. The same applies also to device connections; in case you're using the bundle, devices connecting to the CoAP Gateway can use random/static onboarding code as it's not verified. Onboarding of devices is therefore much simpler.
 
 {{% warning %}}
 OAuth Server which is part of the plgd is only for testing and development purposes. For the production, integration of the plgd with the external OAuth2.0 server is required.

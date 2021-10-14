@@ -9,7 +9,7 @@ As you've might already experienced, the plgd hub consist of a few scalable serv
 To make the experience with the usage of the plgd hub perfect to everyone, we have created a new package - plgd bundle docker container which bundles all plgd core services and more:
 
 - plgd Dashboard
-- mocked OAuth 2.0 Server
+- OAuth2.0 Mock Server
 - NGINX proxy
 - both secure and unsecure CoAP Gateway (device endpoint)
 - CA service issuing identity certificates for your devices
