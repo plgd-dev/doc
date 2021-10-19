@@ -14,7 +14,7 @@ toc: true
 
 ## CoAP Gateway
 
-The CoAP gateway acts as a CoAP Client, enabling communication between IoT devices and CoAP Servers following the [OCF specification](https://openconnectivity.org/developer/specifications/). As the component diagram describes, the responsibilities of the gateway are:
+The CoAP gateway acts as a CoAP Client, communicating with IoT devices, which serve as CoAP Servers following the [OCF specification](https://openconnectivity.org/developer/specifications/). As the component diagram describes, the responsibilities of the gateway are:
 
 - Handle and maintain TCP connections coming from devices
 - [Authenticate and authorize requests (see 5.5.5)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=15) from the device in conjunction with an OAuth2.0 Server
