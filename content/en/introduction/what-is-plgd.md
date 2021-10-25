@@ -1,6 +1,6 @@
 ---
 title: 'What is plgd'
-description: 'What is plgd and how it help you?'
+description: 'What is plgd and how can it help you?'
 date: '2021-05-13'
 lastmod: '2021-05-13'
 categories: [overview, fundamentals]

@@ -14,11 +14,11 @@ toc: true
 
 > The **Internet of Things (IoT)** is the network of physical devices, which are embedded with electronics, software, sensors, actuators, and connectivity for the purpose of enabling these things to connect and exchange data. Thus creating opportunities for more direct integration of the physical world into computer-based systems, resulting in efficiency improvements, economic benefits and reduced human intervention. _(Wikipedia, Internet of Things)_
 
-In other words, an IoT device is regularly subject to change, since it represents the world around it. It's up to the developer, how the world is represented through the device and processed by the application for your specific domain.  Technology should support the transfer of data in a standardized and secured way. The IoT platform can't limit you and can't set boundaries, which would limit evolution of your system.
+An IoT device senses change, representing the world around it. The developer determines how the world is represented through the device and processed by the application for your specific domain. Technology should support the transfer of data in a standardized and secured way. The IoT platform should not limit you nor set boundaries – this would limit the evolution of your system.
 
-**Domain** is a sphere of knowledge, influence or activity.
+**Domain** is a sphere of knowledge, influence, or activity.
 
-IoT itself is most likely not a domain of your business, it is a group of technology achievements from the last decades of the 20th century, which open the door to new possibilities for your business domain.  Allowing for the modelling of the external world specific to your needs, in the form of resources and events, which will be transferred in a secure and traceable manner to your application, located off-premise or even on-premise.  The goal is for developers to focus primarily on the domain of their business.
+IoT itself is most likely not a domain of your business; it is a group of technology achievements from the last decades of the 20th century, which is now opening doors to new possibilities for your business domain. IoT facilitates modelling of the external world specific to your needs, in the form of resources and events, which are then transferred in a secure and traceable manner to your application, located off-premise or even on-premise. The goal is for developers to focus primarily on the domain of their business.
 
 ## Architectural Drivers
 
@@ -27,20 +27,20 @@ IoT itself is most likely not a domain of your business, it is a group of techno
 - **CoAP**
   - OCF mandates [CoAP](https://coap.technology/) support for compliant [devices](https://github.com/iotivity/iotivity-lite).
 - **CoAP over TCP**
-    While UDP may be preferred for messaging over local networks where "chattiness" is highly detrimental due to power or bandwidth constraints, CoAP over TCP is preferred for situations where a device is communicating with a remote server due to the greater QoS guarantees and TCP has substantially better support than UDP in cloud native use cases.
+    While UDP may be preferred for messaging over local networks where "chattiness" is highly detrimental due to power or bandwidth constraints, CoAP over TCP is preferred for situations where a device is communicating with a remote server, due to the greater QoS guarantees; and TCP has substantially better support than UDP in cloud native use cases.
 - **TLS**
-    Solution has to provide security and data integrity between the new component and a connecting device.
+    is responsible for security and data integrity between the new component and a connecting device.
 - **CBOR**
-    Default media type used in communication between [OCF compliant devices](https://github.com/iotivity/iotivity-lite) and components is [CBOR](https://cbor.io/). This format has to be supported by default.
+    Default media type used in communication between [OCF compliant devices](https://github.com/iotivity/iotivity-lite) and components is [CBOR](https://cbor.io/). This format must be supported by default.
 
 ### Quality Attributes
 
 - **Scalable**
-    A forecast provided by Ericsson states that there will be around 18 billion IoT devices online in 2022. The system needs to not only be able to handle large scales, but also be able to rapidly scale up and down in response to load.
+    Ericsson forecast that there will be around 18 billion IoT devices online in 2022. The system needs to be able to not only handle large scale connectivity and load, but also rapidly scale up and down in response to load.
 - **High Availability**
-    IoT devices are often crucial to the safety and performance of the system that they’re used in. While these devices may be in inherently low QoS environments, it is the responsibility of the cloud to always be available when the devices need it and otherwise not be the weakest link.
+    IoT devices are often crucial to the safety and performance of the system they’re used in. While these devices may be in inherently low QoS environments, it is the responsibility of the cloud to always be available for when the devices need it; and otherwise not be the weakest link.
 - **Traceable**
-    Many users and devices at once can bring a lot of business errors to consuming systems. It is beneficial to track activities within the system for better error solving and future prediction based on similar periodic patterns.
+    Many users and devices transceiving data at the same time can result in many types of errors, negatively impacting business operations. It is beneficial to track activities within the system for more effective error solving and future prediction based on recognised patterns.
 - **Cost Efficient**
     Many future users won't have the knowledge about infrastructure and operations of the whole system. They might not have their own data center for hosting of the solution. This increases the importance of ease of use and cost efficiency. Most cloud providers offer a similar set of services from a functional point of view. A solution should be able to take advantage of these services to save money, alleviating the burden of missing know-how and increasing runtime optimizations.
 - **Multitenant**
