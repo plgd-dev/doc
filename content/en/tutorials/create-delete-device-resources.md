@@ -124,11 +124,11 @@ make cloud_server CLOUD=1 SECURE=0 CREATE=1
 
 #### Create a resource
 
-When you have a cloud backend and a cloud_server binary running, you can use a cloud client to create a resource.
+When you have a hub backend and a cloud_server binary running, you can use a hub client to create a resource.
 
 #### Create by go grpc client
 
-Go [grpc client](https://github.com/plgd-dev/cloud/tree/master/bundle/client/grpc) is a simple tool that supports several useful commands we can combine to create a resource.
+Go [grpc client](https://github.com/plgd-dev/hub/tree/main/bundle/client/grpc) is a simple tool that supports several useful commands we can combine to create a resource.
 
 - Use the get command to identify the collection device
 

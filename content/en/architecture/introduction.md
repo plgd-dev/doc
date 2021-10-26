@@ -27,7 +27,7 @@ IoT itself is most likely not a domain of your business; it is a group of techno
 - **CoAP**
   - OCF mandates [CoAP](https://coap.technology/) support for compliant [devices](https://github.com/iotivity/iotivity-lite).
 - **CoAP over TCP**
-    While UDP may be preferred for messaging over local networks where "chattiness" is highly detrimental due to power or bandwidth constraints, CoAP over TCP is preferred for situations where a device is communicating with a remote server, due to the greater QoS guarantees; and TCP has substantially better support than UDP in cloud native use cases.
+    While UDP may be preferred for messaging over local networks where "chattiness" is highly detrimental due to power or bandwidth constraints, CoAP over TCP is preferred for situations where a device is communicating with a remote server, due to the greater QoS guarantees; and TCP has substantially better support than UDP in cloud-native use cases.
 - **TLS**
     is responsible for security and data integrity between the new component and a connecting device.
 - **CBOR**
@@ -38,7 +38,7 @@ IoT itself is most likely not a domain of your business; it is a group of techno
 - **Scalable**
     Ericsson forecast that there will be around 18 billion IoT devices online in 2022. The system needs to be able to not only handle large scale connectivity and load, but also rapidly scale up and down in response to load.
 - **High Availability**
-    IoT devices are often crucial to the safety and performance of the system they’re used in. While these devices may be in inherently low QoS environments, it is the responsibility of the cloud to always be available for when the devices need it; and otherwise not be the weakest link.
+    IoT devices are often crucial to the safety and performance of the system they’re used in. While these devices may be in inherently low QoS environments, it is the responsibility of the hub to always be available for when the devices need it; and otherwise not be the weakest link.
 - **Traceable**
     Many users and devices transceiving data at the same time can result in many types of errors, negatively impacting business operations. It is beneficial to track activities within the system for more effective error solving and future prediction based on recognised patterns.
 - **Cost Efficient**
@@ -50,7 +50,7 @@ IoT itself is most likely not a domain of your business; it is a group of techno
 
 ### Resources Bounded Context
 
-Servers (IoT Devices) which are OCF enabled are represented in the form of **resources**. (similar to REST)  Resources are hosted by a server (IoT Device) and if it is connected to the [plgd cloud](https://github.com/plgd-dev/cloud/), it is able to publish those resources, which should then be accessible "remotely" through this decentralized component. That means, the [plgd cloud](https://github.com/plgd-dev/cloud/) works both as the gateway and the resource directory for all connected and authorized servers / clients.
+Servers (IoT Devices) which are OCF enabled are represented in the form of **resources**. (similar to REST)  Resources are hosted by a server (IoT Device) and if it is connected to the [plgd hub](https://github.com/plgd-dev/hub/), it is able to publish those resources, which should then be accessible "remotely" through this decentralized component. That means, the [plgd hub](https://github.com/plgd-dev/hub/) works both as the gateway and the resource directory for all connected and authorized servers / clients.
 
 > To understand more about what a resource is, read chapter 7 - [Resource model](https://openconnectivity.org/specs/OCF_Core_Specification.pdf)
 
@@ -69,15 +69,15 @@ Servers (IoT Devices) which are OCF enabled are represented in the form of **res
 
 ### Identities Bounded Context
 
-Only authorized client _(application interested in data)_ connected to the plgd Cloud _(IoT Device)_ is able to perform an action on the device or access device's data. That means, only authorized client and server are able to browse / CRUDN resource published to the Resource Directory.
+Only authorized client _(application interested in data)_ connected to the plgd hub _(IoT Device)_ is able to perform an action on the device or access device's data. That means, only authorized client and server are able to browse / CRUDN resource published to the Resource Directory.
 
-A server and client are required to successfully sign-up and sign-in right after connecting to the [plgd cloud](https://github.com/plgd-dev/cloud/). During the sign-up process, which can be thought of as a registration, a one time use [authorization code](https://tools.ietf.org/html/rfc6749#section-1.3.1) is exchange for an access token, which uniquely represents this server / client. Returned access token is used in the sign-in request. Before the server / client is signed in, requests are not forwarded to the plgd system.
+A server and client are required to successfully sign-up and sign-in right after connecting to the [plgd hub](https://github.com/plgd-dev/hub/). During the sign-up process, which can be thought of as a registration, a one time use [authorization code](https://tools.ietf.org/html/rfc6749#section-1.3.1) is exchange for an access token, which uniquely represents this server / client. Returned access token is used in the sign-in request. Before the server / client is signed in, requests are not forwarded to the plgd system.
 
 The connected server / client belongs to the user who requested the authorization code.
 **Connected server / client can:**
 
 - Sign-up
-  - Registration to the plgd cloud with a valid authorization code
+  - Registration to the plgd hub with a valid authorization code
 - Sign-in
   - Authorize connection with provided access token
 - Sign-out

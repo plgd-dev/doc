@@ -12,7 +12,7 @@ menu:
 toc: true
 ---
 
-C2C Connector connects to other cloud implementing the [Open Connectivity Foundation's Cloud API for Cloud Services](https://openconnectivity.org/developer/specifications/) and mirror devices from this linked instance to yours.
+C2C Connector connects to other hub implementing the [Open Connectivity Foundation's Cloud API for Cloud Services](https://openconnectivity.org/developer/specifications/) and mirror devices from this linked instance to yours.
 
 ## Docker Image
 
@@ -22,7 +22,7 @@ docker pull plgd/cloud2cloud-connector:latest
 
 ## YAML Configuration
 
-A configuration template is available in [cloud2cloud-connector/config.yaml](https://github.com/plgd-dev/cloud/blob/v2/cloud2cloud-connector/config.yaml)
+A configuration template is available in [cloud2cloud-connector/config.yaml](https://github.com/plgd-dev/hub/blob/main/cloud2cloud-connector/config.yaml)
 
 ### Logging
 
@@ -39,7 +39,7 @@ A configuration template is available in [cloud2cloud-connector/config.yaml](htt
 | `apis.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.http.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
-| `apis.http.eventsURL` | string | `External url where the events from another cloud will be send` | `""` |
+| `apis.http.eventsURL` | string | `External url where the events from another hub will be send` | `""` |
 | `apis.http.pullDevices.disabled` | bool | `Disable get devices via pull for all clouds` | `true` |
 | `apis.http.pullDevices.interval` | string | `"Time interval between pulls` | `"5s"` |
 | `apis.http.clientID` | string | `Client ID to exchange an authorization code for an access token.` | `""` |
@@ -80,7 +80,7 @@ Client configurations to internally connect to Identity Store service.
 
 ### Event Bus
 
-Plgd cloud uses NATS messaging system as an event bus.
+plgd hub uses NATS messaging system as an event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -124,7 +124,7 @@ Client configurations to internally connect to the Resource Aggregate service.
 
 ### Storage
 
-Plgd cloud uses MongoDB database as the owner's device store.
+plgd hub uses MongoDB database as the owner's device store.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -159,4 +159,4 @@ Follow [OCF Cloud API For Cloud Services Specification](https://openconnectivity
 
 - maintenance of linked clouds
 - maintenance of linked accounts
-- [swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/cloud/master/cloud2cloud-connector/swagger.yaml)
+- [swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/cloud2cloud-connector/swagger.yaml)

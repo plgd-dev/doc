@@ -13,7 +13,7 @@ toc: true
 ---
 
 Even though the bundle start core plgd services as processes in a single container, a user has still a possibility to configure most of the services parameters. **For testing purposes**, the external OAuth Server (e.g. [Auth0](https://auth0.com)) can be set up.
-To skip the internal mocked OAuth Server and switch to your external one, configure the following environment variables:
+To skip the internal OAuth2.0 Mock Server and switch to your external one, configure the following environment variables:
 
 ```yaml
     OAUTH_AUDIENCE: https://api.example.com

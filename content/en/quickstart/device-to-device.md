@@ -11,7 +11,7 @@ menu:
     weight: 20
 toc: true
 ---
-This guide will walk you through the process of discovering, on-boarding, controlling your secure [OCF Device](https://openconnectivity.org/specs/OCF_Device_Specification_v2.2.3.pdf) using **plgd/sdk** library on your PC.
+This guide will walk you through the process of discovering, on-boarding, controlling your secure [OCF Device](https://openconnectivity.org/specs/OCF_Device_Specification_v2.2.3.pdf) using **plgd/device** library on your PC.
 
 ## Prerequisite
 
@@ -19,12 +19,12 @@ This guide will walk you through the process of discovering, on-boarding, contro
 
 ## Install OCF Client example
 
-1. Checkout [plgd/sdk](https://github.com/plgd-dev/sdk/tree/v2) library:
+1. Checkout [plgd/device](https://github.com/plgd-dev/device/tree/main) library:
 
     ```shell script
     # execute commands on your PC
-    git clone -b v2 https://github.com/plgd-dev/sdk.git --recursive
-    cd sdk
+    git clone -b main https://github.com/plgd-dev/device.git --recursive
+    cd device
     ```
 
 2. Build OCF Client example:
@@ -40,7 +40,7 @@ This guide will walk you through the process of discovering, on-boarding, contro
     ./ocfclient
     ```
 
-The OCF Client is now running on your PC. It's a console application that allows you to communicate with the device on your local network, without the plgd cloud. Code is available [here](https://github.com/plgd-dev/sdk/tree/v2/cmd/ocfclient).
+The OCF Client is now running on your PC. It's a console application that allows you to communicate with the device on your local network, without the plgd hub. Code is available [here](https://github.com/plgd-dev/device/tree/main/cmd/ocfclient).
 
 ## How to use OCF Client example
 
@@ -272,7 +272,7 @@ Off-boarding e2f7b281-d919-4e4b-4ed9-6156caead050 was successful
 
 ## How to make OCF Client on your own
 
-To make your own OCF Client application, you can use following codes included in [main.go](https://github.com/plgd-dev/sdk/blob/v2/cmd/ocfclient/main.go), [ocfclient.go](https://github.com/plgd-dev/sdk/blob/v2/cmd/ocfclient/ocfclient.go).
+To make your own OCF Client application, you can use following codes included in [main.go](https://github.com/plgd-dev/device/blob/main/cmd/ocfclient/main.go), [ocfclient.go](https://github.com/plgd-dev/device/blob/main/cmd/ocfclient/ocfclient.go).
 
 ### Initialize OCF Client
 

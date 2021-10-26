@@ -1,6 +1,6 @@
 ---
 title: Configuration
-description: 'Overview of plgd cloud services configuration'
+description: 'Overview of plgd hub services configuration'
 date: '2021-10-01'
 menu:
   docs:

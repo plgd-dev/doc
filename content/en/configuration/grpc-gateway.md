@@ -22,7 +22,7 @@ docker pull plgd/grpc-gateway:latest
 
 ## YAML Configuration
 
-A configuration template is available on [grpc-gateway/config.yaml](https://github.com/plgd-dev/cloud/blob/v2/grpc-gateway/config.yaml).
+A configuration template is available on [grpc-gateway/config.yaml](https://github.com/plgd-dev/hub/blob/main/grpc-gateway/config.yaml).
 
 ### Logging
 
@@ -32,7 +32,7 @@ A configuration template is available on [grpc-gateway/config.yaml](https://gith
 
 ### gRPC API
 
-gRPC API of the gRPC Gateway service as defined [here](https://github.com/plgd-dev/cloud/blob/v2/grpc-gateway/pb/service_grpc.pb.go#L19).
+gRPC API of the gRPC Gateway service as defined [here](https://github.com/plgd-dev/hub/blob/main/grpc-gateway/pb/service_grpc.pb.go#L19).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -80,7 +80,7 @@ Client configurations to internally connect to Identity Store service.
 
 ### Event Bus
 
-Plgd cloud uses NATS messaging system as a event bus.
+plgd hub uses NATS messaging system as a event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

@@ -85,4 +85,4 @@ sudo apt-get update & apt-get install build-essential git curl openssl
     ./cloud_server
     ```
 
-Now, the Cloud Server example running on your Raspberry Pi allows you to discover your device and connect it to the plgd cloud.
+Now, the Cloud Server example running on your Raspberry Pi allows you to discover your device and connect it to the plgd hub.

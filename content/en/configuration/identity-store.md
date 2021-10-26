@@ -22,7 +22,7 @@ docker pull plgd/identity-store:latest
 
 ## YAML Configuration
 
-A configuration template is available on [identity-store/config.yaml](https://github.com/plgd-dev/cloud/blob/v2/identity-store/config.yaml).
+A configuration template is available on [identity-store/config.yaml](https://github.com/plgd-dev/hub/blob/main/identity-store/config.yaml).
 
 ### Logging
 
@@ -32,7 +32,7 @@ A configuration template is available on [identity-store/config.yaml](https://gi
 
 ### gRPC API
 
-gRPC API of the Identity Store service as defined [here](https://github.com/plgd-dev/cloud/blob/v2/identity-store/pb/service_grpc.pb.go#L19).
+gRPC API of the Identity Store service as defined [here](https://github.com/plgd-dev/hub/blob/main/identity-store/pb/service_grpc.pb.go#L19).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -63,11 +63,12 @@ gRPC API of the Identity Store service as defined [here](https://github.com/plgd
 
 ### Event Bus
 
-Plgd cloud uses NATS messaging system as a event bus.
+plgd hub uses NATS messaging system as a event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
 | `clients.eventBus.nats.url` | string | `URL to nats messaging system.` | `"nats://localhost:4222"` |
+| `clients.eventBus.nats.flusherTimeout` | string | `Define flush timeout for publishing message.` | `"30s"` |
 | `clients.eventBus.nats.jetstream`| bool | `If true, events will be published to jetstream.` | `false` |
 | `clients.eventBus.nats.tls.caPool` | string | `root certificate the root certificate in PEM format.` |  `""` |
 | `clients.eventBus.nats.tls.keyFile` | string | `File name of private key in PEM format.` | `""` |
@@ -76,7 +77,7 @@ Plgd cloud uses NATS messaging system as a event bus.
 
 ### Storage
 
-Plgd cloud uses MongoDB database as owner's device store.
+plgd hub uses MongoDB database as owner's device store.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

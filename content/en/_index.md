@@ -20,7 +20,7 @@ features:
   - heading: Standardized
     image_path: /images/standardized.svg
     tagline: Building on existing foundations
-    copy: APIs have revolutionized how we use the web. Emergence of IoT Technology at scale requires adoption of the similar paradigms in the IoT world as well. We adopted this route and are based on open and well-founded standards. Accessing your plgd IoT device is therefore the same as accessing your favorite web API. Yes, even on the local network without cloud services.
+    copy: APIs have revolutionized how we use the web. Emergence of IoT Technology at scale requires adoption of the similar paradigms in the IoT world as well. We adopted this route and are based on open and well-founded standards. Accessing your plgd IoT device is therefore the same as accessing your favorite web API. Yes, even on the local network without without the internet connection.
 
   - heading: Transparent
     image_path: /images/transparent.svg

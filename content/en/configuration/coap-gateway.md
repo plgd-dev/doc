@@ -22,7 +22,7 @@ docker pull plgd/coap-gateway:latest
 
 ## YAML Configuration
 
-A configuration template is available on [coap-gateway/config.yaml](https://github.com/plgd-dev/cloud/blob/v2/coap-gateway/config.yaml).
+A configuration template is available on [coap-gateway/config.yaml](https://github.com/plgd-dev/hub/blob/main/coap-gateway/config.yaml).
 
 ### Logging
 
@@ -54,7 +54,7 @@ CoAP API as specified in the [Open Connectivity Foundation - Device to Cloud Ser
 
 #### OAuth2.0 Client
 
-OAuth2.0 Client is used to issuing an authorization code used by the Onboarding Tool during the device provisioning which is then exchanged for an access token during the [SignUp operation](https://plgd.dev/architecture/component-overview/#cloud-registration).
+OAuth2.0 Client is used to issuing an authorization code used by the Onboarding Tool during the device provisioning which is then exchanged for an access token during the [SignUp operation](https://plgd.dev/architecture/component-overview/#hub-registration).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -83,7 +83,7 @@ You might have one client, but multiple APIs in the OAuth system. What you want 
 
 ### Event Bus
 
-Plgd cloud uses NATS messaging system as an event bus.
+plgd hub uses NATS messaging system as an event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
