@@ -83,7 +83,7 @@ You might have one client, but multiple APIs in the OAuth system. What you want 
 
 ### Event Bus
 
-Plgd hub uses NATS messaging system as an event bus.
+plgd hub uses NATS messaging system as an event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

@@ -80,7 +80,7 @@ Client configurations to internally connect to Identity Store service.
 
 ### Event Bus
 
-Plgd hub uses NATS messaging system as an event bus.
+plgd hub uses NATS messaging system as an event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -124,7 +124,7 @@ Client configurations to internally connect to the Resource Aggregate service.
 
 ### Storage
 
-Plgd hub uses MongoDB database as the owner's device store.
+plgd hub uses MongoDB database as the owner's device store.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

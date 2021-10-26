@@ -80,7 +80,7 @@ Client configurations to internally connect to Identity Store service.
 
 ### Event Bus
 
-Plgd hub uses NATS messaging system as a event bus.
+plgd hub uses NATS messaging system as a event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

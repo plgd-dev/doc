@@ -27,7 +27,7 @@ IoT itself is most likely not a domain of your business; it is a group of techno
 - **CoAP**
   - OCF mandates [CoAP](https://coap.technology/) support for compliant [devices](https://github.com/iotivity/iotivity-lite).
 - **CoAP over TCP**
-    While UDP may be preferred for messaging over local networks where "chattiness" is highly detrimental due to power or bandwidth constraints, CoAP over TCP is preferred for situations where a device is communicating with a remote server, due to the greater QoS guarantees; and TCP has substantially better support than UDP in hub native use cases.
+    While UDP may be preferred for messaging over local networks where "chattiness" is highly detrimental due to power or bandwidth constraints, CoAP over TCP is preferred for situations where a device is communicating with a remote server, due to the greater QoS guarantees; and TCP has substantially better support than UDP in cloud-native use cases.
 - **TLS**
     is responsible for security and data integrity between the new component and a connecting device.
 - **CBOR**
@@ -69,7 +69,7 @@ Servers (IoT Devices) which are OCF enabled are represented in the form of **res
 
 ### Identities Bounded Context
 
-Only authorized client _(application interested in data)_ connected to the plgd Hub _(IoT Device)_ is able to perform an action on the device or access device's data. That means, only authorized client and server are able to browse / CRUDN resource published to the Resource Directory.
+Only authorized client _(application interested in data)_ connected to the plgd hub _(IoT Device)_ is able to perform an action on the device or access device's data. That means, only authorized client and server are able to browse / CRUDN resource published to the Resource Directory.
 
 A server and client are required to successfully sign-up and sign-in right after connecting to the [plgd hub](https://github.com/plgd-dev/hub/). During the sign-up process, which can be thought of as a registration, a one time use [authorization code](https://tools.ietf.org/html/rfc6749#section-1.3.1) is exchange for an access token, which uniquely represents this server / client. Returned access token is used in the sign-in request. Before the server / client is signed in, requests are not forwarded to the plgd system.
 

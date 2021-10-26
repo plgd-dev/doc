@@ -63,7 +63,7 @@ gRPC API of the Identity Store service as defined [here](https://github.com/plgd
 
 ### Event Bus
 
-plgd Hub uses NATS messaging system as a event bus.
+plgd hub uses NATS messaging system as a event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -77,7 +77,7 @@ plgd Hub uses NATS messaging system as a event bus.
 
 ### Storage
 
-plgd Hub uses MongoDB database as owner's device store.
+plgd hub uses MongoDB database as owner's device store.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

@@ -63,7 +63,7 @@ gRPC API of the Resource Aggregate service as defined [here](https://github.com/
 
 ### Event Bus
 
-Plgd hub uses NATS messaging system as a event bus.
+plgd hub uses NATS messaging system as a event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -77,7 +77,7 @@ Plgd hub uses NATS messaging system as a event bus.
 
 ### Event Store
 
-Plgd hub uses MongoDB database as a event store.
+plgd hub uses MongoDB database as a event store.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

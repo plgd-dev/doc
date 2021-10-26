@@ -14,12 +14,12 @@ toc: true
 
 Resiliency is understood as a way to readapt to a "crisis situation", which applies to both infrastructure and the data. What it means varies from user to user. After service disruptions, some users are okay retrieving the latest resource value while others require all the changes which occurred during the time their application or internal messaging system was down. Another failure scenario is when the node hosting the plgd CoAP Gateway crashes. Thousands of devices will try to reconnect and keep the shadows up to date, which creates a huge load and rapidly slows down the system if not handled properly.
 
-plgd Hub offers to users various techniques on how to approach disaster recovery in case an error or system failure was detected. Let's have a look at them.
+plgd hub offers to users various techniques on how to approach disaster recovery in case an error or system failure was detected. Let's have a look at them.
 
 ## Event Data Loss
 
 {{% note %}}
-plgd Hub is an event-driven system, implemented using [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) and [EventSourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) design patterns. Each event that occurs in the system, _e.g. when the content of resource changes, when a new resource is published, or when a new device is registered with the plgd hub,_ is stored in the EventStore and published to the EventBus.
+plgd hub is an event-driven system, implemented using [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) and [EventSourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) design patterns. Each event that occurs in the system, _e.g. when the content of resource changes, when a new resource is published, or when a new device is registered with the plgd hub,_ is stored in the EventStore and published to the EventBus.
 
 plgd Gateways are subscribed to the EventBus to notify you through the gRPC stream or WebSockets about requested changes. Using plgd Gateways is a straightforward option how to communicate with the system, which can provide you both: the current value of the resource or a set of events representing changes of that particular resource (audit log).
 {{% /note %}}
@@ -54,5 +54,5 @@ The plgd hub uses NATS as an EventBus while keeping the events persisted in our 
 Having JetStream as an EventBus gives you the possibility to read stored events after your service outage right from the JetStream instead of requesting the data from the plgd gRPC Gateway.
 
 {{% warning %}}
-plgd Hub doesn't guarantee delivery of all events to the EventBus. It guarantees that all events are stored in the EventStore in the correct order. In case there is a JetStream / NATS failure and plgd Hub was not able to publish some events, they won't be published again and your service has to anyway fallback to reconciliation using plgd gRPC Gateway.
+plgd hub doesn't guarantee delivery of all events to the EventBus. It guarantees that all events are stored in the EventStore in the correct order. In case there is a JetStream / NATS failure and plgd hub was not able to publish some events, they won't be published again and your service has to anyway fallback to reconciliation using plgd gRPC Gateway.
 {{% /warning %}}
