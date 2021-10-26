@@ -20,7 +20,7 @@ Deployment using helm chart is in progress.
 
 ## plgd Bundle
 
-Bundle deployment hosts core plgd hub Services with mocked OAuth Server in a single Docker image. All services which hosts the gRPC or HTTP API are proxied through the NGINX with configurable `NGINX_PORT` and `FQDN`. Mobile application used in the [Control device remotely](../device-to-hub) works also with the bundle.
+Bundle deployment hosts core plgd hub services with mocked OAuth Server in a single Docker image. All services which hosts the gRPC or HTTP API are proxied through the NGINX with configurable `NGINX_PORT` and `FQDN`. Mobile application used in the [Control device remotely](../device-to-hub) works also with the bundle.
 
 {{% warning %}}
 Bundle version of plgd services should be used only for simple testing and development purposes. Performance evaluations, production environment or other sensitive deployments should deploy plgd services using the plgd HELM chart.

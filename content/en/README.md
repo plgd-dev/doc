@@ -23,7 +23,7 @@ The only viable path forward is collaboration between companies and market verti
 - The immense complexity of managing your own deployment means the market requires managed services
 - There is no seamless portability for IoT devices between clouds
   - Extremely important if we want to decouple the networking costs from hardware costs for customers, like we do for cell phones
-- Lack of an industry standard IoT hub increases the attack surface of the industry
+- Lack of an industry standard increases the attack surface of the industry
 
 ## plgd Goals
 

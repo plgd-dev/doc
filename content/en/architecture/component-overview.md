@@ -52,7 +52,7 @@ group OCF Onboarding
     return Provisioning successful
 end
 group OCF Cloud Provisioning
-    OBT -> D ++: Provisioning hub configuration resource
+    OBT -> D ++: Provisioning cloud configuration resource
     return Provisioning successful
 end
 D -> CGW ++: Establish TCP connection
@@ -61,7 +61,7 @@ D -> CGW ++: Establish TCP connection
 
 The TCP connection which the device established to the CoAP Gateway is now authenticated, but not authorized. In order for the device to be reachable, the TCP connection must be authorized. This flow describes the operation of a new device; within the first connection the device must Sign Up - [register with the plgd hub (see 8.1.4)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=33). The [authorization code](https://tools.ietf.org/html/rfc6749#section-4.1) received during the OCF Cloud Provisioning process described in the diagram above is exchanged by the CoAP Gateway for an access and refresh token and returned to the device. This process is described in more detail in the [OCF Cloud Security Specification (see 6.2)](https://openconnectivity.org/specs/OCF_Cloud_Security_Specification_v2.2.1.pdf#page=12).
 
-#### Cloud Registration
+#### Hub Registration
 
 {{< plantuml id="hub-registration" >}}
 @startuml Sequence
@@ -234,7 +234,7 @@ Through Onboarding Tool, a device is requested to disconnect from the plgd hub a
 
 1. Send the SignOff message, which deregisters the device
 2. Close the TCP connection
-3. Cleanup of the hub configuration resource
+3. Cleanup of the cloud configuration resource
 
 ##### Force disconnect by the plgd hub
 
@@ -275,7 +275,7 @@ return Unauthorized
 CGW -> D: Disconnect
 destroy D
 
-D -> D: Cleanup hub configuration
+D -> D: Cleanup cloud configuration
 @enduml
 {{< /plantuml >}}
 
