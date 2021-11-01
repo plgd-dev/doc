@@ -16,7 +16,7 @@ In this section, you can find several examples of how to deploy plgd hub with ex
 
 ## Getting started
 
-In our GitHub repository you can find `charts/` folder with plgd hub [Helm chart](https://helm.sh/docs/topics/charts/). This chart is automatically published to the Helm registry `https://charts.plgd.dev` during the release. Version of the chart is in sync with the appversion, matching the release tag _(e.g. 2.1.1)_.
+In our GitHub repository you can find `charts/` folder with plgd hub [Helm chart](https://helm.sh/docs/topics/charts/). This chart is automatically published to the Helm registry `https://charts.plgd.dev` during the release. Version of the chart is in sync with the appversion, matching the release tag _(e.g. 2.1.1)_. All configuration values are documented [here](https://github.com/plgd-dev/hub/tree/main/charts/plgd-hub#values).
 
 ### Install Certificate Manager
 
