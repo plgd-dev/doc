@@ -16,11 +16,11 @@ In this section, you can find several examples of how to deploy plgd hub with ex
 
 ## Getting started
 
-In our GitHub repository you can find `charts/` folder with [Helm 3 based chart](https://helm.sh/docs/topics/charts/) to install the [plgd hub](https://github.com/plgd-dev/hub/tree/main/charts/plgd-hub). The plgd hub chart is automatically published to the Helm registry `https://charts.plgd.dev` automatically with every release. Version of the chart is in sync with the appversion, matching the release tag _(e.g. 2.1.1)_.
+In our GitHub repository you can find `charts/` folder with plgd hub [Helm chart](https://helm.sh/docs/topics/charts/). This chart is automatically published to the Helm registry `https://charts.plgd.dev` during the release. Version of the chart is in sync with the appversion, matching the release tag _(e.g. 2.1.1)_.
 
 ### Install Certificate Manager
 
-A communication between devices, clients and plgd hub is secured as well as the communication between the plgd hub services. To simplify the deployment and certificate management, [Certificate Manager](https://cert-manager.io/docs/), required dependency, have to be deployed in your Kubernetes cluster.
+A communication between devices, clients and plgd hub is secured as well as between plgd hub services. To simplify the deployment and certificate management, [Certificate Manager](https://cert-manager.io/docs/), required dependency, have to be deployed in your Kubernetes cluster.
 
 ```sh
 > kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.0/cert-manager.yaml
@@ -46,7 +46,11 @@ plgd/plgd-hub   2.1.1           2.1.1           A Helm chart for plgd-hub
 
 ### Deployment with Mock OAuth2.0 Server
 
-Quickest way how to install your own instance of the plgd hub is to use the mock OAuth2.0 Server **used for tests and development**. When using this option, no user management and authentication is available. Default user is automatically logged in.
+Quickest way how to install your own instance of the plgd hub is to use the Mock OAuth2.0 Server. With this option enabled, no authentication is available. The JWT token is automatically issued for the default user.
+
+{{% warning %}}
+Mock OAuth Server shall be used only for test/development purposes. Use with extra care.
+{{% /warning %}}
 
 ```sh
 > echo "global:
@@ -58,11 +62,11 @@ mockoauthserver:
 > helm install -f withMock.yaml hub plgd/plgd-hub
 ```
 
-The plgd hub is then being deployed to the Kubernetes cluster. Status of the deployment can be verified by calling `kubectl get all`. When all pods are up and running, plgd Dasboard will be available on `https://example.com` domain.
+Deployment of the plgd hub to the Kubernetes cluster is then initiated. Status of the deployment can be verified by calling `kubectl get all`. When all pods are up and running, the plgd Dasboard will become available on your configured domain (e.g. `https://example.com`).
 
 ### Deployment with Auth0 OAuth2.0 Server
 
-Our [try.plgd.cloud](https://try.plgd.cloud) instance which is available for free uses [Auth0 Identity Provider](https://auth0.com). Sample configuration which enables you to use any OAuth2.0 Server would be as follows:
+Our [try.plgd.cloud](https://try.plgd.cloud) instance which is available for free uses [Auth0 Identity Provider](https://auth0.com). Example configuration enabling an integration with an external OAuth2.0 Server should contain OAuth2.0 configuration for the device as well as the dasboard. All required values are part of the `global.` index.
 
 ```sh
 > echo "global:
@@ -92,7 +96,7 @@ Our [try.plgd.cloud](https://try.plgd.cloud) instance which is available for fre
 
 ### Using Let's encrypt certificates
 
-By default, plgd hub Helm chart issues a self-signed CA certificate, used to sign domain certificates of all exposed services. To encrypt the external communication with the certificates signed by the Let's Encrypt CAs, create an issuer:
+By default, the plgd hub Helm chart issues a self-signed CA certificate, used to sign domain certificates of all exposed services. To encrypt the external communication with the certificates signed by the Let's Encrypt CAs, create an issuer:
 
 ```sh
 > echo "apiVersion: cert-manager.io/v1
@@ -113,7 +117,7 @@ spec:
 > kubectl apply -f issuer.yaml
 ```
 
-Required values for the plgd hub Helm chart which make use of a newly created signer are:
+Required values for the plgd hub Helm chart which makes use of a newly created signer are:
 
 ```yaml
 certmanager:
@@ -128,5 +132,5 @@ global:
 
 ## Troubleshooting
 
-- plgd Dashboard returns an error that it cannot get the data from the ./well-known endpoint
-  - Self-signed certificate is used. Import of plgd CA to your browser is therefore required. Get the public key by calling `kubectl get secret plgd-ca -o 'go-template={{index .data "ca.crt"}}' | base64 -d`
+- plgd Dashboard returns "unable to fetch data from from the ./well-known endpoint" error
+  - Not trusted self-signed certificate is used. Import of plgd CA to your system is required. Get the public key by calling `kubectl get secret plgd-ca -o 'go-template={{index .data "ca.crt"}}' | base64 -d`.
