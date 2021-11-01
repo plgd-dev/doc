@@ -20,7 +20,7 @@ In our GitHub repository you can find `charts/` folder with [Helm 3 based chart]
 
 ### Install Certificate Manager
 
-A communication between devices, clients and plgd hub is secured as well as the communication between the plgd hub services. To simplify the deployment and certificate management, [Certificate Manager](https://cert-manager.io/docs/), required dependency, have to be deployed in your Kubernetes cluster. 
+A communication between devices, clients and plgd hub is secured as well as the communication between the plgd hub services. To simplify the deployment and certificate management, [Certificate Manager](https://cert-manager.io/docs/), required dependency, have to be deployed in your Kubernetes cluster.
 
 ```sh
 > kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.0/cert-manager.yaml
@@ -35,18 +35,18 @@ Hang tight while we grab the latest from your chart repositories...
 ...Successfully got an update from the "plgd" chart repository
 
 > helm repo list
-NAME    URL                               
-plgd    https://charts.plgd.dev   
+NAME    URL
+plgd    https://charts.plgd.dev
 
 > helm search repo plgd
-NAME            CHART VERSION   APP VERSION     DESCRIPTION              
+NAME            CHART VERSION   APP VERSION     DESCRIPTION
 plgd/plgd-hub   2.1.1           2.1.1           A Helm chart for plgd-hub
 
 ```
 
 ### Deployment with Mock OAuth2.0 Server
 
-Quickest way how to install your own instance of the plgd hub is to use the mock OAuth2.0 Server **used for tests and development**. When using this option, no user management and authentication is available. Default user is automatically logged in. 
+Quickest way how to install your own instance of the plgd hub is to use the mock OAuth2.0 Server **used for tests and development**. When using this option, no user management and authentication is available. Default user is automatically logged in.
 
 ```sh
 > echo "global:
@@ -114,6 +114,7 @@ spec:
 ```
 
 Required values for the plgd hub Helm chart which make use of a newly created signer are:
+
 ```yaml
 certmanager:
   external:
