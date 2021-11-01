@@ -38,20 +38,13 @@ The command should succeed and print out the currently installed version of go.
 
 Some parts of the `hub` repository are sensitive to location of the code. The source code of the repository must reside in your go workspace, at `$HOME/go/src/plgd-dev/hub`.
 
-You can use older form of the `go get` command to download the source code to expected location:
-
-```shell
-export GO111MODULE=off
-go get -d github.com/plgd-dev/hub
-```
-
-Alternative option is to manually create the folder structure and use `git clone`:
+Manually create the folder structure and use `git clone --recursive` to download source code and all dependencies:
 
 ```shell
 cd $HOME/go
 mkdir -p src/github.com/plgd-dev
 cd src/github.com/plgd-dev
-git clone git@github.com:plgd-dev/hub.git
+git clone --recursive git@github.com:plgd-dev/hub.git
 ```
 
 After a successful checkout use `go mod download` and `go mod tidy` commands to download dependencies.
