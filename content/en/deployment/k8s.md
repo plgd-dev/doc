@@ -49,7 +49,7 @@ plgd/plgd-hub   2.1.1           2.1.1           A Helm chart for plgd-hub
 Quickest way how to install your own instance of the plgd hub is to use the Mock OAuth2.0 Server. With this option enabled, no authentication is available. The JWT token is automatically issued for the default user.
 
 {{% warning %}}
-Mock OAuth Server shall be used only for test/development purposes. Use with extra care.
+Mock OAuth Server shall be used only for test/development purposes. Use with extra care!
 {{% /warning %}}
 
 ```sh
@@ -63,6 +63,21 @@ mockoauthserver:
 ```
 
 Deployment of the plgd hub to the Kubernetes cluster is then initiated. Status of the deployment can be verified by calling `kubectl get all`. When all pods are up and running, the plgd Dasboard will become available on your configured domain (e.g. `https://example.com`).
+
+### NodePort for CoAP Gateway
+
+In case you install plgd hub into [microk8s.io/](https://microk8s.io/), it's required to enable also
+nodePort for the CoAP Gateway Service and extend the port range of the K8S API Server. To extend the port range, add `--service-node-port-range=5683-32767` to `/var/snap/microk8s/current/args/kube-apiserver`. For the CoAP Gateway Service, apply following values:
+
+```yaml
+coapgateway:
+  service:
+    nodePort: 5684
+```
+
+{{% warning %}}
+This configuration should be applied only to test environment!
+{{% /warning %}}
 
 ### Deployment with Auth0 OAuth2.0 Server
 
