@@ -72,6 +72,7 @@ nodePort for the CoAP Gateway Service and extend the port range of the K8S API S
 ```yaml
 coapgateway:
   service:
+    type: NodePort
     nodePort: 5684
 ```
 
