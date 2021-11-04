@@ -46,7 +46,7 @@ First, you need to create a rule at `Auth pipeline->Rules` with code:
 ```js
 function (user, context, callback) {
   var deviceIdClaim = 'https://<YOUR_DOMAIN>/deviceId';
-  var deviceId = (context && context.request && context.request.query && context.request.query.deviceId) || null;
+  var deviceId = (context && context.request && context.request.query && context.request.query.device_id) || null;
   if (deviceId) {
     context.accessToken[deviceIdClaim] = deviceId;
   }
@@ -54,7 +54,7 @@ function (user, context, callback) {
 }
 ```
 
-After that, if you call authorize endpoint to obtain authorization code for a device with query parameter `deviceId=<device id>`,
+After that, if you call authorize endpoint to obtain authorization code for a device with query parameter `device_id=<deviceId>`,
 and the device makes sign up with that code, the returned JWT access token will contain deviceId claim like `https://<YOUR_DOMAIN>/deviceId: <deviceId>`.
 
 For validation of device ID claim by coap-gateway the `api.coap.authorization.deviceIdClaim` must be set to `https://<YOUR_DOMAIN>/deviceId`.
