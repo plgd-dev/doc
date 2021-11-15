@@ -23,15 +23,16 @@ The environment used in this tutorial consists of the following parts:
 * Windows 10 host machine with Ethernet connection
 * Ubuntu 20.04.3 LTS running in Oracle VM VirtualBox 6.1
 
-### Setup the Windows host machine
+### Set up the Windows host machine
 
+* Download CTT tool from <https://cms.openconnectivity.org/> (only available to registered users).
 * Install CTT on the host machine. The default installation should be located in `C:\Program Files (x86)\OCF Conformance Test Tool`.
-* Install [ngrok](https://ngrok.com/) and set it up as is described in the CTT Users Guide located in `C:\Program Files (x86)\OCF Conformance Test Tool\Docs\Users Guide.mhtml`. Follow the section named **C2C Accessibility**.
+* Install [ngrok](https://ngrok.com/) and set it up as is described in the CTT User Guide located in `C:\Program Files (x86)\OCF Conformance Test Tool\Docs\Users Guide.mhtml`. Follow the section named **C2C Accessibility**.
 * Examine the Ubuntu machine VirtualBox, go to Settings/Network pane. Make sure that at least one adapter is enabled and the "Attached to" setting is set to `Bridged Adapter` value.
 
 ### Run OCF Cloud Bundle in Ubuntu machine
 
-The Target Cloud part of the API is implemented by the `cloud2cloud-gateway`, which is included by the plgd.dev [OCF Cloud Bundle implementation](https://github.com/plgd-dev/hub/tree/main/bundle). However, since the services must be available also on the Windows host machine, several environmental variables must be defined.
+The Target Cloud part of the API is implemented by the `cloud2cloud-gateway` service, which is included by the plgd.dev's [OCF Cloud Bundle implementation](https://github.com/plgd-dev/hub/tree/main/bundle). The services must be available also on the Windows host machine, therefore several environmental variables must be defined.
 
 Run the following commands in your `$HOME` folder in terminal:
 
@@ -47,13 +48,15 @@ docker run -it --rm \
   --network=host -v `pwd`/.tmp/data:/data ghcr.io/plgd-dev/hub/bundle:latest
 ```
 
-Values for `FQDN` and `DEVICE_OAUTH_REDIRECT_URL` are machine dependent. If you have followed the previous steps and changed the network settings of the guest machine to `Bridged Adapter` then you should obtain the address by running `ifconfig` in terminal and taking ipv4 address of your active network interface.
+Values for `FQDN` and `DEVICE_OAUTH_REDIRECT_URL` are machine dependent. If you have followed the previous steps and changed the network settings of the guest machine to `Bridged Adapter` then you should obtain the address by running `ifconfig` in terminal and taking the ipv4 address of your active network interface.
 
-The docker command should start up all services in the guest machine. The GUI provided by the OCF Cloud Bundle should be available at the address set by the `FQDN` environmental variable (`192.168.1.44` in this example). You can verify it by opening the address in a browser in your Windows host machine.
+Additionally, before running the docker command, the `FQDN` and `DEVICE_OAUTH_REDIRECT_URL` must be added to "Allowed Callback URLs" and `FQDN` to "Allowed Web Origins" in the configuration of the auth0 service.
+
+After correctly setting up the variables and auth0, the docker command should start up all services in the guest machine. The GUI provided by the OCF Cloud Bundle should be available at the address set by the `FQDN` environmental variable (`192.168.1.44` in this example). You can verify it by opening the address in a browser in your Windows host machine.
 
 #### Create CTT configuration file
 
-To run CTT test cases a PICS configuration file is required. Several files should be provided with your CTT installation, but some fields must be modified based on your environment. All fields are explained in the CTT _Users Guide_.
+To run CTT test cases, a PICS configuration file is required. Several files should be provided with your CTT installation, but some fields must be modified based on your environment. All fields are explained in the CTT _User Guide_.
 
 ```json
 {
@@ -77,7 +80,7 @@ To run CTT test cases a PICS configuration file is required. Several files shoul
 
 The fields `authorizationEndpointUrl`, `tokenEndpointUrl`, `validClientId` and `validClientSecret` values are configured to work with a running plgd-dev OAuth2.0 client. Working `validClientId` and `validClientSecret` should always be available in the [cloud2cloud-gateway documentation](https://plgd.dev/configuration/cloud2cloud-gateway/).
 
-The values for `localEventListenerUri` and `proxyEventListenerUri` are provided by the ngrok application. Guide on how to obtain them is described in the _Users Guide_ section **Setup for Target Cloud test cases for Events API (CT5.3.X)**.
+The values for `localEventListenerUri` and `proxyEventListenerUri` are provided by the ngrok application. The guide on how to obtain them is described in the _User Guide_ section **Setup for Target Cloud test cases for Events API (CT5.3.X)**.
 
 The `cloudServerTrustAnchorCertificate` value should contain a correctly formatted certificate. It should be formatted as a one-liner with Windows line endings, such as:
 
@@ -85,12 +88,12 @@ The `cloudServerTrustAnchorCertificate` value should contain a correctly formatt
 "cloudServerTrustAnchorCertificate": "-----BEGIN CERTIFICATE-----\r\n ... \r\n-----END CERTIFICATE-----",
 ```
 
-The certificate is found in the folder where you ran the docker command. If you ran it in `$HOME` folder then the location is `$HOME/.tmp/data/certs/root_ca.crt`. Copy the contents of the file into the `cloudServerTrustAnchorCertificate` value with proper formatting.
-The certificate is regenerated whenever OCF Cloud Bundle is started. So if you restart your bundle instance then you must update your PICS configuration as well.
+The certificate is found in the folder where you ran the docker command. If you ran it in `$HOME` folder, then the location is `$HOME/.tmp/data/certs/root_ca.crt`. Copy the contents of the file into the `cloudServerTrustAnchorCertificate` value with proper formatting.
+The certificate is regenerated whenever OCF Cloud Bundle is started. So if you restart your bundle instance, then you must update your PICS configuration as well.
 
 ### Start the Conformance Test Tool
 
-After following all of the previous steps you should have a running OCF Cloud Bundle in the Ubuntu machine, a running ngrok application and a prepared PICS configuration file in the Windows machine. You can now start the CTT application. Go to `File` -> `Select IUT`, select `Target Cloud` and click `Next`. In the next pane `IUT Selection` click `Browse`, navigate to your created PICS configuration, select it and click `Next` twice. The Cloud tests list should now be loaded with 6 CT5.x.x C2C test cases available.
+After following all of the previous steps, you should have a running OCF Cloud Bundle in the Ubuntu machine, a running ngrok application and a prepared PICS configuration file in the Windows machine. You can now start the CTT application. Go to `File` -> `Select IUT`, select `Target Cloud` and click `Next`. In the next pane `IUT Selection` click `Browse`, navigate to your created PICS configuration, select it and click `Next` twice. The Cloud tests list should now be loaded with 6 CT5.x.x C2C test cases available.
 
 #### Using Iotivity-lite devices
 
@@ -120,7 +123,7 @@ How to compile and run `cloud_tests` device:
     https://auth.plgd.cloud/authorize?response_type=code&client_id=cYN3p6lwNcNlOvvUhz55KvDZLQbJeDr5&scope=offline_access&audience=https://try.plgd.cloud&redirect_uri=https://192.168.1.44/things
     ```
 
-    You should receive a HTTP 302 response and the authorization code will be included at the end of the URL.
+    You should receive an HTTP 302 response and the authorization code will be included at the end of the URL.
 
     ```url
     https://192.168.1.44/things?code=62InBe9UE_P97kul
@@ -139,13 +142,13 @@ How to compile and run `cloud_tests` device:
     6: device ID
     ```
 
-    Choose whatever device name you want. The authorization code must be the code received in the previous step and can be used only once to register. If you want to run several devices you must get a unique authorization code for each. For device to work with the OCF Cloud Bundle the `cis`, `sid` and `apn` must have specific value.
+    Choose whatever device name you want. The authorization code must be the code received in the previous step and can be used only once to register. If you want to run several devices, you must get a unique authorization code for each. For a device to work with the OCF Cloud Bundle, the `cis`, `sid` and `apn` must have specific value.
 
     ```shell
     ./cloud_tests "ctt-1" "62InBe9UE_P97kul" "coap+tcp://127.0.0.1:5683" "00000000-0000-0000-0000-000000000001" "plgd"
     ```
 
-    If everything is in order then the `cloud_tests` binary should print output similar to following:
+    If everything is in order, then the `cloud_tests` binary should print output similar to the following:
 
     ```shell
     device_name: ctt-1
@@ -181,9 +184,9 @@ How to compile and run `cloud_tests` device:
 
 #### Troubleshooting
 
-##### CT5.3.1 C2C: Events API – Devices-level event types
+##### CT5.3.1 C2C: Events API — Devices-level event types
 
-Some of the steps of this test case require a device to deregistered and then registered again with the same device ID. However, the authorization code is for one time use only. Thus executing the `Cloud Deregister` command and then trying to issue a `Cloud Register` command will fail. The workaround is to exit the currently running `cloud_tests` process, get a new authorization code and start new `cloud_tests` process with the same device ID.
+Some steps of this test case require a device to be deregistered and then registered again with the same device ID. However, the authorization code is for one time use only. Thus, executing the `Cloud Deregister` command and then trying to issue a `Cloud Register` command will fail. The workaround is to exit the currently running `cloud_tests` process, get a new authorization code and start a new `cloud_tests` process with the same device ID.
 
 Use the OCF Cloud Bundle GUI to get the device ID. Then simply use the last positional argument of the `cloud_tests` binary to force the new process to have the same device ID as the previously exited process:
 
