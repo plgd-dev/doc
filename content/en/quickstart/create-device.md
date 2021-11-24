@@ -2,7 +2,7 @@
 title: 'Create device'
 description: 'Start your own device and host resources'
 date: '2021-05-13'
-lastmod: '2021-06-17'
+lastmod: '2021-11-25'
 categories: [quickstart]
 keywords: [quickstart, device, iotivity]
 menu:
@@ -68,7 +68,7 @@ sudo apt-get update & apt-get install build-essential git curl openssl
 
     ```shell script
     # execute commands on the Raspberry Pi
-    git clone -b plgd.dev https://github.com/iotivity/iotivity-lite.git --recursive
+    git clone https://github.com/iotivity/iotivity-lite.git --recursive
     cd iotivity-lite
     ```
 
@@ -76,7 +76,7 @@ sudo apt-get update & apt-get install build-essential git curl openssl
 
     ```shell script
     cd port/linux
-    make CLOUD=1 SECURE=1 MNT=1 cloud_server
+    make CLOUD=1 SECURE=1 MNT=1 CREATE=1 OICRES_OBSERVABLE=1 OSCORE=0 cloud_server
     ```
 
 3. Run Cloud Server example in the `port/linux` folder:
