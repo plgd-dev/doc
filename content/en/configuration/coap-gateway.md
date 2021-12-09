@@ -2,7 +2,7 @@
 title: 'CoAP Gateway'
 description: 'Service configuration overview'
 date: '2021-10-01'
-lastmod: '2021-10-01'
+lastmod: '2021-12-09'
 categories: [configuration, deployment]
 keywords: [configuration]
 menu:
@@ -42,7 +42,7 @@ CoAP API as specified in the [Open Connectivity Foundation - Device to Cloud Ser
 | `api.coap.maxMessageSize` | int | `Max message size which can be send/receive via coap. i.e. 256*1024 = 262144 bytes.` | `262144` |
 | `api.coap.ownerCacheExpiration` | string | `Time limit of how long to keep subscribed to device updates after last use of the given cache item.` | `1m` |
 | `api.coap.subscriptionBufferSize` | int | `The maximum buffer size for one events subscription.` | `1000` |
-| `api.coap.goroutineSocketHeartbeat` | string | `Interval time to check live service.` | `4s` |
+| `api.coap.messagePoolSize` | int | `Defines the maximum preallocated messages in the pool for parse/create coap messages.` | `1000` |
 | `api.coap.keepAlive.timeout` | string | `Time limit to close inactive connection.` | `20s` |
 | `api.coap.blockwiseTransfer.enabled` | bool | `If true, enable blockwise transfer of coap message.` | `false` |
 | `api.coap.blockwiseTransfer.blockSize` | int | `Size of blockwise transfer block.` | `1024` |
