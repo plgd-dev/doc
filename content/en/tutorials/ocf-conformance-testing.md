@@ -1,22 +1,28 @@
 ---
-title: 'OCF Cloud API for Cloud Services'
-description: 'How to validate conformance to OCF Cloud API for Cloud Services?'
-date: '2021-11-10'
-lastmod: '2021-11-11'
-categories: [features]
-keywords: ['OCF conformance', 'tutorial']
+title: 'OCF Conformance Testing'
+description: 'How to validate conformance to OCF C2C and D2C API?'
+date: '2021-12-11'
+lastmod: '2021-12-11'
+categories: [tutorials, ctt]
+keywords: ['OCF conformance', 'tutorial', 'CTT tool']
 menu:
   docs:
-    parent: features
-    weight: 10
+    parent: tutorials
+    weight: 60
 toc: true
 ---
 
-The OCF Cloud API for Cloud Services is a set of well-defined APIs used for device information retrieval, update and event subscription between two OCF Cloud instances. The [full specification](https://openconnectivity.org/specs/OCF_Cloud_API_For_Cloud_Services_Specification_v2.2.4.pdf) is available at The Open Connectivity Foundation (OCF) website.
+The [Open Connectivity Foundation](https://openconnectivity.org) (OCF) is a global, member-driven technical standard development organization. Its [500+ members](https://openconnectivity.org/foundation/membership-list/) are working to enable trust, interoperability, and secure communication between IP-connected IoT devices and services. It does this by fostering collaboration between stakeholders across the IoT ecosystem to deliver the freely-available [ISO/IEC specifications](https://openconnectivity.org/developer/specifications/), including the Secure IP Device Framework, its [open-source reference implementation](https://openconnectivity.org/technology/), and an industry-recognized [certification program](https://openconnectivity.org/certification).
 
-Plgd.dev services `cloud2cloud-gateway` and `cloud2cloud-connector` provide an implementation of the APIs. To validate conformance OCF uses a Windows-based application called Conformance Test Tool (CTT). To succeed with the validation you must have a correctly set up environment and configuration file for CTT. The following sections will explain all the necessary steps.
+The OCF Certification Program includes conformance testing to ensure robust and secure connectivity, and to help manufacturers create products that “just work” with other OCF Certified IoT devices regardless of their form factors, operating systems, service providers or transports.
 
-## Validating Target Cloud conformance with Conformance Test Tool
+The plgd hub, reference implementation of [OCF Device to Cloud Services](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.4.pdf) and [OCF Cloud API for Cloud Services](https://openconnectivity.org/specs/OCF_Cloud_API_For_Cloud_Services_Specification_v2.2.4.pdf) specifications is automatically tested with the OCF Conformance Test Tool (CTT) what guaruantees interoperability between OCF Certified IoT devices and Clouds.
+
+If you are user of the plgd hub, interested in the OCF Certification, this tutorial will guide you on how to execute required OCF test cases.
+
+To validate conformance OCF uses a Windows-based application called Conformance Test Tool (CTT). To succeed with the validation you must have a correctly set up environment and configuration file for CTT. The following sections will explain all the necessary steps.
+
+## Validating C2C Target Cloud Conformance
 
 The environment used in this tutorial consists of the following parts:
 
@@ -30,29 +36,21 @@ The environment used in this tutorial consists of the following parts:
 * Install [ngrok](https://ngrok.com/) and set it up as is described in the CTT User Guide located in `C:\Program Files (x86)\OCF Conformance Test Tool\Docs\Users Guide.mhtml`. Follow the section named **C2C Accessibility**.
 * Examine the Ubuntu machine VirtualBox, go to Settings/Network pane. Make sure that at least one adapter is enabled and the "Attached to" setting is set to `Bridged Adapter` value.
 
-### Run OCF Cloud Bundle in Ubuntu machine
+### Run plgd hub #bundle in Ubuntu machine
 
-The Target Cloud part of the API is implemented by the `cloud2cloud-gateway` service, which is included by the plgd.dev's [OCF Cloud Bundle implementation](https://github.com/plgd-dev/hub/tree/main/bundle). The services must be available also on the Windows host machine, therefore several environmental variables must be defined.
+The Target Cloud API is implemented by the `cloud2cloud-gateway` service, which is part of the [plgd hub #bundle](https://plgd.dev/quickstart/deploy-plgd-hub/#plgd-bundle). The services must be available also on the Windows host machine, therefore several environmental variables must be defined.
 
 Run the following commands in your `$HOME` folder in terminal:
 
 ```shell
 docker run -it --rm \
   -e FQDN=192.168.1.44 \
-  -e OAUTH_AUDIENCE=https://try.plgd.cloud \
-  -e OAUTH_ENDPOINT=auth.plgd.cloud \
-  -e OAUTH_CLIENT_ID=TODO \
-  -e OAUTH_CLIENT_SECRET=TODO \
-  -e DEVICE_OAUTH_REDIRECT_URL=https://192.168.1.44/things \
-  -e DEVICE_OAUTH_SCOPES=offline_access \
-  --network=host -v `pwd`/.tmp/data:/data ghcr.io/plgd-dev/hub/bundle:latest
+  --network=host ghcr.io/plgd-dev/hub/bundle:latest
 ```
 
-Values for `FQDN` and `DEVICE_OAUTH_REDIRECT_URL` are machine dependent. If you have followed the previous steps and changed the network settings of the guest machine to `Bridged Adapter` then you should obtain the address by running `ifconfig` in terminal and taking the ipv4 address of your active network interface.
+Value for `FQDN` is machine dependent. If you have followed the previous steps and changed the network settings of the guest machine to `Bridged Adapter` then you should obtain the address by running `ifconfig` in terminal and taking the ipv4 address of your active network interface.
 
-Additionally, before running the docker command, the `FQDN` and `DEVICE_OAUTH_REDIRECT_URL` must be added to "Allowed Callback URLs" and `FQDN` to "Allowed Web Origins" in the configuration of the auth0 service.
-
-After correctly setting up the variables and auth0, the docker command should start up all services in the guest machine. The GUI provided by the OCF Cloud Bundle should be available at the address set by the `FQDN` environmental variable (`192.168.1.44` in this example). You can verify it by opening the address in a browser in your Windows host machine.
+After correctly setting up the FQDN variable, the docker command should start up all services in the guest machine. The GUI provided by the plgd hub #bundle should be available at the address set by the `FQDN` environmental variable, in our example at `https://192.168.1.44`. Please verify it by opening the address in a browser in your Windows host machine.
 
 #### Create CTT configuration file
 
@@ -62,23 +60,27 @@ To run CTT test cases, a PICS configuration file is required. Several files shou
 {
     ...
     "supportedDeviceTypes": ["oic.d.switch"],
-    "authorizationEndpointUrl": "https://auth.plgd.cloud/authorize?audience=https://openapi.try.plgd.cloud/",
-    "tokenEndpointUrl": "https://auth.plgd.cloud/oauth/token",
-    "c2cApiUrl": "https://192.168.1.44/c2c/gw",
+    "authorizationEndpointUrl": "https://{FQDN}/authorize?audience=https://{FQDN}/",
+    "tokenEndpointUrl": "https://{FQDN}/oauth/token",
+    "c2cApiUrl": "https://{FQDN}/c2c/gw",
     "retrievalScope": "r:* offline_access",
     "updateScope": "r:* w:* offline_access",
     ...
     "cloudServerTrustAnchorCertificate": "...",
     ...
-    "validClientId": "9XjK2mCf2J0or4Ko0ow7wCmZeDTjC1mW",
-    "validClientSecret": "UTeeIsSugTuDNbn4QMdBaNLDnMiBQzQaa6elm4SDuWOdZUou-aH00EPSbBhgppFD",
+    "validClientId": "testC2C",
+    "validClientSecret": "testC2CSecret",
     "supportsResourcesPublishedUnpublishedEvents": true,
     "localEventListenerUri": "https://localhost:55551/events_123",
     "proxyEventListenerUri": "https://4561-95-102-120-86.ngrok.io/events_123"
 }
 ```
 
-The fields `authorizationEndpointUrl`, `tokenEndpointUrl`, `validClientId` and `validClientSecret` values are configured to work with a running plgd-dev OAuth2.0 client. Working `validClientId` and `validClientSecret` should always be available in the [cloud2cloud-gateway documentation](https://plgd.dev/configuration/cloud2cloud-gateway/).
+Properties `authorizationEndpointUrl`, `tokenEndpointUrl` and `c2cApiUrl` contain the address of the plgd hub #bundle against which the CTT executes tests. Please update it to match the `FQDN` value.
+
+{{% note %}}
+plgd hub #bundle contains mock OAuth2.0 Server, which simplifies development and conformance testing.
+{{% /note %}}
 
 The values for `localEventListenerUri` and `proxyEventListenerUri` are provided by the ngrok application. The guide on how to obtain them is described in the _User Guide_ section **Setup for Target Cloud test cases for Events API (CT5.3.X)**.
 
@@ -88,12 +90,15 @@ The `cloudServerTrustAnchorCertificate` value should contain a correctly formatt
 "cloudServerTrustAnchorCertificate": "-----BEGIN CERTIFICATE-----\r\n ... \r\n-----END CERTIFICATE-----",
 ```
 
-The certificate is found in the folder where you ran the docker command. If you ran it in `$HOME` folder, then the location is `$HOME/.tmp/data/certs/root_ca.crt`. Copy the contents of the file into the `cloudServerTrustAnchorCertificate` value with proper formatting.
-The certificate is regenerated whenever OCF Cloud Bundle is started. So if you restart your bundle instance, then you must update your PICS configuration as well.
+The certificate can be retrieved from the plgd hub #bundle by opening `https://{FQDN}/.well-known/hub-configuration`. Copy the contents of the `certificateAuthorities` property into the `cloudServerTrustAnchorCertificate` value with proper formatting.
+
+{{% warning %}}
+The certificate is regenerated whenever plgd hub #bundle is started. So if you restart your bundle instance, then you must update your PICS configuration as well.
+{{% /warning %}}
 
 ### Start the Conformance Test Tool
 
-After following all of the previous steps, you should have a running OCF Cloud Bundle in the Ubuntu machine, a running ngrok application and a prepared PICS configuration file in the Windows machine. You can now start the CTT application. Go to `File` -> `Select IUT`, select `Target Cloud` and click `Next`. In the next pane `IUT Selection` click `Browse`, navigate to your created PICS configuration, select it and click `Next` twice. The Cloud tests list should now be loaded with 6 CT5.x.x C2C test cases available.
+After following all of the previous steps, you should have a running plgd hub #bundle in the Ubuntu machine, a running ngrok application and a prepared PICS configuration file in the Windows machine. You can now start the CTT application. Go to `File` -> `Select IUT`, select `Target Cloud` and click `Next`. In the next pane `IUT Selection` click `Browse`, navigate to your created PICS configuration, select it and click `Next` twice. The Cloud tests list should now be loaded with 6 CT5.x.x C2C test cases available.
 
 #### Using Iotivity-lite devices
 
@@ -196,6 +201,4 @@ Use the OCF Cloud Bundle GUI to get the device ID. Then simply use the last posi
 
 Substitute for `DEVICE_NAME` and `DEVICE_ID` the device name and the device ID of the exited process; for `NEW_AUTHORIZATION_CODE` substitute a new authorization code received from try.plgd.cloud as previously described.
 
-## Validating Origin Cloud conformance with Conformance Test Tool
-
-TODO
+## Validating C2C Origin Cloud Conformance
