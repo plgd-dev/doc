@@ -90,7 +90,7 @@ The `cloudServerTrustAnchorCertificate` value should contain a correctly formatt
 "cloudServerTrustAnchorCertificate": "-----BEGIN CERTIFICATE-----\r\n ... \r\n-----END CERTIFICATE-----",
 ```
 
-The certificate can be retrieved from the plgd hub #bundle by opening `https://{FQDN}/.well-known/hub-configuration`. Copy the contents of the `certificateAuthorities` property into the `cloudServerTrustAnchorCertificate` value with proper formatting.
+The certificate can be retrieved from the plgd hub #bundle by opening `https://{FQDN}/.well-known/hub-configuration`. Copy the value of the `certificateAuthorities` property into the `cloudServerTrustAnchorCertificate` value with proper formatting.
 
 {{% warning %}}
 The certificate is regenerated whenever plgd hub #bundle is started. So if you restart your bundle instance, then you must update your PICS configuration as well.
