@@ -102,9 +102,9 @@ After following all of the previous steps, you should have a running plgd hub #b
 
 #### Using Iotivity-lite devices
 
-Several of the CTT test cases require 1 or more devices to by running. Moreover, these devices must support several operations including - register, deregister, login, logout and others. You can use [cloud_tests device](https://github.com/iotivity/iotivity-lite/blob/master/apps/cloud_certification_tests.c) from the Iotivity-lite repository. This device supports all operations required by CTT.
+Several of the CTT test cases require 1 or more devices to be running. Moreover, these devices must support several operations including - register, deregister, login, logout and others. Please use [cloud_tests device](https://github.com/iotivity/iotivity-lite/blob/master/apps/cloud_certification_tests.c) from the Iotivity-lite repository, which is a device created for the purpose of running cloud conformance tests.
 
-How to compile and run `cloud_tests` device:
+The steps needed to compile and run `cloud_tests` device with plgd hub #bundle's mock OAuth2.0 server follow:
 
 1. Checkout [IoTivity-Lite](https://github.com/iotivity/iotivity-lite):
 
@@ -117,24 +117,10 @@ How to compile and run `cloud_tests` device:
 
     ```shell
     cd port/linux
-    make CLOUD=1 SERVER=1 SECURE=0 MNT=0 OSCORE=0 cloud_tests
+    make CLOUD=1 SECURE=0 OSCORE=0 cloud_tests
     ```
 
-3. Get authorization code from try.plgd.cloud
-
-    In the following request, change the `redirect_uri` value to the address of your machine and copy the URL into your browser.
-
-    ```url
-    https://auth.plgd.cloud/authorize?response_type=code&client_id=cYN3p6lwNcNlOvvUhz55KvDZLQbJeDr5&scope=offline_access&audience=https://try.plgd.cloud&redirect_uri=https://192.168.1.44/things
-    ```
-
-    You should receive an HTTP 302 response and the authorization code will be included at the end of the URL.
-
-    ```url
-    https://192.168.1.44/things?code=62InBe9UE_P97kul
-    ```
-
-4. Run `cloud_tests` in the `port/linux` folder:
+3. Run `cloud_tests` in the `port/linux` folder:
 
     The `cloud_tests` binary has 6 optional positional arguments:
 
@@ -147,17 +133,17 @@ How to compile and run `cloud_tests` device:
     6: device ID
     ```
 
-    Choose whatever device name you want. The authorization code must be the code received in the previous step and can be used only once to register. If you want to run several devices, you must get a unique authorization code for each. For a device to work with the OCF Cloud Bundle, the `cis`, `sid` and `apn` must have specific value.
+    Choose whatever device name you want. The authorization code is not verified by the mock OAuth2.0 server, but it must be non-empty. For a device to work with the plgd hub #bundle, the `cis`, `sid` and `apn` arguments must have specific values.
 
     ```shell
-    ./cloud_tests "ctt-1" "62InBe9UE_P97kul" "coap+tcp://127.0.0.1:5683" "00000000-0000-0000-0000-000000000001" "plgd"
+    ./cloud_tests "ctt-1" "test" "coap+tcp://127.0.0.1:5683" "00000000-0000-0000-0000-000000000001" "plgd"
     ```
 
     If everything is in order, then the `cloud_tests` binary should print output similar to the following:
 
     ```shell
     device_name: ctt-1
-    auth_code: 62InBe9UE_P97kul
+    auth_code: test
     cis : coap+tcp://127.0.0.1:5683
     sid: 00000000-0000-0000-0000-000000000001
     apn: plgd
@@ -186,19 +172,5 @@ How to compile and run `cloud_tests` device:
     ```
 
     Input the option number to issue the selected command to the binary.
-
-#### Troubleshooting
-
-##### CT5.3.1 C2C: Events API — Devices-level event types
-
-Some steps of this test case require a device to be deregistered and then registered again with the same device ID. However, the authorization code is for one time use only. Thus, executing the `Cloud Deregister` command and then trying to issue a `Cloud Register` command will fail. The workaround is to exit the currently running `cloud_tests` process, get a new authorization code and start a new `cloud_tests` process with the same device ID.
-
-Use the OCF Cloud Bundle GUI to get the device ID. Then simply use the last positional argument of the `cloud_tests` binary to force the new process to have the same device ID as the previously exited process:
-
-```shell
- ./cloud_tests "DEVICE_NAME" "NEW_AUTHORIZATION_CODE" "coap+tcp://127.0.0.1:5683" "00000000-0000-0000-0000-000000000001" "plgd" "DEVICE_ID"
-```
-
-Substitute for `DEVICE_NAME` and `DEVICE_ID` the device name and the device ID of the exited process; for `NEW_AUTHORIZATION_CODE` substitute a new authorization code received from try.plgd.cloud as previously described.
 
 ## Validating C2C Origin Cloud Conformance
