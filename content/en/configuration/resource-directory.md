@@ -119,7 +119,7 @@ This will be served by HTTP Gateway API as defined [here](https://github.com/plg
 | `publicConfiguration.caPool` | string | `File path to root CA which was used to sign coap-gw certificate.` | `""` |
 | `publicConfiguration.ownerClaim` | string | `Claim used to identify owner of the device.` | `"sub"` |
 | `publicConfiguration.deviceIdClaim` | string | `Claim used to identify device id of the device. Empty means that JWT doesn't contain it.` | `""` |
-| `publicConfiguration.id` | string | `Hub ID which is stored in coap-gw certificate.` | `""` |
+| `publicConfiguration.hubID` | string | `Hub ID which is stored in coap-gw certificate.` | `""` |
 | `publicConfiguration.coapGateway` | string | `CoAP gateway for onboard device.` | `""` |
 | `publicConfiguration.defaultCommandTimeToLive` | string | `Exposes default command time to live for CreateResource, RetrieveResource, UpdateResource, DeleteResource, and UpdateDeviceMetadata commands when it is not set in the request. 0s - means forever.` | `"0s"` |
 | `publicConfiguration.authorizationServer` | string | `Authority is the address of the token-issuing authentication server. Services will use this URI to find and retrieve the public key that can be used to validate the token’s signature. Must be same as in coap-gateway configuration.` | `""` |
