@@ -18,8 +18,8 @@ For creating grpc-client you need to generate a code for your language from prot
 import (
     "google.golang.org/grpc"
     "google.golang.org/grpc/credentials"
-    "github.com/plgd-dev/hub/grpc-gateway/pb"
-    "github.com/plgd-dev/hub/grpc-gateway/client"
+    "github.com/plgd-dev/hub/v2/grpc-gateway/pb"
+    "github.com/plgd-dev/hub/v2/grpc-gateway/client"
 )
 
     ...
