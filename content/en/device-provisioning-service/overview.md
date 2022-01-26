@@ -7,7 +7,7 @@ categories: [zero-touch, provisioning]
 keywords: [provisioning, TPM, manufacturer-certificate]
 menu:
   docs:
-    parent: device-provisioning-servoce
+    parent: device-provisioning-service
     weight: 50
 toc: true
 ---
@@ -21,6 +21,8 @@ The DPS's main entity is the Entrollment entry, which might be a Group Enrollmen
 {{< plantuml id="resource-publish" >}}
 @startuml
 autonumber
+skinparam backgroundColor transparent
+hide footbox
 
 actor "Device Manufacturer" as dmf
 collections Devices as d
