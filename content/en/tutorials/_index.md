@@ -7,5 +7,6 @@ menu:
     identifier: tutorials
     name: Tutorials
     weight: 320
+    post: break
 draft: false
 ---
