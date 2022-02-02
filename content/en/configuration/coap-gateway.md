@@ -62,11 +62,12 @@ OAuth2.0 Client is used to issuing an authorization code used by the Onboarding 
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `api.coap.authorization.ownerClaim` | string | `Claim used to identify owner of the device.` | `"sub"` |
+| `api.coap.authorization.ownerClaim` | string | `Claim used to identify owner of the device. Combination of ownerClaim set to sub is not compatible if at least one authorization provider uses grant type clientCredentials.` | `"sub"` |
 | `api.coap.authorization.deviceIDClaim` | string | `Claim used to identify device id of the device. Empty means that JWT doesn't contain it.` | `""` |
 | `api.coap.authorization.providers[].name` | string | `Provider name, the register request of the device must contain one of the names of providers.` | `""` |
 | `api.coap.authorization.providers[].clientID` | string | `Client ID to exchange an authorization code for an access token.` | `""` |
 | `api.coap.authorization.providers[].clientSecretFile` | string | `File path to client secret required to exchange an authorization code for an access token.` |  `""` |
+| `api.coap.authorization.providers[].grantType` | string | `A grant type of OAuth provider specifies how the device signing up process is authorized. Combination of api.coap.authorization.ownerClaim set to sub is not compatible if at least one authorization provider uses grant type clientCredentials. Supported values: authorizationCode, clientCredentials` |  `"authorizationCode"` |
 | `api.coap.authorization.providers[].scopes` | string array | `List of required scopes.` | `""` |
 | `api.coap.authorization.providers[].authority` | string | `Authority is the address of the token-issuing authentication server. Services will use this URI to find and retrieve the public key that can be used to validate the token’s signature.` | `""` |
 | `api.coap.authorization.providers[].audience` | string | `Audience of OAuth provider.` | `""` |
