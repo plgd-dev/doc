@@ -83,6 +83,8 @@ plgd hub uses MongoDB database as owner's device store.
 | ---------- | -------- | -------------- | ------- |
 | `clients.storage.mongoDB.uri` | string | `URI to mongo database.` | `"mongodb://localhost:27017"` |
 | `clients.storage.mongoDB.database` | string | `Name of database.` | `"ownersDevices"` |
+| `clients.storage.mongoDB.maxPoolSize` | int | `Limits number of connections.` | `16` |
+| `clients.storage.mongoDB.maxConnIdleTime` | string | `Close connection when idle time reach the value.` | `4m` |
 | `clients.storage.mongoDB.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
 | `clients.storage.mongoDB.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `clients.storage.mongoDB.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
