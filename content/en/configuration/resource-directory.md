@@ -117,7 +117,7 @@ This will be served by HTTP Gateway API as defined [here](https://github.com/plg
 | ---------- | -------- | -------------- | ------- |
 | `publicConfiguration.caPool` | string | `File path to root CA which was used to sign coap-gw certificate.` | `""` |
 | `publicConfiguration.ownerClaim` | string | `Claim used to identify owner of the device.` | `"sub"` |
-| `publicConfiguration.deviceIdClaim` | string | `Claim used to identify device id of the device. Empty means that JWT doesn't contain it.` | `""` |
+| `publicConfiguration.deviceIDClaim` | string | `Claim used to identify device id of the device. Empty means that JWT doesn't contain it.` | `""` |
 | `publicConfiguration.hubID` | string | `Hub ID which is stored in coap-gw certificate.` | `""` |
 | `publicConfiguration.coapGateway` | string | `CoAP gateway for onboard device.` | `""` |
 | `publicConfiguration.defaultCommandTimeToLive` | string | `Exposes default command time to live for CreateResource, RetrieveResource, UpdateResource, DeleteResource, and UpdateDeviceMetadata commands when it is not set in the request. 0s - means forever.` | `"0s"` |
