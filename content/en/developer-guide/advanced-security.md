@@ -31,13 +31,13 @@ After that, only devices which have signed identity certificates by CA configure
 
 When the device makes one of the calls sign up, sign in, sign out or sign off, coap-gateway needs to resolve the device ID.
 
-1. If coap-gateway has set `api.coap.authorization.deviceIdClaim` then it will be resolved from JWT token. If JWT token doesn't contain `https://<YOUR_DOMAIN>/deviceId` it returns code `Unauthorized` and closes the connection.
+1. If coap-gateway has set `api.coap.authorization.deviceIDClaim` then it will be resolved from JWT token. If JWT token doesn't contain `https://<YOUR_DOMAIN>/deviceId` it returns code `Unauthorized` and closes the connection.
 2. If coap-gateway has set mutual TLS `api.coap.tls.clientCertificateRequired` then it will be resolved from the device identity certificate.
 3. If none of the previous options are set, device ID will be resolved from the request parameter.
 
 ## Don't allow access with a token that doesn't bellow the device
 
-When `api.coap.tls.clientCertificateRequired` and `api.coap.authorization.deviceIdClaim` are set, coap-gateway matches deviceID from certificate and JWT token. If they are not the same, then coap-gateway returns code `Unauthorized` and closes the connection.
+When `api.coap.tls.clientCertificateRequired` and `api.coap.authorization.deviceIDClaim` are set, coap-gateway matches deviceID from certificate and JWT token. If they are not the same, then coap-gateway returns code `Unauthorized` and closes the connection.
 
 ## How to push deviceId to the token with auth0
 
@@ -57,4 +57,4 @@ function (user, context, callback) {
 After that, if you call authorize endpoint to obtain authorization code for a device with query parameter `device_id=<deviceId>`,
 and the device makes sign up with that code, the returned JWT access token will contain deviceId claim like `https://<YOUR_DOMAIN>/deviceId: <deviceId>`.
 
-For validation of device ID claim by coap-gateway the `api.coap.authorization.deviceIdClaim` must be set to `https://<YOUR_DOMAIN>/deviceId`.
+For validation of device ID claim by coap-gateway the `api.coap.authorization.deviceIDClaim` must be set to `https://<YOUR_DOMAIN>/deviceId`.
