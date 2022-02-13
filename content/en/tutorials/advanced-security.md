@@ -3,12 +3,12 @@ title: 'Advanced security'
 description: 'How to secure access devices to coap-gateway'
 date: '2021-09-17'
 lastmod: '2021-09-17'
-categories: [developer guide, dashboard]
-keywords: [developer guide, dashboard]
+categories: [tutorials, dashboard]
+keywords: [tutorials, dashboard]
 menu:
   docs:
-    parent: developer-guide
-    weight: 10
+    parent: tutorials
+    weight: 60
 toc: true
 ---
 
