@@ -13,11 +13,19 @@ toc: true
 ---
 
 
-Provisioning milions of devices in a secure and scalable manner without reqrequiering any human interaction is what our plgd Device Provisioning Service (DPS) is capable of. Doesn't matter if you're running the plgd hub on-premise, off-premise or a fully managed instance, the DPS makes sure it trusts only your devices and provision them to the right plgd hub instance. Exactly no human interaction, zero-touch to provision and pre-configure milions of devices just-in-time and securely, using manufacturer certificates or TPMs.
+Provisioning milions of devices in a secure and scalable manner without requiring any human interaction is what our plgd Device Provisioning Service (DPS) solves. Doesn't matter if you're running the plgd hub on-premise, off-premise or a fully managed instance, the DPS makes sure it trusts only your devices and provision them to the right plgd hub instance. Exactly no human interaction, zero-touch to provision and pre-configure milions of devices just-in-time and securely, using manufacturer certificates or TPMs.
 
-{{% note %}}
-  There are [many provisioning scenarios supported by the plgd ecosystem](https://plgd.dev/features/provisioning/). Make sure you understand all the posibilities to find a best fit for your use-case.
-{{% /note %}}
+## When to use Device Provisioning Service
+
+plgd ecosystem supports [various provisioning scenarios](https://plgd.dev/features/provisioning/), including Zero-touch provisioning handled by the DPS. It's your perfect choice when you try to solve:
+- Provision huge number of devices without hardcoding plgd hub connection
+- Distribute devices across different plgd hub instances based on custom identifier (e.g. serial number)
+- Distribute devices to customer specific environments while securing the communication using customer's custom certificate
+- Distribute devices based on a use-case to support solution isolation use-cases
+- Drive custom ACL and Identity Certificate for devices based on a security requirements or use-cases
+- Blacklist devices which were compromised, discontinued, ...
+- Certificate rotation
+- ... and more
 
 ## Provisioning process
 
@@ -29,7 +37,7 @@ Securely provisioned device by the DPS precedes 3 distinct steps:
 ### Manufacturing step
 
 To successfuly attestate the device's identity during the provisioning process, a manufacturer certificate or/and a TPM need to be available on the device. It's a key to verify if the device is trusted and belongs to the enrollment group created in the DPS.
-Creation of the device's manufacturer identity usually occurs towards the end of the manufacturing process. At this point, hardware assembly is complete and the initial software has been loaded. A _manufacturing PC_ is connected to the device and requests from the PKI a unique manufacturer certificate using the unique device identifier (e.g. serial number, depends on the manufacturer). In case the device contains the TPM, _manufacturing PC_ stores the TPM's endorsment key, required to for it's individual enrollment.
+Creation of the device's manufacturer identity usually occurs towards the end of the manufacturing process. At this point, hardware assembly is complete and the initial software has been loaded. A _manufacturing PC_ is connected to the device and requests from the PKI a unique manufacturer certificate using the unique device identifier (e.g. serial number, depends on the manufacturer). In case the device contains the TPM, _manufacturing PC_ stores the TPM's endorsment key, required for it's individual enrollment.
 {{% note %}}
 Process described above varies from manufacturer to manufacturer. Nevertheless, the unique device's manufacturer identity is expected as the result. Additionaly, formulation "Creation of the device's manufacturer identity" was used to not confuse the reader if using more accurate term - "Provisioning of the device's manufacturer identity".
 {{% /note %}}
@@ -43,9 +51,8 @@ DPS does not introduce a new step in the manufacturing process. It ties into the
 
 The Enrollment Group created during the operation setup state has a set of required and optional configuration options, supporting various use-cases or security requirements. The following diagram describes what goes on behind the scenes to get a device securely provisioned. This flow is dependent on the Enrollment Group configuration, which is a prerequisite.
 
-{{< plantuml id="resource-publish" >}}
+{{< plantuml id="dps-overview" >}}
 @startuml
-autonumber
 skinparam backgroundColor transparent
 hide footbox
 
@@ -57,30 +64,38 @@ participant "plgd hub" as hub
 note over op, hub
 Enrollment Entry including Devices key identifiers was created
 end note
-d -> dps: Connect and authenticate
+d -> d: **1** Initiate device ownership transfer
 activate d
-dps -> dps: Find matching Enrollment Group
+d -> dps: **2** Connect and authenticate
+dps -> dps: **3** Find matching Enrollment Group
 activate dps
-d -> dps: Send Identity Certificate Signing Request
-d -> dps: Retrieve ACL configuration
-d -> d: Device ownership transfered
-d -> dps: Get access token for plgd hub API
-d -> dps: Get initial configuration
+d -> dps: **4** Send Identity Certificate Signing Request
+dps --> d
+d -> dps: **5** Retrieve ACL configuration
+dps --> d
+d -> dps: **6** Get initial configuration
+dps --> d
+d -> dps: **7** Get plgd hub connection configuration
+dps --> d
+d ->x dps: Disconnect
 deactivate dps
 deactivate d
-d -> hub: Connect and authenticate using Identity Certificate
+d -> hub: **8** Connect and authenticate
 activate d
 
 @enduml
+
 {{< /plantuml >}}
 
-1. The device contacts the DPS endpoint configured by the device application or by a tool which discovered the device or preset at the factory. Devices proves it's identity using a Manufacturer Certificate or TPM's endorsment key.
-2. The DPS finds DOS finds the matching Enrollment Group.
-3. The device issues Certificate Signing Request for the unique device Identity and requests the DPS to sign it. The CSR is signed using the default or by the operator configured Identity CA.
-4. The device requests resources' ACLs for Device-to-Device as well as Device-to-Cloud communication.
-5. The device starts the provisioning process by setting the device ownership, securely storing the Identity certificate and applying ACLs.
-6. The device retrieves connection configuration and OAuth2.0 access token which authorizes the device to connect with the plgd hub APIs.
-7. If the operator provided initial configuration for device resources, the devices retrieves it and applies.
-8. The devices disconnects from the DPS and connects to the configured plgd hub instance, authenticates and encrypts the session using Identity Certificate and authorizes using the access token.
+1. The device application or external tool which discovered the device using CoAP multicast requests the DPS Client to start the provisioning process by setting the DPS endpoint. The DPS endpoint can be also configured at the factory.
+2. The device opens the connection to the DPS and proves it's identity using a Manufacturer Certificate or TPM's endorsment key.
+3. The DPS finds the Enrollment Group with matching Manufacturer Certificate CA or TPM's endorsment key.
+4. The device issues Certificate Signing Request (CSR) for the unique device Identity and requests the DPS to sign it. The CSR is signed by the separate service, running next to the DPS or within the plgd hub deployment. Custom Identity CA can be used. Identity Certificate is then securely stored on the device and used to for unique identification and secure connection to the plgd hub.
+5. The device requests resources' ACLs for the Device-to-Device as well as Device-to-Cloud communication and applies them.
+6. If the operator provided initial configuration for device resources, the devices retrieves and applies it.
+7. The device retrieves connection configuration and OAuth2.0 access token which authorizes the device to communicate with the plgd hub APIs.
+8. The device connects to the configured plgd hub instance, authenticates and encrypts the session using Identity Certificate and authorizes using the OAuth2.0 access token.
 
-
+{{% note %}}
+Step number 8 is optional. Device provisioning doesn't require to connect the device to the plgd hub. In such a case, device is ready to be securely used for your Device-to-Device scenarios.
+{{% /note %}}
