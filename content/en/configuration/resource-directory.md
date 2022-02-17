@@ -86,9 +86,8 @@ plgd hub uses MongoDB database as a event store.
 | `clients.eventStore.cacheExpiration` | string | `Expiration time of cached resource in projection.` | `20m` |
 | `clients.eventStore.mongoDB.uri` | string | `URI to mongo database.` | `"mongodb://localhost:27017"` |
 | `clients.eventStore.mongoDB.database` | string | `Name of database` | `"eventStore"` |
-| `clients.eventStore.mongoDB.batchSize` | int | `Limits number of queries in one find request.` | `16` |
 | `clients.eventStore.mongoDB.maxPoolSize` | int | `Limits number of connections.` | `16` |
-| `clients.eventStore.mongoDB.maxConnIdleTime` | string | `Close connection when idle time reach the value.` | `240s` |
+| `clients.eventStore.mongoDB.maxConnIdleTime` | string | `Close connection when idle time reach the value.` | `4m` |
 | `clients.eventStore.mongoDB.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
 | `clients.eventStore.mongoDB.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `clients.eventStore.mongoDB.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
@@ -118,7 +117,7 @@ This will be served by HTTP Gateway API as defined [here](https://github.com/plg
 | ---------- | -------- | -------------- | ------- |
 | `publicConfiguration.caPool` | string | `File path to root CA which was used to sign coap-gw certificate.` | `""` |
 | `publicConfiguration.ownerClaim` | string | `Claim used to identify owner of the device.` | `"sub"` |
-| `publicConfiguration.deviceIdClaim` | string | `Claim used to identify device id of the device. Empty means that JWT doesn't contain it.` | `""` |
+| `publicConfiguration.deviceIDClaim` | string | `Claim used to identify device id of the device. Empty means that JWT doesn't contain it.` | `""` |
 | `publicConfiguration.hubID` | string | `Hub ID which is stored in coap-gw certificate.` | `""` |
 | `publicConfiguration.coapGateway` | string | `CoAP gateway for onboard device.` | `""` |
 | `publicConfiguration.defaultCommandTimeToLive` | string | `Exposes default command time to live for CreateResource, RetrieveResource, UpdateResource, DeleteResource, and UpdateDeviceMetadata commands when it is not set in the request. 0s - means forever.` | `"0s"` |

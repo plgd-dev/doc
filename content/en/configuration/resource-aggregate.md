@@ -86,9 +86,8 @@ plgd hub uses MongoDB database as a event store.
 | `clients.eventStore.occMaxRetry` | int | `Limits number of try to store event.` | `8` |
 | `clients.eventStore.mongoDB.uri` | string | `URI to mongo database.` | `"mongodb://localhost:27017"` |
 | `clients.eventStore.mongoDB.database` | string | `Name of database` | `"eventStore"` |
-| `clients.eventStore.mongoDB.batchSize` | int | `Limits number of queries in one find request.` | `16` |
 | `clients.eventStore.mongoDB.maxPoolSize` | int | `Limits number of connections.` | `16` |
-| `clients.eventStore.mongoDB.maxConnIdleTime` | string | `Close connection when idle time reach the value.` | `240s` |
+| `clients.eventStore.mongoDB.maxConnIdleTime` | string | `Close connection when idle time reach the value.` | `4m` |
 | `clients.eventStore.mongoDB.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
 | `clients.eventStore.mongoDB.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `clients.eventStore.mongoDB.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |

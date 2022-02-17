@@ -16,7 +16,7 @@ The [Open Connectivity Foundation](https://openconnectivity.org) (OCF) is a glob
 
 The OCF Certification Program includes conformance testing to ensure robust and secure connectivity, and to help manufacturers create products that “just work” with other OCF Certified IoT devices regardless of their form factors, operating systems, service providers or transports.
 
-The plgd hub, reference implementation of [OCF Device to Cloud Services](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.4.pdf) and [OCF Cloud API for Cloud Services](https://openconnectivity.org/specs/OCF_Cloud_API_For_Cloud_Services_Specification_v2.2.4.pdf) specifications is automatically tested with the OCF Conformance Test Tool (CTT) what guaruantees interoperability between OCF Certified IoT devices and Clouds.
+The plgd hub, reference implementation of [OCF Device to Cloud Services](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.4.pdf) and [OCF Cloud API for Cloud Services](https://openconnectivity.org/specs/OCF_Cloud_API_For_Cloud_Services_Specification_v2.2.4.pdf) specifications is automatically tested with the OCF Conformance Test Tool (CTT) what guarantees interoperability between OCF Certified IoT devices and Clouds.
 
 If you are user of the plgd hub, interested in the OCF Certification, this tutorial will guide you on how to execute required OCF test cases.
 
@@ -183,6 +183,10 @@ The Origin Cloud API is implemented by the `cloud2cloud-connector` service, whic
 Support of the API in the plgd hub #bundle GUI is planned, but not yet implemented. So for now you need an application or a utility that allows you to send HTTP requests with custom headers. In this guide I will use the [Postman](https://www.postman.com/) application.
 
 Additionally, several of the Origin Cloud test cases require different [setup](https://plgd.dev/configuration/cloud2cloud-connector) of the `cloud2cloud-connector` and also different values in the PICS configuration. Only with the correct configuration of each, the test cases will succeed.
+
+{{% note %}}
+When running with the ngrok application do not forget to apply the manual changes to the underlying Python code described in the _User Guide_ section **Setup for all Origin Cloud test cases**.
+{{% /note %}}
 
 ### Executing Origin Cloud API commands using Postman
 
@@ -515,6 +519,9 @@ Start the plgd hub #bundle with default configuration. Modify the PICS configura
 ```
 
 For the `cloudClientTrustAnchorCertificate` use the root certificate authority certificate of the plgd hub #bundle. You can obtain the certificate by sending a `GET` request to `https://{FQDN}/.well-known/hub-configuration`. Use the `certificateAuthorities` contained in the JSON response.
+
+The root certificate authority can also be obtained by accessing the `data` folder of the running bundle. The certificate is stored in the `data/certs/root_ca.crt` file.
+
 The certificates are regenerated whenever the bundle is restarted and previous certificates are no longer valid.
 
 {{% note %}}
