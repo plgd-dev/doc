@@ -8,7 +8,7 @@ keywords: ['OCF conformance', 'tutorial', 'CTT tool']
 menu:
   docs:
     parent: tutorials
-    weight: 60
+    weight: 90
 toc: true
 ---
 

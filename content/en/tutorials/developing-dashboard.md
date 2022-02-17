@@ -3,12 +3,12 @@ title: 'Dashboard'
 description: 'How to build and configure plgd dashboard'
 date: '2021-05-13'
 lastmod: '2021-05-13'
-categories: [developer guide, dashboard]
-keywords: [developer guide, dashboard]
+categories: [tutorials, dashboard]
+keywords: [tutorials, dashboard]
 menu:
   docs:
-    parent: developer-guide
-    weight: 10
+    parent: tutorials
+    weight: 70
 toc: true
 ---
 
