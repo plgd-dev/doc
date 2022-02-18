@@ -28,8 +28,12 @@ A configuration template is available on [coap-gateway/config.yaml](https://gith
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `log.debug` | bool | `Set to true if you would like to see extra information in logs.` | `false` |
-| `log.dumpCoapMessages` | bool | `Set to true if you would like to dump raw messages.` | `false` |
+| `log.dumpBody` | bool | `Set to true if you would like to dump raw messages.` | `false` |
+| `log.level` | string | `Logging enabled from level.` | `"info"` |
+| `log.encoding` | string | `Logging format. The supported values are: "json", "console"` | `"json"` |
+| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `"false` |
+| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn` |
+| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano` |
 
 ### CoAP API
 
