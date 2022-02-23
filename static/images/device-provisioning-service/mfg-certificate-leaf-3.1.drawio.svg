@@ -1,0 +1,47 @@
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="712px" height="32px" viewBox="-0.5 -0.5 712 32" content="&lt;mxfile&gt;&lt;diagram id=&quot;Y8ExfZqDZafEvIbOSx8d&quot; name=&quot;Page-1&quot;&gt;zZTBbtswDIafxscNttSm29F10+4yDFgPO6sWYwuVRUNhGmdPPymi4nhpgR6KYTk41EeJpPjTLmQzTA9ejf131GALUeqpkHeFEDdfb8IzgkMCshIJdN7ohKoZPJrfwLBkujMatouNhGjJjEvYonPQ0oIp73G/3LZBu8w6qg4uwGOr7CX9ZTT1iX4py5l/A9P1OXN2PKn2ufO4c5zOoYPkGVSOwlu3vdK4P0NyXcjGI1KyhqkBG5uaG5bO3b/hPVXswdG7DnAdL8ru+NY/Y3JRNjVXSIfcj54GG6yqkLenusuw0Grbg+aFsqZzwW5DBeADeAFPJjS1ZsdgtI4RY4wxRh6mLo7P5ySZSP8x7CHHjwNVRcshtT3TjbG2QYshx92xwwGho4wKITfHX8xEHp/hlc08c9VVWBNM9GNUraGc97KZ3N94JZjOEDf3AXAA8oewhb1X1+lEfgN4uZ/HqZIsQX82SpkpnuDuFHjWMhgs5xvSigtp105/Cq+Uo3hHsVLDGHv6tB1Pl/0v1a7+ljtoWzW3dX39bs2DpyxX6/r+FeE/QOaV+Gc6h+X8eTj6zj6+cv0H&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs/>
+    <g>
+        <path d="M 0 0 L 120 0 L 120 0 L 130 15 L 120 30 L 120 30 L 0 30 L 0 15 Z" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)" opacity="0">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 15px; margin-left: 65px;">
+                        <div data-drawio-colors="color: #ffffff; " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 14px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: nowrap;">
+                                Root CA
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="65" y="19" fill="#ffffff" font-family="Helvetica" font-size="14px" text-anchor="middle">
+                    Root CA
+                </text>
+            </switch>
+        </g>
+        <path d="M 580 0 L 700 0 L 700 0 L 710 15 L 700 30 L 700 30 L 580 30 L 590 15 Z" fill="#1cbaa5" stroke="#006eaf" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 15px; margin-left: 645px;">
+                        <div data-drawio-colors="color: #ffffff; " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 14px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: nowrap;">
+                                End-identity
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="645" y="19" fill="#ffffff" font-family="Helvetica" font-size="14px" text-anchor="middle">
+                    End-identity
+                </text>
+            </switch>
+        </g>
+    </g>
+    <switch>
+        <g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/>
+        <a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank">
+            <text text-anchor="middle" font-size="10px" x="50%" y="100%">
+                Viewer does not support full SVG 1.1
+            </text>
+        </a>
+    </switch>
+</svg>
