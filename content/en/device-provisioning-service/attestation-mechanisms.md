@@ -76,26 +76,33 @@ authentication fails because the DPS can't attempt authentication assuming the v
 
 The DPS supports creation of [multiple enrollment groups]() what allows the operator to distribute devices based on the Intermediate CAs. When configuring the certificate chain on the enrollment group, an operator has a possibility to select a certificate from the chain to represent the enrollment group during the search. Selection of the enrollment group is done after successful device authentication, by taking the leaf-most certificate from the manufacturer certificate chain and searching for a match across the certificates representing enrollment groups. If no match was found, the next parent authority certificate from the manufacturer certificate chain is taken and search is repeated. This process is repeated until last parent authority certificate present in the manufacturer certificate chain is reached. If there wasn't any match across enrollment groups, the device is disconnected. For better understanding, see following examples:
 
+#### Example 1
+
 Consider 2 enrollment groups configured on the DPS *(certificate with yellow border represents the enrollment group)*:
-
-#### Enrollment Group #A
-
+**Enrollment Group #A**
 ![](/images/device-provisioning-service/enrollment-group-intermediate-2.drawio.svg)
 
-#### Enrollment Group #B
-
+**Enrollment Group #B**
 ![](/images/device-provisioning-service/enrollment-group-intermediate-3.drawio.svg)
 
-- If the device authenticates using the following manufacturer certificate chain:
+- The device after it authenticates using the following manufacturer certificate chain:
 ![](/images/device-provisioning-service/mfg-certificate-intermediate-3.drawio.svg)
-the device will be provisioned as configured in the **Enrollment Group #B**.
+will be provisioned as configured in the **Enrollment Group #B**.
 
 
-- If the device authenticates using the following manufacturer certificate chain:
+- The device after it authenticates using the following manufacturer certificate chain:
 ![](/images/device-provisioning-service/mfg-certificate-intermediate-3.1.drawio.svg)
-the device will be provisioned as configured in the **Enrollment Group #A**.
+will be provisioned as configured in the **Enrollment Group #A**.
 
 
-- If the device authenticates using the following manufacturer certificate chain:
+- The device after it authenticates using the following manufacturer certificate chain:
 ![](/images/device-provisioning-service/mfg-certificate-leaf-3.1.drawio.svg)
-the device will be disconnected as **no matching enrollment group was found**.
+will be disconnected as **no matching enrollment group was found**.
+
+#### Example 2
+Consider following enrollment group configured on the DPS:
+![](/images/device-provisioning-service/enrollment-group-intermediate-2-sel1.drawio.svg)
+
+- The device after it authenticates using the following manufacturer certificate chain:
+![](/images/device-provisioning-service/mfg-certificate-intermediate-3.1.drawio.svg)
+will be disconnected as **no matching enrollment group was found**.
