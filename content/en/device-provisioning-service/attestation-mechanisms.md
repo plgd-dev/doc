@@ -74,38 +74,26 @@ authentication fails because the DPS can't attempt authentication assuming the v
 
 ### Enrollment group prioritization
 
-The DPS supports creation of [multiple enrollment groups]() what allows the operator to distribute devices based on the Intermediate CAs. When configuring the certificate chain on the enrollment group, an operator has a possibility to select a certificate from the chain to represent the enrollment group during the search. Selection of the enrollment group is done after successful device authentication, by taking the leaf-most certificate from the manufacturer certificate chain and searching for a match across the certificates representing enrollment groups. If no match was found, the next parent authority certificate from the manufacturer certificate chain is taken and search is repeated. This process is repeated until last parent authority certificate present in the manufacturer certificate chain is reached. If there wasn't any match across enrollment groups, the device is disconnected. For better understanding, see following examples:
+The DPS supports creation of [multiple enrollment groups]() what allows the operator to distribute devices based on the Intermediate CAs. When configuring the certificate chain on the enrollment group, an operator has a possibility to select a certificate from the chain to represent the enrollment group during the search. Selection of the enrollment group is done after successful device authentication, after which the full verified certificate chain is assembled. Search for the matching enrollment group starts by taking the leaf-most intermediate certificate from the verified certificate chain and finding the match across list of certificates representing enrollment groups. If no match was found, the next parent authority certificate from the verified certificate chain is taken and search is repeated. This process is repeated until last root CA certificate present in the chain is reached. If there wasn't any match across enrollment groups, the device is disconnected.
 
-#### Example 1
+For better understanding, consider 2 enrollment groups configured on the DPS *(certificate with yellow border represents the enrollment group)*:
 
-Consider 2 enrollment groups configured on the DPS *(certificate with yellow border represents the enrollment group)*:
 **Enrollment Group #A**
-![](/images/device-provisioning-service/enrollment-group-intermediate-2.drawio.svg)
+![](/images/device-provisioning-service/enrollment-group-intermediate-sel-3.drawio.svg)
 
 **Enrollment Group #B**
-![](/images/device-provisioning-service/enrollment-group-intermediate-3.drawio.svg)
+![](/images/device-provisioning-service/enrollment-group-intermediate-sel-2.drawio.svg)
 
 - The device after it authenticates using the following manufacturer certificate chain:
 ![](/images/device-provisioning-service/mfg-certificate-intermediate-3.drawio.svg)
-will be provisioned as configured in the **Enrollment Group #B**.
+will be provisioned as configured in the **Enrollment Group #A**.
 
 
 - The device after it authenticates using the following manufacturer certificate chain:
 ![](/images/device-provisioning-service/mfg-certificate-intermediate-3.1.drawio.svg)
-will be provisioned as configured in the **Enrollment Group #A**.
+will be provisioned as configured in the **Enrollment Group #B**.
 
 
 - The device after it authenticates using the following manufacturer certificate chain:
 ![](/images/device-provisioning-service/mfg-certificate-leaf-3.1.drawio.svg)
 will be disconnected as **no matching enrollment group was found**.
-
-#### Example 2
-Consider following enrollment group configured on the DPS:
-![](/images/device-provisioning-service/enrollment-group-intermediate-2-sel1.drawio.svg)
-
-- The device after it authenticates using the following manufacturer certificate chain:
-![](/images/device-provisioning-service/mfg-certificate-intermediate-3.1.drawio.svg)
-will be disconnected as **no matching enrollment group was found**.
-
-## Trusted Platform Module (TPM)
-> Secure attestation and provisioning using TPM based identities is under development.
