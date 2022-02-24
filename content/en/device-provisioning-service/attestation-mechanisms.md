@@ -106,3 +106,6 @@ Consider following enrollment group configured on the DPS:
 - The device after it authenticates using the following manufacturer certificate chain:
 ![](/images/device-provisioning-service/mfg-certificate-intermediate-3.1.drawio.svg)
 will be disconnected as **no matching enrollment group was found**.
+
+## Trusted Platform Module (TPM)
+> Secure attestation and provisioning using TPM based identities is under development.
