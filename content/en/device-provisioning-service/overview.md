@@ -51,7 +51,7 @@ DPS does not introduce a new step in the manufacturing process. It ties into the
 
 ### Provisioning step
 
-The Enrollment Group created during the operation setup state has a set of required and optional configuration options, supporting various use-cases or security requirements. The following diagram describes what goes on behind the scenes to get a device securely provisioned. This flow is dependent on the Enrollment Group configuration, which is a prerequisite.
+The Enrollment Group created during the operation setup state has a set of required and optional configuration options, supporting various use-cases or security requirements. The following sequence diagram describes what goes on under the hood to get a device securely provisioned. This flow is dependent on the Enrollment Group configuration, which is a prerequisite.
 
 {{< plantuml id="dps-overview" >}}
 @startuml
