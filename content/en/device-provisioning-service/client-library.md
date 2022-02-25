@@ -17,6 +17,7 @@ toc: true
 The Device Provisioning Service is distributed as a `tar.gz` package, which contains the dps shared library, public C headers and an example application.
 
 Latest version: 0.0.1
+Supported platforms: linux/amd64, linux/arm64, linux/arm/v7
 
 {{% note %}}
 Please examine the contents of the provided pkg-config (`.pc`) file and install required dependencies.
@@ -74,6 +75,23 @@ int plgd_dps_manager_start(plgd_dps_context_t *ctx, const char *endpoint);
  */
 void plgd_dps_manager_stop(plgd_dps_context_t *ctx);
 
+/**
+ * @brief Clean-up and restart DPS provisioning on factory reset.
+ *
+ * @param ctx device context (cannot be NULL)
+ */
+int plgd_dps_on_factory_reset(plgd_dps_context_t *ctx);
+
+/**
+ * @brief Set credid trusted root CA of the DPS service and/or disable its verification.
+ *
+ * If the credid has been set previously then certificate with the given credid is removed.
+ *
+ * @param device context (cannot be NULL)
+ * @param ca_credid credid of the trusted root CA of the DPS service
+ * @param ca_skip_verification skip verification of the DPS service
+ */
+void plgd_dps_set_service_ca(plgd_dps_context_t *ctx, int ca_credid, bool ca_skip_verification);
 ...
 ```
 
@@ -197,51 +215,84 @@ The `dps_cloud_server` supports `--no-verify-ca` option. If you run the binary w
 In code, the application uses [Iotivity-lite's pki functions to load the certificates](#load-certificates-and-keys) in this helper function:
 
 ```C
+/**
+ * @brief Add dps ca trusted root certificate and device's manufacturer certificate.
+ *
+ * @param dps_ctx device context
+ * @param cert_dir path to directory with certificates
+ * @return int 0 on success
+ * @return int -1 on failure
+ */
 static int
-dps_add_certificates(plgd_dps_context_t *dps_ctx)
+dps_add_certificates(plgd_dps_context_t *dps_ctx, const char *cert_dir)
 {
   oc_assert(dps_ctx != NULL);
+  oc_assert(cert_dir != NULL);
 #define CERT_BUFFER_SIZE 4096
 
-  if (dps_ctx->dps_skip_ca_verification) {
+  char path[PATH_MAX];
+  int mfg_credid = -1;
+  if (dps_ctx->dps_ca_skip_verification) {
     DPS_DBG("adding of trusted root certificate skipped");
   } else {
     unsigned char dps_ca[CERT_BUFFER_SIZE];
     size_t dps_ca_len = sizeof(dps_ca);
-    if (dps_read_pem("pki_certs/dpsca.pem", (char *)dps_ca, &dps_ca_len) < 0) {
-      DPS_ERR("ERROR: unable to read pki_certs/dpsca.pem");
-      return -1;
+    memset(path, 0, sizeof(path));
+    strncpy(path, cert_dir, sizeof(path));
+    strcat(path, "/dpsca.pem");
+    if (dps_read_pem(path, (char *)dps_ca, &dps_ca_len) < 0) {
+      DPS_ERR("ERROR: unable to read %s", path);
+      goto error;
     }
     int dpsca_credit = oc_pki_add_trust_anchor(dps_ctx->device, dps_ca, dps_ca_len);
     if (dpsca_credit < 0) {
       DPS_ERR("ERROR: installing DPS trusted root ca");
-      return -1;
+      goto error;
     }
     DPS_DBG("DPS trusted root credid=%d", dpsca_credit);
-    dps_ctx->dps_ca_credid = dpsca_credit;
+    plgd_dps_set_service_ca(dps_ctx, dpsca_credit, /*ca_skip_verification*/ false);
   }
 
   unsigned char mfg_crt[CERT_BUFFER_SIZE];
   size_t mfg_crt_len = sizeof(mfg_crt);
-  if (dps_read_pem("pki_certs/mfgcrt.pem", (char *)mfg_crt, &mfg_crt_len) < 0) {
-    DPS_ERR("ERROR: unable to read pki_certs/mfgcrt.pem");
-    return -1;
+  memset(path, 0, sizeof(path));
+  strncpy(path, cert_dir, sizeof(path));
+  strcat(path, "/mfgcrt.pem");
+  if (dps_read_pem(path, (char *)mfg_crt, &mfg_crt_len) < 0) {
+    DPS_ERR("ERROR: unable to read %s", path);
+    goto error;
   }
   unsigned char mfg_key[CERT_BUFFER_SIZE];
   size_t mfg_key_len = sizeof(mfg_key);
-  if (dps_read_pem("pki_certs/mfgkey.pem", (char *)mfg_key, &mfg_key_len) < 0) {
-    DPS_ERR("ERROR: unable to read pki_certs/mfgkey.pem\n");
-    return -1;
+  memset(path, 0, sizeof(path));
+  strncpy(path, cert_dir, sizeof(path));
+  strcat(path, "/mfgkey.pem");
+  if (dps_read_pem(path, (char *)mfg_key, &mfg_key_len) < 0) {
+    DPS_ERR("ERROR: unable to read %s", path);
+    goto error;
   }
-  int mfg_credid = oc_pki_add_mfg_cert(dps_ctx->device, mfg_crt, mfg_crt_len, mfg_key, mfg_key_len);
+  mfg_credid = oc_pki_add_mfg_cert(dps_ctx->device, mfg_crt, mfg_crt_len, mfg_key, mfg_key_len);
   if (mfg_credid < 0) {
-    DPS_ERR("ERROR: installing manufacturer certificate\n");
-    return -1;
+    DPS_ERR("ERROR: installing manufacturer certificate");
+    goto error;
   }
   DPS_DBG("manufacturer certificate credid=%d", mfg_credid);
-  dps_ctx->dps_mfg_credid = mfg_credid;
   oc_pki_set_security_profile(dps_ctx->device, OC_SP_BLACK, OC_SP_BLACK, mfg_credid);
   return 0;
+
+error:
+  if (dps_ctx->dps_ca_credid != -1) {
+    if (dps_remove_certificate(dps_ctx->dps_ca_credid, dps_ctx->device) != 0) {
+      DPS_WRN("failed to remove trusted root certificate(%d)", dps_ctx->dps_ca_credid);
+    }
+    dps_ctx->dps_ca_credid = -1;
+  }
+  if (mfg_credid != -1) {
+    if (dps_remove_certificate(mfg_credid, dps_ctx->device) != 0) {
+      DPS_WRN("failed to remove manufacturer certificate(%d)", mfg_credid);
+    }
+  }
+  return -1;
 }
 ```
 
@@ -251,21 +302,28 @@ Now we have all the parts necessary to do the full initialization of the DPS cli
 
 ```C
   ...
+  oc_set_factory_presets_cb(dps_factory_presets_cb, NULL);
+  ...
   oc_main_init(...);
   ...
 
-  plgd_dps_init(skip_ca_verification != 0);
-  plgd_dps_context_t *dps_ctx = plgd_dps_get_context(device_id);
-  if (dps_ctx != NULL) {
-    if (dps_add_certificates(dps_ctx) != 0) {
-      DPS_ERR("failed to add initial certificates");
-      goto finish;
-    }
-    plgd_dps_manager_init_callbacks(dps_ctx, dps_status_handler, NULL, cloud_status_handler, NULL);
-    if (plgd_dps_manager_start(dps_ctx, dps_endpoint) != 0) {
-      DPS_ERR("failed to start dps manager");
-      goto finish;
-    }
+  if (plgd_dps_init(skip_ca_verification != 0) != 0) {
+    DPS_ERR("failed to initialize dps");
+    goto finish;
+  }
+  plgd_dps_context_t *dps_ctx = plgd_dps_get_context(g_device_id);
+  if (dps_ctx == NULL) {
+    DPS_ERR("device(%zu) context not found", g_device_id);
+    goto finish;
+  }
+  if (dps_add_certificates(dps_ctx, dps_cert_dir) != 0) {
+    DPS_ERR("failed to add initial certificates");
+    goto finish;
+  }
+  plgd_dps_manager_init_callbacks(dps_ctx, dps_status_handler, NULL, cloud_status_handler, NULL);
+  if (plgd_dps_manager_start(dps_ctx, dps_endpoint) != 0) {
+    DPS_ERR("failed to start dps manager");
+    goto finish;
   }
 
   ...
@@ -297,4 +355,38 @@ For example, if your DPS endpoint is running on the address `api.try.plgd.cloud:
 
 ```bash
 ./dps_cloud_server "my-device" "coaps+tcp://api.try.plgd.cloud:25684"
+```
+
+### Restarting dps_cloud_server
+
+To force restarting of the provisioning send `SIGHUP` signal to the process. Upon receiving the signal, the application will execute a factory reset and call your handler setup by call to `oc_set_factory_presets_cb`. In the handler you must reload the manufacturer’s certificates, which have been removed by the reset. At the end of the handler, call `plgd_dps_on_factory_reset`, which does some additional clean-up and then restarts the provisioning process.
+
+The factory reset handler might look like this:
+
+```C
+static void
+dps_factory_presets_cb(size_t device_id, void *data)
+{
+  (void)data;
+  // preserve name after factory reset
+  oc_device_info_t *dev = oc_core_get_device_info(device_id);
+  oc_free_string(&dev->name);
+  oc_new_string(&dev->name, dps_device_name, strlen(dps_device_name));
+
+  plgd_dps_context_t *dps_ctx = plgd_dps_get_context(device_id);
+  if (dps_ctx == NULL) {
+    DPS_DBG("skip factory reset handling: empty context");
+    return;
+  }
+
+  if (dps_add_certificates(dps_ctx, dps_cert_dir) != 0) {
+    DPS_ERR("failed to add initial certificates on factory reset");
+    return;
+  }
+
+  if (plgd_dps_on_factory_reset(dps_ctx) != 0) {
+    DPS_ERR("cannot handle factory reset");
+    return;
+  }
+}
 ```
