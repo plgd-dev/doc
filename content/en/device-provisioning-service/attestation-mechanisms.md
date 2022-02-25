@@ -15,20 +15,23 @@ toc: true
 
 Most important part of the zero-touch provisioning is the attestation mechanism, a method used to confirm a device's identity. Each enrollment group needs to have the attestation mechanism configured. Selected method and it's configuration is used to identify to which enrollment group the device opening the connection to the DPS belongs to.
 The Device Provisioning Service supports 2 forms of attestations:
+
 - Manufacturer certificates based on the standard X.509 certificate authentication flow
 - Trusted Platform Module (TPM) based on a nonce challenge
 
 ## X.509 Certificates
 
 Digital certificates allow individuals, organizations, as well as devices to establish trust in the digital world. As the foundation for all digital identities, X.509 certificates are everywhere and are essential to every connected process from websites to applications to devices and online documents. This level of trust is established both by how X.509 certificates work and by how they are issued. The key usage architecture lets certificates verify that:
- - A public key belongs to the hostname/domain, organization, or individual contained within the certificate
- - It has been signed by a trusted issuer Certificate Authority (CA)
+
+- A public key belongs to the hostname/domain, organization, or individual contained within the certificate
+- It has been signed by a trusted issuer Certificate Authority (CA)
 
 When a certificate is signed by a trusted CA, the certificate user can be confident that the certificate owner has been validated.
 
 By using X.509 certificate as an attestation mechanism, a device's manufacturer certificate is used to verify it's identity. This certificate is typically arranged in a certificate chain of trust in which each certificate in the chain is signed by the private key of the next higher certificate. This arrangement establishes a delegated chain of trust from the CA certificate down through each intermediate CA to the manufacturer, end-identity leaf certificate installed on the device.
 
 The way how the certificate chain of trust is built is usually reflected by the physical or logical hierarchy of your devices / products. For example, a device manufacturer may:
+
 - Issue a single self-signed root CA certificate
 - Use the root CA certificate to sign per factory issued intermediate CA
 - Use the factory's intermediate CA to sign per production line issued intermediate CA
@@ -49,9 +52,10 @@ To uniquely identify each device it's recommended to set the certificate common 
 ### Certificate chain of trust
 
 A certificate chain is a list of certificates followed by one or more CA certificates. In RFC 5280 the certificate chain or chain of trust is defined as “certification path”. In other words, the chain of trust refers to your certificate and how it is linked back to a trusted Certificate Authority. In order for a certificate to be trusted it has to be traceable back to the trust root it was signed off, meaning all certificates in the chain—server, intermediate, and root, need to be properly trusted. There are three parts to the chain of trust:
-  - Root Certificate, a digital certificate that belongs to the issuing Certificate Authority. The root certificates are closely guarded by CAs.
-  - Intermediate Certificate, branch off root certificates like branches of trees. They act as middle-men between the protected root certificates and the manufacturer certificates issued for your devices.
-  - Manufacturer certificate (end-entity certificate) is the one issued to the specific device the system is needing coverage for.
+
+- Root Certificate, a digital certificate that belongs to the issuing Certificate Authority. The root certificates are closely guarded by CAs.
+- Intermediate Certificate, branch off root certificates like branches of trees. They act as middle-men between the protected root certificates and the manufacturer certificates issued for your devices.
+- Manufacturer certificate (end-entity certificate) is the one issued to the specific device the system is needing coverage for.
 
 Certificate chains are used in order to check that the public key and other data contained in an end-entity certificate (the first certificate in the chain) effectively belong to its subject. In order to ascertain this, the signature on the end-target certificate is verified by using the public key contained in the following certificate, whose signature is verified using the next certificate, and so on **until the last certificate in the chain is reached**. As the last certificate is a trust anchor, successfully reaching it will prove that the end-entity certificate can be trusted.
 
@@ -70,7 +74,9 @@ If the device sends the following **manufacturer certificate chain**:
 
 authentication fails because the DPS can't attempt authentication assuming the validity of the `Intermediate CA #2`.
 
-> If the device authenticates using the manufacturer certificate chain containing certificates up to `Intermediate CA #2`, or the certificate chain configured on the enrollment group would contain certificates up to `Intermediate CA #2`, the authentication would be successful.
+{{% note %}}
+If the device authenticates using the manufacturer certificate chain containing certificates up to `Intermediate CA #2`, or the certificate chain configured on the enrollment group would contain certificates up to `Intermediate CA #2`, the authentication would be successful.
+{{% /note %}}
 
 ### Enrollment group prioritization
 
@@ -84,16 +90,20 @@ For better understanding, consider 2 enrollment groups configured on the DPS *(c
 **Enrollment Group #B**
 ![](/images/device-provisioning-service/enrollment-group-intermediate-sel-2.drawio.svg)
 
-- The device after it authenticates using the following manufacturer certificate chain:
+{{% note %}}
+The device after it authenticates using the following manufacturer certificate chain:
 ![](/images/device-provisioning-service/mfg-certificate-intermediate-3.drawio.svg)
 will be provisioned as configured in the **Enrollment Group #A**.
+{{% /note %}}
 
-
-- The device after it authenticates using the following manufacturer certificate chain:
+{{% note %}}
+The device after it authenticates using the following manufacturer certificate chain:
 ![](/images/device-provisioning-service/mfg-certificate-intermediate-3.1.drawio.svg)
 will be provisioned as configured in the **Enrollment Group #B**.
+{{% /note %}}
 
-
-- The device after it authenticates using the following manufacturer certificate chain:
+{{% note %}}
+The device after it authenticates using the following manufacturer certificate chain:
 ![](/images/device-provisioning-service/mfg-certificate-leaf-3.1.drawio.svg)
 will be disconnected as **no matching enrollment group was found**.
+{{% /note %}}
