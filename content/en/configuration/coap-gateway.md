@@ -51,6 +51,7 @@ CoAP API as specified in the [Open Connectivity Foundation - Device to Cloud Ser
 | `api.coap.blockwiseTransfer.enabled` | bool | `If true, enable blockwise transfer of coap message.` | `false` |
 | `api.coap.blockwiseTransfer.blockSize` | int | `Size of blockwise transfer block.` | `1024` |
 | `api.coap.tls.enabled` | bool | `If true, require server certificate for ssl connection.` | `true` |
+| `api.coap.tls.disconnectOnExpiredCertificate` | bool | `If true, device with expired certificates will be disconnected.` | `false` |
 | `api.coap.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
 | `api.coap.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `api.coap.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
