@@ -32,14 +32,15 @@ The API is defined in the public header files provided in the distributed packag
 ```C
 ...
 
+#define PLGD_DPS_URI "/plgd/dps"
+
 /**
  * @brief Allocate and initialize data.
  *
- * @param skip_ca_verification if true then don't load and verify DPS CA certificate.
  * @return int  0   on success
  *              <0  on failure
  */
-int plgd_dps_init(bool skip_ca_verification);
+int plgd_dps_init(void);
 
 /**
  * @brief Stop all devices and deallocate data.
@@ -50,49 +51,75 @@ void plgd_dps_shutdown(void);
 plgd_dps_context_t *plgd_dps_get_context(size_t device);
 
 /// @brief Set DPS manager callbacks.
-void plgd_dps_manager_init_callbacks(plgd_dps_context_t *ctx, plgd_dps_on_status_change_cb_t on_change_cb,
-                                     void *on_change_data, oc_cloud_cb_t on_cloud_change_cb,
-                                     void *on_cloud_change_data);
+void plgd_dps_set_manager_callbacks(plgd_dps_context_t *ctx, plgd_dps_on_status_change_cb_t on_change_cb,
+  void *on_change_data, oc_cloud_cb_t on_cloud_change_cb, void *on_cloud_change_data);
 
 /**
  * @brief Start DPS manager to provision device by given server.
  *
- * Setup context, handlers, dps server and start dps manager.
+ * Setup context, handlers, dps endpoint and start dps manager.
  *
- * @param ctx device context (cannot be NULL)
+ * @param ctx dps context (cannot be NULL)
  * @param endpoint endpoint of the provisioning server (cannot be NULL)
  * @return 0 on success
  * @return -1 on failure
  */
-int plgd_dps_manager_start(plgd_dps_context_t *ctx, const char *endpoint);
+int plgd_dps_manager_start(plgd_dps_context_t *ctx);
 
 /**
  * @brief Stop DPS manager.
  *
  * Deregister handlers, clear context, stop manager and close connection.
  *
- * @param ctx device context (cannot be NULL)
+ * @param ctx dps context (cannot be NULL)
  */
 void plgd_dps_manager_stop(plgd_dps_context_t *ctx);
 
 /**
- * @brief Clean-up and restart DPS provisioning on factory reset.
+ * @brief Restart DPS manager to provision device by given server.
  *
- * @param ctx device context (cannot be NULL)
+ * Setup context, handlers, dps endpoint and start dps manager.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param endpoint endpoint of the provisioning server (cannot be NULL)
+ * @return 0 on success
+ * @return -1 on failure
+ */
+int plgd_dps_manager_restart(plgd_dps_context_t *ctx);
+
+/**
+ * @brief Clean-up of DPS provisioning and stopping of DPS manager on factory reset.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @return 0 on success
+ * @return -1 on failure
  */
 int plgd_dps_on_factory_reset(plgd_dps_context_t *ctx);
 
 /**
- * @brief Set credid trusted root CA of the DPS service and/or disable its verification.
+ * @brief Controls whether a dps client verifies the device provision service's certificate chain against trust anchor
+ * in the device.
  *
- * If the credid has been set previously then certificate with the given credid is removed.
- *
- * @param device context (cannot be NULL)
- * @param ca_credid credid of the trusted root CA of the DPS service
- * @param ca_skip_verification skip verification of the DPS service
+ * @param ctx dps context (cannot be NULL)
+ * @param skip_verify skip verification of the DPS service for true.
  */
-void plgd_dps_set_service_ca(plgd_dps_context_t *ctx, int ca_credid, bool ca_skip_verification);
-...
+void plgd_dps_set_skip_verify(plgd_dps_context_t *ctx, bool skip_verify);
+
+/**
+ * @brief Set endpoint of DPS service.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param endpoint endpoint of the provisioning server (cannot be NULL)
+ */
+void plgd_dps_set_endpoint(plgd_dps_context_t *ctx, const char *endpoint);
+
+/**
+ * @brief Controls whether a dps client creates configuration resource for managing dps client via COAPs API.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param create set true for creating resource. set false to free memory of created resource.
+ */
+void plgd_dps_set_configuration_resource(plgd_dps_context_t *ctx, bool create);...
 ```
 
 `dps_log.h`:
@@ -113,20 +140,8 @@ plgd_dps_print_log_fn_t plgd_dps_get_log_fn(void);
 
 A DPS client device is an extension of an [Iotivity-lite](https://github.com/iotivity/iotivity-lite) device. Define your desired Iotivity-lite device and add DPS code to automatically provision the device.
 
-Start up the DPS initialization by calling the `plgd_dps_init(bool skip_ca_verification)` function, which allocates and initializes required data structures.
-Set the `skip_ca_verification` parameter to true to [skip verification of the DPS endpoint](#load-certificates-and-keys), otherwise set it to false.
-
-### Load certificates and keys
-
-To be secure the device communicates with the DPS endpoint using TLS. Use [PKI functions from Iotivity-lite](https://github.com/iotivity/iotivity-lite/blob/master/include/oc_pki.h) to add certificates to device.
-
-Use `oc_pki_add_mfg_cert` function to add manufacturer's certificate and private key to device. This certificate will be used to sign communication with the DPS server, which then can authenticate and identify the device. On success, use the returned credential id to assign a security profile by calling `oc_pki_set_security_profile`. Additionally, assign the credential id value to `dps_mfg_credid` member variable on device context struct.
-
-Use `oc_pki_add_trust_anchor` function to add trusted root certificate of the DPS server, this will be used to verify the DPS server. On success, assign the returned credential id value to `dps_ca_credid` member variable on device context struct.
-
-{{% note %}}
-The verification of the DPS server can be disabled by setting the `skip_ca_verification` argument to false when calling `plgd_dps_init`.
-{{% /note %}}
+Start up the DPS initialization by calling the `plgd_dps_init` function, which allocates and initializes required data structures.
+Use setters `plgd_dps_set_endpoint`, `plgd_dps_set_manager_callbacks`, `plgd_dps_set_skip_verify` and `plgd_dps_set_configuration_resource` to configure the device.
 
 <!--
 ### Set custom logging function
@@ -134,9 +149,13 @@ The verification of the DPS server can be disabled by setting the `skip_ca_verif
 TODO
 -->
 
+### Set DPS Endpoint
+
+To set the DPS endpoint call the `plgd_dps_set_endpoint(plgd_dps_context_t *ctx, const char *endpoint)` function.
+
 ### Set status callbacks
 
-The DPS client device can optionally provide two custom callbacks to track the provisioning status and the cloud registration status by calling `plgd_dps_manager_init_callbacks` function. The status of cloud registration is part of the public API of [Iotivity-lite](https://github.com/iotivity/iotivity-lite/blob/master/include/oc_cloud.h) and can be examined there.
+The DPS client device can optionally provide two custom callbacks to track the provisioning status and the cloud registration status by calling `plgd_dps_set_manager_callbacks` function. The status of cloud registration is part of the public API of [Iotivity-lite](https://github.com/iotivity/iotivity-lite/blob/master/include/oc_cloud.h) and can be examined there.
 
 The DPS status callback is executed whenever a provisioning step succeeds or fails. The callback has the following signature:
 
@@ -144,7 +163,7 @@ The DPS status callback is executed whenever a provisioning step succeeds or fai
 void (*)(struct plgd_dps_context_t *ctx, plgd_dps_status_t status, void *data);
 ```
 
-The `ctx` argument is device context created by `plgd_dps_init`, the `data` argument is a value provided to the call of `plgd_dps_manager_init_callbacks`. The `status` argument is an integer value, that consists of the following flags defined in the `dps.h` header:
+The `ctx` argument is device context created by `plgd_dps_init`, the `data` argument is a value provided to the call of `plgd_dps_set_manager_callbacks`. The `status` argument is an integer value, that consists of the following flags defined in the `dps.h` header:
 
 ```C
 typedef enum {
@@ -185,6 +204,30 @@ dps_status_handler(plgd_dps_context_t *ctx, plgd_dps_status_t status, void *data
   }
 }
 ```
+
+### DPS configuration resource
+
+To expose the `/plgd/dps` resource call `plgd_dps_set_configuration_resource(plgd_dps_context_t *ctx, bool create)`, with the `create` parameter equal to `true`.
+
+The resource type of the DPS configuration resource is `x.plgd.dps.conf` and the resource has the following structure:
+
+| Property    | Value type  | Description |
+| ----------- | ----------- | ----------- |
+| ep | string | DPS endpoint. Use empty value to force a factory reset of the device. |
+| sv | boolean | Enable/disable verification of the DPS service. |
+| rst | boolean | Restart provisioning of the device. |
+
+### Load certificates and keys
+
+To be secure the device communicates with the DPS endpoint using TLS. Use [PKI functions from Iotivity-lite](https://github.com/iotivity/iotivity-lite/blob/master/include/oc_pki.h) to add certificates to device.
+
+Use `oc_pki_add_mfg_cert` function to add manufacturer's certificate and private key to device. This certificate will be used to sign communication with the DPS server, which then can authenticate and identify the device. On success, use the returned credential id to assign a security profile by calling `oc_pki_set_security_profile`.
+
+Use `oc_pki_add_trust_anchor` function to add trusted root certificate of the DPS server, this will be used to verify the DPS server.
+
+{{% note %}}
+The verification of the DPS server can be disabled by calling `plgd_dps_set_skip_verify(false)`.
+{{% /note %}}
 
 ### Provisioning
 
@@ -231,33 +274,33 @@ dps_add_certificates(plgd_dps_context_t *dps_ctx, const char *cert_dir)
 #define CERT_BUFFER_SIZE 4096
 
   char path[PATH_MAX];
+  int dpsca_credit = -1;
   int mfg_credid = -1;
-  if (dps_ctx->dps_ca_skip_verification) {
+  if (dps_ctx->store.skip_verify) {
     DPS_DBG("adding of trusted root certificate skipped");
   } else {
     unsigned char dps_ca[CERT_BUFFER_SIZE];
     size_t dps_ca_len = sizeof(dps_ca);
     memset(path, 0, sizeof(path));
     strncpy(path, cert_dir, sizeof(path));
-    strcat(path, "/dpsca.pem");
+    strcat(path, "/dpsca.pem"); // NOLINT(clang-analyzer-security.insecureAPI.strcpy)
     if (dps_read_pem(path, (char *)dps_ca, &dps_ca_len) < 0) {
       DPS_ERR("ERROR: unable to read %s", path);
       goto error;
     }
-    int dpsca_credit = oc_pki_add_trust_anchor(dps_ctx->device, dps_ca, dps_ca_len);
+    dpsca_credit = oc_pki_add_trust_anchor(dps_ctx->device, dps_ca, dps_ca_len);
     if (dpsca_credit < 0) {
       DPS_ERR("ERROR: installing DPS trusted root ca");
       goto error;
     }
     DPS_DBG("DPS trusted root credid=%d", dpsca_credit);
-    plgd_dps_set_service_ca(dps_ctx, dpsca_credit, /*ca_skip_verification*/ false);
   }
 
   unsigned char mfg_crt[CERT_BUFFER_SIZE];
   size_t mfg_crt_len = sizeof(mfg_crt);
   memset(path, 0, sizeof(path));
   strncpy(path, cert_dir, sizeof(path));
-  strcat(path, "/mfgcrt.pem");
+  strcat(path, "/mfgcrt.pem"); // NOLINT(clang-analyzer-security.insecureAPI.strcpy)
   if (dps_read_pem(path, (char *)mfg_crt, &mfg_crt_len) < 0) {
     DPS_ERR("ERROR: unable to read %s", path);
     goto error;
@@ -266,7 +309,7 @@ dps_add_certificates(plgd_dps_context_t *dps_ctx, const char *cert_dir)
   size_t mfg_key_len = sizeof(mfg_key);
   memset(path, 0, sizeof(path));
   strncpy(path, cert_dir, sizeof(path));
-  strcat(path, "/mfgkey.pem");
+  strcat(path, "/mfgkey.pem"); // NOLINT(clang-analyzer-security.insecureAPI.strcpy)
   if (dps_read_pem(path, (char *)mfg_key, &mfg_key_len) < 0) {
     DPS_ERR("ERROR: unable to read %s", path);
     goto error;
@@ -281,19 +324,90 @@ dps_add_certificates(plgd_dps_context_t *dps_ctx, const char *cert_dir)
   return 0;
 
 error:
-  if (dps_ctx->dps_ca_credid != -1) {
-    if (dps_remove_certificate(dps_ctx->dps_ca_credid, dps_ctx->device) != 0) {
-      DPS_WRN("failed to remove trusted root certificate(%d)", dps_ctx->dps_ca_credid);
+  if (dpsca_credit != -1) {
+    if (oc_sec_remove_cred_by_credid(dpsca_credit, dps_ctx->device)) {
+      DPS_DBG("certificate(%d) removed", dpsca_credit);
+    } else {
+      DPS_WRN("failed to remove trusted root certificate(%d)", dpsca_credit);
     }
-    dps_ctx->dps_ca_credid = -1;
   }
   if (mfg_credid != -1) {
-    if (dps_remove_certificate(mfg_credid, dps_ctx->device) != 0) {
+    if (oc_sec_remove_cred_by_credid(mfg_credid, dps_ctx->device)) {
+      DPS_DBG("certificate(%d) removed", mfg_credid);
+    } else {
       DPS_WRN("failed to remove manufacturer certificate(%d)", mfg_credid);
     }
   }
   return -1;
 }
+```
+
+### Configuring device
+
+Use public API of Iotivity-lite and DPS to setup device to desired initial configuration:
+
+```C
+/**
+ * @brief Setup the device to manufacturer's configuration.
+ *
+ * @param dps_ctx device context
+ * @return int 0 on success
+ * @return int -1 on failure
+ */
+static int
+manufacturer_setup(plgd_dps_context_t *dps_ctx)
+{
+  // preserve name after factory reset
+  oc_device_info_t *dev = oc_core_get_device_info(dps_ctx->device);
+  oc_free_string(&dev->name);
+  oc_new_string(&dev->name, dps_device_name, strlen(dps_device_name));
+  plgd_dps_set_manager_callbacks(dps_ctx, dps_status_handler, NULL, cloud_status_handler, NULL);
+  plgd_dps_set_skip_verify(dps_ctx, g_skip_ca_verification != 0);
+  plgd_dps_set_endpoint(dps_ctx, dps_endpoint);
+  plgd_dps_set_configuration_resource(dps_ctx, g_create_configuration_resource != 0);
+  if (dps_add_certificates(dps_ctx, dps_cert_dir) != 0) {
+    DPS_ERR("failed to add initial certificates on factory reset");
+    return -1;
+  }
+  return 0;
+}
+```
+
+### Factory reset
+
+Use a factory reset handler function to react to a reset of the device. The function is also invoked on the first start of the device and thus can be used to call the configuration function.
+
+{{% note %}}
+If your device has run before then it should've created storage files in a folder next to the binary. During the initialization the data will be loaded from these storage files and the factory reset function might not be invoked. The configuration of the device will be based on the loaded data.
+{{% /note %}}
+
+To properly handle a device reset the handler must reload the manufacturer’s certificates, which have been removed by the reset and reconfigure the device. At the end of the handler, call the `plgd_dps_on_factory_reset` function, which does some additional clean-up and then restarts the provisioning state.
+
+```C
+static void
+factory_presets_cb(size_t device_id, void *data)
+{
+  (void)data;
+  plgd_dps_context_t *dps_ctx = plgd_dps_get_context(device_id);
+  if (dps_ctx == NULL) {
+    DPS_DBG("skip factory reset handling: empty context");
+    return;
+  }
+
+  if (plgd_dps_on_factory_reset(dps_ctx) != 0) {
+    DPS_ERR("cannot handle factory reset");
+    return;
+  }
+  if (manufacturer_setup(dps_ctx) != 0) {
+    DPS_ERR("failed to configure device");
+    return;
+  }
+  if (plgd_dps_manager_start(dps_ctx) != 0) {
+    DPS_ERR("failed to start dps manager");
+    return;
+  }
+}
+
 ```
 
 ### Device initialization
@@ -302,32 +416,24 @@ Now we have all the parts necessary to do the full initialization of the DPS cli
 
 ```C
   ...
-  oc_set_factory_presets_cb(dps_factory_presets_cb, NULL);
+  oc_set_factory_presets_cb(factory_presets_cb, NULL);
   ...
   oc_main_init(...);
   ...
 
-  if (plgd_dps_init(skip_ca_verification != 0) != 0) {
-    DPS_ERR("failed to initialize dps");
-    goto finish;
-  }
   plgd_dps_context_t *dps_ctx = plgd_dps_get_context(g_device_id);
   if (dps_ctx == NULL) {
-    DPS_ERR("device(%zu) context not found", g_device_id);
+    DPS_DBG("cannot start dps manager: empty context");
     goto finish;
   }
-  if (dps_add_certificates(dps_ctx, dps_cert_dir) != 0) {
-    DPS_ERR("failed to add initial certificates");
-    goto finish;
-  }
-  plgd_dps_manager_init_callbacks(dps_ctx, dps_status_handler, NULL, cloud_status_handler, NULL);
-  if (plgd_dps_manager_start(dps_ctx, dps_endpoint) != 0) {
+  if (plgd_dps_manager_start(dps_ctx) != 0) {
     DPS_ERR("failed to start dps manager");
     goto finish;
   }
 
   ...
   run(); // start run loop
+finish:
   ...
 ```
 
@@ -342,7 +448,10 @@ $ ./dps_cloud_server --help
 
 OPTIONS:
   -h | --help                print help
+  --create-conf-resource     create DPS configuration resource
   --no-verify-ca             skip loading of the DPS certificate authority
+  --wait-for-reset           don\'t start right away, but wait for SIGHUP signal
+
 
 ARGUMENTS:
   device-name                name of the device (optional, default: dps)
@@ -359,34 +468,4 @@ For example, if your DPS endpoint is running on the address `api.try.plgd.cloud:
 
 ### Restarting dps_cloud_server
 
-To force restarting of the provisioning send `SIGHUP` signal to the process. Upon receiving the signal, the application will execute a factory reset and call your handler setup by call to `oc_set_factory_presets_cb`. In the handler you must reload the manufacturer’s certificates, which have been removed by the reset. At the end of the handler, call `plgd_dps_on_factory_reset`, which does some additional clean-up and then restarts the provisioning process.
-
-The factory reset handler might look like this:
-
-```C
-static void
-dps_factory_presets_cb(size_t device_id, void *data)
-{
-  (void)data;
-  // preserve name after factory reset
-  oc_device_info_t *dev = oc_core_get_device_info(device_id);
-  oc_free_string(&dev->name);
-  oc_new_string(&dev->name, dps_device_name, strlen(dps_device_name));
-
-  plgd_dps_context_t *dps_ctx = plgd_dps_get_context(device_id);
-  if (dps_ctx == NULL) {
-    DPS_DBG("skip factory reset handling: empty context");
-    return;
-  }
-
-  if (dps_add_certificates(dps_ctx, dps_cert_dir) != 0) {
-    DPS_ERR("failed to add initial certificates on factory reset");
-    return;
-  }
-
-  if (plgd_dps_on_factory_reset(dps_ctx) != 0) {
-    DPS_ERR("cannot handle factory reset");
-    return;
-  }
-}
-```
+To force restarting of the provisioning send `SIGHUP` signal to the process. Upon receiving the signal, the application will execute a factory reset and call your handler setup by call to `oc_set_factory_presets_cb`.
