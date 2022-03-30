@@ -23,11 +23,11 @@ The resource is not registered at the device by default. The `plgd_dps_set_confi
 
 | Property Title | Property Name | Type | Access Mode | Mandatory | Description |
 | -------------- | ------------- | -----| ----------- | --------- | ----------- |
-| Endpoint       | ep            | string | RW | No | Device provisioning server endpoint in format `coaps+tcp://{domain}:{port}` |
-| Last error code | lec          | string | R  | No | Provides a last error code when provision status is in `failed` state.<br> `0` - OK<br> `1` - error response<br> `2` - cannot connect to dps<br> `3` - cannot apply credentials configuration<br> `4` - cannot apply acls configuration `5` - cannot apply cloud configuration |
-| Self own       | so            | bool   | R  | No | For true, device is owned by itself via "C-API" |
-| Restart        | rst           | bool   | RW | No | Connects to DPS service and updates credentials, ACLs, and cloud configuration. |
-| Provisioning status| ps        | enum(string) | R  | No | `uninitialized` - ep is not set or dps manger has not been started yet<br> `initialized` - ep is set and manager starting requests<br> `provisioning credentials` - provisioning credentials has been stared<br> `provisioning acls` - provisioning acls has been stared<br> `provisioning cloud` - provisioning cloud has been stared<br> `provisioned` - device is fully provisioned and configured<br> `failed` - provisioning fails, more information is stored in last error code |
+| Endpoint       | endpoint            | string | RW | No | Device provisioning server endpoint in format `coaps+tcp://{domain}:{port}` |
+| Last error code | lastErrorCode         | string | R  | No | Provides a last error code when provision status is in `failed` state.<br> `0` - OK<br> `1` - error response<br> `2` - cannot connect to dps<br> `3` - cannot apply credentials configuration<br> `4` - cannot apply acls configuration `5` - cannot apply cloud configuration |
+| Self owned       | selfOwned           | bool   | R  | No | For true, device is owned by itself via "C-API" |
+| Force reprovision        | forceReprovision           | bool   | RW | No | Connects to DPS service and reprovision all resource (credentials, ACLs, cloud configuration,..) |
+| Provision status| provisionStatus       | enum(string) | R  | No | `uninitialized` - ep is not set or dps manger has not been started yet<br> `initialized` - ep is set and manager starting requests<br> `provisioning credentials` - provisioning credentials has been stared<br> `provisioning acls` - provisioning acls has been stared<br> `provisioning cloud` - provisioning cloud has been stared<br> `provisioned` - device is fully provisioned and configured<br> `failed` - provisioning fails, more information is stored in last error code |
 
 ## Onboarding device to DPS
 
