@@ -36,7 +36,7 @@ For onboarding owned devices, you need to update the configuration resource by t
 ```golang
    dps := "coaps+tcp://try.plgd.cloud:25684"
    err = c.UpdateResource(ctx, deviceID, "/plgd/dps", map[string]interface{}{
-    "ep": dps,
+    "endpoint": dps,
   }, nil)
   if err != nil {
     panic(err)
