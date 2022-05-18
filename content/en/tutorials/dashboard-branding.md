@@ -54,4 +54,4 @@ Every text in this application is coming from a translation file located in [`la
 
 Some messages might be missing. This is due to fact that they were not yet translated. You can add them manually or use a language editor like [POEditor](https://poeditor.com/).
 
-You can also override these strings to fit your need, for example, if you would like to have `Devices` as the name of the menu which we call `Things`, you have to find the key `menu.things` and change its value to `Devices`.
+You can also override these strings to fit your need, for example, if you would like to have `Lights` as the name of the menu which we call `Devices`, you have to find the key `menu.devices` and change its value to `Lights`.

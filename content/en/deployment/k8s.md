@@ -102,7 +102,7 @@ Our [try.plgd.cloud](https://try.plgd.cloud) instance which is available for fre
       clientID: \"i0jt0i00xcva0r\"
       clientSecret: \"98219h23uh43t9r4h93rh994th923r\"
       scopes: [\"offline_access\"]
-      redirectURL: \"https://example.com/things\"
+      redirectURL: \"https://example.com/devices\"
       useInUi: true
     web:
       clientID: \"98y239hu94hr2ohu3e23eh\"" > withMock.yaml
