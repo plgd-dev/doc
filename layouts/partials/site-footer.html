@@ -9,7 +9,11 @@
           <ul class="center f6 list ma0 mv3 pa0 tc">
             {{- with .Site.Params.github_repo -}}<li class="dib mr3"><a href="{{ . }}" class="dim link light-gray pv2">File an Issue</a></li>{{- end -}}
             {{- with .Site.Params.gitter -}}<li class="dib mr3"><a href="{{ . }}" class="dim link light-gray pv2">Discuss Source Code</a></li>{{- end -}}
-            {{- with .Site.Params.plgd_try -}}<li class="dib"><a href="{{ . }}" class="dim link light-gray pv2">Try plgd hub</a></li>{{- end -}}
+            <li class="dib"><a href="#" onClick="(function(){
+              var _hsp = window._hsp = window._hsp || [];
+              _hsp.push(['showBanner']);
+            })()" class="dim link light-gray pv2">Cookie settings</a></li>
+           
           </ul>
 
           <div class="center f7 gray tc"> 
