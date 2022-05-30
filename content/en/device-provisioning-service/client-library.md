@@ -16,7 +16,7 @@ toc: true
 
 The Device Provisioning Service is distributed as a `tar.gz` package, which contains the dps shared library, public C headers and an example application.
 
-Latest version: 0.0.1
+Latest version: 0.0.4
 Supported platforms: linux/amd64, linux/arm64, linux/arm/v7
 
 {{% note %}}
@@ -27,230 +27,9 @@ Please examine the contents of the provided pkg-config (`.pc`) file and install 
 
 The API is defined in the public header files provided in the distributed package.
 
-`dps.h`:
-
-```C
-...
-
-/**
- * @brief Allocate and initialize data.
- *
- * @return int  0   on success
- *              <0  on failure
- */
-int plgd_dps_init(void);
-
-/**
- * @brief Stop all devices and deallocate data.
- */
-void plgd_dps_shutdown(void);
-
-/// Get context for given device
-plgd_dps_context_t *plgd_dps_get_context(size_t device);
-
-/**
- * @brief Get device from context.
- *
- * @param ctx dps context (cannot be NULL)
- *
- * @return size_t index of device
- */
-size_t plgd_dps_get_device(plgd_dps_context_t *ctx);
-
-/**
- * @brief Set DPS manager callbacks.
- *
- * @param ctx dps context (cannot be NULL)
- * @param on_change_cb callback invoked on provisioning status change
- * @param on_change_data user data provided to on_change_cb invocation
- * @param on_cloud_change_cb callback invoked on cloud status change
- * @param on_cloud_change_data user data provided to on_cloud_change_cb invocation
- *
- * Example of plgd_dps_on_status_change_cb_t function:
- * @code{.c}
- * static void
- * on_change_cb(plgd_dps_context_t *ctx, plgd_dps_status_t status, void *on_change_data) {
- *   printf("DPS Manager Status:\n");
- *   if (status & PLGD_DPS_INITIALIZED) {
- *     printf("\t-Initialized\n");
- *   }
- *   ...
- * }
- * @endcode
- *
- * Example of oc_cloud_cb_t function:
- * @code{.c}
- * static void
- * on_cloud_change_cb(oc_cloud_context_t *ctx, oc_cloud_status_t status, void *on_cloud_change_data) {
- *   printf("Cloud Manager Status:\n");
- *   if (status & OC_CLOUD_REGISTERED) {
- *     printf("\t-Registered\n");
- *   }
- *   ...
- * }
- * @endcode
- */
-void plgd_dps_set_manager_callbacks(plgd_dps_context_t *ctx, plgd_dps_on_status_change_cb_t on_change_cb,
-                                    void *on_change_data, oc_cloud_cb_t on_cloud_change_cb, void *on_cloud_change_data);
-
-/**
- * @brief Start DPS manager to provision device.
- *
- * Setup context, global session handlers and start DPS manager.
- *
- * Starting DPS also starts the retry mechanism, which will remain active until the device is successfully provisioned.
- * If a provisioning step fails, it will be tried again after a time interval. The time interval depends on the retry
- * counter (which is incremented on each retry) and uses the following values [ 10, 20, 40, 80, 120 ] in seconds.
- * Meaning that the first retry is scheduled after 10 seconds after a failure, the second retry after 20 seconds, etc.
- * After the interval reaches the maximal value (120 seconds) it resets back to the first value (10 seconds).
- *
- * @note Before starting the DPS manager, an endpoint must be set using plgd_dps_set_endpoint. Without an endpoint set
- * the provisioning will not start.
- *
- * @note The function examines the state of storage and some provisioning steps might be skipped if the stored data is
- * evaluated as still valid. To force full reprovisioning call plgd_force_reprovision before this function. At the end
- * of this call forced reprovisioning is disabled.
- * @see plgd_force_reprovision
- *
- * @param ctx dps context (cannot be NULL)
- * @return 0 on success
- * @return -1 on failure
- */
-int plgd_dps_manager_start(plgd_dps_context_t *ctx);
-
-/**
- * @brief Check whether DPS manager has been started.
- *
- * @param ctx dps context (cannot be NULL)
- * @return true DPS manager has been started
- * @return false DPS manager has not been started
- *
- * @see plgd_dps_manager_start
- */
-bool plgd_dps_manager_is_started(const plgd_dps_context_t *ctx);
-
-/**
- * @brief Stop DPS manager.
- *
- * Deregister handlers, clear context, stop DPS manager, close connection to DPS endpoint and remove identity
- * certificates retrieved from DPS endpoint.
- *
- * @param ctx dps context (cannot be NULL)
- */
-void plgd_dps_manager_stop(plgd_dps_context_t *ctx);
-
-/**
- * @brief Restart DPS manager to provision device by given server.
- *
- * A convenience function equivalent to calling plgd_dps_manager_stop and plgd_dps_manager_start.
- *
- * @param ctx dps context (cannot be NULL)
- * @return 0 on success
- * @return -1 on failure
- *
- * @see plgd_dps_manager_start
- * @see plgd_dps_manager_stop
- */
-int plgd_dps_manager_restart(plgd_dps_context_t *ctx);
-
-/**
- * @brief Clean-up of DPS provisioning on factory reset.
- *
- * The function must be called from the factory reset handler to clean-up data that has been invalidated by a factory
- * reset.
- * The clean-up includes:
- *   - stopping of DPS provisioning and resetting the provisioning status
- *   - disconnecting from DPS endpoint and resetting the endpoint address
- *   - resetting data in storage and committing the empty data to storage files
- *   - removing identifiers of identity certificates that have been deleted by factory reset
- *
- * @param ctx dps context (cannot be NULL)
- * @return 0 on success
- * @return -1 on failure
- */
-int plgd_dps_on_factory_reset(plgd_dps_context_t *ctx);
-
-/**
- * @brief Controls whether a dps client verifies the device provision service's certificate chain against trust anchor
- * in the device. To set skip verify, it must be called before plgd_dps_manager_start.
- *
- * @param ctx dps context (cannot be NULL)
- * @param skip_verify skip verification of the DPS service
- */
-void plgd_dps_set_skip_verify(plgd_dps_context_t *ctx, bool skip_verify);
-
-/**
- * @brief Get `skip verify` value from context.
- *
- * @param ctx dps context (cannot be NULL)
- * @return true `skip verify` is enabled
- * @return false `skip verify` is disabled
- *
- * @see plgd_dps_set_skip_verify
- */
-bool plgd_dps_get_skip_verify(plgd_dps_context_t *ctx);
-
-/**
- * @brief Set endpoint of DPS service.
- *
- * Expected format of the endpoint is "coaps+tcp://${HOST}:${PORT}". For example: coaps+tcp://localhost:40030
- *
- * @param ctx dps context (cannot be NULL)
- * @param endpoint endpoint of the provisioning server (cannot be NULL)
- */
-void plgd_dps_set_endpoint(plgd_dps_context_t *ctx, const char *endpoint);
-
-/**
- * @brief Force all steps of the provisioning process to be executed.
- *
- * A step that was successfully executed stores data in the storage and on the next start this data is still valid the
- * step would be automatically skipped.
- *
- * @param ctx dps context (cannot be NULL)
- *
- * @see plgd_dps_manager_start
- */
-void plgd_dps_force_reprovision(plgd_dps_context_t *ctx);
-
-/**
- * @brief Configuration resource
- *
- * Description:
- *  - Resource type: x.plgd.dps.conf
- *  - Resource structure in json format:
- *    {
- *      endpoint: string;
- *      lastErrorCode: int;
- *      selfOwned: bool;
- *      forceReprovision: bool;
- *    }
- */
-#define PLGD_DPS_URI "/plgd/dps"
-
-/**
- * @brief Controls whether a dps client creates configuration resource for managing dps client via COAPs API.
- *
- * @param ctx dps context (cannot be NULL)
- * @param create set true for creating resource. set false to free memory of created resource.
- */
-void plgd_dps_set_configuration_resource(plgd_dps_context_t *ctx, bool create);
-
-...
-```
-
-`dps_log.h`:
-
-```C
-...
-
-/// @brief Set global logging function
-void plgd_dps_set_log_fn(plgd_dps_print_log_fn_t fn);
-
-/// @brief Get global logging function
-plgd_dps_print_log_fn_t plgd_dps_get_log_fn(void);
-
-...
-```
+- [dps.h](../../dps/dps.h)
+- [dps_export.h](../../dps/dps_export.h)
+- [dps_log.h](../../dps/dps_log.h)
 
 ### Initialize DPS
 
@@ -282,12 +61,20 @@ void (*)(struct plgd_dps_context_t *ctx, plgd_dps_status_t status, void *data);
 The `ctx` argument is device context created by `plgd_dps_init`, the `data` argument is a value provided to the call of `plgd_dps_set_manager_callbacks`. The `status` argument is an integer value, that consists of the following flags defined in the `dps.h` header:
 
 ```C
+/**
+ * @brief DPS provisioning status flags.
+ */
 typedef enum {
   PLGD_DPS_INITIALIZED = 1 << 0,
-  PLGD_DPS_HAS_CREDENTIALS = 1 << 1,
-  PLGD_DPS_HAS_ACLS = 1 << 2,
-  PLGD_DPS_HAS_CLOUD = 1 << 3,
-  PLGD_DPS_FAILURE = 1 << 6,
+  PLGD_DPS_GET_CREDENTIALS = 1 << 1,
+  PLGD_DPS_HAS_CREDENTIALS = 1 << 2,
+  PLGD_DPS_GET_ACLS = 1 << 3,
+  PLGD_DPS_HAS_ACLS = 1 << 4,
+  PLGD_DPS_GET_CLOUD = 1 << 6,
+  PLGD_DPS_HAS_CLOUD = 1 << 7,
+  PLGD_DPS_CLOUD_STARTED = 1 << 8,
+  PLGD_DPS_TRANSIENT_FAILURE = 1 << 14,
+  PLGD_DPS_FAILURE = 1 << 15,
 } plgd_dps_status_t;
 ```
 
@@ -303,19 +90,34 @@ dps_status_handler(plgd_dps_context_t *ctx, plgd_dps_status_t status, void *data
   if (status == 0) {
     printf("\t\t-Uninitialized\n");
   }
-  if (status & PLGD_DPS_INITIALIZED) {
+  if ((status & PLGD_DPS_INITIALIZED) != 0) {
     printf("\t\t-Initialized\n");
   }
-  if (status & PLGD_DPS_HAS_CREDENTIALS) {
+  if ((status & PLGD_DPS_GET_CREDENTIALS) != 0) {
+    printf("\t\t-Get credentials\n");
+  }
+  if ((status & PLGD_DPS_HAS_CREDENTIALS) != 0) {
     printf("\t\t-Has credentials\n");
   }
-  if (status & PLGD_DPS_HAS_ACLS) {
+  if ((status & PLGD_DPS_GET_ACLS) != 0) {
+    printf("\t\t-Get acls\n");
+  }
+  if ((status & PLGD_DPS_HAS_ACLS) != 0) {
     printf("\t\t-Has set acls\n");
   }
-  if (status & PLGD_DPS_HAS_CLOUD) {
-    printf("\t\t-Has configured cloud\n");
+  if ((status & PLGD_DPS_GET_CLOUD) != 0) {
+    printf("\t\t-Get cloud configuration\n");
   }
-  if (status & PLGD_DPS_FAILURE) {
+  if ((status & PLGD_DPS_HAS_CLOUD) != 0) {
+    printf("\t\t-Has cloud configuration\n");
+  }
+  if ((status & PLGD_DPS_CLOUD_STARTED) != 0) {
+    printf("\t\t-Started cloud\n");
+  }
+  if ((status & PLGD_DPS_TRANSIENT_FAILURE) != 0) {
+    printf("\t\t-Transient failure\n");
+  }
+  if ((status & PLGD_DPS_FAILURE) != 0) {
     printf("\t\t-Failure\n");
   }
 }
@@ -330,10 +132,34 @@ The resource type of the DPS configuration resource is `x.plgd.dps.conf` and the
 | Property Title | Property Name | Type | Access Mode | Mandatory | Description |
 | -------------- | ------------- | -----| ----------- | --------- | ----------- |
 | Endpoint | endpoint | string | RW | No | Device provisioning server endpoint in format `coaps+tcp://{domain}:{port}` |
-| Last error code | lastErrorCode | string | R | No | Provides last error code when provision status is in `failed` state.<br/> `0` - OK<br/> `1` - error response<br/> `2` - cannot connect to dps<br/> `3` - cannot apply credentials configuration<br/> `4` - cannot apply acls configuration `5` - cannot apply cloud configuration |
+| Last error code | lastErrorCode | string | R | No | Provides last error code when provision status is in `failed` state (see list below for possible values). |
 | Self-owned | selfOwned | bool | R | No | True if the device is owned by itself (ie. by the device provisioning client) |
 | Force reprovision | forceReprovision | bool | RW | No | Connect to dps service and reprovision credentials, acls and cloud configuration. |
-| Provisioning status| provisionStatus | enum(string) | R | No | `uninitialized` - endpoint is not set or dps manger has not been started yet<br/> `initialized` - endpoint is set and manager is starting requests<br/> `provisioning credentials` - provisioning of credentials has been started<br/> `provisioning acls` - provisioning of acls has been started<br/> `provisioning cloud` - provisioning of cloud configuration has been started<br/> `provisioned` - device is fully provisioned and configured<br/> `failed` - provisioning fails, more information is stored in the last error code property |
+| Provisioning status | provisionStatus | enum(string) | R | No | String representation of the provisioning status (see list below for possible values). |
+
+Last error code values:
+
+- `0`: OK
+- `1`: error response
+- `2`: cannot connect to dps
+- `3`: cannot apply credentials configuration
+- `4`: cannot apply acls configuration
+- `5`: cannot apply cloud configuration
+- `6`: cannot start cloud
+
+Provisioning status values:
+
+- `uninitialized`: endpoint is not set or dps manger has not been started yet
+- `initialized`: endpoint is set and manager is starting requests
+- `provisioning credentials`: provisioning of credentials has been started
+- `provisioned credentials`: credentials are provisioned
+- `provisioning acls`: provisioning of acls has been started
+- `provisioned acls`: acls are provisioned
+- `provisioning cloud`: provisioning of cloud configuration has been started
+- `provisioned cloud`: cloud configuration is provisioned
+- `provisioned`: device is fully provisioned and configured
+- `transient failure`: provisioning failed with a transient error and the failed step is being retried
+- `failure`: provisioning failed, more information is stored in the last error code property
 
 ### Load certificates and keys
 
@@ -573,15 +399,16 @@ $ ./dps_cloud_server --help
 ./dps_cloud_server [device-name] [endpoint]
 
 OPTIONS:
-  -h | --help                print help
-  --create-conf-resource     create DPS configuration resource
-  --no-verify-ca             skip loading of the DPS certificate authority
-  --wait-for-reset           don\'t start right away, but wait for SIGHUP signal
+  -h | --help                   print help
+  -c | --create-conf-resource   create DPS configuration resource
+  -h | --no-verify-ca           skip loading of the DPS certificate authority
+  -r | --retry-configuration    retry timeout configuration (array of non-zero values delimited by ',', maximum of 8 values is accepted; example: 1,2,4,8,16)
+  -w | --wait-for-reset         don\'t start right away, but wait for SIGHUP signal
 
 
 ARGUMENTS:
-  device-name                name of the device (optional, default: dps)
-  endpoint                   address of the endpoint (optional, default: coaps+tcp://127.0.0.1:20030)
+  device-name                   name of the device (optional, default: dps)
+  endpoint                      address of the endpoint (optional, default: coaps+tcp://127.0.0.1:20030)
 ```
 
 The binary takes two optional positional arguments `device-name` and `endpoint`. If they are not specified, default values are used instead. The `device-name` argument will be used as the name of the device after it is registered to the plgd cloud. The `endpoint` argument is the endpoint of a running DPS service.
