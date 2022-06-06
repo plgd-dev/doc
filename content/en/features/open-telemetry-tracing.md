@@ -23,11 +23,14 @@ This example shows open telemetry tracing in action:
 
 The plgd hub services emit telemetry to collectors, secured using TLS and supporting otlp encoding. The open telemetry integration can be enabled globally for each in the [plgd hub helm chart](https://plgd.dev/deployment/k8s/#register-plgd-helm-chart-registry). Read further for more information on how to enable open telemetry in plgd hub helm chart.
 
+> The request content is included the gRPC as well as CoAP Gateway spans. As the HTTP Gateway is the proxy of the gRPC Gateway, the request content can be found in the gRPC Gateway spans.
+
 ### Setup Open Telemetry collector
 
-Interested how to deploy OpenTelemetry Collector? Read more [here]](https://artifacthub.io/packages/helm/opentelemetry-helm/opentelemetry-collector).
+Interested how to deploy OpenTelemetry Collector? Read more [here](https://artifacthub.io/packages/helm/opentelemetry-helm/opentelemetry-collector).
 
-> Don't forget to enable tls!
+> Don't forget to enable TLS!
+
 ```yaml
 receivers:
   otlp:
@@ -42,6 +45,7 @@ receivers:
 ```
 
 ### Setup plgd hub
+
 To enable tracing in plgd services, you need to set the following variables in the plgd helm chart:
 
 ```yaml
