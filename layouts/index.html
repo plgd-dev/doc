@@ -1,18 +1,4 @@
-{{ define "header" }}
-  {{ partial "hero" . }}
-  {{ partial "boxes-small-news" . }}
-{{ end }}
-
 {{ define "main" }}
-  <section class="w-100 ph4 ph5-ns pv4">
-    {{- partial "home-page-sections/features-icons" . -}}
-  </section>
-
-  {{ partial "home-page-sections/sponsors.html" (dict "cx" . "gtag" "home" ) }}
-
-  <!-- {{- partial "home-page-sections/features-single" . -}} -->
-
-  <section class="w-100 ph4 ph5-ns pt4 pb5 mid-gray bg-primary-color-light bb bt b--light-gray ">
-    {{- partial "home-page-sections/open-source-involvement" . -}}
-  </section>
+{{ $section_to_display := (.Site.Taxonomies.categories.fundamentals).Pages | lang.Merge (.Sites.First.Taxonomies.categories.fundamentals).Pages }}
+  {{ partial "pagelayout.html" (dict "context" . "section_to_display" $section_to_display ) }}
 {{ end }}
