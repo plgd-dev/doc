@@ -1,13 +1,11 @@
-baseURL = "https://plgd.dev/"
+baseURL = "https://docs.plgd.dev/"
 paginate = 100
 defaultContentLanguage = "en"
 enableEmoji = true
 # Set the unicode character used for the "return" link in page footnotes.
 footnotereturnlinkcontents = "↩"
 languageCode = "en-us"
-title = "plgd"
-
-googleAnalytics = "G-PS70WYYFKX"
+title = "plgd docs"
 
 pluralizeListTitles = false
 
