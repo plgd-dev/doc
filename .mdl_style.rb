@@ -6,3 +6,4 @@ exclude_rule 'MD041'
 exclude_rule 'MD013'
 # enable ordered lists indexed by letters (a, b, c)
 exclude_rule 'MD029'
+exclude_rule 'MD033'
