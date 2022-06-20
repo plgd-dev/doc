@@ -14,14 +14,15 @@ toc: true
 
 ## Get Package
 
+{{% note %}}
+Are you interested in testing out the zero-touch provisioning? [Reach out](https://plgd.dev/contact/) to us!
+{{% /note %}}
+
 The Device Provisioning Service is distributed as a `tar.gz` package, which contains the dps shared library, public C headers and an example application.
 
-Latest version: 0.0.4
-Supported platforms: linux/amd64, linux/arm64, linux/arm/v7
-
-{{% note %}}
+{{% warning %}}
 Please examine the contents of the provided pkg-config (`.pc`) file and install required dependencies.
-{{% /note %}}
+{{% /warning %}}
 
 ## DPS Client API
 
@@ -33,16 +34,10 @@ The API is defined in the public header files provided in the distributed packag
 
 ### Initialize DPS
 
-A DPS client device is an extension of an [Iotivity-lite](https://github.com/iotivity/iotivity-lite) device. Define your desired Iotivity-lite device and add DPS code to automatically provision the device.
+A DPS client device is an extension of an [IoTivity](https://github.com/iotivity/iotivity-lite) device. Define your desired device and add DPS code to automatically provision the device.
 
 Start up the DPS initialization by calling the `plgd_dps_init` function, which allocates and initializes required data structures.
 Use setters `plgd_dps_set_endpoint`, `plgd_dps_set_manager_callbacks`, `plgd_dps_set_skip_verify` and `plgd_dps_set_configuration_resource` to configure the device.
-
-<!--
-### Set custom logging function
-
-TODO
--->
 
 ### Set DPS Endpoint
 
@@ -50,7 +45,7 @@ To set the DPS endpoint call the `plgd_dps_set_endpoint(plgd_dps_context_t *ctx,
 
 ### Set status callbacks
 
-The DPS client device can optionally provide two custom callbacks to track the provisioning status and the cloud registration status by calling `plgd_dps_set_manager_callbacks` function. The status of cloud registration is part of the public API of [Iotivity-lite](https://github.com/iotivity/iotivity-lite/blob/master/include/oc_cloud.h) and can be examined there.
+The DPS client device can optionally provide two custom callbacks to track the provisioning status and the cloud registration status by calling `plgd_dps_set_manager_callbacks` function. The status of cloud registration is part of the public API of [IoTivity](https://github.com/iotivity/iotivity-lite/blob/master/include/oc_cloud.h) and can be examined there.
 
 The DPS status callback is executed whenever a provisioning step succeeds or fails. The callback has the following signature:
 
@@ -163,21 +158,21 @@ Provisioning status values:
 
 ### Load certificates and keys
 
-To be secure the device communicates with the DPS endpoint using TLS. Use [PKI functions from Iotivity-lite](https://github.com/iotivity/iotivity-lite/blob/master/include/oc_pki.h) to add certificates to device.
+To make sure the device communicates with the DPS endpoint using TLS, add the certificate using the [IoTivity PKI API](https://github.com/iotivity/iotivity-lite/blob/master/include/oc_pki.h) to the device.
 
-Use `oc_pki_add_mfg_cert` function to add manufacturer's certificate and private key to device. This certificate will be used to sign communication with the DPS server, which then can authenticate and identify the device. On success, use the returned credential id to assign a security profile by calling `oc_pki_set_security_profile`.
+The `oc_pki_add_mfg_cert` function adds manufacturer's certificate and private key to device. This certificate is used to sign the communication with the DPS server, authenticatating and identifying the device. On success, use the returned credential id to assign a security profile by calling `oc_pki_set_security_profile`.
 
-Use `oc_pki_add_trust_anchor` function to add trusted root certificate of the DPS server, this will be used to verify the DPS server.
+The `oc_pki_add_trust_anchor` function adds trusted root certificate of the DPS server, used to verify the DPS.
 
 {{% note %}}
-The verification of the DPS server can be disabled by calling `plgd_dps_set_skip_verify(false)`.
+The verification of the DPS can be disabled by calling `plgd_dps_set_skip_verify(false)`.
 {{% /note %}}
 
 ### Provisioning
 
 Provisioning algorithm is asynchronous and consists of several steps. Each step after it finishes schedules the next step. The whole process is fired up by calling `plgd_dps_manager_start`.
 
-After the provisioning is successfully finished, the connection to DPS endpoint is closed and the registration to plgd cloud is started using the data that was set up during the provisioning.
+After the provisioning is successfully finished, the connection to the DPS endpoint is closed and the registration to the plgd hub is started using the data, that was set up during the provisioning.
 
 #### Handling failure
 
@@ -189,17 +184,17 @@ The application uses the following retry intervals [10s, 20s, 40s, 80s, 120s] an
 
 Part of the package is an example application called `dps_cloud_server`. The following sections describe how DPS client library is integrated in the binary (with code examples). And the finally section shows how to run it.
 
-### Bootstrapping device with mfg certificates
+### Bootstrapping device with manufacturer certificates
 
-Currently, the handling of certificates is hard-coded into the binary. On start-up the process expects the certificates to be in a folder named `pki_certs` located next to the binary file. The folder must contain 3 files:
+Currently, the handling of certificates is hard-coded into the binary. On start-up, the process expects the certificates to be in a folder named `pki_certs` located next to the binary file. The folder must contain 3 files:
 
-- dpsca.pem - certificate authority of the DPS
-- mfgcrt.pem - manufacture certificate of the device
-- mfgkey.pem - private key for the manufacture certificate
+- `dpsca.pem` - certificate authority of the DPS
+- `mfgcrt.pem` - manufacture certificate of the device
+- `mfgkey.pem` - manufacturer certificate private key
 
 The `dps_cloud_server` supports `--no-verify-ca` option. If you run the binary with this option, then the DPS endpoint will be used without authentication and you don't need the `dpsca.pem` file.
 
-In code, the application uses [Iotivity-lite's pki functions to load the certificates](#load-certificates-and-keys) in this helper function:
+In code, the application uses [IoTivity's PKI functions to load the certificates](#load-certificates-and-keys) in this helper function:
 
 ```C
 /**
@@ -421,4 +416,4 @@ For example, if your DPS endpoint is running on the address `api.try.plgd.cloud:
 
 ### Restarting dps_cloud_server
 
-To force restarting of the provisioning send `SIGHUP` signal to the process. Upon receiving the signal, the application will execute a factory reset and call your handler setup by call to `oc_set_factory_presets_cb`.
+To force provisioning restart, send the `SIGHUP` signal to the process. Upon receiving the signal, the application will execute a factory reset and call your handler setup by a call to `oc_set_factory_presets_cb`.
