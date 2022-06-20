@@ -1,10 +1,10 @@
 ---
-title: 'Onboarding device to DPS'
-description: 'How to configure the DPS device with onboarding agent ?'
-date: '2021-03-24'
-lastmod: '2021-03-24'
+title: 'Starting zero-touch provisioning'
+description: 'What are the possibilites on triggering the zero-touch provisioning?'
+date: '2022-06-20'
+lastmod: '2022-06-20'
 categories: [zero-touch, provisioning]
-keywords: [provisioning]
+keywords: [provisioning, dps]
 menu:
   docs:
     parent: device-provisioning-service
@@ -13,25 +13,24 @@ toc: true
 ---
 
 
-A DPS device is still an OCF device containing a device provisioning client which provides a configuration resource. First, you need to own the device through your onboarding tool. Upon owning, you can configure device provisioning service endpoint in format `coaps+tcp://{domain}:{port}` via update resource. Observing the configuration resource allows you to track the device provisioning status via the property `ps`.
+IoTivity devices can be extended by the Device Provisioning Client library, which enables you to use the zero-touch provisioning feature. Integrating this library into your device enables you to start the automated provisioning through 2 APIs. 
+- DPS Client Library API of the [DPS Client library](../client-library#dps-client-api)
+- Configuring the [DPS resource](../client-library#dps-configuration-resource)
 
-## Device provisioning configuration resource
+## DPS Client Library API
 
-The resource is not registered at the device by default. The `plgd_dps_set_configuration_resource` method must be called during registration resources in order to register a resource.
+Provisioning process can be initiated by your application or immediateny when the device is started. This can be all managed by your device firmware, without any external interaction. To read more how to interact and configure DPS Client Library, read [here](../client-library).
 
-### Properties of the "x.plgd.dps.conf" resource
+## DPS Resource
 
-| Property Title | Property Name | Type | Access Mode | Mandatory | Description |
-| -------------- | ------------- | -----| ----------- | --------- | ----------- |
-| Endpoint       | endpoint            | string | RW | No | Device provisioning server endpoint in format `coaps+tcp://{domain}:{port}` |
-| Last error code | lastErrorCode         | string | R  | No | Provides a last error code when provision status is in `failed` state.<br> `0` - OK<br> `1` - error response<br> `2` - cannot connect to dps<br> `3` - cannot apply credentials configuration<br> `4` - cannot apply acls configuration `5` - cannot apply cloud configuration |
-| Self owned       | selfOwned           | bool   | R  | No | For true, device is owned by itself via "C-API" |
-| Force reprovision        | forceReprovision           | bool   | RW | No | Connects to DPS service and reprovision all resource (credentials, ACLs, cloud configuration,..) |
-| Provision status| provisionStatus       | enum(string) | R  | No | `uninitialized` - ep is not set or dps manger has not been started yet<br> `initialized` - ep is set and manager starting requests<br> `provisioning credentials` - provisioning credentials has been stared<br> `provisioning acls` - provisioning acls has been stared<br> `provisioning cloud` - provisioning cloud has been stared<br> `provisioned` - device is fully provisioned and configured<br> `failed` - provisioning fails, more information is stored in last error code |
+If DPS resouce was enabled using the DPS Client Library API, users or deamons have a possibilty to trigger the automated provisioning by configuring this resource over network. 
+The device needs to be before the self-provisioning owned by the daemon / tool, to configure the DPS endpoint on the resource. 
 
-## Onboarding device to DPS
+Resource can be observed and is published also the the plgd hub. This enables you to track the provisioning progress by observing the value of the `ps` property.
 
-For onboarding owned devices, you need to update the configuration resource by the endpoint.
+### How to configure DPS Resource
+
+To trigger device provisioning on owned devices, you need to update the DPS resource by the endpoint.
 
 ```golang
    dps := "coaps+tcp://try.plgd.cloud:25684"
@@ -43,9 +42,9 @@ For onboarding owned devices, you need to update the configuration resource by t
   }
 ```
 
-After that, the device provisioning client will provision configuration from the device provision service and onboard the device to the hub.
+After that, the device provisioning client will provision configuration, ACLs and cloud configuration from the DPS and onboard the device to the plgd hub.
 
-### Setup DPS trust anchor to the device
+## Setup DPS trust anchor to the device
 
 The device by default verifies the endpoint certificate by the installed trust anchors using the C-API `oc_pki_add_trust_anchor` or by provisioning the certificate through the onboarding tool. To set up trust anchors, change operation mode from normal to provisioning, update the credential resource, and then return to the normal operation mode.
 
