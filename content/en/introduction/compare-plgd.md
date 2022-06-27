@@ -12,7 +12,7 @@ menu:
 toc: true
 ---
 
-The growing importance of global connectivity means you need a reliable and secure IoT platform. And to be honest, there are many of them. How to chose the one which fits your use-case? How to be future-proof if you want to start small but grow big? Let's check an overview how plgd compares to other platforms out there.
+It’s tricky to keep track, with the number of IoT platforms out there. Which is dependable? Which is secure? Which fits my use case? Let’s see how they stack up.
 
 {{< rawhtml >}}
 <style>
