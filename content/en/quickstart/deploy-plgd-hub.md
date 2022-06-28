@@ -14,8 +14,10 @@ toc: true
 
 There are multiple ways how to start using / testing the plgd hub on your own infrastructure. If you're just trying to get in touch with this IoT framework, go back to [Control device remotely](./device-to-hub.md) tutorial and use our free [try.plgd.cloud](https://tryplgd.cloud) instance. In case you want to **get in touch** with the system localy and you have the [Docker installed](https://docs.docker.com/get-docker/), use our [plgd hub #Bundle](#plgd-bundle).
 
+## Kubernetes
+
 {{% note %}}
-Deployment using helm chart is in progress.
+To read more on how to deploy plgd hub to Kubernetes using helm chart, continue [here](/deployment/k8s).
 {{% /note %}}
 
 ## plgd Bundle
@@ -51,7 +53,3 @@ OAuth Server which is part of the plgd is only for testing and development purpo
 - Logs and data are by default stored at `/data` path. Run the container with `-v $PWD/vol/plgd/data:/data` to be able to analyze the logs in case of an issue.
 - In case you need support, we are happy to support you on [Gitter](http://gitter.im/ocfcloud/Lobby)
 - OCF UCI (Cloud2Cloud Gateway) is not part of the bundle
-
-## Kubernetes
-
-coming soon...
