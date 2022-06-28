@@ -16,7 +16,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
 
 {{< rawhtml >}}
 <style>
-    .comparision {
+    .comparison {
       border-spacing: 0;
       border-collapse: collapse;
     }
@@ -28,7 +28,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
       vertical-align: bottom;
       background-color: transparent;
     }
-    .comparision th div {
+    .comparison th div {
       display: flex;
       padding: 6px 20px;
       width: 95px;
@@ -47,13 +47,13 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
       transition-timing-function: linear;
       height: 50px;
     }
-    .comparision th div.main {
+    .comparison th div.main {
       background-color: #FEBF40;
       height: 65px;
       vertical-align: bottom;
     }
 
-    .comparision td {
+    .comparison td {
       height: 35px;
       box-sizing: border-box;
       border: 1px solid #ccc;
@@ -63,33 +63,33 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
       transition-duration: 0.10s;
       transition-timing-function: linear;
     }
-    .comparision td.tab {
+    .comparison td.tab {
       padding-left: 25px;
     }
-    .comparision td:first-child {
+    .comparison td:first-child {
       padding-right: 25px;
     }
-    .comparision td:nth-child(2){
+    .comparison td:nth-child(2){
       background-color: #FEDA93 !important;
     }
-    .comparision td:not(:first-child) {
+    .comparison td:not(:first-child) {
       text-align: center;
     }
 
-    .comparision td.hover:not(:first-child) {
+    .comparison td.hover:not(:first-child) {
       background-color: #f0f0f0;
     }
 
-    .comparision th.hover div:not(.main) {
+    .comparison th.hover div:not(.main) {
       height: 60px;
     }
 
-    .comparision tbody:not(.empty) tr:nth-child(even) {background: #f7f7f7;}
-    .comparision tbody:not(.empty) tr:nth-child(odd) {background: #FFF;}
-    
+    .comparison tbody:not(.empty) tr:nth-child(even) {background: #f7f7f7;}
+    .comparison tbody:not(.empty) tr:nth-child(odd) {background: #FFF;}
+
     .hint {
     }
-    
+
     /* Tooltip */
     .tooltip {
       background: #18191F;
@@ -175,11 +175,11 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
       document.querySelector("#table").addEventListener("mouseleave", function(event) {
         document.querySelectorAll("td, th").forEach(e => e.classList.remove("hover"));
       })
-      
+
       document.querySelector("#table").addEventListener("mouseover", function(event) {
         document.querySelectorAll("td, th").forEach(e => e.classList.remove("hover"));
       });
-      
+
       // Tooltips
       var showEvents = ["mouseenter", "focus"];
       var hideEvents = ["mouseleave", "blur"];
@@ -219,7 +219,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
       }
     });
   </script>
-  <table class="comparision" id="table">
+  <table class="comparison" id="table">
     <thead>
       <tr>
         <th></th>
