@@ -357,7 +357,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-05" data-tip="tooltip-05" tabindex="1">ⓘ Cloud to Device</span>
           <div id="tooltip-05" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>Send commands from your applications to your remote devices, as part of bidirectional communication.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
@@ -375,7 +375,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-06" data-tip="tooltip-06" tabindex="1">ⓘ Device to Device over Cloud</span>
           <div id="tooltip-06" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>Ability of one device to communicate with another, through the backend system.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
@@ -600,7 +600,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-16" data-tip="tooltip-16" tabindex="1">ⓘ Preshared key</span>
           <div id="tooltip-16" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>Method to authenticate a device by sharing a secret key between two devices.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
@@ -741,7 +741,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-204" data-tip="tooltip-204" tabindex="1">ⓘ Reprovisioning</span>
           <div id="tooltip-204" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>Change your enrollment group configuration to allow it to automatically reconfigure, connect to a different cloud, change ACLs, rotate tokens, or renew identity certificates.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
@@ -810,7 +810,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-22" data-tip="tooltip-22" tabindex="1">ⓘ Resource discovery</span>
           <div id="tooltip-22" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>Send a multicast with the resource type filter / capability, and only devices with this capability will reply.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
@@ -859,11 +859,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
       </tr>
       <tr>
         <td class="tab">
-        <span class="hint tooltip-24" data-tip="tooltip-24" tabindex="1">ⓘ Mutual TLS</span>
-          <div id="tooltip-24" class="tooltip" role="tooltip">
-            <span>tbd</span>
-            <div class="tooltip-arrow" data-popper-arrow></div>
-          </div>
+        Mutual TLS
         </td>
         <td>X</td>
         <td>X</td>
@@ -877,11 +873,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
       </tr>
       <tr>
         <td class="tab">
-        <span class="hint tooltip-25" data-tip="tooltip-25" tabindex="1">ⓘ DTLS</span>
-          <div id="tooltip-25" class="tooltip" role="tooltip">
-            <span>tbd</span>
-            <div class="tooltip-arrow" data-popper-arrow></div>
-          </div>
+        DTLS
         </td>
         <td>X</td>
         <td></td>
@@ -915,7 +907,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-27" data-tip="tooltip-27" tabindex="1">ⓘ Single instance multitenancy</span>
           <div id="tooltip-27" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>Testing and certification of conformance to Open Connectivity (OCF) ISO standards of interoperability (and OCF’s other quality standards).</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
