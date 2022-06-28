@@ -339,7 +339,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-04" data-tip="tooltip-04" tabindex="1">ⓘ Device to Cloud</span>
           <div id="tooltip-04" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>Send data to the remote endpoint, the hosted backend system.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
@@ -687,7 +687,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-201" data-tip="tooltip-201" tabindex="1">ⓘ x509 attestation</span>
           <div id="tooltip-201" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>Automated provisioning of the device after first startup, verifying its identity using its manufacturer certificate.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
@@ -705,7 +705,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-202" data-tip="tooltip-202" tabindex="1">ⓘ Device pre-configuration</span>
           <div id="tooltip-202" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>Ability to define initial configuration, which should be set to the device during automated provisioning.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
@@ -723,7 +723,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-203" data-tip="tooltip-203" tabindex="1">ⓘ Certificate rotation</span>
           <div id="tooltip-203" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>Rotation of identity certificates, set by end-customer, used to encrypt communication between devices and between devices and the cloud.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
@@ -774,7 +774,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-20" data-tip="tooltip-20" tabindex="1">ⓘ Standardized device models</span>
           <div id="tooltip-20" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>Pre-defined models for various sensors and use cases.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
@@ -792,7 +792,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-21" data-tip="tooltip-21" tabindex="1">ⓘ OpenAPI for Device</span>
           <div id="tooltip-21" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>Easily define and document your own device models, with OpenAPI.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
@@ -828,7 +828,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-23" data-tip="tooltip-23" tabindex="1">ⓘ Conformance testing</span>
           <div id="tooltip-23" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>One instance of the system supports device management of multiple customers at the same time.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
@@ -897,7 +897,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
         <td class="tab">
         <span class="hint tooltip-26" data-tip="tooltip-26" tabindex="1">ⓘ End-to-end encryption</span>
           <div id="tooltip-26" class="tooltip" role="tooltip">
-            <span>tbd</span>
+            <span>End-to-end encryption using OSCORE.</span>
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </td>
