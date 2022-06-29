@@ -19,14 +19,14 @@ IoTivity devices can be extended by the Device Provisioning Client library, whic
 
 ## DPS Client Library API
 
-Provisioning process can be initiated by your application or immediateny when the device is started. This can be all managed by your device firmware, without any external interaction. To read more how to interact and configure DPS Client Library, read [here](../client-library).
+Provisioning process can be initiated by your application or immediately when the device is started. This can be all managed by your device firmware, without any external interaction. To read more about how to interact and configure the DPS Client Library, read [here](../client-library).
 
 ## DPS Resource
 
-If DPS resouce was enabled using the DPS Client Library API, users or deamons have a possibility to trigger the automated provisioning by configuring this resource over network.
-The device needs to be before the self-provisioning owned by the daemon / tool, to configure the DPS endpoint on the resource.
+If the DPS resource was enabled using the DPS Client Library API, users or deamons have the possibility to trigger the automated provisioning by configuring this resource over network.
+To configure the DPS endpoint on the resource, the device needs to be before the self-provisioning and owned by the daemon / tool.
 
-Resource can be observed and is published also the the plgd hub. This enables you to track the provisioning progress by observing the value of the `ps` property.
+The resource can be observed and it is published in the plgd hub. This enables you to track the provisioning progress by observing the value of the `ps` property.
 
 ### How to configure DPS Resource
 
