@@ -51,3 +51,7 @@ After a successful provisioning, the device disconnects from the DPS service and
 Cloud status observer is a simple polling mechanism which examines the cloud status value 30 times in 1 second intervals. The observer checks the cloud status and waits for the status to have both `OC_CLOUD_REGISTERED` and `OC_CLOUD_LOGGED_IN` flags sets. If the flags are set, then the polling stops. If the limit of polling checks is reached and the flags are still not set, then the cloud manager is stopped and a full reprovisioning is forced.
 
 The limit of polling checks (default: 30) and the interval (default: 1 second) can be configured by the `plgd_dps_set_cloud_observer_configuration` function.
+
+{{% note %}}
+Valid authentication of cloud manager depends on a valid access token. If the access token retrieved during provisioning is not permanent, it will eventually expire. It must be refreshed, because otherwise #plgd hub will close the connection to the device. This is handled internally by IoTivity-lite library, which schedules a refresh token operation before the access token expires.
+{{% /note %}}

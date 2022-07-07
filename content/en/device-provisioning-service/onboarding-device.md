@@ -24,7 +24,7 @@ Provisioning process can be initiated by your application or immediately when th
 ## DPS Resource
 
 If the DPS resource was enabled using the DPS Client Library API, users or deamons have the possibility to trigger the automated provisioning by configuring this resource over network.
-To configure the DPS endpoint on the resource, the device needs to be before the self-provisioning and owned by the daemon / tool.
+To configure the DPS endpoint on the resource, the device needs to be before the self-provisioning and owned by the onboarding tool.
 
 The resource can be observed and it is published in the plgd hub. This enables you to track the provisioning progress by observing the value of the `ps` property.
 
