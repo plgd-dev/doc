@@ -180,6 +180,63 @@ If a step in the provisioning algorithm encounters an error, or if it does not t
 
 The application uses the following retry intervals [10s, 20s, 40s, 80s, 120s] and forever loops through the array (i.e. when the last retry interval was 120s then the next will be 10s again) until the provisioning process succeeds. To read more about the retry mechanism of the DPS Client Library, read [here](../retry-mechanism).
 
+### Certificate renewal
+
+A certificate retrieved from the DPS service can be in one of the following states:
+
+- not yet valid - the valid-from time hasn't yet passed
+- expired - the valid-to time has passed already
+- expiring - the valid-to time will pass soon (the expiration interval is determined by the `expiringLimit` value, by default this is 1 hour)
+- valid - otherwise
+
+In the provisioning of credentials step, the retrieved certificates are checked for validity. If at least one of the retrieved certificates is not valid, they are all discarded and the whole step is repeated.
+
+A valid certificate fulfills all of the following conditions:
+
+- certificate was correctly parsed and stored by the IoTivity-lite library
+- its valid-from and valid-to timestamps are currently valid
+- the certificate is not expiring (ie. the interval until the certificate expires is longer than the `expiringLimit` value)
+
+Once the certificates are stored, the certificate renewal operation is scheduled based on the earliest valid-to timestamp of a retrieved certificate.
+
+#### Setting expiration interval
+
+To set expiration interval use `plgd_dps_pki_set_expiring_limit`. To get the current expiration interval call `plgd_dps_pki_get_expiring_limit`. The interval is in seconds and the default value is 1 hour (3600 seconds).
+
+#### Certificate renewal interval
+
+To get the interval after which the certificate renewal operation is scheduled, all retrieved certificates are examined and the minimal valid-to timestamp (`min_valid_to`) is found. The internal is then calculated by the following simple algorithm:
+
+```pseudo
+if (certificate is expiring) or (min_valid_to is within 1 minute from now) {
+  return 0 // force renewal to trigger right away
+}
+
+if min_valid_to is within 3 minutes from now {
+  return 1 minute
+}
+
+if min_valid_to is within 6 minutes from now {
+  return 2 minutes
+}
+
+return 2/3 of the remaining time until min_valid_to has passed
+```
+
+#### Replacing certificates
+
+Once the renewal interval is reached, then the certificate renewal operation is executed. A certificate signing request (CSR) is sent to the DPS service. When the response with new certificates is received, the new certificates are validated. If they are valid, then they replace the previously stored certificates. If they are not valid, they are discarded and the operation is repeated.
+A new certificate renewal interval is calculated based on the new certificates, and renewal is scheduled again using this new interval.
+
+That the algorithm is active can be detected by checking for `PLGD_DPS_RENEW_CREDENTIALS` provisioning status flag. The flag is added when the renewal starts and removed when it ends.
+
+The algorithm can fail, and the possible failures are handled in the following way:
+
+- sending of the CSR fails - scheduling of the renewal is retried (the same renewal interval calculation is used, however to avoid 100% CPU usage in case of a repeated send failure the calculated interval cannot be lower than the interval calculated by the retry mechanism used during provisioning).
+- the response is not received - after successful sending of the CSR then operation is rescheduled using the same retry mechanism that's used during provisioning
+- in the response handler if either an invalid response was received or a valid response was received, but the replacement of the current fails, then a full reprovisioning is triggered
+- if any other failures occur during renewal, then a full reprovisioning is triggered
+
 ## Example application - dps_cloud_server
 
 Part of the package is an example application called `dps_cloud_server`. The following sections describe how DPS client library is integrated in the binary (with code examples). And the finally section shows how to run it.
