@@ -1,3 +1,3 @@
 module github.com/plgd-dev/www
 
-go 1.16
+go 1.19
