@@ -40,24 +40,28 @@ APIs of the HTTP Gateway service as defined [uri](https://github.com/plgd-dev/hu
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `api.http.address` | string | `Listen specification <host>:<port> for http client connection.` | `"0.0.0.0:9100"` |
-| `api.http.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
-| `api.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `api.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `api.http.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
-| `api.http.websocket.streamBodyLimit` | int | `Limit a size for the buffer used while reading the grpc stream.` | `262144` |
-| `api.http.websocket.pingFrequency` | string | `Ping frequency specifies the ping interval between pings.` | `10s` |
-| `api.http.authorization.authority` | string | `Authority is the address of the token-issuing authentication server. Services will use this URI to find and retrieve the public key that can be used to validate the token’s signature.` | `""` |
-| `api.http.authorization.audience` | string | `Identifier of the API configured in your OAuth provider.` | `""` |
-| `api.http.authorization.http.maxIdleConns` | int | `It controls the maximum number of idle (keep-alive) connections across all hosts. Zero means no limit.` | `16` |
-| `api.http.authorization.http.maxConnsPerHost` | int | `It optionally limits the total number of connections per host, including connections in the dialing, active, and idle states. On limit violation, dials will block. Zero means no limit.` | `32` |
-| `api.http.authorization.http.maxIdleConnsPerHost` | int | `If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used.` | `16` |
-| `api.http.authorization.http.idleConnTimeout` | string | `The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit.` | `30s` |
-| `api.http.authorization.http.timeout` | string | `A time limit for requests made by this Client. A Timeout of zero means no timeout.` | `10s` |
-| `api.http.authorization.http.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
-| `api.http.authorization.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `api.http.authorization.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `api.http.authorization.http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `apis.http.address` | string | `Listen specification <host>:<port> for http client connection.` | `"0.0.0.0:9100"` |
+| `apis.http.readTimeout` | string | `The maximum duration for reading the entire request, including the body by the server. A zero or negative value means there will be no timeout.` | `8s` |
+| `apis.http.readHeaderTimeout` | string | `The amount of time allowed to read request headers by the server. If readHeaderTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `4s` |
+| `apis.http.writeTimeout` | string | `The maximum duration before the server times out writing of the response. A zero or negative value means there will be no timeout.` | `16s` |
+| `apis.http.idleTimeout` | string | `The maximum amount of time the server waits for the next request when keep-alives are enabled. If idleTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `30s` |
+| `apis.http.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
+| `apis.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
+| `apis.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
+| `apis.http.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
+| `apis.http.websocket.streamBodyLimit` | int | `Limit a size for the buffer used while reading the grpc stream.` | `262144` |
+| `apis.http.websocket.pingFrequency` | string | `Ping frequency specifies the ping interval between pings.` | `10s` |
+| `apis.http.authorization.authority` | string | `Authority is the address of the token-issuing authentication server. Services will use this URI to find and retrieve the public key that can be used to validate the token’s signature.` | `""` |
+| `apis.http.authorization.audience` | string | `Identifier of the API configured in your OAuth provider.` | `""` |
+| `apis.http.authorization.http.maxIdleConns` | int | `It controls the maximum number of idle (keep-alive) connections across all hosts. Zero means no limit.` | `16` |
+| `apis.http.authorization.http.maxConnsPerHost` | int | `It optionally limits the total number of connections per host, including connections in the dialing, active, and idle states. On limit violation, dials will block. Zero means no limit.` | `32` |
+| `apis.http.authorization.http.maxIdleConnsPerHost` | int | `If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used.` | `16` |
+| `apis.http.authorization.http.idleConnTimeout` | string | `The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit.` | `30s` |
+| `apis.http.authorization.http.timeout` | string | `A time limit for requests made by this Client. A Timeout of zero means no timeout.` | `10s` |
+| `apis.http.authorization.http.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
+| `apis.http.authorization.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
+| `apis.http.authorization.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
+| `apis.http.authorization.http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
 
 ### GRPC Gateway Client
 
