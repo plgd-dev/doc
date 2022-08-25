@@ -40,7 +40,7 @@ This is the default configuration of the plgd d2d client. Pre-shared key is gene
 **Requirements:**
 
 - Devices are provisioned and optionally onboarded to the plgd hub
-- Ownership transfer is done either by the DPS or [by the client](./ownership-transfer)
+- Ownership transfer is done either by the DPS or [by the client](../ownership-transfer)
 - Device ownership is centralized, driven by the identity provider
 - Devices can be accessed remotely, through the plgd hub API
 - Devices can be discovered and configured locally using a client
