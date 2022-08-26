@@ -74,7 +74,7 @@ hide footbox
 
 actor U as "User"
 box "D2D Client"
-participant S as "SPA\n(running in the browser)"
+participant S as "Web App\n(running in the browser)"
 participant C as "Service\n(local or remote host)"
 end box
 
@@ -115,63 +115,14 @@ S -> C ++: Discover devices
 
 In case the [plgd d2d client](https://github.com/plgd-dev/client-application) or other application using [device/client Go library](https://github.com/plgd-dev/device/tree/main/client) cannot access the plgd hub API directly (e.g. it's running in a different network as a web service), but the user's PC can, the CSR can be propagated through the browser to the plgd hub API and the response from the certificate authority service can be returned back over the browser to the client. This flow delivers the Identity Certificate to the client, without private key leaving the client. The client can communicate securely with any devices which is part of the same security domain right after receiving the Identity certificate and its initialization.
 
-##### Redirect Flow
-
-{{< plantuml id="mediated-csr-redirect" >}}
+{{< plantuml id="mediated-csr" >}}
 @startuml Sequence
 skinparam backgroundColor transparent
 hide footbox
 
 actor U as "User"
 box "D2D Client"
-participant S as "SPA\n(running in the browser)"
-participant C as "Service\n(local or remote host)"
-end box
-
-box "plgd hub"
-participant CA as "Certificate Authority"
-participant OA as "OAuth 2.0 Server"
-end box
-
-U -> C ++: Open Web App
-activate U
-C -> S: Serve UI
-deactivate C
-activate S
-S -> U: Request plgd hub endpoint
-U -> S: plgd hub endpoint
-
-S -> C ++: Initialize\n(plgd hub endpoint)
-C -> S: Sign D2D Client Identity Certificate\n(Redirect to hub with CSR, Client redirect url)
-S -> CA ++: Sign D2D Client Identity Certificate\n(Redirect to hub with CSR, Client redirect url)
-CA -> S++: Authenticate\n(Redirect to OAuth 2.0 Server)
-S -> OA ++: Request authorization code
-OA -> U: Provide credentials
-U -> OA: Username and password
-return Authorization code\n(Redirect to Certificate Authority)
-return Authorization code\n(Redirect to Certificate Authority)
-CA -> OA ++: Exchange for the user token
-return User token
-CA -> CA: Sign D2D Client Certificate\n(CSR, User token)
-return Identity Certificate chain\n(Redirect to D2D Client)
-S -> C: Initialize\n(Identity Certificate Chain)
-return Initialized
-S -> U: Initialized
-U -> S: Discover devices
-S -> C ++: Discover devices
-@enduml
-{{< /plantuml >}}
-
-##### JS driven flow
-
-{{< plantuml id="mediated-csr-js" >}}
-@startuml Sequence
-skinparam backgroundColor transparent
-hide footbox
-
-actor U as "User"
-box "D2D Client"
-participant S as "SPA\n(running in the browser)"
+participant S as "Web App\n(running in the browser)"
 participant C as "Service\n(local or remote host)"
 end box
 

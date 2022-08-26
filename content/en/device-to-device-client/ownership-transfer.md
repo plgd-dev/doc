@@ -28,3 +28,5 @@ Supported [credetials](https://openconnectivity.org/specs/OCF_Security_Specifica
 With the default configuration, the plgd d2d client provisions the device with the pre-shared key, generated during the startup. This one is then used for every device.
 {{% /note %}}
 
+
+
