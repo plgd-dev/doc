@@ -17,6 +17,7 @@ toc: true
 There are more ways on how to setup authentication between devices, clients and plgd hub, as various deployment models are supported. It's all about distribution of right credentials. Same applies for the client applications, which needs to authenticate to communicate with devices.
 
 ### Deployment scenarios
+
 There are more options on how to initialize the client and provision it with the right security credentials. All depends on the deployment scenarios and use-cases. Let's go through 2 deployment scenarios:
 
 #### Devices and single client
@@ -65,7 +66,7 @@ What is the security domain? All entities, the plgd hub, d2d client or devices, 
 
 #### Client requests the identity certificate on it's own
 
-This option requires that the [plgd d2d client](https://github.com/plgd-dev/client-application) or other application using [device/client Go library](https://github.com/plgd-dev/device/tree/main/client), can access plgd hub API. The client is required to issue the CSR and send it to the certificate signing service to get the Identity Certificate. After retrieving the certificate and initialization, the client becomes the member of the same security domain. This allows him to successfuly authenticate and interact with any device which is member of that security domain.
+This option requires that the [plgd d2d client](https://github.com/plgd-dev/client-application) or other application using [device/client Go library](https://github.com/plgd-dev/device/tree/main/client), can access plgd hub API. The client is required to issue the CSR and send it to the certificate signing service to get the Identity Certificate. After retrieving the certificate and initialization, the client becomes the member of the same security domain. This allows him to successfully authenticate and interact with any device which is member of that security domain.
 
 {{< plantuml id="direct-csr" >}}
 @startuml Sequence
