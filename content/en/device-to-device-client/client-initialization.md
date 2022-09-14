@@ -63,7 +63,7 @@ But how to provision the client with the Identity Certificate, issued by the Cer
 What is the security domain? All entities, the plgd hub, d2d client or devices, which have the Identity Certificate issued by the same Certificate Authority are considered to be in the same security domain.
 {{% /note %}}
 
-##### Client requests the identity certificate on it's own
+#### Client requests the identity certificate on it's own
 
 This option requires that the [plgd d2d client](https://github.com/plgd-dev/client-application) or other application using [device/client Go library](https://github.com/plgd-dev/device/tree/main/client), can access plgd hub API. The client is required to issue the CSR and send it to the certificate signing service to get the Identity Certificate. After retrieving the certificate and initialization, the client becomes the member of the same security domain. This allows him to successfuly authenticate and interact with any device which is member of that security domain.
 
@@ -147,14 +147,16 @@ return Authorization code
 S -> OA ++: Exchange for the user token
 return User token
 
-S -> C ++: Request Certificate Signing Request
-return Certificate Signing Request
+S -> OA ++: Get /.well-known/jwks.json
+return jwks.json
 
-S -> CA ++: Sign D2D Client Identity Certificate\n(CSR, User token)
+S -> C ++: Initialize\n(jwks.json, User token)
+return Identity certificate challenge\n(D2D Client Identity CSR, state)
+
+S -> CA ++: Sign D2D Client Identity CSR\n(CSR, User token)
 return Identity Certificate chain
 
-
-S -> C ++: Initialize\n(Identity Certificate Chain)
+S -> C ++: Finish Initialize\n(Identity Certificate Chain, User token, state)
 return Initialized
 S -> U: Initialized
 U -> S: Discover devices
