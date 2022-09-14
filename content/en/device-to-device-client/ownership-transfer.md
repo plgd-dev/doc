@@ -30,9 +30,13 @@ With the default configuration, the plgd d2d client provisions the device with t
 
 ### Own device
 
-The plgd d2d client can be initialized in 3 different ways, for each of them the own device setup credential different:
+Part of the device ownership transfer is the credentials provisioning. As you know from the [d2d client initialization](../client-initialization), there are more options, depending on your setup, on how to request and provision credentials. The same requirements and flow applies also for device credential provisioning.
 
-- [Devices and single client](../client-initialization/#devices-and-single-client)
+#### Devices and single client
+
+{{% note %}}
+More on this deployment option [here](../client-initialization/#devices-and-single-client).
+{{% /note %}}
 
 The pre-shared key is setup on the device by the D2D client service.
 
@@ -55,9 +59,13 @@ return Device owned
 @enduml
 {{< /plantuml >}}
 
-- [Client requests the identity certificate on it's own](../client-initialization/#client-requests-the-identity-certificate-on-its-own)
+#### Client requests the identity certificate on its own
 
-In the D2D client service, the identity certificate is setup for the device and signed by the certificate authority.
+{{% note %}}
+More on this deployment option [here](../client-initialization/#devices-plgd-hub-and-1n-clients).
+{{% /note %}}
+
+The d2d client service requests the identity certificate from the plgd Certificate Authority for the device on its own.
 
 {{< plantuml id="own-device-client-requests-the-identity-certificate-on-it-s-own" >}}
 @startuml Sequence
@@ -88,9 +96,13 @@ deactivate C
 @enduml
 {{< /plantuml >}}
 
-- [User agent mediates CSR from the client](../client-initialization/#user-agent-mediates-csr-from-the-client)
+#### User agent mediates CSR from the client
 
-The D2D client service sets up the identity certificate to be signed by the certificate authority to the device, but the signing process is handled by the D2D client Web App.
+{{% note %}}
+More on this deployment option [here](../client-initialization/#devices-plgd-hub-and-1n-clients).
+{{% /note %}}
+
+The d2d client service is unable to reach the plgd Certificate Authority service. Therefore the plgd d2d web app gets the Identity CSR from the d2d client service and requests the certificate from the plgd Certificate Authority on its own, which is then sent back to the d2d client service. The web app is in the mediator role, assuming the PC where it's loaded has access to both, plgd hub as well as to the d2d client service.
 
 {{< plantuml id="direct-csr" >}}
 @startuml Sequence
