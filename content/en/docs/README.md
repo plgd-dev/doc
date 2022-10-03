@@ -1,4 +1,4 @@
-# Introduction
+## Introduction
 
 What are the biggest problems in IoT? Where do the current market IoT solutions fall short? How should you consider IoT for your projects?
 
