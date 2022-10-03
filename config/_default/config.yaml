@@ -1,0 +1,78 @@
+---
+baseURL: 'https://docs.plgd.dev/'
+theme: 'plgd'
+title: 'plgd docs'
+defaultContentLanguage: en
+enableEmoji: true
+footnotereturnlinkcontents: ↩
+languageCode: en-us
+languages:
+  en:
+    contentDir: content/en
+    languageName: English
+    weight: 1
+  # de:
+  #   contentDir: content/de
+  #   languageName: Deutsch
+  #   weight: 2
+copyright: 'All Rights Reserved © 2020-{year} plgd.dev, s.r.o.'
+googleAnalytics: 'GTM-5B8C4RK'
+algolia:
+  index: "doc"
+  appID: "42D6VHXINQ"
+pluralizeListTitles: false
+outputs:
+  home:
+    - HTML
+    - RSS
+    - REDIR
+    - HEADERS
+  section:
+    - HTML
+    - RSS
+mediaTypes:
+  text/netlify:
+    delimiter: ''
+outputFormats:
+  REDIR:
+    mediatype: text/netlify
+    baseName: _redirects
+    isPlainText: true
+    notAlternative: true
+  HEADERS:
+    mediatype: text/netlify
+    baseName: _headers
+    isPlainText: true
+    notAlternative: true
+caches:
+  getjson:
+    dir: ':cacheDir/:project'
+    maxAge: -1
+  getcsv:
+    dir: ':cacheDir/:project'
+    maxAge: -1
+  images:
+    dir: ':resourceDir/_gen'
+    maxAge: -1
+  assets:
+    dir: ':resourceDir/_gen'
+    maxAge: -1
+related:
+  threshold: 80
+  includeNewer: true
+  toLower: false
+  indices:
+    - name: keywords
+      weight: 100
+    - name: date
+      weight: 10
+      pattern: '2006'
+imaging:
+  resampleFilter: CatmullRom
+  quality: 75
+  anchor: smart
+taxonomies:
+  category: categories
+params:
+  githubRepository: 'https://github.com/plgd-dev/doc/'
+---

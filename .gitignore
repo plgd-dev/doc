@@ -5,11 +5,13 @@
 !.vscode/extensions.json
 *.code-workspace
 .history/
-.hugo_build.lock
 
-public/*
+public
 !public/CNAME
 resources/*
 nohup.out
 .DS_Store
 trace.out
+.idea
+node_modules
+.hugo_build.lock
