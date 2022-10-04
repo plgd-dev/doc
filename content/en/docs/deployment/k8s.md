@@ -48,9 +48,9 @@ plgd/plgd-hub   2.1.1           2.1.1           A Helm chart for plgd-hub
 
 Quickest way how to install your own instance of the plgd hub is to use the Mock OAuth2.0 Server. With this option enabled, no authentication is available. The JWT token is automatically issued for the default user.
 
-{{% warning %}}
+{{< warning >}}
 Mock OAuth Server shall be used only for test/development purposes. Use with extra care!
-{{% /warning %}}
+{{< /warning >}}
 
 ```sh
 echo "global:
@@ -76,9 +76,9 @@ coapgateway:
     nodePort: 5684
 ```
 
-{{% warning %}}
+{{< warning >}}
 This configuration should be applied only to test environment!
-{{% /warning %}}
+{{< /warning >}}
 
 ### Deployment with Auth0 OAuth2.0 Server
 

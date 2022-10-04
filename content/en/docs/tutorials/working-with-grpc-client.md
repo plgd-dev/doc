@@ -47,9 +47,9 @@ More info in [doc](https://pkg.go.dev/github.com/plgd-dev/hub/grpc-gateway/clien
 
 All requests to the service must contain a valid access token in the [grpc metadata](https://github.com/grpc/grpc-go/blob/master/Documentation/grpc-auth-support.md#oauth2).
 
-{{% warning %}}
+{{< warning >}}
 Each request to the gRPC Gateway shall contain a valid access token as a part of the [grpc metadata](https://github.com/grpc/grpc-go/blob/master/Documentation/grpc-auth-support.md#oauth2).
-{{% /warning %}}
+{{< /warning >}}
 
 ### Get Devices
 

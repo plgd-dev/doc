@@ -40,9 +40,9 @@ Securely provisioned device by the DPS precedes 3 distinct steps:
 
 To successfully attest the device's identity during the provisioning process, a manufacturer certificate or/and a TPM need to be available on the device. It's a key to verify if the device is trusted and belongs to the enrollment group created in the DPS.
 Creation of the device's manufacturer identity usually occurs towards the end of the manufacturing process. At this point, hardware assembly is complete and the initial software has been loaded. A _manufacturing PC_ is connected to the device and requests from the PKI a unique manufacturer certificate using the unique device identifier (e.g. serial number, depends on the manufacturer). In case the device contains the TPM, _manufacturing PC_ stores the TPM's endorsement key, required for it's individual enrollment.
-{{% note %}}
+{{< note >}}
 Process described above varies from manufacturer to manufacturer. Nevertheless, the unique device's manufacturer identity is expected as the result. Additionally, formulation "Creation of the device's manufacturer identity" was used to not confuse the reader if using more accurate term - "Provisioning of the device's manufacturer identity".
-{{% /note %}}
+{{< /note >}}
 DPS does not introduce a new step in the manufacturing process. It ties into the existing step creating the unique identifying key information - the device's manufacturer certificate or TPM's endorsement key used for device attestation during the zero-touch provisioning by the DPS.
 
 ### Operation setup step
@@ -98,6 +98,6 @@ activate d
 7. The device retrieves connection configuration and OAuth2.0 access token which authorizes the device to communicate with the plgd hub APIs.
 8. The device connects to the configured plgd hub instance, authenticates and encrypts the session using Identity Certificate and authorizes using the OAuth2.0 access token.
 
-{{% note %}}
+{{< note >}}
 Step number 8 is optional. Device provisioning doesn't require to connect the device to the plgd hub. In such a case, device is ready to be securely used for your Device-to-Device scenarios.
-{{% /note %}}
+{{< /note >}}

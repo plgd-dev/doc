@@ -37,17 +37,17 @@ The way how the certificate chain of trust is built is usually reflected by the 
 - Use the factory's intermediate CA to sign per production line issued intermediate CA
 - Use the production line intermediate CA to sign the end-identity manufacturer certificate installed on the device
 
-{{% note %}}
+{{< note >}}
 To govern the issuance of digital certificates in a scalable way, public key infrastructure (PKI) is required.
-{{% /note %}}
+{{< /note >}}
 
 ### Manufacturer certificate
 
 The manufacturer certificate is the leaf certificate signed by the manufacturer's root / intermediate CA. It uniquely identifies the device. This certificate is used only during the provisioning process to verify that the device was manufactured by that particular company. The device connecting to the DPS needs to authenticate using this client certificate during what the DPS verifies it's the public key against the root CA / intermediate CA registered in the matching enrollment group. The device must present the leaf certificate or the certificate chain from leaf certificate all the way to the certificate verified with proof-of-possession, otherwise authentication will fail. Successful verification of the public key results in successfully connected device, developed by the declared manufacturer, eligible for the provisioning. Verification of the DPS server certificate by the device is configurable. To learn more, see [DPS Client API](../client-library/#dps-client-api). Successfully provisioned device switches from using Manufacturer certificate to Identity certificates, both for communication with the plgd hub / other devices in the network or when [connecting to the DPS service again]().
 
-{{% note %}}
+{{< note >}}
 To uniquely identify each device it's recommended to set the certificate common name (CN) to a unique product identifier, e.g. serial number. This allows you to whitelist or blacklist devices, what's configurable on the enrollment group level. To know more about this feature, see [Whitelisting / BlackListing](../whitelisting-blacklisting).
-{{% /note %}}
+{{< /note >}}
 
 ### Certificate chain of trust
 
@@ -74,9 +74,9 @@ If the device sends the following **manufacturer certificate chain**:
 
 authentication fails because the DPS can't attempt authentication assuming the validity of the `Intermediate CA #2`.
 
-{{% note %}}
+{{< note >}}
 If the device authenticates using the manufacturer certificate chain containing certificates up to `Intermediate CA #2`, or the certificate chain configured on the enrollment group would contain certificates up to `Intermediate CA #2`, the authentication would be successful.
-{{% /note %}}
+{{< /note >}}
 
 ### Enrollment group prioritization
 
@@ -90,20 +90,20 @@ For better understanding, consider 2 enrollment groups configured on the DPS *(c
 **Enrollment Group #B**
 ![](../static/enrollment-group-intermediate-sel-2.drawio.svg)
 
-{{% note %}}
+{{< note >}}
 The device after it authenticates using the following manufacturer certificate chain:
 ![](../static/mfg-certificate-intermediate-3.drawio.svg)
 will be provisioned as configured in the **Enrollment Group #A**.
-{{% /note %}}
+{{< /note >}}
 
-{{% note %}}
+{{< note >}}
 The device after it authenticates using the following manufacturer certificate chain:
 ![](../static/mfg-certificate-intermediate-3.1.drawio.svg)
 will be provisioned as configured in the **Enrollment Group #B**.
-{{% /note %}}
+{{< /note >}}
 
-{{% note %}}
+{{< note >}}
 The device after it authenticates using the following manufacturer certificate chain:
 ![](../static/mfg-certificate-leaf-3.1.drawio.svg)
 will be disconnected as **no matching enrollment group was found**.
-{{% /note %}}
+{{< /note >}}

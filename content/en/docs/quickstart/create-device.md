@@ -24,9 +24,9 @@ This guide will walk you through the process of starting your secure [OCF Device
 
 To set up your Raspberry Pi, please follow [this step-by-step tutorial](https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up).
 
-{{% note %}}
+{{< note >}}
 Enabling SSH is highly recommended as it simplifies access to the device and allows you to make changes quickly. More information available [here](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md).
-{{% /note %}}
+{{< /note >}}
 
 ### Enable SSH via the Desktop
 
@@ -52,9 +52,9 @@ More information how to access Raspberry Pi remotely can be found [here](https:/
 ssh pi@{raspberryPiIpAddress}
 ```
 
-{{% note %}}
+{{< note >}}
 Default login username is `pi` and password is `raspberry` if you didn't change.
-{{% /note %}}
+{{< /note >}}
 
 ## Install essential build tools
 
