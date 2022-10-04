@@ -4,7 +4,7 @@ description: 'How to persist plgd events in the JetStream'
 date: '2021-07-01'
 lastmod: '2021-07-01'
 categories: [features]
-keywords: ['persistance', 'message log', 'nats']
+keywords: ['persistence', 'message log', 'nats']
 menu:
   docs:
     parent: features
