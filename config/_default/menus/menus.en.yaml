@@ -1,0 +1,24 @@
+global:
+  - name: 'Features'
+    weight: 10
+    url: 'https://plgd.dev/#features'
+  - name: 'References'
+    weight: 20
+    url: 'https://plgd.dev/#testimonials'
+  - name: 'Docs'
+    weight: 30
+    url: 'https://docs.plgd.dev'
+  - name: 'Blog'
+    weight: 40
+    url: 'https://plgd.dev/blog/'
+  - name: 'Contact'
+    weight: 50
+    url: 'https://plgd.dev/contact/'
+highlighted:
+  - name: 'Request a demo'
+    url: '/meetings/team/'
+footer:
+  - name: 'Terms & Conditions'
+    url: ''
+  - name: 'Privacy Notice'
+    url: '/legal/privacy-notice'

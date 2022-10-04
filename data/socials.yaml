@@ -1,0 +1,9 @@
+- name: GitHub
+  link: 'https://github.com/plgd-dev'
+  iconPath: '/img/socials/github.svg'
+- name: LinkedIn
+  link: 'https://www.linkedin.com/company/plgd/'
+  iconPath: '/img/socials/linkedin.svg'
+- name: YouTube
+  link: 'https://www.youtube.com/channel/UCOZCFItLhoIKrM1WE6jdN1A'
+  iconPath: '/img/socials/youtube.svg'
