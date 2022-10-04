@@ -23,22 +23,22 @@ In our GitHub repository you can find `charts/` folder with plgd hub [Helm chart
 A communication between devices, clients and plgd hub is secured as well as between plgd hub services. To simplify the deployment and certificate management, [Certificate Manager](https://cert-manager.io/docs/), required dependency, have to be deployed in your Kubernetes cluster.
 
 ```sh
-> kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.0/cert-manager.yaml
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.0/cert-manager.yaml
 ```
 
 ### Register plgd Helm Chart Registry
 
 ```sh
-> helm repo add plgd https://charts.plgd.dev
-> helm repo update
+// helm repo add plgd https://charts.plgd.dev
+// helm repo update
 Hang tight while we grab the latest from your chart repositories...
 ...Successfully got an update from the "plgd" chart repository
 
-> helm repo list
+// helm repo list
 NAME    URL
 plgd    https://charts.plgd.dev
 
-> helm search repo plgd
+// helm search repo plgd
 NAME            CHART VERSION   APP VERSION     DESCRIPTION
 plgd/plgd-hub   2.1.1           2.1.1           A Helm chart for plgd-hub
 
@@ -53,13 +53,13 @@ Mock OAuth Server shall be used only for test/development purposes. Use with ext
 {{% /warning %}}
 
 ```sh
-> echo "global:
+echo "global:
   domain: \"example.com\"
   hubId: \"d03a1bb4-0a77-428c-b78c-1c46efe6a38e\"
-mockoauthserver:
+  mockoauthserver:
   enabled: true" > withMock.yaml
 
-> helm install -f withMock.yaml hub plgd/plgd-hub
+helm install -f withMock.yaml hub plgd/plgd-hub
 ```
 
 Deployment of the plgd hub to the Kubernetes cluster is then initiated. Status of the deployment can be verified by calling `kubectl get all`. When all pods are up and running, the plgd Dasboard will become available on your configured domain (e.g. `https://example.com`).
@@ -85,29 +85,29 @@ This configuration should be applied only to test environment!
 Our [try.plgd.cloud](https://try.plgd.cloud) instance which is available for free uses [Auth0 Identity Provider](https://auth0.com). Example configuration enabling an integration with an external OAuth2.0 Server should contain OAuth2.0 configuration for the device as well as the dasboard. All required values are part of the `global.` index.
 
 ```sh
-> echo "global:
-  domain: \"example.com\"
-  hubId: \"d03a1bb4-0a77-428c-b78c-1c46efe6a38e\"
-  authority: \"https://myinstance.auth0.com\"
-  audience: \"https://api.example.com\"
-  oauth:
-    device:
-    - name: \"onboardingtool.mobile\"
-      clientID: \"l12j3oi12j3jlk1904\"
-      clientSecret: \"891y2ehpu2he9182heh2ep9128eh\"
-      scopes: [\"offline_access\"]
-      redirectURL: \"com.example.mobile://login-callback\"
-      useInUi: false
-    - name: \"onboardingtool.desktop\"
-      clientID: \"i0jt0i00xcva0r\"
-      clientSecret: \"98219h23uh43t9r4h93rh994th923r\"
-      scopes: [\"offline_access\"]
-      redirectURL: \"https://example.com/devices\"
-      useInUi: true
-    web:
-      clientID: \"98y239hu94hr2ohu3e23eh\"" > withMock.yaml
+echo "global:
+domain: \"example.com\"
+hubId: \"d03a1bb4-0a77-428c-b78c-1c46efe6a38e\"
+authority: \"https://myinstance.auth0.com\"
+audience: \"https://api.example.com\"
+oauth:
+  device:
+  - name: \"onboardingtool.mobile\"
+    clientID: \"l12j3oi12j3jlk1904\"
+    clientSecret: \"891y2ehpu2he9182heh2ep9128eh\"
+    scopes: [\"offline_access\"]
+    redirectURL: \"com.example.mobile://login-callback\"
+    useInUi: false
+  - name: \"onboardingtool.desktop\"
+    clientID: \"i0jt0i00xcva0r\"
+    clientSecret: \"98219h23uh43t9r4h93rh994th923r\"
+    scopes: [\"offline_access\"]
+    redirectURL: \"https://example.com/devices\"
+    useInUi: true
+  web:
+    clientID: \"98y239hu94hr2ohu3e23eh\"" > withMock.yaml
 
-> helm install -f withMock.yaml hub plgd/plgd-hub
+helm install -f withMock.yaml hub plgd/plgd-hub
 ```
 
 ### Using Let's encrypt certificates
@@ -115,7 +115,7 @@ Our [try.plgd.cloud](https://try.plgd.cloud) instance which is available for fre
 By default, the plgd hub Helm chart issues a self-signed CA certificate, used to sign domain certificates of all exposed services. To encrypt the external communication with the certificates signed by the Let's Encrypt CAs, create an issuer:
 
 ```sh
-> echo "apiVersion: cert-manager.io/v1
+echo "apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: \"letsencrypt-prod\"
@@ -130,7 +130,7 @@ spec:
         ingress:
           class: public" > issuer.yaml
 
-> kubectl apply -f issuer.yaml
+kubectl apply -f issuer.yaml
 ```
 
 Required values for the plgd hub Helm chart which makes use of a newly created signer are:
