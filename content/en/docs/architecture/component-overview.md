@@ -22,9 +22,9 @@ The CoAP gateway acts as a CoAP Client, communicating with IoT devices, which se
 
 Before a device becomes operational and is able to interact with other devices, it needs to be appropriately onboarded. The first step in onboarding the device is to [configure ownership (see 5.3.3)](https://openconnectivity.org/specs/OCF_Security_Specification_v2.2.1.pdf#page=38) where the legitimate user who owns/purchases the device uses one of the Owner Transfer Methods (OTMs) within the Onboarding tool to establish ownership. Once ownership is established, the OBT [provisions the device (see 5.3.4)](https://openconnectivity.org/specs/OCF_Security_Specification_v2.2.1.pdf#page=39), after which the device can be [provisioned for the plgd hub (see 8.1.2.3)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=32). After successful provisioning, the device should [establish a TLS connection (see 7.2)](https://openconnectivity.org/specs/OCF_Cloud_Security_Specification_v2.2.1.pdf#page=14) using certificate based credentials.
 
-{{% note %}}
+{{< note >}}
 Use [plgd OCF Client](https://github.com/plgd-dev/device) or [Apple](https://apps.apple.com/us/app/plgd/id1536315811) / [Android](https://play.google.com/store/apps/details?id=dev.plgd.client) mobile app for **easy** device discovery, ownership configuration and provisioning for the plgd hub!
-{{% /note %}}
+{{< /note >}}
 
 #### Device Onboarding
 
@@ -82,9 +82,9 @@ return Signed up\n(JWT Access Token, Refresh Token, ...)
 
 Successful registration to plgd.dev is followed by an authorization request called Sign In. Sign In is required right after a successfully established TCP connection to the CoAP Gateway, otherwise the device won’t be reachable – marked as online. Other device requests are blocked as well unless the device successfully Signs In. Successful authorization precedes validation of the [JWT Access Token](https://tools.ietf.org/html/rfc6749#section-1.4).
 
-{{% warning %}}
+{{< warning >}}
 Only JWT access tokens are supported on the device.
-{{% /warning %}}
+{{< /warning >}}
 
 #### Device Authorization
 
@@ -216,9 +216,9 @@ return Updated
 @enduml
 {{< /plantuml >}}
 
-{{% note %}}
+{{< note >}}
 A client requesting resource observation will immediately start to receive notifications without additional requests to the device over the CoAP Gateway. As the plgd hub is by default observing the resources of all connected devices, the Gateway responsible will just subscribe to the [Event Bus](#event-bus) and forward requested notifications. **Handling of CRUDN operations is the same for every Gateway.**
-{{% /note %}}
+{{< /note >}}
 
 #### Delete a device
 
@@ -370,9 +370,9 @@ Aggregate -down-> (DeviceMetadataSnapshotTaken)
 @enduml
 {{< /plantuml >}}
 
-{{% note %}}
+{{< note >}}
 More detailed flows on which commands trigger which events can be found in the [commands proto file](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/pb/commands.proto).
-{{% /note %}}
+{{< /note >}}
 
 ![L3](../static/component-resourceaggregate.svg "medium-zoom-image")
 

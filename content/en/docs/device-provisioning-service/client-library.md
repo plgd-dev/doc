@@ -14,15 +14,15 @@ toc: true
 
 ## Get Package
 
-{{% note %}}
+{{< note >}}
 Are you interested in testing out the zero-touch provisioning? [Reach out](https://plgd.dev/contact/) to us!
-{{% /note %}}
+{{< /note >}}
 
 The Device Provisioning Service is distributed as a `tar.gz` package, which contains the dps shared library, public C headers and an example application.
 
-{{% warning %}}
+{{< warning >}}
 Please examine the contents of the provided pkg-config (`.pc`) file and install required dependencies.
-{{% /warning %}}
+{{< /warning >}}
 
 ## DPS Client API
 
@@ -164,9 +164,9 @@ The `oc_pki_add_mfg_cert` function adds manufacturer's certificate and private k
 
 The `oc_pki_add_trust_anchor` function adds trusted root certificate of the DPS server, used to verify the DPS.
 
-{{% note %}}
+{{< note >}}
 The verification of the DPS can be disabled by calling `plgd_dps_set_skip_verify(false)`.
-{{% /note %}}
+{{< /note >}}
 
 ### Provisioning
 
@@ -376,9 +376,9 @@ manufacturer_setup(plgd_dps_context_t *dps_ctx)
 
 Use a factory reset handler function to react to a reset of the device. The function is also invoked on the first start of the device and thus can be used to call the configuration function.
 
-{{% note %}}
+{{< note >}}
 If your device has run before then it should've created storage files in a folder next to the binary. During the initialization the data will be loaded from these storage files and the factory reset function might not be invoked. The configuration of the device will be based on the loaded data.
-{{% /note %}}
+{{< /note >}}
 
 To properly handle a device reset the handler must reload the manufacturer’s certificates, which have been removed by the reset and reconfigure the device. At the end of the handler, call the `plgd_dps_on_factory_reset` function, which does some additional clean-up and resets the provisioning state. Finally, restart the provisioning process by calling `plgd_dps_manager_start`.
 

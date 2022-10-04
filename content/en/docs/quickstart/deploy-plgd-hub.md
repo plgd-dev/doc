@@ -16,17 +16,17 @@ There are multiple ways how to start using / testing the plgd hub on your own in
 
 ## Kubernetes
 
-{{% note %}}
+{{< note >}}
 To read more on how to deploy plgd hub to Kubernetes using helm chart, continue [here](/deployment/k8s).
-{{% /note %}}
+{{< /note >}}
 
 ## plgd Bundle
 
 Bundle deployment hosts core plgd hub services with mocked OAuth Server in a single Docker image. All services which hosts the gRPC or HTTP API are proxied through the NGINX with configurable `NGINX_PORT` and `FQDN`. Mobile application used in the [Control device remotely](../device-to-hub) works also with the bundle.
 
-{{% warning %}}
+{{< warning >}}
 Bundle version of plgd services should be used only for simple testing and development purposes. Performance evaluations, production environment or other sensitive deployments should deploy plgd services using the plgd HELM chart.
-{{% /warning %}}
+{{< /warning >}}
 
 ### Run on localhost
 
@@ -43,9 +43,9 @@ After couple of seconds your plgd hub will become available. The plgd dashboard 
 
 The plgd hub doesn't work without OAuth Server. To not require developers not interested in sharing bundle instances with other users, a simple OAuth2.0 Mock Server is included in the bundle. Authentication to the plgd is therefore not required, and the test user is automatically logged in. The same applies also to device connections; in case you're using the bundle, devices connecting to the CoAP Gateway can use random/static onboarding code as it's not verified. Onboarding of devices is therefore much simpler.
 
-{{% warning %}}
+{{< warning >}}
 OAuth Server which is part of the plgd is only for testing and development purposes. For the production, integration of the plgd with the external OAuth2.0 server is required.
-{{% /warning %}}
+{{< /warning >}}
 
 ### Troubleshooting
 

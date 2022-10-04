@@ -14,13 +14,13 @@ toc: true
 
 By default, plgd hub services use NATS as an EventBus and MongoDB as an EventStore. Some use-cases require subscription directly to the internal messaging system instead of communicating with the plgd using its gateways. To simplify the data reconciliation and scale consumers easier, plgd supports [JetStream](https://github.com/nats-io/jetstream) technology as an alternative EventBus. JetStream is built on top of NATS, persisting all published events. Using JetStream as an EventBus allows you to access older, not yet processed messages without accessing the EventStore.
 
-{{% note %}}
+{{< note >}}
 There are still some edge-cases when the plgd event couldn't be published to the JetStream but it was stored to the EventStore. In such a case you need to identify that one event was lost and if needed, retrieve it using plgd gRPC Gateway.
-{{% /note %}}
+{{< /note >}}
 
-{{% note %}}
+{{< note >}}
 More information about the JetStream can be found [here](https://docs.nats.io/jetstream).
-{{% /note %}}
+{{< /note >}}
 
 ## NATS subjects overview
 
@@ -78,13 +78,13 @@ For the consumers of events you can subscribe to:
 
 ## Enable JetStream
 
-{{% note %}}
+{{< note >}}
 Deployment of the JetStream as an EventBus will be controlled by a single configuration option available in the plgd HELM chart. This is currently WIP.
-{{% /note %}}
+{{< /note >}}
 
-{{% warning %}}
+{{< warning >}}
 It's required from you to create event streams before the JetStream can be used as the plgd EventBus. If streams are not created, plgd services won't work.
-{{% /warning %}}
+{{< /warning >}}
 
 ### Enable jetstream at plgd #bundle
 
@@ -96,10 +96,10 @@ docker run -it --rm -e JETSTREAM=true --network=host -v `pwd`/.tmp/data:/data pl
 
 ### Enable jetstream manually
 
-{{% warning %}}
+{{< warning >}}
 Required [nats-server 2.3+](https://github.com/nats-io/nats-server/releases/latest)
 Required [nats client](https://github.com/nats-io/natscli/releases/latest)
-{{% /warning %}}
+{{< /warning >}}
 
 #### Enable jetstream at nats-server
 
@@ -117,9 +117,9 @@ jetstream: {
 }
 ```
 
-{{% note %}}
+{{< note >}}
 More [information](https://docs.nats.io/nats-server/configuration) about nats-server configuration.
-{{% /note %}}
+{{< /note >}}
 
 and start it:
 
@@ -151,9 +151,9 @@ Setup events stream `stream.json` where all events of hub will be stored:
 }
 ```
 
-{{% note %}}
+{{< note >}}
 More [information](https://docs.nats.io/jetstream/concepts/streams) about stream configuration.
-{{% /note %}}
+{{< /note >}}
 
 And then apply the configuration to the nats-server via:
 

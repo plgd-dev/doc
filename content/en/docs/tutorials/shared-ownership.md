@@ -55,6 +55,6 @@ Devices are organized in the Identity Store service by the owner ID retrieved fr
 
 After the rule is created, Auth0 include into every access tokens custom claim `https://plgd.dev/tenant` used to group users and "their" devices. In case the custom `OWNER_CLAIM` is configured, devices are no more owned by a single user, but in this case, by the **tenant**. Each user who is a member of the tenant A will be able to access all the devices of this tenant.
 
-{{% warning %}}
+{{< warning >}}
 If the configuration property `OWNER_CLAIM` is changed, each user is required to have this claim present.
-{{% /warning %}}
+{{< /warning >}}

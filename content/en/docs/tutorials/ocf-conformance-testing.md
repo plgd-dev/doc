@@ -82,9 +82,9 @@ To run CTT test cases, a PICS configuration file is required. Several files shou
 
 Properties `authorizationEndpointUrl`, `tokenEndpointUrl` and `c2cApiUrl` contain the address of the plgd hub #bundle against which the CTT executes tests. Please update it to match the `FQDN` value.
 
-{{% note %}}
+{{< note >}}
 plgd hub #bundle contains mock OAuth2.0 Server, which simplifies development and conformance testing.
-{{% /note %}}
+{{< /note >}}
 
 The values for `localEventListenerUri` and `proxyEventListenerUri` are provided by the ngrok application. The guide on how to obtain them is described in the _User Guide_ section **Setup for Target Cloud test cases for Events API (CT5.3.X)**.
 
@@ -96,9 +96,9 @@ The `cloudServerTrustAnchorCertificate` value should contain a correctly formatt
 
 The certificate can be retrieved from the plgd hub #bundle by opening `https://{FQDN}/.well-known/hub-configuration`. Copy the value of the `certificateAuthorities` property into the `cloudServerTrustAnchorCertificate` value with proper formatting.
 
-{{% warning %}}
+{{< warning >}}
 The certificate is regenerated whenever plgd hub #bundle is started. So if you restart your bundle instance, then you must update your PICS configuration as well.
-{{% /warning %}}
+{{< /warning >}}
 
 ### Start the Conformance Test Tool
 
@@ -184,9 +184,9 @@ Support of the API in the plgd hub #bundle GUI is planned, but not yet implement
 
 Additionally, several of the Origin Cloud test cases require different [setup](https://plgd.dev/configuration/cloud2cloud-connector) of the `cloud2cloud-connector` and also different values in the PICS configuration. Only with the correct configuration of each, the test cases will succeed.
 
-{{% note %}}
+{{< note >}}
 When running with the ngrok application do not forget to apply the manual changes to the underlying Python code described in the _User Guide_ section **Setup for all Origin Cloud test cases**.
-{{% /note %}}
+{{< /note >}}
 
 ### Executing Origin Cloud API commands using Postman
 
@@ -227,9 +227,9 @@ Keep default values in the remaining fields.
 
 Click on the **Get New Access Token** button and you should obtain a new valid JWT token. Postman will store the token and it will be available under the selected **Token Name**. This token can be used to validate all Origin Cloud API commands.
 
-{{% note %}}
+{{< note >}}
 The token was obtained from the mock OAuth2.0 Server contained in the plgd hub #bundle. If you restart the bundle you must obtain a new token, because the old one will no longer be valid.
-{{% /note %}}
+{{< /note >}}
 
 #### Create Linked Cloud
 
@@ -266,9 +266,9 @@ To create a linked cloud send a `POST` request to `https://{{FQDN}}/c2c/connecto
 }
 ```
 
-{{% note %}}
+{{< note >}}
 The values of `oauth.*` and `supportedSubscriptionEvents` fields vary between the Origin Cloud test cases. So to pass a test case you will usually need to create a new linked cloud with a given set of parameters.
-{{% /note %}}
+{{< /note >}}
 
 On success, the server sends a response with HTTP code 200 and a body containing the data of the newly created linked cloud in JSON format. The data should copy the request values, but it should contain at least one additional value — `id` of the new cloud.
 
@@ -319,9 +319,9 @@ Use the Postman console to examine the redirect chain that gets generated after 
 
 In the redirect chain there are two groups of requests – those addressed to `{FQDN}` URIs and those addressed to `{NGROK_URL}` URIs. The Origin Cloud handles the first group of requests and they need a valid JWT token in headers. CTT handles the second group of requests, and these requests do not require the original JWT token in headers. So to make this work, simply take the first address prefixed by `{NGROK_URL}` and copy it to your browser. It will redirect you to the login screen and allow you to enter the credentials and then grant the requested scope in the consent screen.
 
-{{% note %}}
+{{< note >}}
 There are third-party plugins that allow you to modify the headers the browser sends. When you add an authorization header with a valid JWT token then sending the original `GET` request from browser should work.)
-{{% /note %}}
+{{< /note >}}
 
 #### List Linked Clouds and Accounts
 
@@ -524,9 +524,9 @@ The root certificate authority can also be obtained by accessing the `data` fold
 
 The certificates are regenerated whenever the bundle is restarted and previous certificates are no longer valid.
 
-{{% note %}}
+{{< note >}}
 Older versions of the CTT ignore the `cloudClientTrustAnchorCertificate` value from the PICS file. As a workaround you can import the certificate as a trusted certificate system wide in Windows.
-{{% /note %}}
+{{< /note >}}
 
 For the fields of the Origin Cloud configuration not defined in the CTT prompt use the following:
 
@@ -619,9 +619,9 @@ Next, modify the PICS configuration file to contain the following:
 
 For the `cloudClientTrustAnchorCertificate` use the root certificate authority certificate of the plgd hub #bundle. You can obtain the certificate by sending a `GET` request to `https://{FQDN}/.well-known/hub-configuration`. Use the `certificateAuthorities` contained in the JSON response.
 
-{{% note %}}
+{{< note >}}
 If you're using an older versions of the CTT see the note in [Section CT6.3.1](#ct631-c2c-origin-cloud---devices-level-events)
-{{% /note %}}
+{{< /note >}}
 
 For the fields of the Origin Cloud configuration not defined in the CTT prompt use the following:
 

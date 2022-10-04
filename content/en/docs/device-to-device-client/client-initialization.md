@@ -30,9 +30,9 @@ There are more options on how to initialize the client and provision it with the
 
 The device client can be your custom application using a [device/client Go library](https://github.com/plgd-dev/device/tree/main/client), or a [plgd d2d client](https://github.com/plgd-dev/client-application). In such a scenario, the client generates (or it might be preconfigured) credentials for the device it's going to provision. The client needs to persist these credentials securely (a pre-shared key). In case credentials are lost (reinstallation, disk failure), a factory reset on the device need to be executed; using it's hardware button or other device native mechanism. It's API is not accessible, as the client cannot authenticate.
 
-{{% note %}}
+{{< note >}}
 This is the default configuration of the plgd d2d client. Pre-shared key is generated during startup and no authentication to the plgd d2d client is in place.
-{{% /note %}}
+{{< /note >}}
 
 ![](../static/device-client.drawio.svg)
 
@@ -48,9 +48,9 @@ This is the default configuration of the plgd d2d client. Pre-shared key is gene
 
 This scenario allows all clients which are part of the same security domain as well as the plgd hub to communicate securely with devices. Goal is to have all devices, clients as well as plgd hub trusting each other. Comparing to previous use-case, where the client issues it's own pre-shared key, this use-case requires distribution of Identity Certificates to all entities (devices, plgd hub, clients). The Identity Certificate, used for authentication identifies users / customers and devices. IDs of these entities are known as `owner IDs`.
 
-{{% note %}}
+{{< note >}}
 If your deployment scenario requires plgd hub and 1..n clients, read further to understand how to provision client with the Identity Certificate.
-{{% /note %}}
+{{< /note >}}
 
 ![](../static/device-hub-client-cert.drawio.svg)
 
@@ -60,9 +60,9 @@ The Identity Certificate is issued by the Certificate Authority service, which i
 
 But how to provision the client with the Identity Certificate, issued by the Certificate Authority service?
 
-{{% note %}}
+{{< note >}}
 What is the security domain? All entities, the plgd hub, d2d client or devices, which have the Identity Certificate issued by the same Certificate Authority are considered to be in the same security domain.
-{{% /note %}}
+{{< /note >}}
 
 #### Client requests the identity certificate on it's own
 

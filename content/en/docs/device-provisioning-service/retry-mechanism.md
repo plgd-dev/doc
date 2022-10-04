@@ -52,6 +52,6 @@ Cloud status observer is a simple polling mechanism which examines the cloud sta
 
 The limit of polling checks (default: 30) and the interval (default: 1 second) can be configured by the `plgd_dps_set_cloud_observer_configuration` function.
 
-{{% note %}}
+{{< note >}}
 Valid authentication of cloud manager depends on a valid access token. If the access token retrieved during provisioning is not permanent, it will eventually expire. It must be refreshed, because otherwise #plgd hub will close the connection to the device. This is handled internally by IoTivity-lite library, which schedules a refresh token operation before the access token expires.
-{{% /note %}}
+{{< /note >}}
