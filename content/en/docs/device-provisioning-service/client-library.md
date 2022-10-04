@@ -28,16 +28,16 @@ Please examine the contents of the provided pkg-config (`.pc`) file and install 
 
 The API is defined in the public header files provided in the distributed package.
 
-- [dps.h](../static/dps.h)
-- [dps_export.h](../static/dps_export.h)
-- [dps_log.h](../static/dps_log.h)
+- [dps.h](../static/dps-release/dps.h)
+- [dps_export.h](../static/dps-release/dps_export.h)
+- [dps_log.h](../static/dps-release/dps_log.h)
 
 ### Initialize DPS
 
 A DPS client device is an extension of an [IoTivity](https://github.com/iotivity/iotivity-lite) device. Define your desired device and add DPS code to automatically provision the device.
 
 Start up the DPS initialization by calling the `plgd_dps_init` function, which allocates and initializes required data structures.
-Use setters `plgd_dps_set_endpoint`, `plgd_dps_set_manager_callbacks`, `plgd_dps_set_skip_verify` and `plgd_dps_set_configuration_resource` to configure the device.
+Use setters `plgd_dps_set_endpoint`, `plgd_dps_set_manager_callbacks`, `plgd_dps_set_skip_verify`, `plgd_dps_set_configuration_resource`, `plgd_dps_set_retry_configuration`, `plgd_dps_set_cloud_observer_configuration` and `plgd_dps_pki_set_expiring_limit` to configure the device.
 
 ### Set DPS Endpoint
 
@@ -68,6 +68,9 @@ typedef enum {
   PLGD_DPS_GET_CLOUD = 1 << 6,
   PLGD_DPS_HAS_CLOUD = 1 << 7,
   PLGD_DPS_CLOUD_STARTED = 1 << 8,
+  PLGD_DPS_RENEW_CREDENTIALS = 1 << 9,
+  PLGD_DPS_GET_OWNER = 1 << 10,
+  PLGD_DPS_HAS_OWNER = 1 << 11,
   PLGD_DPS_TRANSIENT_FAILURE = 1 << 14,
   PLGD_DPS_FAILURE = 1 << 15,
 } plgd_dps_status_t;
@@ -81,39 +84,48 @@ dps_status_handler(plgd_dps_context_t *ctx, plgd_dps_status_t status, void *data
 {
   (void)data;
   (void)ctx;
-  printf("\nDPS Manager Status:\n");
+  PRINT("\nDPS Manager Status:\n");
   if (status == 0) {
-    printf("\t\t-Uninitialized\n");
+    PRINT("\t\t-Uninitialized\n");
   }
   if ((status & PLGD_DPS_INITIALIZED) != 0) {
-    printf("\t\t-Initialized\n");
+    PRINT("\t\t-Initialized\n");
+  }
+  if ((status & PLGD_DPS_GET_OWNER) != 0) {
+    PRINT("\t\t-Get owner\n");
+  }
+  if ((status & PLGD_DPS_HAS_OWNER) != 0) {
+    PRINT("\t\t-Has owner\n");
   }
   if ((status & PLGD_DPS_GET_CREDENTIALS) != 0) {
-    printf("\t\t-Get credentials\n");
+    PRINT("\t\t-Get credentials\n");
   }
   if ((status & PLGD_DPS_HAS_CREDENTIALS) != 0) {
-    printf("\t\t-Has credentials\n");
+    PRINT("\t\t-Has credentials\n");
   }
   if ((status & PLGD_DPS_GET_ACLS) != 0) {
-    printf("\t\t-Get acls\n");
+    PRINT("\t\t-Get acls\n");
   }
   if ((status & PLGD_DPS_HAS_ACLS) != 0) {
-    printf("\t\t-Has set acls\n");
+    PRINT("\t\t-Has set acls\n");
   }
   if ((status & PLGD_DPS_GET_CLOUD) != 0) {
-    printf("\t\t-Get cloud configuration\n");
+    PRINT("\t\t-Get cloud configuration\n");
   }
   if ((status & PLGD_DPS_HAS_CLOUD) != 0) {
-    printf("\t\t-Has cloud configuration\n");
+    PRINT("\t\t-Has cloud configuration\n");
   }
   if ((status & PLGD_DPS_CLOUD_STARTED) != 0) {
-    printf("\t\t-Started cloud\n");
+    PRINT("\t\t-Started cloud\n");
+  }
+  if ((status & PLGD_DPS_RENEW_CREDENTIALS) != 0) {
+    PRINT("\t\t-Renew credentials\n");
   }
   if ((status & PLGD_DPS_TRANSIENT_FAILURE) != 0) {
-    printf("\t\t-Transient failure\n");
+    PRINT("\t\t-Transient failure\n");
   }
   if ((status & PLGD_DPS_FAILURE) != 0) {
-    printf("\t\t-Failure\n");
+    PRINT("\t\t-Failure\n");
   }
 }
 ```
@@ -128,19 +140,19 @@ The resource type of the DPS configuration resource is `x.plgd.dps.conf` and the
 | -------------- | ------------- | -----| ----------- | --------- | ----------- |
 | Endpoint | endpoint | string | RW | No | Device provisioning server endpoint in format `coaps+tcp://{domain}:{port}` |
 | Last error code | lastErrorCode | string | R | No | Provides last error code when provision status is in `failed` state (see list below for possible values). |
-| Self-owned | selfOwned | bool | R | No | True if the device is owned by itself (ie. by the device provisioning client) |
 | Force reprovision | forceReprovision | bool | RW | No | Connect to dps service and reprovision credentials, acls and cloud configuration. |
 | Provisioning status | provisionStatus | enum(string) | R | No | String representation of the provisioning status (see list below for possible values). |
 
 Last error code values:
 
-- `0`: OK
-- `1`: error response
-- `2`: cannot connect to dps
-- `3`: cannot apply credentials configuration
-- `4`: cannot apply acls configuration
-- `5`: cannot apply cloud configuration
-- `6`: cannot start cloud
+- `0` (`PLGD_DPS_OK`): OK
+- `1` (`PLGD_DPS_ERROR_RESPONSE`): error response
+- `2` (`PLGD_DPS_ERROR_CONNECT`): cannot connect to dps
+- `3` (`PLGD_DPS_ERROR_GET_CREDENTIALS`): cannot apply credentials configuration
+- `4` (`PLGD_DPS_ERROR_GET_ACLS`): cannot apply acls
+- `5` (`PLGD_DPS_ERROR_SET_CLOUD`): cannot apply cloud configuration
+- `6` (`PLGD_DPS_ERROR_START_CLOUD`): cannot start cloud
+- `7` (`PLGD_DPS_ERROR_GET_OWNER`): cannot retrieve device owner
 
 Provisioning status values:
 
@@ -148,11 +160,14 @@ Provisioning status values:
 - `initialized`: endpoint is set and manager is starting requests
 - `provisioning credentials`: provisioning of credentials has been started
 - `provisioned credentials`: credentials are provisioned
+- `provisioning owner`: requesting of device owner has been started
+- `provisioned owner`: device is owned by the received owner
 - `provisioning acls`: provisioning of acls has been started
 - `provisioned acls`: acls are provisioned
 - `provisioning cloud`: provisioning of cloud configuration has been started
 - `provisioned cloud`: cloud configuration is provisioned
 - `provisioned`: device is fully provisioned and configured
+- `renew credentials`: renewing expired or expiring certificates
 - `transient failure`: provisioning failed with a transient error and the failed step is being retried
 - `failure`: provisioning failed, more information is stored in the last error code property
 
@@ -162,7 +177,7 @@ To make sure the device communicates with the DPS endpoint using TLS, add the ce
 
 The `oc_pki_add_mfg_cert` function adds manufacturer's certificate and private key to device. This certificate is used to sign the communication with the DPS server, authenticatating and identifying the device. On success, use the returned credential id to assign a security profile by calling `oc_pki_set_security_profile`.
 
-The `oc_pki_add_trust_anchor` function adds trusted root certificate of the DPS server, used to verify the DPS.
+The `oc_pki_add_mfg_trust_anchor` function adds manufacturer's trusted root certificate of the DPS server, which is used to verify the DPS.
 
 {{< note >}}
 The verification of the DPS can be disabled by calling `plgd_dps_set_skip_verify(false)`.
@@ -245,8 +260,8 @@ Part of the package is an example application called `dps_cloud_server`. The fol
 
 Currently, the handling of certificates is hard-coded into the binary. On start-up, the process expects the certificates to be in a folder named `pki_certs` located next to the binary file. The folder must contain 3 files:
 
-- `dpsca.pem` - certificate authority of the DPS
-- `mfgcrt.pem` - manufacture certificate of the device
+- `dpsca.pem` - manufacturer certificate authority of the DPS
+- `mfgcrt.pem` - manufacturer certificate of the device
 - `mfgkey.pem` - manufacturer certificate private key
 
 The `dps_cloud_server` supports `--no-verify-ca` option. If you run the binary with this option, then the DPS endpoint will be used without authentication and you don't need the `dpsca.pem` file.
@@ -273,7 +288,7 @@ dps_add_certificates(plgd_dps_context_t *dps_ctx, const char *cert_dir)
   int dpsca_credit = -1;
   int mfg_credid = -1;
   if (plgd_dps_get_skip_verify(dps_ctx)) {
-    DPS_DBG("adding of trusted root certificate skipped");
+    DPS_DBG("adding of manufacturer trusted root ca skipped");
   } else {
     unsigned char dps_ca[CERT_BUFFER_SIZE];
     size_t dps_ca_len = sizeof(dps_ca);
@@ -284,12 +299,12 @@ dps_add_certificates(plgd_dps_context_t *dps_ctx, const char *cert_dir)
       DPS_ERR("ERROR: unable to read %s", path);
       goto error;
     }
-    dpsca_credit = oc_pki_add_trust_anchor(plgd_dps_get_device(dps_ctx), dps_ca, dps_ca_len);
-    if (dpsca_credit < 0) {
-      DPS_ERR("ERROR: installing DPS trusted root ca");
+    dpsca_credid = oc_pki_add_mfg_trust_anchor(plgd_dps_get_device(dps_ctx), dps_ca, dps_ca_size);
+    if (dpsca_credid < 0) {
+      DPS_ERR("ERROR: installing manufacturer trusted root ca");
       goto error;
     }
-    DPS_DBG("DPS trusted root credid=%d", dpsca_credit);
+    DPS_DBG("manufacturer trusted root ca credid=%d", dpsca_credid);
   }
 
   unsigned char mfg_crt[CERT_BUFFER_SIZE];
@@ -361,6 +376,12 @@ manufacturer_setup(plgd_dps_context_t *dps_ctx)
   }
   plgd_dps_set_manager_callbacks(dps_ctx, dps_status_handler, /* on_change_data */ NULL, cloud_status_handler,
                                  /* on_cloud_change_data */ NULL);
+  if (g_expiration_limit != -1) {
+    plgd_dps_pki_set_expiring_limit(dps_ctx, (uint16_t)g_expiration_limit);
+  }
+  if (g_observer_max_retry != -1) {
+    plgd_dps_set_cloud_observer_configuration(dps_ctx, (uint8_t)g_observer_max_retry, 1);
+  }
   plgd_dps_set_skip_verify(dps_ctx, g_skip_ca_verification != 0);
   plgd_dps_set_endpoint(dps_ctx, dps_endpoint);
   if (dps_add_certificates(dps_ctx, dps_cert_dir) != 0) {
@@ -426,7 +447,20 @@ Now we have all the parts necessary to do the full initialization of the DPS cli
     ret = -1;
     goto finish;
   }
+  if (parsed_options.retry_configuration_size > 0 &&
+      !plgd_dps_set_retry_configuration(dps_ctx, parsed_options.retry_configuration,
+                                        parsed_options.retry_configuration_size)) {
+    DPS_ERR("cannot start dps manager: invalid retry configuration");
+    ret = -1;
+    goto finish;
+  }
   if (!plgd_dps_manager_is_started(dps_ctx)) {
+    if (g_expiration_limit != -1) {
+      plgd_dps_pki_set_expiring_limit(dps_ctx, (uint16_t)g_expiration_limit);
+    }
+    if (g_observer_max_retry != -1) {
+      plgd_dps_set_cloud_observer_configuration(dps_ctx, (uint8_t)g_observer_max_retry, 1);
+    }
     plgd_dps_set_skip_verify(dps_ctx, g_skip_ca_verification != 0);
     plgd_dps_set_manager_callbacks(dps_ctx, dps_status_handler, /* on_change_data */ NULL, cloud_status_handler,
                                    /* on_cloud_change_data */ NULL);
@@ -451,11 +485,13 @@ $ ./dps_cloud_server --help
 ./dps_cloud_server [device-name] [endpoint]
 
 OPTIONS:
-  -h | --help                   print help
-  -c | --create-conf-resource   create DPS configuration resource
-  -h | --no-verify-ca           skip loading of the DPS certificate authority
-  -r | --retry-configuration    retry timeout configuration (array of non-zero values delimited by ',', maximum of 8 values is accepted; example: 1,2,4,8,16)
-  -w | --wait-for-reset         don\'t start right away, but wait for SIGHUP signal
+  -h | --help                       print help
+  -c | --create-conf-resource       create DPS configuration resource
+  -e | --expiration-limit           set certificate expiration limit (in seconds)
+  -h | --no-verify-ca               skip loading of the DPS certificate authority
+  -r | --retry-configuration        retry timeout configuration (array of non-zero values delimited by ',', maximum of 8 values is accepted; example: 1,2,4,8,16)
+  -o | --cloud-observer-max-retry   maximal number of retries by cloud observer before forcing reprovisioning
+  -w | --wait-for-reset             don\'t start right away, but wait for SIGHUP signal
 
 
 ARGUMENTS:

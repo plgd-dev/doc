@@ -46,7 +46,7 @@ After that, the device provisioning client will provision configuration, ACLs an
 
 ## Setup DPS trust anchor to the device
 
-The device by default verifies the endpoint certificate by the installed trust anchors using the C-API `oc_pki_add_trust_anchor` or by provisioning the certificate through the onboarding tool. To set up trust anchors, change operation mode from normal to provisioning, update the credential resource, and then return to the normal operation mode.
+The device by default verifies the endpoint certificate by the trust anchors which were installed using the C-API `oc_pki_add_mfg_trust_anchor` or by provisioning the certificate through the onboarding tool. To set up trust anchors, change operation mode from normal to provisioning, update the credential resource, and then return to the normal operation mode.
 
 ```golang
   trustAnchor := "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----\n"
@@ -65,7 +65,7 @@ The device by default verifies the endpoint certificate by the installed trust a
     {
       Subject: uuid.NewSHA1(uuid.NameSpaceDNS, []byte("try.plgd.cloud")).String(),
       Type:    credential.CredentialType_ASYMMETRIC_SIGNING_WITH_CERTIFICATE,
-      Usage:   credential.CredentialUsage_TRUST_CA,
+      Usage:   credential.CredentialUsage_MFG_TRUST_CA,
       PublicData: &credential.CredentialPublicData{
         DataInternal: trustAnchor,
         Encoding:     credential.CredentialPublicDataEncoding_PEM,
