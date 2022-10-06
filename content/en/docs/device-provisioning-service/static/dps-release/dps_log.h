@@ -9,7 +9,7 @@
 #ifndef PLGD_DPS_LOG_H
 #define PLGD_DPS_LOG_H
 
-#include "dps_export.h"
+#include "dps_compiler.h"
 #include <stdio.h>
 #include <time.h>
 
@@ -47,11 +47,11 @@ plgd_dps_print_log_fn_t plgd_dps_get_log_fn(void);
     }                                                                                                                  \
   } while (0)
 
-#ifdef DEBUG
+#ifdef DPS_DBG_ENABLED
 #define DPS_DBG(...) DPS_LOG(DPS_LOG_LEVEL_DEBUG, __VA_ARGS__)
-#else
+#else /* !DPS_DBG_ENABLED */
 #define DPS_DBG(...)
-#endif
+#endif /* DPS_DBG_ENABLED */
 #define DPS_INFO(...) DPS_LOG(DPS_LOG_LEVEL_INFO, __VA_ARGS__)
 #define DPS_WRN(...) DPS_LOG(DPS_LOG_LEVEL_WARNING, __VA_ARGS__)
 #define DPS_ERR(...) DPS_LOG(DPS_LOG_LEVEL_ERROR, __VA_ARGS__)

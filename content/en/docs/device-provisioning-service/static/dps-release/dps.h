@@ -29,7 +29,7 @@
 #error "OC_STORAGE must be defined"
 #endif
 
-#include "dps_export.h"
+#include "dps_compiler.h"
 #include "oc_client_state.h"
 #include "oc_cloud.h"
 #include "oc_ri.h"
@@ -57,6 +57,9 @@ typedef enum {
   PLGD_DPS_GET_CLOUD = 1 << 6,
   PLGD_DPS_HAS_CLOUD = 1 << 7,
   PLGD_DPS_CLOUD_STARTED = 1 << 8,
+  PLGD_DPS_RENEW_CREDENTIALS = 1 << 9,
+  PLGD_DPS_GET_OWNER = 1 << 10,
+  PLGD_DPS_HAS_OWNER = 1 << 11,
   PLGD_DPS_TRANSIENT_FAILURE = 1 << 14,
   PLGD_DPS_FAILURE = 1 << 15,
 } plgd_dps_status_t;
@@ -72,6 +75,7 @@ typedef enum {
   PLGD_DPS_ERROR_GET_ACLS = 4,
   PLGD_DPS_ERROR_SET_CLOUD = 5,
   PLGD_DPS_ERROR_START_CLOUD = 6,
+  PLGD_DPS_ERROR_GET_OWNER = 7,
 } plgd_dps_error_t;
 
 /**
@@ -109,7 +113,7 @@ plgd_dps_context_t *plgd_dps_get_context(size_t device);
  * @return size_t index of device
  */
 DPS_EXPORT
-size_t plgd_dps_get_device(plgd_dps_context_t *ctx);
+size_t plgd_dps_get_device(const plgd_dps_context_t *ctx) DPS_NONNULL();
 
 /**
  * @brief Set DPS manager callbacks.
@@ -146,7 +150,8 @@ size_t plgd_dps_get_device(plgd_dps_context_t *ctx);
  */
 DPS_EXPORT
 void plgd_dps_set_manager_callbacks(plgd_dps_context_t *ctx, plgd_dps_on_status_change_cb_t on_change_cb,
-                                    void *on_change_data, oc_cloud_cb_t on_cloud_change_cb, void *on_cloud_change_data);
+                                    void *on_change_data, oc_cloud_cb_t on_cloud_change_cb, void *on_cloud_change_data)
+  DPS_NONNULL(1);
 
 /**
  * @brief Start DPS manager to provision device.
@@ -172,7 +177,7 @@ void plgd_dps_set_manager_callbacks(plgd_dps_context_t *ctx, plgd_dps_on_status_
  * @return -1 on failure
  */
 DPS_EXPORT
-int plgd_dps_manager_start(plgd_dps_context_t *ctx);
+int plgd_dps_manager_start(plgd_dps_context_t *ctx) DPS_NONNULL();
 
 /**
  * @brief Check whether DPS manager has been started.
@@ -184,7 +189,7 @@ int plgd_dps_manager_start(plgd_dps_context_t *ctx);
  * @see plgd_dps_manager_start
  */
 DPS_EXPORT
-bool plgd_dps_manager_is_started(const plgd_dps_context_t *ctx);
+bool plgd_dps_manager_is_started(const plgd_dps_context_t *ctx) DPS_NONNULL();
 
 /**
  * @brief Stop DPS manager.
@@ -195,7 +200,7 @@ bool plgd_dps_manager_is_started(const plgd_dps_context_t *ctx);
  * @param ctx dps context (cannot be NULL)
  */
 DPS_EXPORT
-void plgd_dps_manager_stop(plgd_dps_context_t *ctx);
+void plgd_dps_manager_stop(plgd_dps_context_t *ctx) DPS_NONNULL();
 
 /**
  * @brief Restart DPS manager to provision device by given server.
@@ -210,7 +215,7 @@ void plgd_dps_manager_stop(plgd_dps_context_t *ctx);
  * @see plgd_dps_manager_stop
  */
 DPS_EXPORT
-int plgd_dps_manager_restart(plgd_dps_context_t *ctx);
+int plgd_dps_manager_restart(plgd_dps_context_t *ctx) DPS_NONNULL();
 
 /**
  * @brief Clean-up of DPS provisioning on factory reset.
@@ -228,7 +233,7 @@ int plgd_dps_manager_restart(plgd_dps_context_t *ctx);
  * @return -1 on failure
  */
 DPS_EXPORT
-int plgd_dps_on_factory_reset(plgd_dps_context_t *ctx);
+int plgd_dps_on_factory_reset(plgd_dps_context_t *ctx) DPS_NONNULL();
 
 /**
  * @brief Controls whether a dps client verifies the device provision service's certificate chain against trust anchor
@@ -238,7 +243,7 @@ int plgd_dps_on_factory_reset(plgd_dps_context_t *ctx);
  * @param skip_verify skip verification of the DPS service
  */
 DPS_EXPORT
-void plgd_dps_set_skip_verify(plgd_dps_context_t *ctx, bool skip_verify);
+void plgd_dps_set_skip_verify(plgd_dps_context_t *ctx, bool skip_verify) DPS_NONNULL();
 
 /**
  * @brief Get `skip verify` value from context.
@@ -250,7 +255,7 @@ void plgd_dps_set_skip_verify(plgd_dps_context_t *ctx, bool skip_verify);
  * @see plgd_dps_set_skip_verify
  */
 DPS_EXPORT
-bool plgd_dps_get_skip_verify(plgd_dps_context_t *ctx);
+bool plgd_dps_get_skip_verify(const plgd_dps_context_t *ctx) DPS_NONNULL();
 
 /**
  * @brief Set endpoint of the DPS service.
@@ -261,20 +266,20 @@ bool plgd_dps_get_skip_verify(plgd_dps_context_t *ctx);
  * @param endpoint endpoint of the provisioning server (cannot be NULL)
  */
 DPS_EXPORT
-void plgd_dps_set_endpoint(plgd_dps_context_t *ctx, const char *endpoint);
+void plgd_dps_set_endpoint(plgd_dps_context_t *ctx, const char *endpoint) DPS_NONNULL();
 
 /**
  * @brief Copy endpoint of the DPS service to output buffer.
  *
  * @param ctx dps context (cannot be NULL)
- * @param buffer[out] output buffer (cannot NULL and must be large enough to contain the endpoint in a string format)
+ * @param[out] buffer output buffer (cannot be NULL and must be large enough to contain the endpoint in a string format)
  * @param buffer_size size of output buffer
  * @return >0 on success, number of copied bytes to buffer
  * @return 0 endpoint is not set, thus nothing was copied
  * @return <0 on error
  */
 DPS_EXPORT
-int plgd_dps_get_endpoint(const plgd_dps_context_t *ctx, char *buffer, size_t buffer_size);
+int plgd_dps_get_endpoint(const plgd_dps_context_t *ctx, char *buffer, size_t buffer_size) DPS_NONNULL();
 
 /**
  * @brief Force all steps of the provisioning process to be executed.
@@ -287,7 +292,7 @@ int plgd_dps_get_endpoint(const plgd_dps_context_t *ctx, char *buffer, size_t bu
  * @see plgd_dps_manager_start
  */
 DPS_EXPORT
-void plgd_dps_force_reprovision(plgd_dps_context_t *ctx);
+void plgd_dps_force_reprovision(plgd_dps_context_t *ctx) DPS_NONNULL();
 
 /**
  * @brief Check if force reprovision flag is set.
@@ -297,7 +302,7 @@ void plgd_dps_force_reprovision(plgd_dps_context_t *ctx);
  * @return false force reprovision is not set
  */
 DPS_EXPORT
-bool plgd_dps_has_forced_reprovision(plgd_dps_context_t *ctx);
+bool plgd_dps_has_forced_reprovision(const plgd_dps_context_t *ctx) DPS_NONNULL();
 
 /**
  * @brief Configuration resource
@@ -308,7 +313,6 @@ bool plgd_dps_has_forced_reprovision(plgd_dps_context_t *ctx);
  *    {
  *      endpoint: string;
  *      lastErrorCode: int;
- *      selfOwned: bool;
  *      provisionStatus: string;
  *      forceReprovision: bool;
  *    }
@@ -322,7 +326,7 @@ bool plgd_dps_has_forced_reprovision(plgd_dps_context_t *ctx);
  * @param create set true for creating resource. set false to free memory of created resource.
  */
 DPS_EXPORT
-void plgd_dps_set_configuration_resource(plgd_dps_context_t *ctx, bool create);
+void plgd_dps_set_configuration_resource(plgd_dps_context_t *ctx, bool create) DPS_NONNULL();
 
 /**
  * @brief Maximal size of the retry configuration array
@@ -332,27 +336,27 @@ void plgd_dps_set_configuration_resource(plgd_dps_context_t *ctx, bool create);
 /**
  * @brief Configure retry counter.
  *
- * @param ret dps context (cannot be NULL)
+ * @param ctx dps context (cannot be NULL)
  * @param cfg array with new timeout values (must have [1, PLGD_DPS_MAX_RETRY_VALUES_SIZE> number of non-zero values)
  * @param cfg_size size of the array with timeout values
  * @return true on success
  * @return false on failure
  */
 DPS_EXPORT
-bool plgd_dps_set_retry_configuration(plgd_dps_context_t *ctx, const uint8_t cfg[], size_t cfg_size);
+bool plgd_dps_set_retry_configuration(plgd_dps_context_t *ctx, const uint8_t cfg[], size_t cfg_size) DPS_NONNULL(1);
 
 /**
  * @brief Get retry counter configuration.
  *
  * @param ctx dps context (cannot be NULL)
- * @param buffer[out] output buffer into which the configuration will be copied (cannot be NULL, and must be large
+ * @param[out] buffer output buffer into which the configuration will be copied (cannot be NULL, and must be large
  * enough to contain the current configuration)
  * @param buffer_size size of the output buffer
  * @return >0 the size of the configuration array copied to buffer
  * @return <0 on failure
  */
 DPS_EXPORT
-int plgs_dps_get_retry_configuration(const plgd_dps_context_t *ctx, uint8_t *buffer, size_t buffer_size);
+int plgs_dps_get_retry_configuration(const plgd_dps_context_t *ctx, uint8_t *buffer, size_t buffer_size) DPS_NONNULL();
 
 /**
  * @brief Get last provisioning error.
@@ -361,7 +365,7 @@ int plgs_dps_get_retry_configuration(const plgd_dps_context_t *ctx, uint8_t *buf
  * @return plgd_dps_error_t last provisioning error
  */
 DPS_EXPORT
-plgd_dps_error_t plgd_dps_get_last_error(const plgd_dps_context_t *ctx);
+plgd_dps_error_t plgd_dps_get_last_error(const plgd_dps_context_t *ctx) DPS_NONNULL();
 
 /**
  * @brief Get provision status.
@@ -370,7 +374,7 @@ plgd_dps_error_t plgd_dps_get_last_error(const plgd_dps_context_t *ctx);
  * @return uint16_t current provision status
  */
 DPS_EXPORT
-uint16_t plgd_dps_get_provision_status(const plgd_dps_context_t *ctx);
+uint16_t plgd_dps_get_provision_status(const plgd_dps_context_t *ctx) DPS_NONNULL();
 
 typedef struct
 {
@@ -382,7 +386,7 @@ typedef struct
 /**
  * @brief Configure cloud observer.
  *
- * @param ret dps context (cannot be NULL)
+ * @param ctx dps context (cannot be NULL)
  * @param max_retry_count maximal number of retries, set to 0 to disable cloud status observer
  * @param retry_interval_s retry interval in seconds (must be >0)
  * @return true on success
@@ -390,7 +394,7 @@ typedef struct
  */
 DPS_EXPORT
 bool plgd_dps_set_cloud_observer_configuration(plgd_dps_context_t *ctx, uint8_t max_retry_count,
-                                               uint8_t retry_interval_s);
+                                               uint8_t retry_interval_s) DPS_NONNULL();
 
 /**
  * @brief Get cloud observer configuration
@@ -399,7 +403,31 @@ bool plgd_dps_set_cloud_observer_configuration(plgd_dps_context_t *ctx, uint8_t 
  * @return plgd_cloud_status_observer_configuration_t current cloud observer configuration
  */
 DPS_EXPORT
-plgd_cloud_status_observer_configuration_t plgd_dps_get_cloud_observer_configuration(plgd_dps_context_t *ctx);
+plgd_cloud_status_observer_configuration_t plgd_dps_get_cloud_observer_configuration(const plgd_dps_context_t *ctx)
+  DPS_NONNULL();
+
+/**
+ * @brief Set expiring-in limit of DPS certificates.
+ *
+ * If a certificate's valid-to timestamp is within the expiring-in limit (current time < valid_to and current time +
+ * expiring-in limit > valid_to) then the certificate is considered as expiring.
+ * Expiring certificates are not accepted during the get credentials step of DPS provisioning. If a expiring
+ * certificates is received then the step is retried to receive a newer certificate with longer expiration.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param expiring_limit limit value in seconds
+ */
+DPS_EXPORT
+void plgd_dps_pki_set_expiring_limit(plgd_dps_context_t *ctx, uint16_t expiring_limit) DPS_NONNULL();
+
+/**
+ * @brief Get expiring-in limit of DPS certificates
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @return expiring-in limit in seconds
+ */
+DPS_EXPORT
+uint16_t plgd_dps_pki_get_expiring_limit(const plgd_dps_context_t *ctx) DPS_NONNULL();
 
 #ifdef __cplusplus
 }
