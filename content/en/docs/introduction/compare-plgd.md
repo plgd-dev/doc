@@ -216,6 +216,7 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
       }
     });
   </script>
+  <div class="table-responsive">
   <table class="comparison" id="table">
     <thead>
       <tr>
@@ -920,4 +921,5 @@ It’s tricky to keep track, with the number of IoT platforms out there. Which i
       </tr>
     </tbody>
   </table>
+  </div>
 {{< /rawhtml >}}
