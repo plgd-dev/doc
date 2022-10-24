@@ -67,6 +67,19 @@ gRPC API of the Certificate Authority service as defined [here](https://github.c
 | `apis.grpc.authorization.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.grpc.authorization.http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
 
+### HTTP API
+
+ HTTP Certificate Authority APIs as defined by [swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/certificate-authority/pb/service.swagger.json).
+ The configuration `apis.http.tls` and `apis.http.authorization` are inherited from the gRPC API.
+
+ | Property | Type | Description | Default |
+ | ---------- | -------- | -------------- | ------- |
+ | `apis.http.address` | string | `Listen specification <host>:<port> for http client connection.` | `"0.0.0.0:9101"` |
+ | `apis.http.readTimeout` | string | `The maximum duration for reading the entire request, including the body by the server. A zero or negative value means there will be no timeout.` | `8s` |
+ | `apis.http.readHeaderTimeout` | string | `The amount of time allowed to read request headers by the server. If readHeaderTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `4s` |
+ | `apis.http.writeTimeout` | string | `The maximum duration before the server times out writing of the response. A zero or negative value means there will be no timeout.` | `16s` |
+ | `apis.http.idleTimeout` | string | `The maximum amount of time the server waits for the next request when keep-alives are enabled. If idleTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `30s` |
+
 ### Signer
 
 Signer configuration to issue identity certificates for devices or mobile application.
