@@ -148,13 +148,16 @@ return Authorization code
 S -> OA ++: Exchange for the user token
 return User token
 
-S -> C ++: Request Certificate Signing Request
-return Certificate Signing Request
+S -> OA ++: Get /.well-known/jwks.json
+return jwks.json
 
-S -> CA ++: Sign D2D Client Identity Certificate\n(CSR, User token)
+S -> C ++: Initialize\n(jwks.json, User token)
+return Identity certificate challenge\n(D2D Client Identity CSR, state)
+
+S -> CA ++: Sign D2D Client Identity CSR\n(CSR, User token)
 return Identity Certificate chain
 
-S -> C ++: Initialize\n(Identity Certificate Chain)
+S -> C ++: Finish Initialize\n(Identity Certificate Chain, User token, state)
 return Initialized
 S -> U: Initialized
 U -> S: Discover devices
