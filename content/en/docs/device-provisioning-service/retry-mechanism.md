@@ -48,11 +48,9 @@ The retry counter starts with zero. Each retry, after either a transient or a no
 
 After a successful provisioning, the device disconnects from the DPS service and starts up the cloud manager in `IoTivity-lite`. If the cloud manager fails to start, then a full reprovisioning is triggered. If the cloud manager starts successfully, then a cloud status observer also starts to operate.
 
-Cloud status observer is a simple polling mechanism which examines the cloud status value 30 times in 1 second intervals. The observer checks the cloud status and waits for the status to have both `OC_CLOUD_REGISTERED` and `OC_CLOUD_LOGGED_IN` flags sets. If the flags are set, then the polling stops. If the limit of polling checks is reached and the flags are still not set, then the cloud manager is stopped and a full reprovisioning is forced.
+Cloud status observer is a simple polling mechanism which examines the cloud status value 30 times in 1 second intervals. The observer checks the cloud status and waits for the status to have both `OC_CLOUD_REGISTERED` and `OC_CLOUD_LOGGED_IN` flags sets. If the flags are set, then the polling stops. If the limit of polling checks is reached and the flags are still not set, then the cloud manager is stopped and a full reprovisioning is forced. The polling mechanism is restarted as soon as the connection to the plgd hub is lost.
 
 The limit of polling checks (default: 30) and the interval (default: 1 second) can be configured by the `plgd_dps_set_cloud_observer_configuration` function.
-
-As soon as the cloud connection is lost, the cloud status observer is triggered.
 
 {{< note >}}
 Valid authentication of cloud manager depends on a valid access token. If the access token retrieved during provisioning is not permanent, it will eventually expire. It must be refreshed, because otherwise #plgd hub will close the connection to the device. This is handled internally by IoTivity-lite library, which schedules a refresh token operation before the access token expires.
