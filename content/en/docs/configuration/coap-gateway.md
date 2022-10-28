@@ -42,6 +42,7 @@ CoAP API as specified in the [Open Connectivity Foundation - Device to Cloud Ser
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
 | `apis.coap.address` | string | Listen specification <host>:<port> for coap client connection. | `"0.0.0.0:5684"` |
+| `apis.coap.protocols` | []string | `Protocol for coap connection. The supported values are: "tcp", "udp" .` | `["tcp"]` |
 | `apis.coap.externalAddress` | string | `External address including public domain/IP for coap client connection.` | `"coap-gw.example.com:5684"` |
 | `apis.coap.maxMessageSize` | int | `Max message size which can be sent/received via coap. i.e. 256*1024 = 262144 bytes.` | `262144` |
 | `apis.coap.ownerCacheExpiration` | string | `Time limit of how long to keep subscribed to device updates after last use of the given cache item.` | `1m` |

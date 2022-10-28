@@ -183,9 +183,9 @@ return
 
 From this moment on, the device is reachable to all authorized clients and devices. Resource update requests received by a particular Gateway to which the client is connected are forwarded to the [Resource Aggregate](#resource-aggregate). Successful command validation precedes storing and publishing of this event to the [Event Bus](#event-bus) to which the CoAP Gateway is subscribed. If the update request event targets the device hosted by this instance of the CoAP Gateway, an [UPDATE](https://tools.ietf.org/html/rfc7252#section-5.8.2) is forwarded over the authorized TCP channel to the device. The device response is forwarded to the [Resource Aggregate](#resource-aggregate), which issues a resource updated event, updating the resource projection and informing the client that the update was successful.
 
-#### Device Status
+#### Device Metadata
 
-{{< plantuml id="device-status" >}}
+{{< plantuml id="device-metadata" >}}
 @startuml Sequence
 skinparam backgroundColor transparent
 hide footbox
@@ -203,7 +203,7 @@ CGW -> D: Signed In
 deactivate D
 CGW -> D: Get discovery resource (oic/res)
 D -> CGW: resources links
-alt batch observation is supported
+alt batch observation is supported and twin is enabled
   CGW -> RA: Update twin synchronization to started
   RA->CGW:
   CGW -> D: Observe discovery resource (oic/res) via batch observation
@@ -212,7 +212,7 @@ alt batch observation is supported
   RA->CGW:
   CGW -> RA: Update twin synchronization to finished
   RA->CGW:
-else batch observation is not supported
+else batch observation is not supported and twin is enabled
   CGW -> RD: Get published resources
   RD -> CGW: published resources
   CGW -> RA: Update twin synchronization to started
@@ -231,7 +231,7 @@ deactivate CGW
 D -> CGW ++: Publish resources
 CGW -> D
 deactivate D
-alt batch observation is supported and batch observation is not created
+alt batch observation is supported and batch observation is not created and twin is enabled
   CGW -> RA: Update twin synchronization to started
   RA->CGW:
   CGW -> D: Observe discovery resource (oic/res) via batch observation
@@ -240,7 +240,7 @@ alt batch observation is supported and batch observation is not created
   RA->CGW:
   CGW -> RA: Update twin synchronization to finished
   RA->CGW:
-else batch observation is not supported and some resources are not observed
+else batch observation is not supported and some resources are not observed and twin is enabled
   CGW -> RA: Update twin synchronization to started
   RA->CGW:
   loop for each not observed resource
@@ -261,6 +261,8 @@ RA->CGW:
 @enduml
 {{< /plantuml >}}
 
+Device metadata contains status about the connection and twin synchronization. Device metadata is updated to online with expiration when the device comes online, and twin synchronization is set to none. Devices are responsible for signing in again before expiration. When the device does not sign-in again, the connection is closed, and the device metadata is updated to offline. Whenever the device closes the connection, the device metadata is updated to offline.
+If the device twin is enabled, the CoAP Gateway attempts to synchronize it after successful signing. After synchronization has started, the device metadata twin synchronization will update to started, and after it has finished, the device metadata twin synchronization will update to finished.
 
 #### Resource Update
 
