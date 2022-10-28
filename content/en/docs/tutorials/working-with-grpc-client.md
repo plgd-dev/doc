@@ -76,7 +76,7 @@ To return only binary switches resources hosted by devices with ids `deviceID1` 
 
 ### Get Resource Content
 
-The `GetResources` command supports various filter options. If all of them are **unset**, all resource contents (shadows) of all devices user is authorized to use are returned.
+The `GetResources` command supports various filter options. If all of them are **unset**, all resource contents (device twin) of all devices user is authorized to use are returned.
 
 **Example usages of filter options:**
 
@@ -103,7 +103,7 @@ If the user loses a device _(unregistered / no more shared with the user)_, the 
 
 ### Get Resource from Device
 
-The `GetResourceFromDevice` retrieves resource content directly from the device - resource shadow value is not returned. To define the expiration of command, set `GetResourceFromDeviceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `GetResourceFromDevice.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the hub skips it and will be removed by creating a new snapshot event.
+The `GetResourceFromDevice` retrieves resource content directly from the device - device twin resource value is not returned. To define the expiration of command, set `GetResourceFromDeviceRequest.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `GetResourceFromDevice.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the hub skips it and will be removed by creating a new snapshot event.
 > This command execution is "expensive" as it has to reach the real device while your client synchronously waits for a response.
 
 ### Update Resource Content
@@ -133,7 +133,7 @@ To return certain pending commands of binary switch resources hosted by devices 
 
 ### Get devices metadata
 
-The `GetDevicesMetadata` command supports various filter options. If all of them are **unset**, all metadata of all devices the user is authorized to use are returned. Metadata contains information about connection status(ONLINE/OFFLINE) and shadow synchronization(ENABLED, DISABLED)
+The `GetDevicesMetadata` command supports various filter options. If all of them are **unset**, all metadata of all devices the user is authorized to use are returned. Metadata contains information about connection status(ONLINE/OFFLINE) and twin synchronization(NONE, STARTED, FINISHED)
 
 **Example usages of filter options:**
 
@@ -142,7 +142,7 @@ The `GetDevicesMetadata` command supports various filter options. If all of them
 
 ### Update Device Metadata
 
-The `UpdateDeviceMetadata` command requests enable/disable shadow synchronization on the device. To define the expiration of command, set `UpdateDeviceMetadata.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `DeviceMetadataUpdatePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the hub skips it and will be removed by creating a new snapshot event.
+The `UpdateDeviceMetadata` command requests enable/disable the device twin. To define the expiration of command, set `UpdateDeviceMetadata.time_to_live` in nanoseconds(minimal 100ms). If the pending event is expired `DeviceMetadataUpdatePending.valid_until` (Unix timestamp in nanoseconds, 0 means forever), the hub skips it and will be removed by creating a new snapshot event.
 
 ### Get events
 
@@ -169,7 +169,7 @@ Pending command of resource is identified by the `correlationId`. If a `correlat
 
 ### Cancel pending metadata updates
 
-Pending metadata update is identified by `correlationId`. If a `correlationIdFilter` is not specified, all pending metadata updates(Set shadow synchronization) will be canceled.
+Pending metadata update is identified by `correlationId`. If a `correlationIdFilter` is not specified, all pending metadata updates(Set device twin enabled) will be canceled.
 
 ## Contracts
 

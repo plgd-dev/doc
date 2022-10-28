@@ -12,7 +12,7 @@ menu:
 toc: true
 ---
 
-Resiliency is understood as a way to readapt to a "crisis situation", which applies to both infrastructure and the data. What it means varies from user to user. After service disruptions, some users are okay retrieving the latest resource value while others require all the changes which occurred during the time their application or internal messaging system was down. Another failure scenario is when the node hosting the plgd CoAP Gateway crashes. Thousands of devices will try to reconnect and keep the shadows up to date, which creates a huge load and rapidly slows down the system if not handled properly.
+Resiliency is understood as a way to readapt to a "crisis situation", which applies to both infrastructure and the data. What it means varies from user to user. After service disruptions, some users are okay retrieving the latest resource value while others require all the changes which occurred during the time their application or internal messaging system was down. Another failure scenario is when the node hosting the plgd CoAP Gateway crashes. Thousands of devices will try to reconnect and keep the device twin up to date, which creates a huge load and rapidly slows down the system if not handled properly.
 
 plgd hub offers to users various techniques on how to approach disaster recovery in case an error or system failure was detected. Let's have a look at them.
 

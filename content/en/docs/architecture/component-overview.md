@@ -229,7 +229,8 @@ end
 deactivate CGW
 
 D -> CGW ++: Publish resources
-CGW -> D
+activate D
+CGW -> D:
 deactivate D
 alt batch observation is supported and batch observation is not created and twin is enabled
   CGW -> RA: Update twin synchronization to started
@@ -257,11 +258,12 @@ deactivate CGW
 D -> CGW ++: Close connection
 CGW -> RA: Update device to offline
 RA->CGW:
+deactivate CGW
 
 @enduml
 {{< /plantuml >}}
 
-Device metadata contains status about the connection and twin synchronization. Device metadata is updated to online with expiration when the device comes online, and twin synchronization is set to none. Devices are responsible for signing in again before expiration. When the device does not sign-in again, the connection is closed, and the device metadata is updated to offline. Whenever the device closes the connection, the device metadata is updated to offline.
+Device metadata contains status about the connection and twin synchronization. It is updated to online with expiration when the device comes online, and twin synchronization is set to none. Device is responsible for signing in again before expiration, otherwises the connection is closed, and the device metadata is updated to offline. Whenever the device closes the connection, the device metadata is updated to offline.
 If the device twin is enabled, the CoAP Gateway attempts to synchronize it after successful signing. After synchronization has started, the device metadata twin synchronization will update to started, and after it has finished, the device metadata twin synchronization will update to finished.
 
 #### Resource Update
