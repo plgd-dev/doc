@@ -183,6 +183,85 @@ return
 
 From this moment on, the device is reachable to all authorized clients and devices. Resource update requests received by a particular Gateway to which the client is connected are forwarded to the [Resource Aggregate](#resource-aggregate). Successful command validation precedes storing and publishing of this event to the [Event Bus](#event-bus) to which the CoAP Gateway is subscribed. If the update request event targets the device hosted by this instance of the CoAP Gateway, an [UPDATE](https://tools.ietf.org/html/rfc7252#section-5.8.2) is forwarded over the authorized TCP channel to the device. The device response is forwarded to the [Resource Aggregate](#resource-aggregate), which issues a resource updated event, updating the resource projection and informing the client that the update was successful.
 
+#### Device Status
+
+{{< plantuml id="device-status" >}}
+@startuml Sequence
+skinparam backgroundColor transparent
+hide footbox
+
+participant D as "Device"
+participant CGW as "CoAP Gateway"
+participant RA as "Resource Aggregate"
+participant RD as "Resource Directory"
+
+D -> CGW ++: Sign In
+activate D
+CGW -> RA: Update device to online and twin synchronization to none
+RA->CGW:
+CGW -> D: Signed In
+deactivate D
+CGW -> D: Get discovery resource (oic/res)
+D -> CGW: resources links
+alt batch observation is supported
+  CGW -> RA: Update twin synchronization to started
+  RA->CGW:
+  CGW -> D: Observe discovery resource (oic/res) via batch observation
+  D -> CGW: first notification from observe
+  CGW -> RA: notify resources are changed
+  RA->CGW:
+  CGW -> RA: Update twin synchronization to finished
+  RA->CGW:
+else batch observation is not supported
+  CGW -> RD: Get published resources
+  RD -> CGW: published resources
+  CGW -> RA: Update twin synchronization to started
+  RA->CGW:
+  loop for each published resource
+    CGW -> D: Observe resource
+    D -> CGW: first notification from observe
+    CGW -> RA: notify resources are changed
+    RA->CGW:
+  end
+  CGW -> RA: Update twin synchronization to finished
+  RA->CGW:
+end
+deactivate CGW
+
+D -> CGW ++: Publish resources
+CGW -> D
+deactivate D
+alt batch observation is supported and batch observation is not created
+  CGW -> RA: Update twin synchronization to started
+  RA->CGW:
+  CGW -> D: Observe discovery resource (oic/res) via batch observation
+  D -> CGW: first notification from observe
+  CGW -> RA: notify resources are changed
+  RA->CGW:
+  CGW -> RA: Update twin synchronization to finished
+  RA->CGW:
+else batch observation is not supported and some resources are not observed
+  CGW -> RA: Update twin synchronization to started
+  RA->CGW:
+  loop for each not observed resource
+    CGW -> D: Observe resource
+    D -> CGW: first notification from observe
+    CGW -> RA: notify resources are changed
+    RA->CGW:
+  end
+  CGW -> RA: Update twin synchronization to finished
+  RA->CGW:
+end
+deactivate CGW
+
+D -> CGW ++: Close connection
+CGW -> RA: Update device to offline
+RA->CGW:
+
+@enduml
+{{< /plantuml >}}
+
+
 #### Resource Update
 
 {{< plantuml id="resource-update" >}}
