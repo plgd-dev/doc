@@ -152,6 +152,10 @@ The plgd hub starts observation of **every successfully published resource** by 
 
 As the response to the resource observation request contains actual [representation](https://tools.ietf.org/html/rfc7641#section-1.1), the CoAP Gateway doesn't have to pull the data at all. Additional responses called [notifications](https://tools.ietf.org/html/rfc7641#section-3.2) are sent by the device whenever the representation of the device changes.
 
+{{< note >}}
+If you want to know more about Device Twin and it's state changes, please go to [Device Twin](https://docs.plgd.dev/docs/features/device-twin) section.
+{{< /note >}}
+
 #### Resource Publish & Subscription
 
 {{< plantuml id="resource-publish" >}}
@@ -183,174 +187,9 @@ return
 
 From this moment on, the device is reachable to all authorized clients and devices. Resource update requests received by a particular Gateway to which the client is connected are forwarded to the [Resource Aggregate](#resource-aggregate). Successful command validation precedes storing and publishing of this event to the [Event Bus](#event-bus) to which the CoAP Gateway is subscribed. If the update request event targets the device hosted by this instance of the CoAP Gateway, an [UPDATE](https://tools.ietf.org/html/rfc7252#section-5.8.2) is forwarded over the authorized TCP channel to the device. The device response is forwarded to the [Resource Aggregate](#resource-aggregate), which issues a resource updated event, updating the resource projection and informing the client that the update was successful.
 
-#### Device Metadata
-
-{{< plantuml id="device-metadata" >}}
-@startuml Sequence
-skinparam backgroundColor transparent
-hide footbox
-
-participant D as "Device"
-participant CGW as "CoAP Gateway"
-participant RA as "Resource Aggregate"
-participant RD as "Resource Directory"
-participant EB as "Event Bus"
-
-group Device has signed in
-   D -> CGW ++: Sign In
-   activate D
-   CGW -> RA++: Update device to online and twin synchronization to out of sync or disabled state
-   RA -> EB: Publish device metadata updated event
-   RA->CGW:
-   deactivate RA
-   CGW -> D: Signed In
-   deactivate D
-   CGW -> D++: Get discovery resource (oic/res)
-   return resources links
-   alt batch observation is supported and twin is enabled
-      CGW -> RA++: Update twin synchronization to syncing state
-      RA -> EB: Publish device metadata updated event
-      RA -> CGW
-      deactivate RA
-      CGW -> D++: Observe discovery resource (oic/res) via batch observation
-      D -> CGW: first notification from observe
-      CGW -> RA++: notify resources are changed
-      return
-      CGW -> RA++: Update twin synchronization to in sync state
-      RA -> EB: Publish device metadata updated event
-      RA -> CGW
-      deactivate RA
-      deactivate D
-   else batch observation is not supported and twin is enabled
-      CGW -> RD++: Get published resources
-      return published resources
-      CGW -> RA++: Update twin synchronization to syncing state
-      RA -> EB: Publish device metadata updated event
-      RA->CGW:
-      deactivate RA
-      loop for each new published resource
-         CGW -> D++: Observe resource
-         D -> CGW: first notification from observe
-         CGW -> RA++: notify resources are changed
-         return
-      end
-      CGW -> RA++: Update twin synchronization to in sync state
-      RA -> EB: Publish device metadata updated event
-      RA->CGW:
-      deactivate RA
-      deactivate D
-   end
-   deactivate CGW
-end
-
-group Device publish resources
-  D -> CGW ++: Publish resources
-  activate D
-  CGW -> D:
-  deactivate D
-  alt batch observation is supported and batch observation is not created and twin is enabled
-    CGW -> RA++: Update twin synchronization to syncing state
-    RA -> EB: Publish device metadata updated event
-    RA->CGW:
-    deactivate RA
-    CGW -> D++: Observe discovery resource (oic/res) via batch observation
-    D -> CGW: first notification from observe
-    CGW -> RA++: notify resources are changed
-    return
-    CGW -> RA++: Update twin synchronization to in sync state
-    RA -> EB: Publish device metadata updated event
-    RA->CGW:
-    deactivate RA
-    deactivate D
-  else batch observation is not supported and some resources are not observed and twin is enabled
-    CGW -> RA++: Update twin synchronization to syncing state
-    RA -> EB: Publish device metadata updated event
-    RA->CGW:
-    deactivate RA
-    loop for each not observed resource
-      CGW -> D++: Observe resource
-      D -> CGW: first notification from observe
-      CGW -> RA++: notify resources are changed
-      return
-    end
-    CGW -> RA++: Update twin synchronization to in sync state
-    RA -> EB: Publish device metadata updated event
-    RA->CGW:
-    deactivate RA
-    deactivate CGW
-    deactivate D
-  end
-end
-
-group Device twin has been disabled
-  EB -> CGW ++: The device twin has been disabled
-  CGW -> D++: Close all observations
-  return
-  CGW -> RA++: Confirm device twin has been disabled and update twin synchronization to disabled state
-  RA -> EB: Publish device metadata updated event
-  RA->CGW:
-  deactivate RA
-  deactivate CGW
-end
-
-group Device twin has been enabled
-  EB -> CGW++: The device twin has been enabled
-  CGW -> RA++: Confirm device twin has been enabled and update twin synchronization to out of sync state
-  RA -> EB: Publish device metadata updated event
-  RA->CGW:
-  deactivate RA
-  CGW -> D++: Get discovery resource (oic/res)
-  return resources links
-  alt batch observation is supported and twin is enabled
-    CGW -> RA++: Update twin synchronization to syncing state
-    RA -> EB: Publish device metadata updated event
-    RA -> CGW
-    deactivate RA
-    CGW -> D++: Observe discovery resource (oic/res) via batch observation
-    D -> CGW: first notification from observe
-    CGW -> RA++: notify resources are changed
-    return
-    CGW -> RA++: Update twin synchronization to in sync state
-    RA -> EB: Publish device metadata updated event
-    RA -> CGW
-    deactivate RA
-    deactivate D
-  else batch observation is not supported and twin is enabled
-    CGW -> RD++: Get published resources
-    return published resources
-    CGW -> RA++: Update twin synchronization to syncing state
-    RA -> EB: Publish device metadata updated event
-    RA->CGW:
-    deactivate RA
-    loop for each new published resource
-        CGW -> D++: Observe resource
-        D -> CGW: first notification from observe
-        CGW -> RA++: notify resources are changed
-        return
-    end
-    CGW -> RA++: Update twin synchronization to in sync state
-    RA -> EB: Publish device metadata updated event
-    RA->CGW:
-    deactivate RA
-    deactivate D
-  end
-  deactivate CGW
-end
-
-group Device has been disconnected
-  D -> CGW++: Close connection
-  CGW -> RA++: Update device to offline and twin synchronization to out of sync or disabled state
-  RA -> EB: Publish device metadata updated event
-  RA->CGW:
-  deactivate RA
-  deactivate CGW
-end
-
-@enduml
-{{< /plantuml >}}
-
-Device metadata contains status about the connection and twin synchronization. It is updated to online with expiration when the device comes online, and twin synchronization is set to out of sync state. Device is responsible for signing in again before expiration, otherwise the connection is closed, and the device metadata is updated to offline. Whenever the device closes the connection, the device metadata is updated to offline.
-If the device twin is enabled, the CoAP Gateway attempts to synchronize it after successful signing. After synchronization has started, the device metadata twin synchronization will update to syncing state, and after it has finished, the device metadata twin synchronization will update to in sync state.
+{{< note >}}
+If you want to know more about Device Twin and it's state changes, please go to [Device Twin](https://docs.plgd.dev/docs/features/device-twin) section.
+{{< /note >}}
 
 #### Resource Update
 
