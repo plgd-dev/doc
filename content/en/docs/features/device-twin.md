@@ -16,7 +16,7 @@ The device twin represents the current state of each device's resource. Each con
 
 ### How is the twin kept up to date?
 
-#### Update a resource from CoAP Gateway
+#### Update resource from CoAP Gateway
 
 The device resources can be updated by more services/users at the same time. These resource change requests are called [Pending Commands](/docs/features/pending-command/). As soon as the command is successfully processed on the device, the CoAP Gateway is informed about the change through our observation channel. More details in the following diagram.
 
@@ -67,7 +67,7 @@ Server -> Gateway : [NOTIFY] 'oic.r.temperature' changed
 @enduml
 {{< /plantuml >}}
 
-#### Update a resource from OCF Client
+#### Update resource from OCF Client
 
 The device might be actuated also from the local network. The temperature in the room changed, or a user updated a resource over device-to-device connectivity, for example using the [plgd client](https://github.com/plgd-dev/client-application). This change also triggers the notify on the device, what delivers to the CoAP Gateway, subscribed device observer, information about the change what updates the twin in the plgd hub. More details in the following diagram.
 
