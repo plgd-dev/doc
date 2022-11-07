@@ -14,11 +14,11 @@ toc: true
 
 The device twin represents the current state of each device's resource. Each connected device notifies the plgd hub about every change using the CoAP Gateway observations, which are started right after the device successfully connects and authenticates. All changes are persisted in form of an audit log in the EventStore, from which is the latest version returned to clients through the Resource Directory.
 
-## How is the twin kept up to date?
+### How is the twin kept up to date?
 
 #### Update a resource from CoAP Gateway
 
-The device resources can be updated by more services/users at the same time. These resource change requests are called [Pending Commands](/docs/features/pending-command/). As soon as the command is successfuly processed on the device, the CoAP Gateway is informed about the change through our observation channel. More details in the following diagram.
+The device resources can be updated by more services/users at the same time. These resource change requests are called [Pending Commands](/docs/features/pending-command/). As soon as the command is successfully processed on the device, the CoAP Gateway is informed about the change through our observation channel. More details in the following diagram.
 
 {{< plantuml id="update-device-twin-from-hub" >}}
 @startuml Sequence
@@ -102,9 +102,9 @@ Server -> Gateway : [NOTIFY] 'oic.r.temperature' changed
 
 ### Device Metadata and Twin State
 
-Device metadata contains additional information about the device lifecycle, including connection status and twin synchronization state. The twin synchronization state informs user about the reconciliation after the reconnect or twin creation after the first sign-in to the plgd hub. There are more states and various edge cases, so let's go through diagrams to understand all the state transitions during the device lifecycle. 
+Device metadata contains additional information about the device lifecycle, including connection status and twin synchronization state. The twin synchronization state informs user about the reconciliation after the reconnect or twin creation after the first sign-in to the plgd hub. There are more states and various edge cases, so let's go through diagrams to understand all the state transitions during the device lifecycle.
 
-#### Device successfuly signs-in
+#### Device successfully signs-in
 
 {{< plantuml id="device-metadata-connect" >}}
 @startuml Sequence
@@ -236,5 +236,88 @@ alt TwinEnabled == true
 end
 deactivate CGW
 
+@enduml
+{{< /plantuml >}}
+
+
+
+#### Disable Device Twin
+
+All changes that occur on the connected device are observed and stored in the EventStore. There are few use cases where Device Twin - active observation of all changes is not desired. For example, if the device is in the maintenance state and produces test data that shall not be part of the audit log, Device Twin should be for this device disabled. To do so, a client needs to send the request `UpdateDeviceMetadataRequest` with `TwinEnabled` and `CorrelationId`.
+
+The Device Twin feature is disabled only after the successful recipient of the `DeviceMetadataUpdated` event containing the same correlation id used in the Update request. This confirmation event is received only if the device is/comes online.
+
+{{< plantuml id="device-metadata-disable-twin" >}}
+@startuml Sequence
+skinparam backgroundColor transparent
+hide footbox
+
+entity Device as Device
+participant CGW as "CoAP Gateway"
+participant RA as "Resource Aggregate"
+control EB as "Event Bus"
+entity Client as Client
+
+Client -> RA : UpdateDeviceMetadataRequest \nwith\nTwinEnabled == false, correlationId == "abc"
+activate Client
+activate RA
+activate Device
+RA -> Client: UpdateDeviceMetadataResponse
+RA --> EB: DeviceMetadataUpdatePending with\nTwinEnabled == false, correlationId == "abc"
+deactivate RA
+EB --> CGW : DeviceMetadataUpdatePending with\nTwinEnabled == false, correlationId == "abc"
+activate CGW
+CGW -> Device: Close all observations
+Device -> CGW: Observe closed
+CGW -> RA: ConfirmDeviceMetadataUpdateRequest with\nTwinEnabled == false, correlationId == "abc"
+activate RA
+RA --> EB: DeviceMetadataUpdated with\nTwinEnabled = false, TwinSynchronization.State = DISABLED, correlationId == "abc"
+deactivate RA
+RA -> CGW: ConfirmDeviceMetadataUpdateResponse
+deactivate CGW
+EB --> Client: DeviceMetadataUpdated with\nTwinEnabled = false, TwinSynchronization.State = DISABLED, correlationId == "abc"
+deactivate Client
+deactivate Device
+@enduml
+{{< /plantuml >}}
+
+#### Enable Device Twin
+
+All changes that occur on the connected device are observed and stored in the EventStore. To enable device twin a client needs to send the request `UpdateDeviceMetadataRequest` with `TwinEnabled` and `CorrelationId`.
+
+The Device Twin feature is enabled only after the successful recipient of the `DeviceMetadataUpdated` event containing the same correlation id used in the Update request. This confirmation event is received only if the device is/comes online.
+
+{{< plantuml id="device-metadata-enabled-twin" >}}
+@startuml Sequence
+skinparam backgroundColor transparent
+hide footbox
+
+entity Device as Device
+participant CGW as "CoAP Gateway"
+participant RA as "Resource Aggregate"
+control EB as "Event Bus"
+entity "Client" as Client
+
+Client -> RA : UpdateDeviceMetadataRequest with\nTwinEnabled = true, correlationId = "abc"
+activate Client
+activate RA
+activate Device
+RA -> Client : UpdateDeviceMetadataResponse
+RA --> EB : DeviceMetadataUpdatePending with\nTwinEnabled = true, correlationId = "abc"
+deactivate RA
+EB --> CGW : DeviceMetadataUpdatePending with\nTwinEnabled = true, correlationId = "abc"
+activate CGW
+CGW -> RA : ConfirmDeviceMetadataUpdateRequest with\nTwinEnabled = true, correlationId = "abc"
+activate RA
+RA --> EB : DeviceMetadataUpdated with\nTwinEnabled = true, TwinSynchronization.State = OUT_OF_SYNC, correlationId = "abc"
+deactivate RA
+EB --> Client : DeviceMetadataUpdated with\nTwinEnabled = true, TwinSynchronization.State = OUT_OF_SYNC, correlationId == "abc"
+deactivate Client
+RA -> CGW : ConfirmDeviceMetadataUpdateResponse
+CGW -> Device: Get device resources links\nto check if batch observation is supported
+Device->CGW: Device resources links
+ref over CGW, RA, EB, Device: Device Twin Synchronization
+deactivate CGW
+deactivate Device
 @enduml
 {{< /plantuml >}}
