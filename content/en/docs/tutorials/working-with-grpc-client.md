@@ -133,7 +133,7 @@ To return certain pending commands of binary switch resources hosted by devices 
 
 ### Get devices metadata
 
-The `GetDevicesMetadata` command supports various filter options. If all of them are **unset**, all metadata of all devices the user is authorized to use are returned. Metadata contains information about connection status(ONLINE/OFFLINE) and twin synchronization(NONE, STARTED, FINISHED)
+The `GetDevicesMetadata` command supports various filter options. If all of them are **unset**, all metadata of all devices the user is authorized to use are returned. Metadata contains information about [connection status](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/pb/commands.proto#L433) and [twin synchronization state](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/pb/commands.proto#L477).
 
 **Example usages of filter options:**
 
