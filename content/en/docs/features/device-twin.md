@@ -241,11 +241,11 @@ deactivate CGW
 
 
 
-#### Disable Device Twin
+#### Disable Twin
 
-All changes that occur on the connected device are observed and stored in the EventStore. There are few use cases where Device Twin - active observation of all changes is not desired. For example, if the device is in the maintenance state and produces test data that shall not be part of the audit log, Device Twin should be for this device disabled. To do so, a client needs to send the request `UpdateDeviceMetadataRequest` with `TwinEnabled` and `CorrelationId`.
+All changes that occur on the connected device are observed and stored in the EventStore. There are few use cases when the Twin - active observation of all changes is not desired. For example, if the device is in the maintenance state and produces test data that shall not be part of the audit log. To do so, a client needs to send the request `UpdateDeviceMetadataRequest` with `TwinEnabled` and `CorrelationId`.
 
-The Device Twin feature is disabled only after the successful recipient of the `DeviceMetadataUpdated` event containing the same correlation id used in the Update request. This confirmation event is received only if the device is/comes online.
+The Twin is disabled only after the `DeviceMetadataUpdated` event is received and contains the same correlation id as was used in the update request. **This confirmation event is received only if the device is/comes online.**
 
 {{< plantuml id="device-metadata-disable-twin" >}}
 @startuml Sequence
@@ -281,11 +281,9 @@ deactivate Device
 @enduml
 {{< /plantuml >}}
 
-#### Enable Device Twin
+#### Enable Twin
 
-All changes that occur on the connected device are observed and stored in the EventStore. To enable device twin a client needs to send the request `UpdateDeviceMetadataRequest` with `TwinEnabled` and `CorrelationId`.
-
-The Device Twin feature is enabled only after the successful recipient of the `DeviceMetadataUpdated` event containing the same correlation id used in the Update request. This confirmation event is received only if the device is/comes online.
+Same logic as for disable Twin applies. The Twin is enabled only after the `DeviceMetadataUpdated` event is received and contains the same correlation id as was used in the update request. **This confirmation event is received only if the device is/comes online.**
 
 {{< plantuml id="device-metadata-enabled-twin" >}}
 @startuml Sequence
