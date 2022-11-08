@@ -14,7 +14,7 @@ toc: true
 
 The device twin represents the current state of each device's resource. Each connected device notifies the plgd hub about every change using the CoAP Gateway observations, which are started right after the device successfully connects and authenticates. All changes are persisted in form of an audit log in the EventStore, from which is the latest version returned to clients through the Resource Directory.
 
-### How is the twin kept up to date?
+### How is the twin kept up to date
 
 #### Update resource from CoAP Gateway
 
