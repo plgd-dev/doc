@@ -239,8 +239,6 @@ deactivate CGW
 @enduml
 {{< /plantuml >}}
 
-
-
 #### Disable Twin
 
 All changes that occur on the connected device are observed and stored in the EventStore. There are few use cases when the Twin - active observation of all changes is not desired. For example, if the device is in the maintenance state and produces test data that shall not be part of the audit log. To do so, a client needs to send the request `UpdateDeviceMetadataRequest` with `TwinEnabled` and `CorrelationId`.
