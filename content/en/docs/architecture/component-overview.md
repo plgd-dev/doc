@@ -152,6 +152,10 @@ The plgd hub starts observation of **every successfully published resource** by 
 
 As the response to the resource observation request contains actual [representation](https://tools.ietf.org/html/rfc7641#section-1.1), the CoAP Gateway doesn't have to pull the data at all. Additional responses called [notifications](https://tools.ietf.org/html/rfc7641#section-3.2) are sent by the device whenever the representation of the device changes.
 
+{{< note >}}
+If you want to know more about Device Twin and it's state changes, please go to [Device Twin](/docs/features/device-twin) section.
+{{< /note >}}
+
 #### Resource Publish & Subscription
 
 {{< plantuml id="resource-publish" >}}
@@ -182,6 +186,10 @@ return
 {{< /plantuml >}}
 
 From this moment on, the device is reachable to all authorized clients and devices. Resource update requests received by a particular Gateway to which the client is connected are forwarded to the [Resource Aggregate](#resource-aggregate). Successful command validation precedes storing and publishing of this event to the [Event Bus](#event-bus) to which the CoAP Gateway is subscribed. If the update request event targets the device hosted by this instance of the CoAP Gateway, an [UPDATE](https://tools.ietf.org/html/rfc7252#section-5.8.2) is forwarded over the authorized TCP channel to the device. The device response is forwarded to the [Resource Aggregate](#resource-aggregate), which issues a resource updated event, updating the resource projection and informing the client that the update was successful.
+
+{{< note >}}
+If you want to know more about Device Twin and it's state changes, please go to [Device Twin](/docs/features/device-twin) section.
+{{< /note >}}
 
 #### Resource Update
 

@@ -41,14 +41,15 @@ CoAP API as specified in the [Open Connectivity Foundation - Device to Cloud Ser
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `apis.coap.address` | string | Listen specification <host>:<port> for coap client connection. | `"0.0.0.0:5684"` |
+| `apis.coap.address` | string | `Listen specification <host>:<port> for coap client connection.` | `"0.0.0.0:5684"` |
+| `apis.coap.protocols` | []string | `Protocol for coap connection. The supported values are: "tcp", "udp" .` | `["tcp"]` |
 | `apis.coap.externalAddress` | string | `External address including public domain/IP for coap client connection.` | `"coap-gw.example.com:5684"` |
 | `apis.coap.maxMessageSize` | int | `Max message size which can be sent/received via coap. i.e. 256*1024 = 262144 bytes.` | `262144` |
 | `apis.coap.ownerCacheExpiration` | string | `Time limit of how long to keep subscribed to device updates after last use of the given cache item.` | `1m` |
 | `apis.coap.subscriptionBufferSize` | int | `The maximum buffer size for one events subscription.` | `1000` |
 | `apis.coap.messagePoolSize` | int | `Defines the maximum preallocated messages in the pool for parse/create coap messages.` | `1000` |
 | `apis.coap.keepAlive.timeout` | string | `Time limit to close inactive connection.` | `20s` |
-| `apis.coap.blockwiseTransfer.enabled` | bool | `If true, enable blockwise transfer of coap messages.` | `false` |
+| `apis.coap.blockwiseTransfer.enabled` | bool | `If true, enable blockwise transfer of coap messages.` | `true` |
 | `apis.coap.blockwiseTransfer.blockSize` | int | `Size of blockwise transfer block.` | `1024` |
 | `apis.coap.tls.enabled` | bool | `If true, require server certificate for ssl connection.` | `true` |
 | `apis.coap.tls.disconnectOnExpiredCertificate` | bool | `If true, device with expired certificates will be disconnected.` | `false` |
