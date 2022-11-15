@@ -48,7 +48,7 @@ gRPC API of the Identity Store service as defined [here](https://github.com/plgd
 | `apis.grpc.keepAlive.maxConnectionAgeGrace` | string | `An additive period after MaxConnectionAge after which the connection will be forcibly closed. 0s means infinity.` | `0s` |
 | `apis.grpc.keepAlive.time` | string | `After a duration of this time if the server doesn't see any activity it pings the client to see if the transport is still alive.` | `2h` |
 | `apis.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
-| `apis.grpc.tls.caPool` | string | `File path to the root certificate in PEM format.` |  `""` |
+| `apis.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `apis.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.grpc.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
@@ -60,7 +60,7 @@ gRPC API of the Identity Store service as defined [here](https://github.com/plgd
 | `apis.grpc.authorization.http.maxIdleConnsPerHost` | int | `If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used.` | `16` |
 | `apis.grpc.authorization.http.idleConnTimeout` | string | `The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit.` | `30s` |
 | `apis.grpc.authorization.http.timeout` | string | `A time limit for requests made by this Client. A Timeout of zero means no timeout.` | `10s` |
-| `apis.grpc.authorization.http.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
+| `apis.grpc.authorization.http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `apis.grpc.authorization.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.grpc.authorization.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.grpc.authorization.http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
@@ -74,7 +74,7 @@ plgd hub uses NATS messaging system as a event bus.
 | `clients.eventBus.nats.url` | string | `URL to nats messaging system.` | `"nats://localhost:4222"` |
 | `clients.eventBus.nats.flusherTimeout` | string | `Define flush timeout for publishing message.` | `"30s"` |
 | `clients.eventBus.nats.jetstream`| bool | `If true, events will be published to jetstream.` | `false` |
-| `clients.eventBus.nats.tls.caPool` | string | `root certificate the root certificate in PEM format.` |  `""` |
+| `clients.eventBus.nats.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.eventBus.nats.tls.keyFile` | string | `File name of private key in PEM format.` | `""` |
 | `clients.eventBus.nats.tls.certFile` | string | `File name of certificate in PEM format.` | `""` |
 | `clients.eventBus.nats.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
@@ -89,7 +89,7 @@ plgd hub uses MongoDB database as owner's device store.
 | `clients.storage.mongoDB.database` | string | `Name of database.` | `"ownersDevices"` |
 | `clients.storage.mongoDB.maxPoolSize` | int | `Limits number of connections.` | `16` |
 | `clients.storage.mongoDB.maxConnIdleTime` | string | `Close connection when idle time reach the value.` | `4m` |
-| `clients.storage.mongoDB.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
+| `clients.storage.mongoDB.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.storage.mongoDB.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `clients.storage.mongoDB.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `clients.storage.mongoDB.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
