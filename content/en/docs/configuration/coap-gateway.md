@@ -53,7 +53,7 @@ CoAP API as specified in the [Open Connectivity Foundation - Device to Cloud Ser
 | `apis.coap.blockwiseTransfer.blockSize` | int | `Size of blockwise transfer block.` | `1024` |
 | `apis.coap.tls.enabled` | bool | `If true, require server certificate for ssl connection.` | `true` |
 | `apis.coap.tls.disconnectOnExpiredCertificate` | bool | `If true, device with expired certificates will be disconnected.` | `false` |
-| `apis.coap.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
+| `apis.coap.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `apis.coap.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.coap.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.coap.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
@@ -79,7 +79,7 @@ OAuth2.0 Client is used to issuing an authorization code used by the Onboarding 
 | `apis.coap.authorization.providers[].http.maxIdleConnsPerHost` | int | `If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used.` | `16` |
 | `apis.coap.authorization.providers[].http.idleConnTimeout` | string | `The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit.` | `30s` |
 | `apis.coap.authorization.providers[].http.timeout` | string | `A time limit for requests made by this Client. A Timeout of zero means no timeout.` | `10s` |
-| `apis.coap.authorization.providers[].http.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
+| `apis.coap.authorization.providers[].http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `apis.coap.authorization.providers[].http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.coap.authorization.providers[].http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.coap.authorization.providers[].http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
@@ -98,7 +98,7 @@ plgd hub uses NATS messaging system as an event bus.
 | `clients.eventBus.nats.url` | string | `URL to nats messaging system.` | `"nats://localhost:4222"` |
 | `clients.eventBus.nats.pendingLimits.msgLimit` | int | `Limit number of messages in queue. -1 means unlimited` | `524288` |
 | `clients.eventBus.nats.pendingLimits.bytesLimit` | int | `Limit buffer size of queue. -1 means unlimited` | `67108864` |
-| `clients.eventBus.nats.tls.caPool` | string | `root certificate the root certificate in PEM format.` |  `""` |
+| `clients.eventBus.nats.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.eventBus.nats.tls.keyFile` | string | `File name of private key in PEM format.` | `""` |
 | `clients.eventBus.nats.tls.certFile` | string | `File name of certificate in PEM format.` | `""` |
 | `clients.eventBus.nats.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
@@ -110,7 +110,7 @@ Client configurations to internally connect to Identity Store service.
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
 | `clients.identityStore.grpc.address` | string | `Identity Store service address.` | `"127.0.0.1:9100"` |
-| `clients.identityStore.grpc.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
+| `clients.identityStore.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.identityStore.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `clients.identityStore.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `clients.identityStore.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
@@ -125,7 +125,7 @@ Client configurations to internally connect to Resource Aggregate service.
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
 | `clients.resourceAggregate.grpc.address` | string | `Resource aggregate service address.` | `"127.0.0.1:9100"` |
-| `clients.resourceAggregate.grpc.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
+| `clients.resourceAggregate.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.resourceAggregate.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `clients.resourceAggregate.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `clients.resourceAggregate.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
@@ -142,7 +142,7 @@ Client configurations to internally connect to Resource Directory service.
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
 | `clients.resourceDirectory.grpc.address` | string | `Resource directory service address.` | `"127.0.0.1:9100"` |
-| `clients.resourceDirectory.grpc.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
+| `clients.resourceDirectory.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.resourceDirectory.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `clients.resourceDirectory.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `clients.resourceDirectory.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
