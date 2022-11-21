@@ -1,10 +1,15 @@
-/****************************************************************************
+/**
+ * @file dps.h
+ *
+ * Device provisioning service API functions.
+ *
  *
  * Copyright (C) 2022 plgd.dev, s.r.o. - All Rights Reserved
- * Unauthorized distribution of this library is strictly prohibited
- * Proprietary and confidential
  *
- ****************************************************************************/
+ * Unauthorized distribution of this library is strictly prohibited
+ *
+ * Proprietary and confidential
+ */
 
 #ifndef PLGD_DPS_H
 #define PLGD_DPS_H
@@ -115,14 +120,19 @@ plgd_dps_context_t *plgd_dps_get_context(size_t device);
 DPS_EXPORT
 size_t plgd_dps_get_device(const plgd_dps_context_t *ctx) DPS_NONNULL();
 
+typedef struct
+{
+  plgd_dps_on_status_change_cb_t on_status_change; ///< callback executed on DPS status change
+  void *on_status_change_data;                     ///< user data provided to DPS status change callback
+  oc_cloud_cb_t on_cloud_status_change;            ///< callback executed when cloud status change
+  void *on_cloud_status_change_data;               ///< user data provided to cloud status change callback
+} plgd_dps_manager_callbacks_t;
+
 /**
  * @brief Set DPS manager callbacks.
  *
  * @param ctx dps context (cannot be NULL)
- * @param on_change_cb callback invoked on provisioning status change
- * @param on_change_data user data provided to on_change_cb invocation
- * @param on_cloud_change_cb callback invoked on cloud status change
- * @param on_cloud_change_data user data provided to on_cloud_change_cb invocation
+ * @param callbacks callbacks with data
  *
  * Example of plgd_dps_on_status_change_cb_t function:
  * @code{.c}
@@ -149,9 +159,7 @@ size_t plgd_dps_get_device(const plgd_dps_context_t *ctx) DPS_NONNULL();
  * @endcode
  */
 DPS_EXPORT
-void plgd_dps_set_manager_callbacks(plgd_dps_context_t *ctx, plgd_dps_on_status_change_cb_t on_change_cb,
-                                    void *on_change_data, oc_cloud_cb_t on_cloud_change_cb, void *on_cloud_change_data)
-  DPS_NONNULL(1);
+void plgd_dps_set_manager_callbacks(plgd_dps_context_t *ctx, plgd_dps_manager_callbacks_t callbacks) DPS_NONNULL(1);
 
 /**
  * @brief Start DPS manager to provision device.
@@ -218,6 +226,16 @@ DPS_EXPORT
 int plgd_dps_manager_restart(plgd_dps_context_t *ctx) DPS_NONNULL();
 
 /**
+ * @brief Start cloud manager with previously set server and callbacks.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @return true on success
+ * @return false otherwise
+ */
+DPS_EXPORT
+bool plgd_cloud_manager_start(const plgd_dps_context_t *ctx) DPS_NONNULL();
+
+/**
  * @brief Clean-up of DPS provisioning on factory reset.
  *
  * The function must be called from the factory reset handler to clean-up data that has been invalidated by a factory
@@ -280,6 +298,16 @@ void plgd_dps_set_endpoint(plgd_dps_context_t *ctx, const char *endpoint) DPS_NO
  */
 DPS_EXPORT
 int plgd_dps_get_endpoint(const plgd_dps_context_t *ctx, char *buffer, size_t buffer_size) DPS_NONNULL();
+
+/**
+ * @brief Check if the value of the DPS service endpoint is an empty string.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @return true if the endpoint value is an empty string
+ * @return false otherwise
+ */
+DPS_EXPORT
+bool plgd_dps_endpoint_is_empty(const plgd_dps_context_t *ctx) DPS_NONNULL();
 
 /**
  * @brief Force all steps of the provisioning process to be executed.

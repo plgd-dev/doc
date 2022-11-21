@@ -1,10 +1,15 @@
-/****************************************************************************
+/**
+ * @file dps_compiler.h
+ *
+ * Cross-compiler attributes used in code.
+ *
  *
  * Copyright (C) 2022 plgd.dev, s.r.o. - All Rights Reserved
- * Unauthorized distribution of this library is strictly prohibited
- * Proprietary and confidential
  *
- ****************************************************************************/
+ * Unauthorized distribution of this library is strictly prohibited
+ *
+ * Proprietary and confidential
+ */
 
 #ifndef PLGD_DPS_COMPILER_H
 #define PLGD_DPS_COMPILER_H
@@ -32,6 +37,7 @@ extern "C" {
 #define DPS_API OC_IMPORT
 #endif /* DPS_SHARED_LIBRARY_EXPORT */
 #else  /* !DPS_SHARED_LIBRARY */
+/// Annotation of the API functions that are exported by the library.
 #define DPS_API
 #endif /* DPS_SHARED_LIBRARY */
 
@@ -40,8 +46,11 @@ extern "C" {
 #define DPS_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
 #define DPS_UNREACHABLE __builtin_unreachable()
 #else /* !GNUC && !__clang__ */
+/// Warn about NULL being used for value that is expected to be non-NULL.
 #define DPS_NONNULL(...)
+/// Warn that the return value is not checked.
 #define DPS_WARN_UNUSED_RESULT
+/// Mark unreachable code.
 #define DPS_UNREACHABLE
 #endif /* GNUC || __clang__ */
 

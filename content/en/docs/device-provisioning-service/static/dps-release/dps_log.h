@@ -1,16 +1,22 @@
-/****************************************************************************
+/**
+ * @file dps_log.h
+ *
+ * Global logging functions.
+ *
  *
  * Copyright (C) 2022 plgd.dev, s.r.o. - All Rights Reserved
- * Unauthorized distribution of this library is strictly prohibited
- * Proprietary and confidential
  *
- ****************************************************************************/
+ * Unauthorized distribution of this library is strictly prohibited
+ *
+ * Proprietary and confidential
+ */
 
 #ifndef PLGD_DPS_LOG_H
 #define PLGD_DPS_LOG_H
 
 #include "dps_compiler.h"
 #include <stdio.h>
+#include <sys/time.h>
 #include <time.h>
 
 #ifdef __cplusplus
@@ -28,7 +34,7 @@ typedef void (*plgd_dps_print_log_fn_t)(plgd_dps_log_level_t log_level, const ch
 
 /// @brief Set global logging function
 DPS_EXPORT
-void plgd_dps_set_log_fn(plgd_dps_print_log_fn_t fn);
+void plgd_dps_set_log_fn(plgd_dps_print_log_fn_t log_fn);
 
 /// @brief Get global logging function
 DPS_EXPORT
@@ -40,8 +46,11 @@ plgd_dps_print_log_fn_t plgd_dps_get_log_fn(void);
     if (_dps_log_fn != NULL) {                                                                                         \
       _dps_log_fn((log_level), __VA_ARGS__);                                                                           \
     } else {                                                                                                           \
-      time_t ltime = time(NULL);                                                                                       \
-      printf("[DPS:%ld] %s <%s:%d>: ", (long)ltime, __FILENAME__, __func__, __LINE__);                                 \
+      struct timeval dps_log_fn_tv;                                                                                    \
+      gettimeofday(&dps_log_fn_tv, NULL);                                                                              \
+      char dps_log_fn_buf[64];                                                                                         \
+      strftime(dps_log_fn_buf, sizeof(dps_log_fn_buf), "%Y-%m-%d %H:%M:%S", gmtime(&dps_log_fn_tv.tv_sec));            \
+      printf("[DPS %s.%06ld] %s <%s:%d>: ", dps_log_fn_buf, dps_log_fn_tv.tv_usec, __FILENAME__, __func__, __LINE__);  \
       printf(__VA_ARGS__);                                                                                             \
       printf("\n");                                                                                                    \
     }                                                                                                                  \
