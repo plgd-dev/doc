@@ -90,6 +90,7 @@ deactivate S
 As the device acts as a server, it uses the concepts of ACLs for the client authorization. More information about ACLs and how to configure them can be found [here](#jozo prosim docku s vysvetlenim co su acl, diagramom ako sa dostat do toho stavu[toto zasa asi separatna docka na ktoru sa odkazes aj z tohto aj predosleho stepu] a ako nastavit ACL].
 
 ### Hub Onboarding Configuration
+
 Each device hosts the `coapcloudconf`resource where the `hub onboarding configuration` has to be set. Resource definition can be found [here](https://github.com/openconnectivityfoundation/cloud-services/blob/master/swagger2.0/oic.r.coapcloudconf.swagger.json#L215). Setting the resource with required values will trigger the onboarding process, which is in detail described [here](../../architecture/component-overview/#device-onboarding.
 
 ## Connection authentication and encryption
