@@ -3,8 +3,8 @@ title: 'Onboarding to plgd hub'
 description: 'How to onboard the device to the plgd hub?'
 date: '2022-12-13'
 lastmod: '2022-12-13'
-categories: [d2c, provisioning, onboarding]
-keywords: [d2c, provisioning, onboarding, oauth]
+categories: [architecture, d2c, provisioning, onboarding]
+keywords: [architecture, d2c, provisioning, onboarding, oauth]
 menu:
   docs:
     parent: device-to-device-client
@@ -30,6 +30,7 @@ The [device onboarding process](../../architecture/component-overview/#device-on
 ## How to onboard?
 
 To enable device to cloud connectivity, following tasks need to be successfuly completed:
+
 - Certificate Authority configured so the device can successfuly verify authenticity of the plgd hub
 - ACLs are configured so the device authorizes incoming requests from the plgd hub
 - The `hub onboarding configuration` is set so the device knows where to connect and how to authorize the connection
@@ -39,9 +40,53 @@ These steps are reduced to one click when using [Device to Device Client](../../
 {{< /note >}}
 
 ### Certificate Authority configuration
-Certificates can be configured only in the [JOZO] state. More information about this process can be found [here](#jozo prosim docku s diagramom ako sa dostat do toho stavu, co v nom spravit, a ako sa vratit naspat).
+
+Certificates can be configured only in the provisioning state. More information about this process can be found [here](../../tutorials/change-provision-status).
+
+When device is in provisioning state we can add the certificate authority to the device through credentials resource with body:
+
+```json
+{
+  "creds": [
+    {
+      "subjectuuid": "plgd/hub ID",
+      "credtype": 8,
+      "credusage": "oic.sec.cred.trustca",
+      "publicdata": {
+        "data": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----\n",
+        "encoding": "oic.sec.encoding.pem"
+      }
+    }
+  ]
+}
+```
+
+{{< note >}}
+More information about the credentials resource can be found [here](https://openconnectivity.org/specs/OCF_Security_Specification.pdf) in section 9.
+{{< /note >}}
+
+{{< plantuml id="add-ca" >}}
+@startuml Sequence
+skinparam backgroundColor transparent
+hide footbox
+
+box "D2D Client"
+participant S as "Web App\n(running in the browser)"
+participant C as "Service\n(local or remote host)"
+end box
+
+participant D as "Device\n(in the local network with Service)"
+
+S -> D++: Update credentials\n(POST /oic/sec/cred {"creds": [...]})
+activate S
+return Credentials updated
+deactivate S
+
+@enduml
+{{< /plantuml >}}
 
 ### Device ACLs
+
 As the device acts as a server, it uses the concepts of ACLs for the client authorization. More information about ACLs and how to configure them can be found [here](#jozo prosim docku s vysvetlenim co su acl, diagramom ako sa dostat do toho stavu[toto zasa asi separatna docka na ktoru sa odkazes aj z tohto aj predosleho stepu] a ako nastavit ACL].
 
 ### Hub Onboarding Configuration
