@@ -15,7 +15,7 @@ toc: true
 For update any secure device resource such at credentials/ACLs we need to change device from normal state to provisioning state. To get current state of device we can use `GET` request on device provisioning status resource(/oic/sec/pstat). The property `dos.s` is state of device.
 
 | State name | Value | Notes |
-| -------------|-------------- | --------------------- |
+| ---------- | ----- | ----- |
 | Reset | 0 | Factory reset - device will change state after that to RFOTM |
 | Ready for Device owner transfer method (RFOTM) | 1 | Device is ready to be owned |
 | Ready for Device provisioning (RFPRO) | 2 | Update some properties in secure resources by resource owner and owner |
