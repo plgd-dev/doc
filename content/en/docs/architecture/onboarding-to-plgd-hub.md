@@ -143,7 +143,6 @@ Each device hosts the `coapcloudconf`resource where the `hub onboarding configur
 
 Connection to the plgd hub is secured using a X.509 certificate. If the device mutually authenticates with the cloud and what certificate is used depends on credentials which are available on the device. Following table gives you more information if mTLS can be enabled and which certificate is used for the connection.
 
-
 | Manufacturer Certificate | Identity Certificate  | mTLS to plgd hub possible   | Device authenticates using |
 | ------------------------ | --------------------- | --------------------------- | -------------------------- |
 | no                       | no                    | no                          | mTLS not possible          |
@@ -151,7 +150,7 @@ Connection to the plgd hub is secured using a X.509 certificate. If the device m
 | yes/no                   | yes                   | yes                         | identity certificate       |
 
 {{< note >}}
-Manufacturer certificate is flashed (or contained within the TPM)) on the device during the production. The Identity Certificate is one option of device credentials set during the device ownership transfer. Other is PSK, that's why Identity Certificate doesn't have to be present to connect to the plgd hub. 
+Manufacturer certificate is flashed (or contained within the TPM)) on the device during the production. The Identity Certificate is one option of device credentials set during the device ownership transfer. Other is PSK, that's why Identity Certificate doesn't have to be present to connect to the plgd hub.
 {{< /note >}}
 
 If the plgd hub requires mTLS authentication, the device needs to have the identity/manufacturer certificate signed by the certificate authority which is known in the plgd hub.
