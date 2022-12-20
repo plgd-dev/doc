@@ -62,6 +62,8 @@ When device is in provisioning state we can add the certificate authority to the
 More information about the credentials resource can be found [here](https://openconnectivity.org/specs/OCF_Security_Specification.pdf) in section 9.
 {{< /note >}}
 
+The update device credentials is done via POST method on the /oic/sec/cred resource:
+
 {{< plantuml id="add-ca" >}}
 @startuml Sequence
 skinparam backgroundColor transparent
@@ -115,7 +117,7 @@ For Hub to device communication, the device needs to have the following ACLs con
 }
 ```
 
-To update the device ACL resource we just POST it to he acl resource:
+The update device ACL is done via POST method on the /oic/sec/acl2 resource:
 
 {{< plantuml id="add-hub-acl" >}}
 @startuml Sequence
