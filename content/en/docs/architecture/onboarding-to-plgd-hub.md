@@ -5,11 +5,8 @@ date: '2022-12-13'
 lastmod: '2022-12-13'
 categories: [architecture, d2c, provisioning, onboarding]
 keywords: [architecture, d2c, provisioning, onboarding, oauth]
-menu:
-  docs:
-    parent: device-to-device-client
-    weight: 40
 toc: true
+weight: 1
 ---
 
 Device can be remotely accessed when it's onboarded and connected to the plgd hub. The connection between the device and the hub is a secure CoAP over TCP/UDP connection. Combination of JWT token and Identity certificate guarantees zero trust security on this end-to-end integration.
@@ -87,7 +84,56 @@ deactivate S
 
 ### Device ACLs
 
-As the device acts as a server, it uses the concepts of ACLs for the client authorization. More information about ACLs and how to configure them can be found [here](#jozo prosim docku s vysvetlenim co su acl, diagramom ako sa dostat do toho stavu[toto zasa asi separatna docka na ktoru sa odkazes aj z tohto aj predosleho stepu] a ako nastavit ACL].
+As the device acts as a server, it uses the concepts of ACLs for the client authorization. More information about ACLs and how to configure them can be found [here](../../tutorials/acl).
+
+For Hub to device communication, the device needs to have the following ACLs configured:
+
+```jsonc
+{
+  "aclist2": [
+    {
+      "permission": 31, // full access
+      "resources": [
+        {
+          "wc": "*", // to update/get all resources
+          "if": [ "*" ] // all interfaces
+        },
+        {
+          "href": "/oc/con", // to update/get device name
+          "if": [ "*" ] // all interfaces
+        },
+        {
+          "href": "/oc/swu", // to update/get device firmware
+          "if": [ "*" ] // all interfaces
+        }
+      ],
+      "subject": { // type of subject is defined by body content
+        "uuid": "hub-id" // Hub id
+      }
+    }
+  ]
+}
+```
+
+{{< plantuml id="add-hub-acl" >}}
+@startuml Sequence
+skinparam backgroundColor transparent
+hide footbox
+
+box "D2D Client"
+participant S as "Web App\n(running in the browser)"
+participant C as "Service\n(local or remote host)"
+end box
+
+participant D as "Device\n(in the local network with Service)"
+
+S -> D++: Update ACL\n(POST /oic/sec/acl2 {"aclist2": [...]})
+activate S
+return ACL updated
+deactivate S
+
+@enduml
+{{< /plantuml >}}
 
 ### Hub Onboarding Configuration
 
