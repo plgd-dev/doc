@@ -16,7 +16,7 @@ To onboard the device to the plgd hub, following configuration data are needed:
 - authorizationCode - [OAuth2.0 authorization code](https://www.rfc-editor.org/rfc/rfc6749#section-4.1), used to get the device JWT token
 - authorizationProviderName - authorization provider which is used to authorize the device on the plgd hub
 - hubID - id of the plgd hub
-- certificateAuthorities - trusted certificates used to verify the authenticty of the plgd hub
+- certificateAuthorities - trusted certificates used to verify the authenticity of the plgd hub
 
 {{< warning >}}
 Only the device owner, [Zero-touch Provisioning service](../../device-provisioning-service/overview/) or an authorized client are allowed to provision the device with all the configuration data required for the device to cloud connectivity.
@@ -26,9 +26,9 @@ The [device onboarding process](../../architecture/component-overview/#device-on
 
 ## How to onboard?
 
-To enable device to cloud connectivity, following tasks need to be successfuly completed:
+To enable device to cloud connectivity, following tasks need to be successfully completed:
 
-- Certificate Authority configured so the device can successfuly verify authenticity of the plgd hub
+- Certificate Authority configured so the device can successfully verify authenticity of the plgd hub
 - ACLs are configured so the device authorizes incoming requests from the plgd hub
 - The `hub onboarding configuration` is set so the device knows where to connect and how to authorize the connection
 
