@@ -24,7 +24,7 @@ Only the device owner, [Zero-touch Provisioning service](../../device-provisioni
 
 The [device onboarding process](../../architecture/component-overview/#device-onboarding) starts right after successful provisioning.
 
-## How to onboard?
+## How to onboard
 
 To enable device to cloud connectivity, following tasks need to be successfully completed:
 
@@ -207,7 +207,7 @@ state NOT_OWNED <<Shadow>> {
 
 state OWNED <<Shadow>> {
   state uninitialized: Device is owned without onboard configuration
-  
+
   state ONBOARDING_IN_PROGRESS <<Shadow>> {
     state registering: Try sign up/sign in to the plgd hub
     state registering: Connection lost - reconnect
