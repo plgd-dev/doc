@@ -115,6 +115,8 @@ For Hub to device communication, the device needs to have the following ACLs con
 }
 ```
 
+To update the device ACL resource we just POST it to he acl resource:
+
 {{< plantuml id="add-hub-acl" >}}
 @startuml Sequence
 skinparam backgroundColor transparent
