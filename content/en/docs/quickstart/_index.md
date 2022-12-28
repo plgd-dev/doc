@@ -6,8 +6,5 @@ menu:
   docs:
     identifier: quickstart
     name: Quickstart
-    weight: 120
-    post: break
-draft: false
+    weight: 1
 ---
-
