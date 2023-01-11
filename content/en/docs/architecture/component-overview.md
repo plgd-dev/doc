@@ -248,13 +248,25 @@ After the connection has been established, the device needs to refresh its token
 
 The device then needs to authorize itself by signing in. This process is necessary to ensure that only authorized devices are able to access the resources on the server.
 
+{{< note >}}
+More information about the Device Authorization can be found [here](#device-authorization).
+{{< /note >}}
+
 ##### Publish Resources
 
 If new resources have been added or the module has been restarted, the device needs to publish these resources to the server. This process is necessary to ensure that all devices have access to the most up-to-date information.
 
+{{< note >}}
+More information about the Publish Resources can be found [here](#resource-publish--subscription).
+{{< /note >}}
+
 ##### Synchronize Device Twin
 
 The final step in the reconnect process is to synchronize the device twin. This is necessary to ensure that the contents of the IPM resources on the device match the contents on the server. Currently, this process is always done, but it will be improved in the future through the use of etags.
+
+{{< note >}}
+More information about the Device Twin can be found [here](/docs/features/device-twin).
+{{< /note >}}
 
 #### Delete a device
 
