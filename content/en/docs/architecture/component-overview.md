@@ -228,6 +228,46 @@ return Updated
 A client requesting resource observation will immediately start to receive notifications without additional requests to the device over the CoAP Gateway. As the plgd hub is by default observing the resources of all connected devices, the Gateway responsible will just subscribe to the [Event Bus](#event-bus) and forward requested notifications. **Handling of CRUDN operations is the same for every Gateway.**
 {{< /note >}}
 
+#### Reconnect a device
+
+Reconnecting is a crucial operation in IoT devices, but it can also be an expensive one. The process consists of multiple steps, including establishing a TLS connection, refreshing the token, signing in, publishing resources, and synchronizing the device twin.
+
+{{< note >}}
+It's worth noting that during the reconnect process, the device's CPU may be heavily utilized.
+{{< /note >}}
+
+##### Establishing a TLS Connection
+
+The first step in the reconnect process is to establish a secure connection using Transport Layer Security (TLS). This ensures that all data transmitted between the device and the server is encrypted and protected from unauthorized access.
+
+##### Refresh Token
+
+After the connection has been established, the device needs to refresh its token, which is similar to the sign-in operation. This is necessary to obtain a new access token that can be used to sign in to the device.
+
+##### Sign In
+
+The device then needs to authorize itself by signing in. This process is necessary to ensure that only authorized devices are able to access the resources on the server.
+
+{{< note >}}
+More information about the Device Authorization can be found [here](#device-authorization).
+{{< /note >}}
+
+##### Publish Resources
+
+If new resources have been added or the module has been restarted, the device needs to publish these resources to the server. This process is necessary to ensure that all devices have access to the most up-to-date information.
+
+{{< note >}}
+More information about the Publish Resources can be found [here](#resource-publish--subscription).
+{{< /note >}}
+
+##### Synchronize Device Twin
+
+The final step in the reconnect process is to synchronize the device twin. This is necessary to ensure that the contents of the IPM resources on the device match the contents on the server. Currently, this process is always done, but it will be improved in the future through the use of etags.
+
+{{< note >}}
+More information about the Device Twin can be found [here](/docs/features/device-twin).
+{{< /note >}}
+
 #### Delete a device
 
 At some point, a user might want to delete a device from the plgd hub. There are two ways to achieve this.
