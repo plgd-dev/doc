@@ -23,7 +23,7 @@ The CoAP gateway acts as a CoAP Client, communicating with IoT devices, which se
 Before a device becomes operational and is able to interact with other devices, it needs to be appropriately onboarded. The first step in onboarding the device is to [configure ownership (see 5.3.3)](https://openconnectivity.org/specs/OCF_Security_Specification_v2.2.1.pdf#page=38) where the legitimate user who owns/purchases the device uses one of the Owner Transfer Methods (OTMs) within the Onboarding tool to establish ownership. Once ownership is established, the OBT [provisions the device (see 5.3.4)](https://openconnectivity.org/specs/OCF_Security_Specification_v2.2.1.pdf#page=39), after which the device can be [provisioned for the plgd hub (see 8.1.2.3)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=32). After successful provisioning, the device should [establish a TLS connection (see 7.2)](https://openconnectivity.org/specs/OCF_Cloud_Security_Specification_v2.2.1.pdf#page=14) using certificate based credentials.
 
 {{< note >}}
-Use [plgd OCF Client](https://github.com/plgd-dev/device) or [Apple](https://apps.apple.com/us/app/plgd/id1536315811) / [Android](https://play.google.com/store/apps/details?id=dev.plgd.client) mobile app for **easy** device discovery, ownership configuration and provisioning for the plgd hub!
+Use [plgd Client Application](https://github.com/plgd-dev/client-application) for **easy** device discovery, ownership configuration and provisioning for the plgd hub!
 {{< /note >}}
 
 #### Device Onboarding
@@ -203,7 +203,7 @@ participant CGW as "CoAP Gateway"
 participant GGW as "gRPC Gateway"
 participant RA as "Resource Aggregate"
 participant EB as "Event Bus"
-participant C as "Mobile App"
+participant C as "Client Application"
 
 C -> GGW ++: Update device/light resource
 activate C
