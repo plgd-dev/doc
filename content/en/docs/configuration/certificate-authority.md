@@ -82,7 +82,7 @@ gRPC API of the Certificate Authority service as defined [here](https://github.c
 
 ### Signer
 
-Signer configuration to issue identity certificates for devices or mobile application.
+Signer configuration to issue identity certificates for devices or client application.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
