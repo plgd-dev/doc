@@ -14,16 +14,15 @@ toc: true
 
 ## try.plgd.cloud
 
-You can try out the plgd hub without downloading a single docker container by using [try.plgd.cloud](https://try.plgd.cloud). There is a [client application](https://github.com/plgd-dev/client-application/releases) available for onboarding any IoTivitiy-Lite or OCF standardized device to the plgd hub.
-You need to also use [config.yaml](#configyaml-file) that contains configuration for plgd hub and [ca.crt](#cacrt-file) file that contains certificate of the plgd hub. The path ca.crt is set in the config file and both files need to be in the same directory as client-application binary.
+You can try out the plgd hub without downloading a single docker container by going to [try.plgd.cloud](https://try.plgd.cloud). Additionally, there is a [client application](https://github.com/plgd-dev/client-application/releases) which can be used to onboard any IoTivitiy-Lite or OCF standardized devices to the plgd hub. In order to use the client application, you need to use both a [config.yaml](#configyaml-file) file that contains configuration for the plgd hub and a [ca.crt](#cacrt-file) file that contains the certificate of the plgd hub, both of which need to be in the same directory as the client-application binary.
 
-Run the client application with the following command:
+The client application can then be run with the following command:
 
 ```bash
 ./client-application --config ./config.yaml
 ```
 
-Then open the [http://localhost:3000](http://localhost:3000) in your browser. Onboarding your device requires that you Discover devices, go to specific devices, own it, and finally onboard it.
+Once the application is running, you can open [http://localhost:3000](http://localhost:3000) in your browser. Onboarding your device requires that you Discover devices, go to specific device, own it, and finally onboard it.
 
 ### config.yaml file
 
