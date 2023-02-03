@@ -1,14 +1,15 @@
 ---
-title: 'Deploy your own plgd hub'
-description: 'Deploy plgd hub on your own development machine'
-date: '2021-05-13'
-lastmod: '2021-05-13'
-categories: [quickstart]
-keywords: [quickstart, bundle, deployment, d2c]
+title: 'Deploy Hub'
+description: 'Secure remote device communication made easy. Follow our guide to deploy the plgd hub in your environment with simple steps.'
+docsTitleDisplay: true
+docsTitleIndex: 3
+date: '2023-02-03'
+categories: ['quickstart']
+keywords: ['quickstart', 'bundle', 'deployment', 'd2c']
 menu:
   docs:
-    parent: quickstart
-    weight: 40
+    parent: 'quickstart'
+    weight: 30
 toc: true
 ---
 

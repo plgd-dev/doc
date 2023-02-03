@@ -1,8 +1,8 @@
 ---
 title: 'Advanced security'
 description: 'How to secure access devices to coap-gateway'
+docsOthersDisplay: true
 date: '2021-09-17'
-lastmod: '2021-09-17'
 categories: [tutorials, dashboard]
 keywords: [tutorials, dashboard]
 menu:
@@ -35,7 +35,7 @@ When the device makes one of the calls sign up, sign in, sign out or sign off, c
 2. If coap-gateway has set mutual TLS `api.coap.tls.clientCertificateRequired` then it will be resolved from the device identity certificate.
 3. If none of the previous options are set, device ID will be resolved from the request parameter.
 
-## Don't allow access with a token that doesn't bellow the device
+## Don't allow access with a token that doesn't belong to the device
 
 When `api.coap.tls.clientCertificateRequired` and `api.coap.authorization.deviceIDClaim` are set, coap-gateway matches deviceID from certificate and JWT token. If they are not the same, then coap-gateway returns code `Unauthorized` and closes the connection.
 

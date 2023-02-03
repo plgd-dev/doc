@@ -1,14 +1,15 @@
 ---
-title: 'Control device remotely'
-description: 'Onboard your devices and control them remotely'
-date: '2021-05-13'
-lastmod: '2021-05-13'
-categories: [quickstart]
-keywords: [quickstart, onboarding, mobile app, dashboard, d2c]
+title: 'Remote Access'
+description: 'Ensure secure remote communication with your device. This guide walks you through the onboarding process to the plgd hub.'
+docsTitleDisplay: true
+docsTitleIndex: 4
+date: '2023-02-03'
+categories: ['quickstart']
+keywords: ['quickstart', 'onboarding', 'dashboard', 'd2c']
 menu:
   docs:
-    parent: quickstart
-    weight: 30
+    parent: 'quickstart'
+    weight: 40
 toc: true
 ---
 

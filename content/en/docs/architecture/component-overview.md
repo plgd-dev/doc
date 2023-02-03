@@ -2,7 +2,6 @@
 title: 'Component Overview'
 description: 'L3 and L4 plgd overview'
 date: '2021-05-13'
-lastmod: '2021-05-13'
 categories: [architecture, C4 model, components]
 keywords: [c4 model, diagrams]
 weight: 4
