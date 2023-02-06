@@ -29,6 +29,8 @@ More information about the JetStream can be found [here](https://docs.nats.io/je
 - `ownerID` is the owner of the device. It is calculated as `uuid.NewV5(uuid.NamespaceURL, value of JWT ownerClaim)`.
 - `deviceID` is the UUID of the device.
 - `resourceID` is the unique identifier of resource over the whole hub. It is calculated as `uuid.NewV5(uuid.NamespaceURL, deviceID+href)`, where the `href` is a resource path. (eg "/oic/d").
+- `resourceHrefID` is the identifier of resource href. It is calculated as `uuid.NewV5(uuid.NamespaceURL, resourceHref)`. For multiple hrefs of the same resource, the same `resourceHrefID` is used.
+- `resourceTypeID` is the identifier of the resource type. It is calculated as `uuid.NewV5(uuid.NamespaceURL, resourceType)`. For multiple resource types, the same `resourceTypeID` is used.
 
 ### Device events
 
@@ -44,7 +46,24 @@ Each event is compressed by [snappy](https://github.com/google/snappy) and encod
 
 #### Resources events
 
+The resources events are published for each resource of the device. The event is published multiple times to different subjects:
+
+- once for resource ID
+- once for resource href
+- once for each resource type of the resource
+
+##### Resources events by resource ID
+
 - `plgd.owners.{ownerID}.devices.{deviceID}.resources.{resourceID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceID`, `deviceID` and `ownerID`.
+
+##### Resources events by href
+
+- `plgd.owners.{ownerID}.devices.{deviceID}.resourceHrefs.{resourceHrefID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceHrefID`, `deviceID` and `ownerID`.
+
+##### Resources events by resource type
+
+- `plgd.owners.{ownerID}.devices.{deviceID}.resourceTypes.{resourceTypeID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceTypeID`, `deviceID` and `ownerID`.
+
 
 ### Owner events
 
@@ -76,15 +95,37 @@ For the consumers of events you can subscribe to:
 - `plgd.owners.*.devices.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices
 - `plgd.owners.{ownerId}.devices.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices of owner `ownerId`
 
+#### Subscribe by resource href
+
+- `plgd.owners.*.devices.{deviceID}.resourceHrefs.>` gets all resources events of device `deviceID`
+- `plgd.owners.*.devices.{deviceID}.resourceHrefs.{resourceHrefID}.>` gets all events of resource `resourceID` for device `deviceID`
+- `plgd.owners.*.devices.{deviceID}.resourceHrefs.{resourceHrefID}.resourcechanged` gets `resourcechanged` events of resource `resourceHrefID` for device `deviceID`
+- `plgd.owners.*.devices.{deviceID}.resourceHrefs.*.resourcechanged` gets `resourcechanged` events of all resources for device `deviceID`
+- `plgd.owners.*.devices.*.resourceHrefs.{resourceHrefID}.>` gets all events of resources with `resourceHrefID` for all devices
+- `plgd.owners.*.devices.*.resourceHrefs.*.resourcechanged` gets `resourcechanged` events of all resources for all devices
+- `plgd.owners.{ownerId}.devices.*.resourceHrefs.*.resourcechanged` gets `resourcechanged` events of all resources for all devices of owner `ownerId`
+
+#### Subscribe by resource type
+
+- `plgd.owners.*.devices.{deviceID}.resourceTypes.{resourceTypeID}.>` gets all events of resource with resource type `resourceTypeID` for device `deviceID`
+- `plgd.owners.*.devices.{deviceID}.resourceTypes.{resourceTypeID}.resourcechanged` gets `resourcechanged` events of all resources with resource type `resourceTypeID`  for device `deviceID`
+- `plgd.owners.*.devices.*.resourceTypes.{resourceTypeID}.>` gets all events of resource with resource type `resourceTypeID` for all devices
+- `plgd.owners.{ownerId}.devices.*.resourceTypes.{resourceTypeID}.>` gets all events of resource with resource type `resourceTypeID` for all devices of owner `ownerId`
+
+{{< warning >}}
+This subjects can producer duplications events, because resource can contain multiple resource types. It's up to you to filter duplications.
+
+- `plgd.owners.{ownerID or *}.devices.{deviceID or *}.resourceTypes.>`
+- `plgd.owners.{ownerID or *}.devices.{deviceID or *}.resourceTypes.*.{eventType}>`
+
 ## Enable JetStream
 
 {{< note >}}
 Deployment of the JetStream as an EventBus will be controlled by a single configuration option available in the plgd HELM chart. This is currently WIP.
-{{< /note >}}
 
 {{< warning >}}
 It's required from you to create event streams before the JetStream can be used as the plgd EventBus. If streams are not created, plgd services won't work.
-{{< /warning >}}
+
 
 ### Enable jetstream at plgd #bundle
 
