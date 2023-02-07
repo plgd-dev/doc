@@ -58,11 +58,11 @@ The resources events are published for each resource of the device. The event is
 
 ##### Resources events by href
 
-- `plgd.owners.{ownerID}.devices.{deviceID}.resourceHrefs.{resourceHrefID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceHrefID`, `deviceID` and `ownerID`.
+- `plgd.href.owners.{ownerID}.devices.{deviceID}.resources.{resourceHrefID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceHrefID`, `deviceID` and `ownerID`.
 
 ##### Resources events by resource type
 
-- `plgd.owners.{ownerID}.devices.{deviceID}.resourceTypes.{resourceTypeID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceTypeID`, `deviceID` and `ownerID`.
+- `plgd.resourceType.owners.{ownerID}.devices.{deviceID}.resourceTypes.{resourceTypeID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceTypeID`, `deviceID` and `ownerID`.
 
 ### Owner events
 
@@ -94,28 +94,40 @@ For the consumers of events you can subscribe to:
 - `plgd.owners.*.devices.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices
 - `plgd.owners.{ownerId}.devices.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices of owner `ownerId`
 
+{{< warning >}}
+This subject can producer duplications events, because resource can contain multiple resource types. It's up to you to filter duplications.
+
+- `plgd.>`
+{{< /warning >}}
+
 #### Subscribe by resource href
 
-- `plgd.owners.*.devices.{deviceID}.resourceHrefs.>` gets all resources events of device `deviceID`
-- `plgd.owners.*.devices.{deviceID}.resourceHrefs.{resourceHrefID}.>` gets all events of resource `resourceHrefID` for device `deviceID`
-- `plgd.owners.*.devices.{deviceID}.resourceHrefs.{resourceHrefID}.resourcechanged` gets `resourcechanged` events of resource `resourceHrefID` for device `deviceID`
-- `plgd.owners.*.devices.{deviceID}.resourceHrefs.*.resourcechanged` gets `resourcechanged` events of all resources for device `deviceID`
-- `plgd.owners.*.devices.*.resourceHrefs.{resourceHrefID}.>` gets all events of resources with `resourceHrefID` for all devices
-- `plgd.owners.*.devices.*.resourceHrefs.*.resourcechanged` gets `resourcechanged` events of all resources for all devices
-- `plgd.owners.{ownerId}.devices.*.resourceHrefs.*.resourcechanged` gets `resourcechanged` events of all resources for all devices of owner `ownerId`
+- `plgd.resources.owners.*.devices.{deviceID}.resources.>` gets all resources events of device `deviceID`
+- `plgd.resources.owners.*.devices.{deviceID}.resources.{resourceHrefID}.>` gets all events of resource `resourceHrefID` for device `deviceID`
+- `plgd.resources.owners.*.devices.{deviceID}.resources.{resourceHrefID}.resourcechanged` gets `resourcechanged` events of resource `resourceHrefID` for device `deviceID`
+- `plgd.resources.owners.*.devices.{deviceID}.resources.*.resourcechanged` gets `resourcechanged` events of all resources for device `deviceID`
+- `plgd.resources.owners.*.devices.*.resources.{resourceHrefID}.>` gets all events of resources with `resourceHrefID` for all devices
+- `plgd.resources.owners.*.devices.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices
+- `plgd.resources.owners.{ownerId}.devices.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices of owner `ownerId`
 
 #### Subscribe by resource type
 
-- `plgd.owners.*.devices.{deviceID}.resourceTypes.{resourceTypeID}.>` gets all events of resource with resource type `resourceTypeID` for device `deviceID`
-- `plgd.owners.*.devices.{deviceID}.resourceTypes.{resourceTypeID}.resourcechanged` gets `resourcechanged` events of all resources with resource type `resourceTypeID`  for device `deviceID`
-- `plgd.owners.*.devices.*.resourceTypes.{resourceTypeID}.>` gets all events of resource with resource type `resourceTypeID` for all devices
-- `plgd.owners.{ownerId}.devices.*.resourceTypes.{resourceTypeID}.>` gets all events of resource with resource type `resourceTypeID` for all devices of owner `ownerId`
+- `plgd.resourceTypes.owners.*.devices.{deviceID}.resourceTypes.{resourceTypeID}.>` gets all events of resource with resource type `resourceTypeID` for device `deviceID`
+- `plgd.resourceTypes.owners.*.devices.{deviceID}.resourceTypes.{resourceTypeID}.resourcechanged` gets `resourcechanged` events of all resources with resource type `resourceTypeID`  for device `deviceID`
+- `plgd.resourceTypes.owners.*.devices.*.resourceTypes.{resourceTypeID}.>` gets all events of resource with resource type `resourceTypeID` for all devices
+- `plgd.resourceTypes.owners.{ownerId}.devices.*.resourceTypes.{resourceTypeID}.>` gets all events of resource with resource type `resourceTypeID` for all devices of owner `ownerId`
 
 {{< warning >}}
-This subjects can producer duplications events, because resource can contain multiple resource types. It's up to you to filter duplications.
+These subjects can producer duplications events, because resource can contain multiple resource types. It's up to you to filter duplications.
 
-- `plgd.owners.{ownerID or *}.devices.{deviceID or *}.resourceTypes.>`
-- `plgd.owners.{ownerID or *}.devices.{deviceID or *}.resourceTypes.*.{eventType}>`
+- `plgd.>`
+- `plgd.resourceTypes.>`
+- `plgd.resourceTypes.owners.>`
+- `plgd.resourceTypes.owners.{ownerID or *}.>`
+- `plgd.resourceTypes.owners.{ownerID or *}.devices.>`
+- `plgd.resourceTypes.owners.{ownerID or *}.devices.{deviceID}.>`
+- `plgd.resourceTypes.owners.{ownerID or *}.devices.{deviceID or *}.resourceTypes.>`
+- `plgd.resourceTypes.owners.{ownerID or *}.devices.{deviceID or *}.resourceTypes.*.{eventType}>`
 {{< /warning >}}
 
 ## Enable JetStream
