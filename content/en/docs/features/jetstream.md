@@ -97,7 +97,7 @@ For the consumers of events you can subscribe to:
 #### Subscribe by resource href
 
 - `plgd.owners.*.devices.{deviceID}.resourceHrefs.>` gets all resources events of device `deviceID`
-- `plgd.owners.*.devices.{deviceID}.resourceHrefs.{resourceHrefID}.>` gets all events of resource `resourceID` for device `deviceID`
+- `plgd.owners.*.devices.{deviceID}.resourceHrefs.{resourceHrefID}.>` gets all events of resource `resourceHrefID` for device `deviceID`
 - `plgd.owners.*.devices.{deviceID}.resourceHrefs.{resourceHrefID}.resourcechanged` gets `resourcechanged` events of resource `resourceHrefID` for device `deviceID`
 - `plgd.owners.*.devices.{deviceID}.resourceHrefs.*.resourcechanged` gets `resourcechanged` events of all resources for device `deviceID`
 - `plgd.owners.*.devices.*.resourceHrefs.{resourceHrefID}.>` gets all events of resources with `resourceHrefID` for all devices
