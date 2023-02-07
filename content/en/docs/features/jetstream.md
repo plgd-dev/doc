@@ -98,6 +98,7 @@ For the consumers of events you can subscribe to:
 This subject can producer duplications events, because resource can contain multiple resource types. It's up to you to filter duplications.
 
 - `plgd.>`
+
 {{< /warning >}}
 
 #### Subscribe by resource href
@@ -128,6 +129,7 @@ These subjects can producer duplications events, because resource can contain mu
 - `plgd.resourceTypes.owners.{ownerID or *}.devices.{deviceID}.>`
 - `plgd.resourceTypes.owners.{ownerID or *}.devices.{deviceID or *}.resourceTypes.>`
 - `plgd.resourceTypes.owners.{ownerID or *}.devices.{deviceID or *}.resourceTypes.*.{eventType}>`
+
 {{< /warning >}}
 
 ## Enable JetStream
