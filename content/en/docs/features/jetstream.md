@@ -116,6 +116,7 @@ This subjects can producer duplications events, because resource can contain mul
 
 - `plgd.owners.{ownerID or *}.devices.{deviceID or *}.resourceTypes.>`
 - `plgd.owners.{ownerID or *}.devices.{deviceID or *}.resourceTypes.*.{eventType}>`
+{{< /warning >}}
 
 ## Enable JetStream
 
@@ -124,6 +125,7 @@ Deployment of the JetStream as an EventBus will be controlled by a single config
 
 {{< warning >}}
 It's required from you to create event streams before the JetStream can be used as the plgd EventBus. If streams are not created, plgd services won't work.
+{{< /warning >}}
 
 ### Enable jetstream at plgd #bundle
 
