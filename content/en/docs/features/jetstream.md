@@ -182,13 +182,36 @@ nats-server -c nats.config
 
 #### Setup and create stream
 
-Setup events stream `stream.json` where all events of hub will be stored:
+Setup events stream `primary-stream.json` where all main events of hub will be stored:
 
 ```jsonc
 {
   "name": "EVENTS", // A name for the Stream that may not have spaces, tabs, period (.), greater than (>), or asterisk (*).
   "subjects": [ // A list of subjects to consume, supports wildcards.
-    "plgd.>"
+    "plgd.owners.>"
+  ],
+  "retention": "limits",  // How message retention is considered, limits (default), interest or workQueue.
+  "max_consumers": -1, // How many Consumers can be defined for a given Stream, -1 for unlimited.
+  "max_msgs_per_subject": 0, // / How many messages may be in a subject of Stream, -1 for unlimited.
+  "max_msgs": -1,  // How many messages may be in a Stream. Adheres to Discard Policy, removing oldest or refusing new messages if the Stream exceeds this size, -1 for unlimited.
+  "max_bytes": -1, // How many bytes the Stream may contain. Adheres to Discard Policy, removing oldest or refusing new messages if the Stream exceeds this number of messages, -1 for unlimited.
+  "max_age": 0,  // Maximum age of any message in the Stream, expressed in nanoseconds, -1 for unlimited.
+  "max_msg_size": -1, // The largest message that will be accepted by the Stream. -1 for unlimited
+  "storage": "file", // The type of storage backend, file and memory
+  "discard": "old", // discard old messages when stream is full
+  "num_replicas": 1, // How many replicas to keep for each message in a clustered JetStream, maximum 5
+  "duplicate_window": 600000000000 // The window within which to track duplicate messages, expressed in nanoseconds.
+}
+```
+
+Setup events stream `secondary-streams.json` where all other events of hub will be stored:
+
+```jsonc
+{
+  "name": "SECONDARY_EVENTS", // A name for the Stream that may not have spaces, tabs, period (.), greater than (>), or asterisk (*).
+  "subjects": [ // A list of subjects to consume, supports wildcards.
+    "plgd.resources.>"
+    "plgd.resourceTypes.>"
   ],
   "retention": "limits",  // How message retention is considered, limits (default), interest or workQueue.
   "max_consumers": -1, // How many Consumers can be defined for a given Stream, -1 for unlimited.
@@ -208,10 +231,11 @@ Setup events stream `stream.json` where all events of hub will be stored:
 More [information](https://docs.nats.io/jetstream/concepts/streams) about stream configuration.
 {{< /note >}}
 
-And then apply the configuration to the nats-server via:
+And then apply the configurations to the nats-server via:
 
 ```bash
-nats str add EVENTS --config /configs/jetstream.json
+nats str add EVENTS --config /configs/primary-stream.json
+nats str add SECONDARY_EVENTS --config /configs/secondary-streams.json
 ```
 
 ### Deploy JetStream Controller for K8S
@@ -240,7 +264,15 @@ metadata:
   name: events
 spec:
   name: events
-  subjects: ["plgd.>"]
+  subjects: ["plgd.owners.>"]
+---
+apiVersion: jetstream.nats.io/v1beta1
+kind: Stream
+metadata:
+  name: secondary-events
+spec:
+  name: secondary-events
+  subjects: ["plgd.resources.>", "plgd.resourceTypes.>" ]
 ```
 
 ### Enable JetStream at Resource Aggregate
