@@ -64,7 +64,6 @@ The resources events are published for each resource of the device. The event is
 
 - `plgd.owners.{ownerID}.devices.{deviceID}.resourceTypes.{resourceTypeID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceTypeID`, `deviceID` and `ownerID`.
 
-
 ### Owner events
 
 Each event is encoded in protobuf [event envelope](https://github.com/plgd-dev/hub/blob/main/authorization/pb/events.proto) and then compressed by [snappy](https://github.com/google/snappy).
@@ -125,7 +124,6 @@ Deployment of the JetStream as an EventBus will be controlled by a single config
 
 {{< warning >}}
 It's required from you to create event streams before the JetStream can be used as the plgd EventBus. If streams are not created, plgd services won't work.
-
 
 ### Enable jetstream at plgd #bundle
 
