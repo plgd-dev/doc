@@ -1,5 +1,6 @@
 ---
-title: 'What can we <span>help with?</span>'
+title: 'Docs' #used for breadcrumb
+titlePage: 'What can we <span>help with?</span>'
 description: 'Welcome to plgd knowledge base! Search our extensive documentation and self-help resources.'
 searchPlaceHolder: 'I am searching for...'
 getStartedTitle: 'Get started'
