@@ -110,6 +110,20 @@ oauth:
 helm install -f withMock.yaml hub plgd/plgd-hub
 ```
 
+### Custom Authorization CA pool
+
+By default, the plgd hub Helm chart expect that certificate used by OAuth 2.0 server is signed by the same CA as rest of certificates
+used by plgd hub services. For including custom authorization CA pool into authorization section, use following configuration attribute:
+
+```yaml
+global:
+  # -- Custom CA certificate for authorization endpoint in PEM format
+  authorizationCAPool: |
+    -----BEGIN CERTIFICATE-----
+    your custom authorization CA pool in PEM format
+    -----END CERTIFICATE-----
+```
+
 ### Using Let's encrypt certificates
 
 By default, the plgd hub Helm chart issues a self-signed CA certificate, used to sign domain certificates of all exposed services. To encrypt the external communication with the certificates signed by the Let's Encrypt CAs, create an issuer:
