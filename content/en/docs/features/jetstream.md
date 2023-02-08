@@ -29,8 +29,7 @@ More information about the JetStream can be found [here](https://docs.nats.io/je
 - `ownerID` is the owner of the device. It is calculated as `uuid.NewV5(uuid.NamespaceURL, value of JWT ownerClaim)`.
 - `deviceID` is the UUID of the device.
 - `resourceID` is the unique identifier of resource over the whole hub. It is calculated as `uuid.NewV5(uuid.NamespaceURL, deviceID+href)`, where the `href` is a resource path. (eg "/oic/d").
-- `resourceHrefID` is the identifier of resource href. It is calculated as `uuid.NewV5(uuid.NamespaceURL, resourceHref)`. For multiple hrefs of the same resource, the same `resourceHrefID` is used.
-- `resourceTypeID` is the identifier of the resource type. It is calculated as `uuid.NewV5(uuid.NamespaceURL, resourceType)`. For multiple resource types, the same `resourceTypeID` is used.
+- `resourceTypeID` is the identifier of the resource type. It is calculated as `uuid.NewV5(uuid.NamespaceURL, resourceType)`.
 
 ### Device events
 
@@ -49,16 +48,11 @@ Each event is compressed by [snappy](https://github.com/google/snappy) and encod
 The resources events are published for each resource of the device. The event is published multiple times to different subjects:
 
 - once for resource ID
-- once for resource href
 - once for each resource type of the resource
 
 ##### Resources events by resource ID
 
 - `plgd.owners.{ownerID}.devices.{deviceID}.resources.{resourceID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceID`, `deviceID` and `ownerID`.
-
-##### Resources events by href
-
-- `plgd.href.owners.{ownerID}.devices.{deviceID}.resources.{resourceHrefID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `resourceHrefID`, `deviceID` and `ownerID`.
 
 ##### Resources events by resource type
 
@@ -95,21 +89,12 @@ For the consumers of events you can subscribe to:
 - `plgd.owners.{ownerId}.devices.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices of owner `ownerId`
 
 {{< warning >}}
-This subject can producer duplications events, because resource can contain multiple resource types. It's up to you to filter duplications.
+
+Due to the fact that resources may contain multiple resource types, this NATS subject produces duplicates.
 
 - `plgd.>`
 
 {{< /warning >}}
-
-#### Subscribe by resource href
-
-- `plgd.resources.owners.*.devices.{deviceID}.resources.>` gets all resources events of device `deviceID`
-- `plgd.resources.owners.*.devices.{deviceID}.resources.{resourceHrefID}.>` gets all events of resource `resourceHrefID` for device `deviceID`
-- `plgd.resources.owners.*.devices.{deviceID}.resources.{resourceHrefID}.resourcechanged` gets `resourcechanged` events of resource `resourceHrefID` for device `deviceID`
-- `plgd.resources.owners.*.devices.{deviceID}.resources.*.resourcechanged` gets `resourcechanged` events of all resources for device `deviceID`
-- `plgd.resources.owners.*.devices.*.resources.{resourceHrefID}.>` gets all events of resources with `resourceHrefID` for all devices
-- `plgd.resources.owners.*.devices.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices
-- `plgd.resources.owners.{ownerId}.devices.*.resources.*.resourcechanged` gets `resourcechanged` events of all resources for all devices of owner `ownerId`
 
 #### Subscribe by resource type
 
@@ -119,7 +104,8 @@ This subject can producer duplications events, because resource can contain mult
 - `plgd.resourceTypes.owners.{ownerId}.devices.*.resourceTypes.{resourceTypeID}.>` gets all events of resource with resource type `resourceTypeID` for all devices of owner `ownerId`
 
 {{< warning >}}
-These subjects can producer duplications events, because resource can contain multiple resource types. It's up to you to filter duplications.
+
+Because resources may contain multiple types of resources, these NATS subjects duplicate data.
 
 - `plgd.>`
 - `plgd.resourceTypes.>`
@@ -212,7 +198,6 @@ Setup events stream `secondary-streams.json` where all other events of hub will 
 {
   "name": "SECONDARY_EVENTS", // A name for the Stream that may not have spaces, tabs, period (.), greater than (>), or asterisk (*).
   "subjects": [ // A list of subjects to consume, supports wildcards.
-    "plgd.resources.>"
     "plgd.resourceTypes.>"
   ],
   "retention": "limits",  // How message retention is considered, limits (default), interest or workQueue.
@@ -274,7 +259,7 @@ metadata:
   name: secondary-events
 spec:
   name: secondary-events
-  subjects: ["plgd.resources.>", "plgd.resourceTypes.>" ]
+  subjects: [ "plgd.resourceTypes.>" ]
 ```
 
 ### Enable JetStream at Resource Aggregate
