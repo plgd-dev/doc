@@ -1,12 +1,14 @@
 ---
-title: 'Local Discoveryyy'
+title: 'Local Discovery'
 description: 'Discover, update and subscribe to changes with ease! This guide will show you how to find your device, update its properties and stay up-to-date.'
+docsTitleDisplay: true
+docsTitleIndex: 2
 date: '2023-02-03'
 categories: ['quickstart']
 keywords: ['quickstart', 'discovery', 'coap', 'multicast', 'd2d']
 menu:
   docs:
-    parent: 'test'
+    parent: 'quickstart'
     weight: 20
 toc: true
 ---

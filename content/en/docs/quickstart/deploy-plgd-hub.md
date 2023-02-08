@@ -1,12 +1,14 @@
 ---
-title: 'Deploy Hubbb'
+title: 'Deploy Hub'
 description: 'Secure remote device communication made easy. Follow our guide to deploy the plgd hub in your environment with simple steps.'
+docsTitleDisplay: true
+docsTitleIndex: 3
 date: '2023-02-03'
 categories: ['quickstart']
 keywords: ['quickstart', 'bundle', 'deployment', 'd2c']
 menu:
   docs:
-    parent: 'test'
+    parent: 'quickstart'
     weight: 30
 toc: true
 ---
