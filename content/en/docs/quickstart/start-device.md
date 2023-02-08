@@ -1,17 +1,18 @@
 ---
-title: 'Create device'
-description: 'Start your own device and host resources'
-date: '2021-05-13'
-lastmod: '2021-11-25'
-categories: [quickstart]
-keywords: [quickstart, device, iotivity]
+title: 'Start Device'
+description: 'Get your device up and running in seconds! Follow this guide for easy setup, and start exploring the power of plgd using a real hardware or a virtual device.'
+docsTitleDisplay: true
+docsTitleIndex: 1
+date: '2023-02-03'
+categories: ['quickstart']
+keywords: ['quickstart', 'device', 'iotivity']
 menu:
   docs:
-    parent: quickstart
+    parent: 'quickstart'
     weight: 10
 toc: true
 ---
-This guide will walk you through the process of starting your secure [OCF Device](https://openconnectivity.org/specs/OCF_Device_Specification_v2.2.3.pdf) using [IoTivity](https://iotivity.org/) library on the Raspberry Pi.
+This guide will walk you through the process of starting your [secure Device](https://openconnectivity.org/specs/OCF_Device_Specification_v2.2.3.pdf) using [IoTivity](https://iotivity.org/) library on the Raspberry Pi.
 
 ## Requirements
 

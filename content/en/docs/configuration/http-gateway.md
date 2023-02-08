@@ -80,7 +80,7 @@ Client configurations to internally connect to GRPC Gateway service.
 
 ### Web UI
 
-These configurations are for `PLGD Dashboard` as described in [here](https://github.com/plgd-dev/hub/blob/main/docs/guide/developing/dashboard.md).
+These configurations are for `plgd Dashboard` as described in [here](https://github.com/plgd-dev/hub/blob/main/docs/guide/developing/dashboard.md).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

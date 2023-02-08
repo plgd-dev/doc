@@ -1,8 +1,8 @@
 ---
 title: 'Open Telemetry Tracing'
 description: 'How to trace request through plgd hub?'
+docsOthersDisplay: true
 date: '2022-05-19'
-lastmod: '2022-05-19'
 categories: [features]
 keywords: [opentelemetry, tracing]
 menu:

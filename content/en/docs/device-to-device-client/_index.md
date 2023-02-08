@@ -2,6 +2,7 @@
 title: 'Device to Device Client'
 description: 'Communicate with the device directly, without any backend.'
 date: '2022-08-18'
+docsOthersDisplay: true
 menu:
   docs:
     identifier: device-to-device-client

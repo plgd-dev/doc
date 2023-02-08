@@ -1,8 +1,8 @@
 ---
 title: 'Device Twin'
 description: 'What is device twin?'
+docsOthersDisplay: true
 date: '2021-05-13'
-lastmod: '2022-10-28'
 categories: [features]
 keywords: [twin, twin, cache, history]
 menu:

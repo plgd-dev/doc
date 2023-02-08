@@ -1,8 +1,8 @@
 ---
 title: 'plgd on K8S'
 description: 'Running plgd hub on Kubernetes'
+docsOthersDisplay: true
 date: '2021-11-01'
-lastmod: '2021-11-01'
 categories: [deployment, kubernetes]
 keywords: [deployment, kubernetes, k8s, helm, chart]
 menu:

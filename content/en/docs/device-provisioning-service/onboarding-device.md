@@ -2,7 +2,7 @@
 title: 'Starting zero-touch provisioning'
 description: 'What are the possibilites on triggering the zero-touch provisioning?'
 date: '2022-06-20'
-lastmod: '2022-06-20'
+docsOthersDisplay: true
 categories: [zero-touch, provisioning]
 keywords: [provisioning, dps]
 menu:

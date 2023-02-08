@@ -1,13 +1,14 @@
 ---
-title: 'Discover & control device locally'
-description: 'Discover devices using UDP CoAP multicast and control them locally'
-date: '2021-06-14'
-lastmod: '2021-06-25'
-categories: [quickstart]
-keywords: [quickstart, discovery, coap, multicast, d2d]
+title: 'Local Discovery'
+description: 'Discover, update and subscribe to changes with ease! This guide will show you how to find your device, update its properties and stay up-to-date.'
+docsTitleDisplay: true
+docsTitleIndex: 2
+date: '2023-02-03'
+categories: ['quickstart']
+keywords: ['quickstart', 'discovery', 'coap', 'multicast', 'd2d']
 menu:
   docs:
-    parent: quickstart
+    parent: 'quickstart'
     weight: 20
 toc: true
 ---
