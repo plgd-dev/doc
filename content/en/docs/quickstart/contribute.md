@@ -2,14 +2,9 @@
 title: 'Contribute'
 description: 'Contribute to development'
 date: '2021-07-09'
-lastmod: '2021-07-10'
 categories: [quickstart]
 keywords: [quickstart, development]
-menu:
-  docs:
-    parent: quickstart
-    weight: 10
-toc: true
+weight: 5
 ---
 This guide will describe how to setup your environment to enable contribution to development.
 

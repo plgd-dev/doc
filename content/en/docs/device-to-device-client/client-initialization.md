@@ -2,14 +2,9 @@
 title: 'Client Initialization'
 description: 'How to initialize the client?'
 date: '2022-08-25'
-lastmod: '2022-08-25'
 categories: [d2d, client]
 keywords: [client, initialization, identity]
-menu:
-  docs:
-    parent: device-to-device-client
-    weight: 20
-toc: true
+weight: 2
 ---
 
 ## Client Application Ownership

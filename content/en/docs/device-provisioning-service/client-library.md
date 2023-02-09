@@ -2,14 +2,9 @@
 title: 'Client Library'
 description: 'How to create a client of plgd Device Provisioning Service?'
 date: '2021-02-15'
-lastmod: '2021-02-15'
 categories: [zero-touch, provisioning]
 keywords: [provisioning]
-menu:
-  docs:
-    parent: device-provisioning-service
-    weight: 50
-toc: true
+weight: 2
 ---
 
 ## Get Package

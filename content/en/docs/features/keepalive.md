@@ -2,14 +2,9 @@
 title: 'KeepAlive'
 description: 'How keepalive works with plgd hub'
 date: '2023-01-10'
-lastmod: '2023-01-10'
 categories: [features]
 keywords: ['keepalive', 'timeout', 'iotivity-lite', 'coap-gateway']
-menu:
-  docs:
-    parent: features
-    weight: 60
-toc: true
+weight: 4
 ---
 
 

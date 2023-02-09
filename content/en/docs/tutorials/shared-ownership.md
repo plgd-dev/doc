@@ -2,14 +2,9 @@
 title: 'Share devices within user groups'
 description: 'Share devices with more than one person identified as owner'
 date: '2021-05-13'
-lastmod: '2021-05-13'
 categories: [tutorials, authorization]
 keywords: [bundle, ownership, device group, oauth, auth0]
-menu:
-  docs:
-    parent: tutorials
-    weight: 20
-toc: true
+weight: 8
 ---
 
 Devices are organized in the Identity Store service by the owner ID retrieved from the JWT token. The plgd API will be based on this value to identify the user and grant him the permissions only to devices he owns. By default, JWT claim `sub` is used as the owner ID. In case you connect the plgd authorization service with the Auth0, each logged-in user can access only his devices. This behaviour can be changed by changing the `OWNER_CLAIM` configuration property and adding custom claim to your Auth0 users.

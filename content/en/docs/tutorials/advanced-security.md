@@ -5,11 +5,7 @@ docsOthersDisplay: true
 date: '2021-09-17'
 categories: [tutorials, dashboard]
 keywords: [tutorials, dashboard]
-menu:
-  docs:
-    parent: tutorials
-    weight: 60
-toc: true
+weight: 1
 ---
 
 

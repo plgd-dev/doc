@@ -2,14 +2,9 @@
 title: 'CoAP Gateway'
 description: 'Service configuration overview'
 date: '2021-10-01'
-lastmod: '2021-12-09'
 categories: [configuration, deployment]
 keywords: [configuration]
-menu:
-  docs:
-    parent: configuration
-    weight: 10
-toc: true
+weight: 1
 ---
 
 CoAP Gateway provides API for devices and clients following the [Open Connectivity Foundation](https://openconnectivity.org/) specification.

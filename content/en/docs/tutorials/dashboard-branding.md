@@ -2,14 +2,9 @@
 title: 'Branding dashboard'
 description: 'Change dashboard colors and logo to brand it for your presentation'
 date: '2021-05-13'
-lastmod: '2021-05-13'
 categories: [tutorials, dashboard]
 keywords: [dashboard, branding, logo, colors]
-menu:
-  docs:
-    parent: tutorials
-    weight: 30
-toc: true
+weight: 12
 ---
 
 Dashboard helps you to present to your stakeholders new device features as well as explain how this IoT framework works. To make it more convincing, basic templating functionality was introduced.

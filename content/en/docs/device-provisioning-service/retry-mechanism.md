@@ -2,14 +2,9 @@
 title: 'Retry mechanism'
 description: 'How is recoverable failure handled?'
 date: '2022-06-28'
-lastmod: '2022-06-28'
 categories: [zero-touch, provisioning]
 keywords: [retry, recovery, failure]
-menu:
-  docs:
-    parent: device-provisioning-service
-    weight: 50
-toc: true
+weight: 5
 ---
 
 Various failures can occur as a DPS device is running. Some failures are recoverable and are handled by retrying the failed step or triggering a full reprovisioning.

@@ -2,14 +2,9 @@
 title: 'Resource Directory'
 description: 'Service configuration overview'
 date: '2021-10-01'
-lastmod: '2021-10-01'
 categories: [configuration, deployment]
 keywords: [configuration]
-menu:
-  docs:
-    parent: configuration
-    weight: 50
-toc: true
+weight: 5
 ---
 
 Resource Directory maintains projection of devices which were requested by clients through the plgd gateways.

@@ -2,14 +2,9 @@
 title: 'Create & Delete device resources'
 description: 'Understand how to create and delete resources hosted by the device dynamically'
 date: '2021-05-13'
-lastmod: '2021-05-13'
 categories: [tutorials, device library]
 keywords: [device, iotivity, create resource, delete resource]
-menu:
-  docs:
-    parent: tutorials
-    weight: 50
-toc: true
+weight: 3
 ---
 
 ## Creating resources

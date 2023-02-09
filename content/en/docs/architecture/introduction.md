@@ -2,7 +2,6 @@
 title: 'Domain Overview'
 description: 'plgd domain overview'
 date: '2021-05-13'
-lastmod: '2021-05-13'
 categories: [architecture]
 keywords: [domain]
 weight: 1

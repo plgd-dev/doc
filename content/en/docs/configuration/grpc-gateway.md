@@ -2,14 +2,9 @@
 title: 'gRPC Gateway'
 description: 'Service configuration overview'
 date: '2021-10-01'
-lastmod: '2021-10-01'
 categories: [configuration, deployment]
 keywords: [configuration]
-menu:
-  docs:
-    parent: configuration
-    weight: 20
-toc: true
+weight: 3
 ---
 
 gRPC Gateway exposes the client's gRPC API to manage user's devices.

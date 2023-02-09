@@ -2,14 +2,9 @@
 title: 'Resource Aggregate'
 description: 'Service configuration overview'
 date: '2021-10-01'
-lastmod: '2021-10-01'
 categories: [configuration, deployment]
 keywords: [configuration]
-menu:
-  docs:
-    parent: configuration
-    weight: 40
-toc: true
+weight: 4
 ---
 
 Resource Aggregate translates commands to events, stores them to the database and publishes them to the messaging system.

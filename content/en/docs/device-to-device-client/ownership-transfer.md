@@ -2,14 +2,8 @@
 title: 'Ownership Transfer and Provisioning'
 description: 'How does security work with d2d?'
 date: '2022-08-18'
-lastmod: '2022-09-14'
 categories: [d2d, client]
-keywords: [d2d, client, proximity, udp]
-menu:
-  docs:
-    parent: device-to-device-client
-    weight: 30
-toc: true
+weight: 3
 ---
 
 ## Device Ownership

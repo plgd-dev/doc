@@ -2,14 +2,9 @@
 title: 'Pending command'
 description: 'What is pending command?'
 date: '2021-08-04'
-lastmod: '2021-08-04'
 categories: [features]
 keywords: [command, history]
-menu:
-  docs:
-    parent: features
-    weight: 20
-toc: true
+weight: 5
 ---
 
 Each command of hub is converted to events. eg:

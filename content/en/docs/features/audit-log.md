@@ -2,14 +2,9 @@
 title: 'Audit Log'
 description: 'What is Audit Log and how does it work?'
 date: '2021-06-11'
-lastmod: '2021-06-18'
 categories: [features]
 keywords: ['duplicated events', 'audit log', 'device twin']
-menu:
-  docs:
-    parent: features
-    weight: 10
-toc: true
+weight: 9
 ---
 
 TODO

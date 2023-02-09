@@ -2,14 +2,9 @@
 title: 'Attestation Mechanisms'
 description: 'How is the device identity confirmed?'
 date: '2022-02-15'
-lastmod: '2022-02-23'
 categories: [zero-touch, provisioning]
 keywords: [attestation, x509, TPM, manufacturer-certificate]
-menu:
-  docs:
-    parent: device-provisioning-service
-    weight: 50
-toc: true
+weight: 3
 ---
 
 

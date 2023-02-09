@@ -2,14 +2,9 @@
 title: 'Disaster Recovery'
 description: 'Getting back online and in-sync'
 date: '2021-06-16'
-lastmod: '2021-06-16'
 categories: [features]
 keywords: ['disaster recovery', 'data reconciliation' , 'jetstream']
-menu:
-  docs:
-    parent: features
-    weight: 50
-toc: true
+weight: 7
 ---
 
 Resiliency is understood as a way to readapt to a "crisis situation", which applies to both infrastructure and the data. What it means varies from user to user. After service disruptions, some users are okay retrieving the latest resource value while others require all the changes which occurred during the time their application or internal messaging system was down. Another failure scenario is when the node hosting the plgd CoAP Gateway crashes. Thousands of devices will try to reconnect and keep the device twin up to date, which creates a huge load and rapidly slows down the system if not handled properly.

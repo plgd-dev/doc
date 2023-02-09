@@ -5,11 +5,7 @@ date: '2022-06-20'
 docsOthersDisplay: true
 categories: [zero-touch, provisioning]
 keywords: [provisioning, dps]
-menu:
-  docs:
-    parent: device-provisioning-service
-    weight: 60
-toc: true
+weight: 4
 ---
 
 IoTivity devices can be extended by the Device Provisioning Client library, which enables you to use the zero-touch provisioning feature. Integrating this library into your device enables you to start the automated provisioning through 2 APIs.

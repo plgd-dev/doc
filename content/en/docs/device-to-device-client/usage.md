@@ -2,14 +2,9 @@
 title: 'Client Usage'
 description: 'How to work with the d2d client?'
 date: '2022-08-18'
-lastmod: '2022-08-18'
 categories: [d2d, client]
 keywords: [d2d, client, discovery, udp, ownership]
-menu:
-  docs:
-    parent: device-to-device-client
-    weight: 40
-toc: true
+weight: 4
 ---
 
 ## Device Discovery

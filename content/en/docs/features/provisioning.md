@@ -2,14 +2,9 @@
 title: 'Device Provisioning'
 description: 'How to securely provision the device?'
 date: '2022-02-12'
-lastmod: '2022-02-12'
 categories: [features]
 keywords: [provisioning, zero-touch]
-menu:
-  docs:
-    parent: features
-    weight: 30
-toc: true
+weight: 1
 ---
 
 When to use Device Provisioning Service

@@ -2,14 +2,9 @@
 title: 'OCF Conformance Testing'
 description: 'How to validate conformance to OCF C2C and D2C API?'
 date: '2021-12-11'
-lastmod: '2021-12-11'
 categories: [tutorials, ctt]
 keywords: ['OCF conformance', 'tutorial', 'CTT tool']
-menu:
-  docs:
-    parent: tutorials
-    weight: 90
-toc: true
+weight: 10
 ---
 
 The [Open Connectivity Foundation](https://openconnectivity.org) (OCF) is a global, member-driven technical standard development organization. Its [500+ members](https://openconnectivity.org/foundation/membership-list/) are working to enable trust, interoperability, and secure communication between IP-connected IoT devices and services. It does this by fostering collaboration between stakeholders across the IoT ecosystem to deliver the freely-available [ISO/IEC specifications](https://openconnectivity.org/developer/specifications/), including the Secure IP Device Framework, its [open-source reference implementation](https://openconnectivity.org/technology/), and an industry-recognized [certification program](https://openconnectivity.org/certification).

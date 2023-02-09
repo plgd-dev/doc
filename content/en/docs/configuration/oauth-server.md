@@ -2,14 +2,9 @@
 title: '[MOCK] OAuth Server'
 description: 'Service configuration overview'
 date: '2021-10-01'
-lastmod: '2021-10-01'
 categories: [configuration, deployment]
 keywords: [configuration]
-menu:
-  docs:
-    parent: configuration
-    weight: 100
-toc: true
+weight: 10
 ---
 
 OAuth2.0 Mock Server used for automated tests, [bundle container](../quickstart/deploy-plgd-hub/#plgd-bundle) and optionally deployment using the HELM chart for the **development purposes**.

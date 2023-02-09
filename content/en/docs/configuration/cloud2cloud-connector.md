@@ -2,14 +2,9 @@
 title: 'Cloud2Cloud Connector'
 description: 'Service configuration overview'
 date: '2021-10-01'
-lastmod: '2021-10-01'
 categories: [configuration, deployment]
 keywords: [configuration]
-menu:
-  docs:
-    parent: configuration
-    weight: 80
-toc: true
+weight: 9
 ---
 
 C2C Connector connects to other hub implementing the [Open Connectivity Foundation's Cloud API for Cloud Services](https://openconnectivity.org/developer/specifications/) and mirror devices from this linked instance to yours.

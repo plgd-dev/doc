@@ -6,11 +6,7 @@ docsTitleIndex: 3
 date: '2023-02-03'
 categories: ['quickstart']
 keywords: ['quickstart', 'bundle', 'deployment', 'd2c']
-menu:
-  docs:
-    parent: 'quickstart'
-    weight: 30
-toc: true
+weight: 3
 ---
 
 There are multiple ways how to start using / testing the plgd hub on your own infrastructure. If you're just trying to get in touch with this IoT framework, go back to [Control device remotely](./device-to-hub.md) tutorial and use our free [try.plgd.cloud](https://tryplgd.cloud) instance. In case you want to **get in touch** with the system localy and you have the [Docker installed](https://docs.docker.com/get-docker/), use our [plgd hub #Bundle](#plgd-bundle).

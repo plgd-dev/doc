@@ -2,14 +2,9 @@
 title: 'Overview'
 description: 'What is plgd Device Provisioning Service?'
 date: '2022-01-26'
-lastmod: '2022-02-15'
 categories: [zero-touch, provisioning]
 keywords: [provisioning, TPM, manufacturer-certificate]
-menu:
-  docs:
-    parent: device-provisioning-service
-    weight: 10
-toc: true
+weight: 1
 ---
 
 

@@ -2,14 +2,9 @@
 title: 'HTTP Gateway'
 description: 'Service configuration overview'
 date: '2021-10-01'
-lastmod: '2021-10-01'
 categories: [configuration, deployment]
 keywords: [configuration]
-menu:
-  docs:
-    parent: configuration
-    weight: 30
-toc: true
+weight: 2
 ---
 
 HTTP Gateway exposes the client's [REST API](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/http-gateway/swagger.yaml) to manage user's devices, as well as the Web UI known as [plgd Dashboard](https://try.plgd.cloud).

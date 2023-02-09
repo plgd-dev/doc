@@ -2,14 +2,9 @@
 title: 'Device access control list'
 description: 'How to configure access to the device?'
 date: '2022-12-20'
-lastmod: '2022-12-20'
 categories: [architecture, d2c, provisioning, acl]
 keywords: [architecture, d2c, provisioning, acl]
-menu:
-  docs:
-    parent: tutorials
-    weight: 20
-toc: true
+weight: 7
 ---
 
 Defines who can access to the device per resource. The access control list is stored in the device in the `/oic/sec/acl2` resource. The access control list is a list of access control entries. Each access control entry defines a subject and a set of permissions for the subject. The subject can be a connection type, a device, or a role. The permissions define what the subject can do with the resource. The permissions are defined in the `permission` property of the access control entry. The permissions are defined as a bit mask. The following table shows the permissions that can be defined in the `permission` property.

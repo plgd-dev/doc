@@ -2,10 +2,8 @@
 title: 'System Overview'
 description: 'L1 and L2 plgd overview'
 date: '2021-05-13'
-lastmod: '2021-05-13'
 categories: [architecture, C4 model]
 keywords: [c4 model, diagrams]
-toc: true
 weight: 3
 ---
 

@@ -2,14 +2,9 @@
 title: 'Cloud2Cloud Gateway'
 description: 'Service configuration overview'
 date: '2021-10-01'
-lastmod: '2021-10-01'
 categories: [configuration, deployment]
 keywords: [configuration]
-menu:
-  docs:
-    parent: configuration
-    weight: 70
-toc: true
+weight: 8
 ---
 
 C2C Gateway implements [Open Connectivity Foundation's Cloud API for Cloud Services](https://openconnectivity.org/specs/OCF_Cloud_API_For_Cloud_Services_Specification.pdf) providing API's to mirror user's devices to a different OCF standardized hub.

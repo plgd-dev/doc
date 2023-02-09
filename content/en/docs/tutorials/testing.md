@@ -2,14 +2,9 @@
 title: 'Testing'
 description: 'How plgd hub tests iotivity-lite and vice versa'
 date: '2021-10-14'
-lastmod: '2021-10-14'
 categories: [tutorials, testing]
 keywords: [tutorials, testing]
-menu:
-  docs:
-    parent: tutorials
-    weight: 80
-toc: true
+weight: 9
 ---
 
 

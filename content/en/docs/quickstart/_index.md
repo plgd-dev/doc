@@ -1,8 +1,4 @@
 ---
-title: Quickstart
-menu:
-  docs:
-    identifier: quickstart
-    name: Quickstart
-    weight: 1
+title: 'Quickstart'
+weight: 1
 ---

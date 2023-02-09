@@ -2,12 +2,9 @@
 title: 'What is plgd'
 description: 'What is plgd and how can it help you?'
 date: '2021-05-13'
-lastmod: '2021-05-13'
 categories: [overview, fundamentals]
 keywords: [overview, introduction]
-toc: true
-isDefault: true
-weight: 10
+weight: 1
 ---
 
 What are the biggest problems in IoT? Where do current market IoT solutions fall short?  How should IoT be considered?

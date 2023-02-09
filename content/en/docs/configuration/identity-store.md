@@ -2,14 +2,9 @@
 title: 'Identity Store'
 description: 'Service configuration overview'
 date: '2021-10-04'
-lastmod: '2021-10-04'
 categories: [configuration, deployment]
 keywords: [configuration]
-menu:
-  docs:
-    parent: configuration
-    weight: 60
-toc: true
+weight: 6
 ---
 
 Identity Store manages devices and their owners.

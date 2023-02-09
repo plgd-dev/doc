@@ -2,14 +2,9 @@
 title: 'Certificate Authority'
 description: 'Service configuration overview'
 date: '2021-10-01'
-lastmod: '2021-10-01'
 categories: [configuration, deployment]
 keywords: [configuration]
-menu:
-  docs:
-    parent: configuration
-    weight: 90
-toc: true
+weight: 7
 ---
 
 This service is used to sign identity certificates for devices and [plgd-dev/device](https://github.com/plgd-dev/device) client.

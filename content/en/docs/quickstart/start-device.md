@@ -6,11 +6,7 @@ docsTitleIndex: 1
 date: '2023-02-03'
 categories: ['quickstart']
 keywords: ['quickstart', 'device', 'iotivity']
-menu:
-  docs:
-    parent: 'quickstart'
-    weight: 10
-toc: true
+weight: 1
 ---
 This guide will walk you through the process of starting your [secure Device](https://openconnectivity.org/specs/OCF_Device_Specification_v2.2.3.pdf) using [IoTivity](https://iotivity.org/) library on the Raspberry Pi.
 

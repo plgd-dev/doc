@@ -6,11 +6,7 @@ docsTitleIndex: 4
 date: '2023-02-03'
 categories: ['quickstart']
 keywords: ['quickstart', 'onboarding', 'dashboard', 'd2c']
-menu:
-  docs:
-    parent: 'quickstart'
-    weight: 40
-toc: true
+weight: 4
 ---
 
 ## try.plgd.cloud

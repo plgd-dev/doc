@@ -6,11 +6,7 @@ docsTitleIndex: 2
 date: '2023-02-03'
 categories: ['quickstart']
 keywords: ['quickstart', 'discovery', 'coap', 'multicast', 'd2d']
-menu:
-  docs:
-    parent: 'quickstart'
-    weight: 20
-toc: true
+weight: 2
 ---
 This guide will walk you through the process of discovering, on-boarding, controlling your secure [OCF Device](https://openconnectivity.org/specs/OCF_Device_Specification_v2.2.3.pdf) using **plgd/device** library on your PC.
 

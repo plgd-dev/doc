@@ -2,14 +2,9 @@
 title: 'Dashboard'
 description: 'How to build and configure plgd dashboard'
 date: '2021-05-13'
-lastmod: '2021-05-13'
 categories: [tutorials, dashboard]
 keywords: [tutorials, dashboard]
-menu:
-  docs:
-    parent: tutorials
-    weight: 70
-toc: true
+weight: 11
 ---
 
 Configuration for the client can be found in [`auth_config.json`](https://github.com/plgd-dev/hub/tree/main/http-gateway/web/src/auth_config.json).

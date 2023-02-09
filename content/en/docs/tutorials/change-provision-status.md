@@ -2,14 +2,9 @@
 title: 'Change the device provisioning status'
 description: 'How to change device provisioning status'
 date: '2021-05-13'
-lastmod: '2021-05-13'
 categories: [tutorials, provisioning]
 keywords: [tutorials, provisioning]
-menu:
-  docs:
-    parent: tutorials
-    weight: 20
-toc: true
+weight: 6
 ---
 
 For update any secure device resource such at credentials/ACLs we need to change device from normal state to provisioning state. To get current state of device we can use `GET` request on device provisioning status resource(/oic/sec/pstat). The property `dos.s` is state of device.

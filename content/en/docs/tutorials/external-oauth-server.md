@@ -2,14 +2,9 @@
 title: 'External OAuth Server with bundle'
 description: 'Use your custom external OAuth Server with plgd bundle'
 date: '2021-05-13'
-lastmod: '2021-05-13'
 categories: [tutorials, authorization]
 keywords: [bundle, oauth, auth0]
-menu:
-  docs:
-    parent: tutorials
-    weight: 10
-toc: true
+weight: 4
 ---
 
 Even though the bundle start core plgd services as processes in a single container, a user has still a possibility to configure most of the services parameters. **For testing purposes**, the external OAuth Server (e.g. [Auth0](https://auth0.com)) can be set up.
