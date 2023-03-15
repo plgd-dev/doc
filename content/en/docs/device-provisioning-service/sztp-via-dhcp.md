@@ -7,50 +7,39 @@ keywords: [dhcp, provisioning]
 weight: 5
 ---
 
-DHCP-based zero touch provisioning is a method of configuring devices using DHCP, which is a protocol for automatically assigning IP addresses to devices on a network. The text explains that in order to provision a device, it is necessary to configure the device with the necessary TLS settings and endpoint. However, the root certificate authority via DHCP is too large, so instead, the user must provide a fingerprint of any certificate in the chain and the used message digest (eg SHA256,SHA384).
+DHCP-based zero touch provisioning is a method of configuring devices using DHCP, which is a protocol for automatically assigning IP addresses to devices on a network. This article explains how to configure zero-touch provisioning via DHCP.
 
-## Get fingerprint from the certificate
+## Overview
 
-The command `openssl s_client -connect dps.mycompany.com:5684 -showcerts` returns the certificate chain in PEM format. The certificate chain is a sequence of certificates that verifies the identity of the server.
+To provision a device, it is necessary to configure the device with the necessary TLS settings and endpoint. However, the root certificate authority via DHCP is too large, so instead, the user must provide a fingerprint of any certificate in the chain and the used message digest (e.g., SHA256, SHA384).
 
-To configure a device for zero touch provisioning using DHCP, you need to obtain the fingerprint of one of the certificates in the chain. A fingerprint is a unique identifier that is computed from the contents of the certificate.
+## Obtaining the Fingerprint
+
+The following command returns the certificate chain in PEM format:
 
 ```bash
+
 openssl s_client -connect dps.mycompany.com:5684 -showcerts
-...
-Certificate chain
- 0 s:CN = 0.dps.mycompany.com
-   i:CN = IntermediateCA
-   a:PKEY: id-ecPublicKey, 256 (bit); sigalg: ecdsa-with-SHA256
-   v:NotBefore: Jun  7 05:50:08 2022 GMT; NotAfter: Jun  7 05:50:38 2023 GMT
------BEGIN CERTIFICATE-----
-MIIB2jCCAX+...
------END CERTIFICATE-----
- 1 s:CN = IntermediateCA
-   i:CN = RootCA
-   a:PKEY: id-ecPublicKey, 256 (bit); sigalg: ecdsa-with-SHA256
-   v:NotBefore: Oct 14 07:43:25 2020 GMT; NotAfter: Jan  1 00:00:00 2025 GMT
------BEGIN CERTIFICATE-----
-MIIBlzCCAT2g...
------END CERTIFICATE-----
+
 ```
 
-In this particular example, the SHA256 message digest is used to compute the fingerprint. The SHA256 message digest is a cryptographic hash function that produces a fixed-length output. This output of command `openssl x509 -noout -fingerprint -sha256 -inform pem <<EOF...` can be used as a fingerprint.
+To configure a device for zero touch provisioning using DHCP, you need to obtain the fingerprint of one of the certificates in the chain. A fingerprint is a unique identifier that is computed from the contents of the certificate. In this particular example, the SHA256 message digest is used to compute the fingerprint.
 
 ```bash
+
 openssl x509 -noout -fingerprint -sha256 -inform pem <<EOF
 -----BEGIN CERTIFICATE-----
 MIIBlzCCAT2g...
 -----END CERTIFICATE-----
 EOF
-sha256 Fingerprint=63:25:73:b8:f9:e:b9:24:54:e5:4:c4:79:61:3b:34:21:c5:f7:20:fe:fa:65:f6:f:51:6c:1e:72:5c:ec:73
+
 ```
 
-The fingerprint and the message digest algorithm (in this case, SHA256) must be configured in the DHCP server so that the device can obtain the necessary configuration parameters during provisioning. Additionally, the device must be configured to allow the use of the configured message digest algorithm.
+The output of the above command can be used as a fingerprint. The fingerprint and the message digest algorithm (in this case, SHA256) must be configured in the DHCP server so that the device can obtain the necessary configuration parameters during provisioning. Additionally, the device must be configured to allow the use of the configured message digest algorithm.
 
-## Configure isc-dhcp-server
+## Configuring isc-dhcp-server
 
-To configure isc-dhcp-server to provide Zero Touch Provisioning via DHCP, modify the /etc/dhcp/dhcpd.conf file to include the following lines:
+To configure isc-dhcp-server to provide zero touch provisioning via DHCP, modify the `/etc/dhcp/dhcpd.conf` file to include the following lines:
 
 ```text
 # dns servers
@@ -81,8 +70,9 @@ subnet 10.115.115.0 netmask 255.255.255.0 {
     fixed-address 10.115.115.11;
   }
 }
+```
 
-After configuring the DHCP server, it is necessary to reload the configuration for the changes to take effect.
+After configuring the DHCP server, it is necessary to reload the configuration for the changes to take effect. This can be done by restarting the DHCP server using the following command:
 
 ```bash
 
@@ -90,11 +80,11 @@ sudo systemctl restart isc-dhcp-server
 
 ```
 
-## Configure isc-dhcp-client
+## Configuring isc-dhcp-client
 
-For the client-side configuration, modify the `/etc/dhcp/dhclient.conf` file and add the following lines:
+On the client side, the configuration must be updated as well. If the client is using the ISC DHCP client, the configuration file is typically located at `/etc/dhcp/dhclient.conf`. To configure the client to obtain the necessary parameters for zero touch provisioning via DHCP, add the following lines to the configuration file:
 
-```config
+```text
 
 option space MY-COMPANY;
 option MY-COMPANY.dps-endpoint code 200 = text;
@@ -114,32 +104,11 @@ request subnet-mask, broadcast-address, time-offset, routers,
 
 ```
 
-Once the DHCP client has obtained the configuration from the DHCP server, the setup will be stored in the `/var/lib/dhcp/dhclient*.leases` file. The last lease configuration in this file will be the one currently in use.
+This will configure the client to send the vendor-class-identifier option with a value of `MY-COMPANY-DEVICE-SN-123456` to identify itself as a device from your company. It also configures the client to request the necessary parameters for zero touch provisioning from the DHCP server.
 
-To acquire configuration from the DHCP server, the device network interface must be restarted. (eg reboot device)
+After making changes to the configuration files, it is necessary to restart the DHCP client for the changes to take effect or reboot the device.
 
-```text
-
-lease {
-  interface "enp0s3";
-  fixed-address 10.115.115.11;
-  option subnet-mask 255.255.255.0;
-  option routers 10.115.115.10;
-  option dhcp-lease-time 20;
-  option dhcp-message-type 5;
-  option domain-name-servers 10.115.115.10;
-  option dhcp-server-identifier 10.115.115.10;
-  option ntp-servers 62.168.65.36,213.81.129.99,213.81.129.98,185.242.56.5;
-  option vendor-encapsulated-options c8:20:63:6f:61:70:73:2b:74:63:70:3a:2f:2f:74:72:79:2e:70:6c:67:64:2e:63:6c:6f:75:64:3a:32:35:36:38:34:c9:20:63:25:73:b8:f9:e:b9:24:54:e5:4:c4:79:61:3b:34:21:c5:f7:20:fe:fa:65:f6:f:51:6c:1e:72:5c:ec:73:ca:6:53:48:41:32:35:36;
-  option infinera.dps-endpoint "coaps+tcp://dps.mycompany.com:5684";
-  option infinera.dps-certificate-fingerprint 63:25:73:b8:f9:e:b9:24:54:e5:4:c4:79:61:3b:34:21:c5:f7:20:fe:fa:65:f6:f:51:6c:1e:72:5c:ec:73;
-  option infinera.dps-certificate-fingerprint-md-type "SHA256";
-  renew 2 2023/03/14 13:39:46;
-  rebind 2 2023/03/14 13:39:52;
-  expire 2 2023/03/14 13:39:55;
-}
-
-```
+With these configuration changes in place, the device should be able to obtain the necessary TLS settings and endpoint for zero touch provisioning via DHCP. This can simplify the device provisioning process, particularly for large deployments where manually configuring each device can be time-consuming and error-prone.
 
 ## Connect with client library
 
