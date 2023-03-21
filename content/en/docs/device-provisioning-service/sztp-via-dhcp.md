@@ -130,23 +130,28 @@ update_from_vendor_encapsulated_options(struct plgd_dps_context_t *dps_ctx, cons
     return false;
   }
 
- switch (plgd_dps_dhcp_set_values_from_vendor_encapsulated_options(dps_ctx, binary_vendor_encapsulated_options, (size_t)len)) {
-  case -1:
+  plgd_dps_dhcp_set_values_t ret = plgd_dps_dhcp_set_values_from_vendor_encapsulated_options(dps_ctx, d.value, d.size);
+  switch (ret) {
+  case PLGD_DPS_DHCP_SET_VALUES_ERROR:
     DPS_ERR("pull vendor_encapsulated_options: error during update");
+    return false;
+  case PLGD_DPS_DHCP_SET_VALUES_NOT_CHANGED:
+    DPS_DBG("pull vendor_encapsulated_options: not changed");
     break;
-  case 0:
-    DPS_DBG("pull vendor_encapsulated_options: no change");
+  case PLGD_DPS_DHCP_SET_VALUES_UPDATED:
+    DPS_DBG("pull vendor_encapsulated_options: updated, but force re-provision is not needed");
     break;
-  case 1:
-    DPS_DBG("pull vendor_encapsulated_options: updated but force re-provision is not needed");
-    break;
-  case 2: {
-    DPS_DBG("pull vendor_encapsulated_options: updated but needed force re-provision and restart dps manager");
+  case PLGD_DPS_DHCP_SET_VALUES_NEED_REPROVISION: {
+    DPS_DBG("pull vendor_encapsulated_options: updated, but needed to force re-provision and restart dps manager");
     plgd_dps_force_reprovision(dps_ctx);
     if (plgd_dps_manager_restart(dps_ctx)) {
       DPS_ERR("pull vendor_encapsulated_options: failed to restart dps manager");
+      return false;
     }
-    } break;
+  } break;
+  default:
+    DPS_ERR("pull vendor_encapsulated_options: unknown return value %d", ret);
+    return false;
   }
   return true;
 }
