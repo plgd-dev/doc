@@ -33,9 +33,7 @@ If you are interested in using this feature in a Docker container, note that it 
 
 To run the image with a specific time, for example January 1st, 2000 at 11:12:13, use the following command:
 
-```bash
-docker run --rm -it --pull always -e FAKETIME="@2000-01-01 11:12:13" ghcr.io/iotivity/iotivity-lite/cloud-server-discovery-resource-observable:master
-```
+`docker run --rm -it --pull always -e FAKETIME="@2000-01-01 11:12:13" ghcr.io/iotivity/iotivity-lite/cloud-server-discovery-resource-observable:master`
 
 {{< /note >}}
 
