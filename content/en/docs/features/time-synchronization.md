@@ -39,4 +39,4 @@ current time = lastSyncTime + elapsed time
 
 ### C-API
 
-When initializing the time feature via the plgd_time_init function in the C-API, there are several parameters that can be set. These include specifying whether to use the time in MbedTLS time callback for TLS certificate verification, specifying a callback function to set the device clock, and indicating whether the resource is available via CoAP. For more information about these parameters and other functions in the C-API such as set/get time, please refer to the [doxygen documentation](http://iotivity.org/iotivity-lite-doxygen/plgd__time_8h.html).
+When initializing the time feature via the `plgd_time_init` function in the C-API, there are several parameters that can be set. These include specifying whether to use the time in MbedTLS time callback for TLS certificate verification, specifying a callback function to set the device clock, and indicating whether the resource is available via CoAP. For more information about these parameters and other functions in the C-API such as set/get time, please refer to the [doxygen documentation](http://iotivity.org/iotivity-lite-doxygen/plgd__time_8h.html).
