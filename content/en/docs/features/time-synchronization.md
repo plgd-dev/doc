@@ -27,6 +27,18 @@ IoTivity Lite provides a resource that can be used to synchronize time on a devi
 
 The definition time resource is available in [swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/iotivity/iotivity-lite/adam/feature/add-clock-resource/api/plgd/x.plgd.dev.time.yaml)
 
+{{< note >}}
+
+If you are interested in using this feature in a Docker container, note that it is already enabled in the [cloud_server](https://github.com/iotivity/iotivity-lite/pkgs/container/iotivity-lite%2Fcloud-server-discovery-resource-observable) Docker image.
+
+To run the image with a specific time, for example January 1st, 2000 at 11:12:13, use the following command:
+
+```bash
+docker run --rm -it -e FAKETIME="@2000-01-01 11:12:13" ghcr.io/iotivity/iotivity-lite/cloud-server-discovery-resource-observable:master
+```
+
+{{< /note >}}
+
 ### Calculating current time
 
 In order to calculate the current time, we utilize the monotonic time of the system in conjunction with the last synchronized time. Monotonic time represents time that is continuously increasing from a starting point, typically the system boot time, and is not affected by changes to the system clock that would otherwise affect the system time. The current time is then computed by adding the elapsed time since synchronization to the `lastSyncTime`. Upon setting lastSyncTime, the system's monotonic time is also recorded. When determining the elapsed time, we simply calculate the difference between the monotonic time at synchronization and the current monotonic time at the time of the query for the current time.
@@ -40,3 +52,7 @@ current time = lastSyncTime + elapsed time
 ### C-API
 
 When initializing the time feature via the `plgd_time_init` function in the C-API, there are several parameters that can be set. These include specifying whether to use the time in MbedTLS time callback for TLS certificate verification, specifying a callback function to set the device clock, and indicating whether the resource is available via CoAP. For more information about these parameters and other functions in the C-API such as set/get time, please refer to the [doxygen documentation](http://iotivity.org/iotivity-lite-doxygen/plgd__time_8h.html).
+
+{{< note >}}
+For an example of how to implement this feature, please refer to the [cloud_server.c](https://github.com/iotivity/iotivity-lite/blob/adam/feature/add-clock-resource/apps/cloud_server.c) file in the iotivity-lite repository.
+{{< /note >}}
