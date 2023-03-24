@@ -3,28 +3,33 @@ title: 'Time Synchronization'
 description: 'How to synchronize time on the device?'
 date: '2023-03-20'
 categories: [features]
-keywords: [time-synchronization, iotivity, TLS]
+keywords: [time-synchronization, iotivity-lite, provisioning, zero-touch, TLS, NTP, GPS, time server]
 weight: 10
 ---
 
-The time on a device can become desynchronized (for example during a power outage on a device without a motherboard clock battery). This can cause several issues, one of them being TLS certificates verification for secure devices. The verification checks the time validity of the certificate
+When a device experiences a disruption in power supply, such as during a power outage or when the device's motherboard clock battery fails, the time on the device can become unsynchronized. Similarly, if the battery of the device runs out of power, the time can also become desynchronized.
 
-## Synchronizing time with Iotivity-Lite device
+This seemingly small issue can cause significant problems, especially for secure devices that rely on TLS certificates verification. TLS certificates are a crucial element of secure communication and are used to establish trust between two parties. During the verification process, the validity of the certificate is checked, including the time at which it was issued and the time at which it expires. If the time on the device is incorrect, it can lead to the verification process failing, which can compromise the security of the communication. Thus, ensuring that the time on a device is accurate is of utmost importance in maintaining the security and integrity of secure communication channels.
 
-To solve the issue of desynchronized time, the resource `/x.plgd.dev/time` can be used.
-It is a plafform wide resource, shared by all devices of a process (similar to the `/oic/p` resource.)
+To prevent these potential problems, it is essential that the device is capable of synchronizing its time with an external source. By utilizing an external time source, the device can accurately set its time and perform verification of TLS certificates. There are multiple methods for synchronizing the time on a device, including NTP, GPS, or a dedicated time server. Nevertheless, the most prevalent approach for synchronizing time on a device involves using the time server provided by the cloud platform. In the event that the device is unable to establish connectivity to any external time source, it can use the last synchronized time as a rough approximation of the current time.
 
-The resource exposes 3 properties: `time`, `lastSyncedTime`, `status`.
+## Synchronization time with hub and device provisioning service
 
-* `time` is a readonly property and it is the current time calculated from the runtime data of the resource
-* `lastSyncedTime` is writable property and represents the UTC time at the moment of synchronization
-* `status` is a readonly property that can have two values `in-sync` or `syncing`, the values describe the current time synchronization status
+If this feature is enabled and the device's time is unsynchronized, the device will synchronize its time with the hub as the first step of the initialization process. The time synchronization is performed by sending a CoAP request to the `/x.plgd.dev/time` resource of the service, which is sent over a secure connection and undergoes TLS certificate verification. During the time synchronization process, the device will accept the hub certificate, even if it is either valid in the future or has already expired. If this occurs, the device will terminate the connection after completing the time synchronization and resume its operations as normal.
 
-On secure devices, properties `lastSyncedTime` and `status` are not retrieved by GET requests sent over an insecure connection.
+{{< note >}}
+It is worth noting that enabling the time synchronization feature on IoTivity-lite requires an additional step during configuration through CMake. Specifically, this can be done by adding the `cmake -DPLGD_DEV_TIME_ENABLED=ON -DOC_CLOUD_ENABLED=ON ...` command to enable the feature.
+{{< /note >}}
+
+## IoTivity-Lite Time
+
+IoTivity Lite provides a resource that can be used to synchronize time on a device. To allow this feature you need to compile IoTivity-lite with `cmake -DPLGD_DEV_TIME_ENABLED=ON ...`. When you set the time, device will store the time to the persistent storage and it will be restored after the device restart. So if the device time is in the past during initialization the time from persistent storage will be used as current time. If you have multiple devices in iotivity-lite, the time resource will be shared among them.
+
+The definition time resource is available in [swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/iotivity/iotivity-lite/adam/feature/add-clock-resource/api/plgd/x.plgd.dev.time.yaml)
 
 ### Calculating current time
 
-Current time is calcuted as `lastSyncTime` + time elapsed since synchronization. When the value of `lastSyncTime` is set, the runtime also stores the monotonic time of the system at the time of synchronization. Elapsed time is then simply calculated as the difference between the monotonic time at synchronization and the monotonic time at the moment of querying for current time.
+In order to calculate the current time, we utilize the monotonic time of the system in conjunction with the last synchronized time. Monotonic time represents time that is continuously increasing from a starting point, typically the system boot time, and is not affected by changes to the system clock that would otherwise affect the system time. The current time is then computed by adding the elapsed time since synchronization to the `lastSyncTime`. Upon setting lastSyncTime, the system's monotonic time is also recorded. When determining the elapsed time, we simply calculate the difference between the monotonic time at synchronization and the current monotonic time at the time of the query for the current time.
 
 ```pseudo-code
 elapsed time = monotonic time now - monotonic time at synchronization
@@ -32,16 +37,6 @@ elapsed time = monotonic time now - monotonic time at synchronization
 current time = lastSyncTime + elapsed time
 ```
 
-TODO: device restart
-
 ### C-API
 
-TODO: synchronization time
-
-TODO: integrate with mbedTLS
-
-TODO: set system time
-
-### Coap request
-
-TODO: link to swagger
+When initializing the time feature via the plgd_time_init function in the C-API, there are several parameters that can be set. These include specifying whether to use the time in MbedTLS time callback for TLS certificate verification, specifying a callback function to set the device clock, and indicating whether the resource is available via CoAP. For more information about these parameters and other functions in the C-API such as set/get time, please refer to the [doxygen documentation](http://iotivity.org/iotivity-lite-doxygen/plgd__time_8h.html).
