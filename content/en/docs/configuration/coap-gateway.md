@@ -52,6 +52,7 @@ CoAP API as specified in the [Open Connectivity Foundation - Device to Cloud Ser
 | `apis.coap.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.coap.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.coap.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
+| `apis.coap.tls.identityPropertiesRequired` | bool | `If true, require  EKU with 1.3.6.1.4.1.44924.1.6 and CN with uuid=<deviceID> in client certificate as is defined OCF.` | `true` |
 
 #### OAuth2.0 Client
 
