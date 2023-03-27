@@ -13,7 +13,7 @@ This seemingly small issue can cause significant problems, especially for secure
 
 To prevent these potential problems, it is essential that the device is capable of synchronizing its time with an external source. By utilizing an external time source, the device can accurately set its time and perform verification of TLS certificates. There are multiple methods for synchronizing the time on a device, including NTP, GPS, or a dedicated time server. Nevertheless, the most prevalent approach for synchronizing time on a device involves using the time server provided by the cloud platform. In the event that the device is unable to establish connectivity to any external time source, it can use the last synchronized time as a rough approximation of the current time.
 
-## Synchronization time with hub and device provisioning service
+## Synchronization time with device provisioning service
 
 If this feature is enabled and the device's time is unsynchronized, the device will synchronize its time with the hub as the first step of the initialization process. The time synchronization is performed by sending a CoAP request to the `/x.plgd.dev/time` resource of the service, which is sent over a secure connection and undergoes TLS certificate verification. During the time synchronization process, the device will accept the hub certificate, even if it is either valid in the future or has already expired. If this occurs, the device will terminate the connection after completing the time synchronization and resume its operations as normal.
 
@@ -49,7 +49,7 @@ current time = lastSyncTime + elapsed time
 
 ### C-API
 
-When initializing the time feature via the `plgd_time_init` function in the C-API, there are several parameters that can be set. These include specifying whether to use the time in MbedTLS time callback for TLS certificate verification, specifying a callback function to set the device clock, and indicating whether the resource is available via CoAP. For more information about these parameters and other functions in the C-API such as set/get time, please refer to the [doxygen documentation](http://iotivity.org/iotivity-lite-doxygen/plgd__time_8h.html).
+When initializing the time feature via the `plgd_time_init` function in the C-API, there are several parameters that can be set. These include specifying whether to use the time in MbedTLS time callback for TLS certificate verification and specifying a callback function to set the device clock. For more information about these parameters and other functions in the C-API such as set/get time, please refer to the [doxygen documentation](http://iotivity.org/iotivity-lite-doxygen/plgd__time_8h.html).
 
 {{< note >}}
 For an example of how to implement this feature, please refer to the [cloud_server.c](https://github.com/iotivity/iotivity-lite/blob/adam/feature/add-clock-resource/apps/cloud_server.c) file in the iotivity-lite repository.
