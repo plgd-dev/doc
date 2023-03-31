@@ -15,9 +15,18 @@
 #define PLGD_DPS_LOG_H
 
 #include "dps_compiler.h"
+#include "oc_clock_util.h"
 #include <stdio.h>
 #include <sys/time.h>
 #include <time.h>
+
+#ifndef __FILENAME__
+#ifdef WIN32
+#define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
+#else
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#endif
+#endif /* !__FILENAME__ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,11 +55,24 @@ plgd_dps_print_log_fn_t plgd_dps_get_log_fn(void);
     if (_dps_log_fn != NULL) {                                                                                         \
       _dps_log_fn((log_level), __VA_ARGS__);                                                                           \
     } else {                                                                                                           \
-      struct timeval dps_log_fn_tv;                                                                                    \
-      gettimeofday(&dps_log_fn_tv, NULL);                                                                              \
-      char dps_log_fn_buf[64];                                                                                         \
-      strftime(dps_log_fn_buf, sizeof(dps_log_fn_buf), "%Y-%m-%d %H:%M:%S", gmtime(&dps_log_fn_tv.tv_sec));            \
-      printf("[DPS %s.%06ld] %s <%s:%d>: ", dps_log_fn_buf, dps_log_fn_tv.tv_usec, __FILENAME__, __func__, __LINE__);  \
+      char dps_log_fn_buf[64] = { 0 };                                                                                 \
+      oc_clock_time_rfc3339(dps_log_fn_buf, sizeof(dps_log_fn_buf));                                                   \
+      const char *log_level_str = "D";                                                                                 \
+      switch (log_level) {                                                                                             \
+      case DPS_LOG_LEVEL_DEBUG:                                                                                        \
+        log_level_str = "D";                                                                                           \
+        break;                                                                                                         \
+      case DPS_LOG_LEVEL_INFO:                                                                                         \
+        log_level_str = "I";                                                                                           \
+        break;                                                                                                         \
+      case DPS_LOG_LEVEL_WARNING:                                                                                      \
+        log_level_str = "W";                                                                                           \
+        break;                                                                                                         \
+      case DPS_LOG_LEVEL_ERROR:                                                                                        \
+        log_level_str = "E";                                                                                           \
+        break;                                                                                                         \
+      }                                                                                                                \
+      printf("[DPS %s] %s: %s <%s:%d>: ", dps_log_fn_buf, log_level_str, __FILENAME__, __func__, __LINE__);            \
       printf(__VA_ARGS__);                                                                                             \
       printf("\n");                                                                                                    \
     }                                                                                                                  \
