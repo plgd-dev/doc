@@ -25,7 +25,7 @@ It is worth noting that enabling the time synchronization feature on IoTivity-li
 
 IoTivity Lite provides a resource that can be used to synchronize time on a device. To allow this feature you need to compile IoTivity-lite with `cmake -DPLGD_DEV_TIME_ENABLED=ON ...`. When you set the time, device will store the time to the persistent storage and it will be restored after the device restart. So if the device time is in the past during initialization the time from persistent storage will be used as current time. If you have multiple devices in iotivity-lite, the time resource will be shared among them.
 
-The definition time resource is available in [swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/iotivity/iotivity-lite/adam/feature/add-clock-resource/api/plgd/x.plgd.dev.time.yaml)
+The definition time resource is available in [swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/iotivity/iotivity-lite/master/api/plgd/x.plgd.dev.time.yaml)
 
 {{< note >}}
 
@@ -49,8 +49,8 @@ current time = lastSyncTime + elapsed time
 
 ### C-API
 
-When initializing the time feature via the `plgd_time_init` function in the C-API, there are several parameters that can be set. These include specifying whether to use the time in MbedTLS time callback for TLS certificate verification and specifying a callback function to set the device clock. For more information about these parameters and other functions in the C-API such as set/get time, please refer to the [doxygen documentation](http://iotivity.org/iotivity-lite-doxygen/plgd__time_8h.html).
+When initializing the time feature via the `plgd_time_init` function in the C-API, there are several parameters that can be set. These include specifying whether to use the time in MbedTLS time callback for TLS certificate verification and specifying a callback function to set the device clock. For more information about these parameters and other functions in the C-API such as set/get time, please refer to the [doxygen documentation](http://iotivity.org/iotivity-lite-doxygen/group__time__synchronization.html).
 
 {{< note >}}
-For an example of how to implement this feature, please refer to the [cloud_server.c](https://github.com/iotivity/iotivity-lite/blob/adam/feature/add-clock-resource/apps/cloud_server.c) file in the iotivity-lite repository.
+For an example of how to implement this feature, please refer to the [cloud_server.c](https://github.com/iotivity/iotivity-lite/blob/cf33fe739a640c301735ca60d5ac390194a430fb/apps/cloud_server.c#L915) file in the iotivity-lite repository.
 {{< /note >}}
