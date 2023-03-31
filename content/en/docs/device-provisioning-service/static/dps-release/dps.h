@@ -42,6 +42,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <mbedtls/md.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -456,6 +457,117 @@ void plgd_dps_pki_set_expiring_limit(plgd_dps_context_t *ctx, uint16_t expiring_
  */
 DPS_EXPORT
 uint16_t plgd_dps_pki_get_expiring_limit(const plgd_dps_context_t *ctx) DPS_NONNULL();
+
+/**
+ * @brief Set certificate fingerprint of the provisioning server.
+ *
+ * If the fingerprint is set then the DPS client
+ * will verify the fingerprint of the provisioning server certificate during the TLS handshake. If any certificate
+ * matching the fingerprint in the chain is found then the handshake is successful.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param md_type hash algorithm used for fingerprint
+ * @param fingerprint fingerprint of the provisioning server certificate
+ * @param size size of the fingerprint
+ * @return true on success
+ */
+DPS_EXPORT
+bool plgd_dps_set_certificate_fingerprint(plgd_dps_context_t *ctx, mbedtls_md_type_t md_type,
+                                          const uint8_t *fingerprint, size_t size) DPS_NONNULL(1);
+
+/**
+ * @brief Copy certificate fingerprint of the DPS service to output buffer.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param[out] md_type hash algorithm used for fingerprint
+ * @param[out] buffer output buffer (cannot be NULL and must be large enough to contain the endpoint in a string format)
+ * @param buffer_size size of output buffer
+ * @return >0 on success, number of copied bytes to buffer
+ * @return 0 endpoint is not set, thus nothing was copied
+ * @return <0 on error
+ */
+DPS_EXPORT
+int plgd_dps_get_certificate_fingerprint(const plgd_dps_context_t *ctx, mbedtls_md_type_t *md_type, uint8_t *buffer,
+                                         size_t buffer_size) DPS_NONNULL();
+
+/**
+ * @brief Set the vendor encapsulated option code for the DPS endpoint. Used during call
+ * plgd_dps_set_dhcp_vendor_encapsulated_option_code_dps_certificate_fingerprint.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param code vendor encapsulated option code for the DPS endpoint
+ */
+DPS_EXPORT
+void plgd_dps_dhcp_set_vendor_encapsulated_option_code_dps_endpoint(plgd_dps_context_t *ctx, uint8_t code)
+  DPS_NONNULL();
+
+/**
+ * @brief Get the vendor encapsulated option code for the DPS endpoint. Used during call
+ * plgd_dps_set_dhcp_vendor_encapsulated_option_code_dps_certificate_fingerprint.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @return uint8_t vendor encapsulated option code for the DPS endpoint
+ */
+DPS_EXPORT
+uint8_t plgd_dps_dhcp_get_vendor_encapsulated_option_code_dps_endpoint(const plgd_dps_context_t *ctx) DPS_NONNULL();
+
+/**
+ * @brief Set the vendor encapsulated option code for the DPS certificate fingerprint. Used during call
+ * plgd_dps_set_dhcp_vendor_encapsulated_option_code_dps_certificate_fingerprint.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param code vendor encapsulated option code for the DPS certificate fingerprint.
+ */
+DPS_EXPORT
+void plgd_dps_dhcp_set_vendor_encapsulated_option_code_dps_certificate_fingerprint(plgd_dps_context_t *ctx,
+                                                                                   uint8_t code) DPS_NONNULL();
+
+/**
+ * @brief Get the vendor encapsulated option code for the DPS certificate fingerprint. Used during call
+ * plgd_dps_set_dhcp_vendor_encapsulated_option_code_dps_certificate_fingerprint.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @return uint8_t vendor encapsulated option code for the DPS certificate fingerprint.
+ */
+DPS_EXPORT
+uint8_t plgd_dps_dhcp_get_vendor_encapsulated_option_code_dps_certificate_fingerprint(const plgd_dps_context_t *ctx)
+  DPS_NONNULL();
+
+/**
+ * @brief Convert isc-dhcp leases file vendor encapsulated options to byte array.
+ *
+ * @param hex_string input hex string (cannot be NULL) in format "01:a:3:14" or "010a0314"
+ * @param hex_string_size vendor encapsulated options size in dhcp leases file.
+ * @param buffer output buffer into which the byte array will be copied or NULL to get the needed size
+ * @param buffer_size size of the output buffer
+ * @return >0 the size of used or needed to copy to buffer, -1 on error
+ */
+DPS_EXPORT
+ssize_t plgd_dps_hex_string_to_bytes(const char *hex_string, size_t hex_string_size, uint8_t *buffer,
+                                     size_t buffer_size) DPS_NONNULL(1);
+
+/**
+ * @brief DPS dhcp plgd_dps_dhcp_set_values_from_vendor_encapsulated_options return values.
+ */
+typedef enum {
+  PLGD_DPS_DHCP_SET_VALUES_ERROR = -1,           // error or parsing values failed
+  PLGD_DPS_DHCP_SET_VALUES_NOT_CHANGED = 0,      // nothing changed
+  PLGD_DPS_DHCP_SET_VALUES_UPDATED = 1,          // just updated
+  PLGD_DPS_DHCP_SET_VALUES_NEED_REPROVISION = 2, // need to force reprovision with restart manager
+} plgd_dps_dhcp_set_values_t;
+
+/**
+ * @brief Set DPS endpoint and certificate fingerprint that will be used in establishment of secure connection.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param vendor_encapsulated_options vendor encapsulated options in byte array
+ * @param vendor_encapsulated_options_size vendor encapsulated options size in byte array
+ * @return one of plgd_dps_dhcp_set_values_t
+ */
+DPS_EXPORT
+plgd_dps_dhcp_set_values_t plgd_dps_dhcp_set_values_from_vendor_encapsulated_options(
+  plgd_dps_context_t *ctx, const uint8_t *vendor_encapsulated_options, size_t vendor_encapsulated_options_size)
+  DPS_NONNULL();
 
 #ifdef __cplusplus
 }
