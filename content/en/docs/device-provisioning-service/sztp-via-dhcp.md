@@ -72,6 +72,12 @@ subnet 10.115.115.0 netmask 255.255.255.0 {
 }
 ```
 
+The `dps-certificate-fingerprint` refers to a certificate fingerprint used only during the TLS handshake with the DPS service at the `dps-endpoint`. It is utilized to verify the DPS certificate, where the DPS chain must contain one certificate with the same fingerprint as configured via DHCP. The fingerprint can be calculated from any certificate of the chain DPS service (intermediate or leaf certificate). The `dps-certificate-fingerprint-md-type` indicates the type of hash that was used, such as SHA256 or SHA384.
+
+{{< warning >}}
+If the device is connected to a network with an **untrustworthy DHCP server**, using the `dps-certificate-fingerprint` to verify the DPS certificate **does not provide any security**. In such a scenario, the device ends up trusting any DPS certificate, which can compromise the security of the system.
+{{< /warning >}}
+
 After configuring the DHCP server, it is necessary to reload the configuration for the changes to take effect. This can be done by restarting the DHCP server using the following command:
 
 ```bash
