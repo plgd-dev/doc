@@ -11,33 +11,33 @@ DHCP-based zero touch provisioning is a method of configuring devices using DHCP
 
 ## Overview
 
-To provision a device, it is necessary to configure the device with the necessary TLS settings and endpoint. However, the root certificate authority via DHCP is too large, so instead, the user must provide a fingerprint of any certificate in the chain and the used message digest (e.g., SHA256, SHA384).
+When provisioning a device, it needs to be configured with the endpoint and, if necessary, the TLS settings. There are three options for securing the TLS connection between the device and the DPS service:
 
-## Obtaining the Fingerprint
+### 1. Use a Root Certificate Authority (mTLS)
 
-The following command returns the certificate chain in PEM format:
+The manufacturer preinstalls a root certificate authority (CA) certificate of the DPS service in the device. During firmware updates, the certificates are updated. Each DPS service needs to have a leaf certificate signed by the root preinstalled CA certificate. To obtain the certificate, the manufacturer's customer needs to use a certificate signing request (CSR) and can sign for an intermediate certificate authority or a leaf certificate. If the manufacturer provides an intermediate certificate authority, the customer can sign for another intermediate CA or leaf certificate. To limit sub-intermediate CA, the [pathLenConstraint](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.9) field can be used (0 means that intermediate CA can only create a leaf certificate). When the device establishes a TLS connection with the DPS service, all intermediate CA certificates must be provided in the chain because the device only contains the root CA certificate. The manufacturer is responsible for updating the root CA certificate in the device via firmware update and providing the new intermediate CA or leaf certificate to the customer for the rotation of the root CA certificate.
 
-```bash
+From the device implementation point of view, the root certificate authority (CA) certificates can be stored in a directory, and for each of them, you can read the certificate and add it to the trusted manufacturer certificate store of iotivity-lite using [oc_pki_add_mfg_trust_anchor](http://iotivity.org/iotivity-lite-doxygen/oc__pki_8h.html#ab429d36577356b5b821e919d43320110) during device initialization.
 
-openssl s_client -connect dps.mycompany.com:5684 -showcerts
+### 2. Use a Fingerprint of the Certificate (mTLS*)
 
-```
+{{< warning >}}
+If the device is connected to a network with an **untrustworthy DHCP server**, using the fingerprint to verify the DPS certificate **does not provide any security**. In such a scenario, it is the same as using a skip certificate verification.
+{{< /warning >}}
 
-To configure a device for zero touch provisioning using DHCP, you need to obtain the fingerprint of one of the certificates in the chain. A fingerprint is a unique identifier that is computed from the contents of the certificate. In this particular example, the SHA256 message digest is used to compute the fingerprint.
+However, the root certificate authority via DHCP is too large. Therefore, the user must provide a fingerprint of any certificate in the chain and the message digest used (e.g., SHA256, SHA384). In this case, the device is configured with the fingerprint of the DPS certificate, which is a unique identifier computed from the certificate. The fingerprint is used to verify the DPS certificate, where the DPS chain must contain one certificate with the same fingerprint as configured via DHCP. The message digest type used to calculate the fingerprint must be configured in the DHCP server so that the device can obtain the necessary [configuration](#how-to-configure-zero-touch-provisioning-via-dhcp) parameters during provisioning. Additionally, the device must be configured to allow the use of the configured message digest algorithm.
 
-```bash
+### 3. Use a Skip Certificate Verification (TLS)
 
-openssl x509 -noout -fingerprint -sha256 -inform pem <<EOF
------BEGIN CERTIFICATE-----
-MIIBlzCCAT2g...
------END CERTIFICATE-----
-EOF
+{{< warning >}}
+This is the simplest way to configure the device, but an intruder can steal the device when it is connected to the network with an untrusted DHCP server and replace the DPS endpoint with the intruder's server.
+{{< /warning >}}
 
-```
+When using the Skip Certificate Verification (TLS) option, the device trusts any certificates sent by the DPS service, but the DPS service still verifies the device's certificate during the TLS handshake. This option should only be used when the device is connected to a trusted network, since an untrusted network could allow an attacker to steal the device and replace the DPS endpoint with their own server. If you want to skip the certificate verification to the DPS service, you can set the `skip_verify` parameter to true using the `plgd_dps_set_skip_verify` function. More details on this function can be found in the [dps.h](https://docs.plgd.dev/docs/device-provisioning-service/static/dps-release/dps.h).
 
-The output of the above command can be used as a fingerprint. The fingerprint and the message digest algorithm (in this case, SHA256) must be configured in the DHCP server so that the device can obtain the necessary configuration parameters during provisioning. Additionally, the device must be configured to allow the use of the configured message digest algorithm.
+## How to configure Zero Touch Provisioning via DHCP
 
-## Configuring isc-dhcp-server
+### Configuring isc-dhcp-server
 
 To configure isc-dhcp-server to provide zero touch provisioning via DHCP, modify the `/etc/dhcp/dhcpd.conf` file to include the following lines:
 
@@ -72,11 +72,7 @@ subnet 10.115.115.0 netmask 255.255.255.0 {
 }
 ```
 
-The `dps-certificate-fingerprint` refers to a certificate fingerprint used only during the TLS handshake with the DPS service at the `dps-endpoint`. It is utilized to verify the DPS certificate, where the DPS chain must contain one certificate with the same fingerprint as configured via DHCP. The fingerprint can be calculated from any certificate of the chain DPS service (intermediate or leaf certificate). The `dps-certificate-fingerprint-md-type` indicates the type of hash that was used, such as SHA256 or SHA384.
-
-{{< warning >}}
-If the device is connected to a network with an **untrustworthy DHCP server**, using the `dps-certificate-fingerprint` to verify the DPS certificate **does not provide any security**. In such a scenario, the device ends up trusting any DPS certificate, which can compromise the security of the system.
-{{< /warning >}}
+The `dps-certificate-fingerprint` (optional - use for [2 option](#2-use-a-fingerprint-of-the-certificate-mtls)) refers to a certificate fingerprint used only during the TLS handshake with the DPS service at the `dps-endpoint`. It is utilized to verify the DPS certificate, where the DPS chain must contain one certificate with the same fingerprint as configured via DHCP. The fingerprint can be calculated from any certificate of the chain DPS service (intermediate or leaf certificate). The `dps-certificate-fingerprint-md-type` (not needed when `dps-certificate-fingerprint` is not set) indicates the type of hash that was used, such as SHA256 or SHA384.
 
 After configuring the DHCP server, it is necessary to reload the configuration for the changes to take effect. This can be done by restarting the DHCP server using the following command:
 
@@ -86,7 +82,31 @@ sudo systemctl restart isc-dhcp-server
 
 ```
 
-## Configuring isc-dhcp-client
+### Obtaining the DPS service fingerprint (for [2 option](#2-use-a-fingerprint-of-the-certificate-mtls))
+
+The following command returns the certificate chain in PEM format:
+
+```bash
+
+openssl s_client -connect dps.mycompany.com:5684 -showcerts
+
+```
+
+To configure a device for zero touch provisioning using DHCP, you need to obtain the fingerprint of one of the certificates in the chain. A fingerprint is a unique identifier that is computed from the contents of the certificate. In this particular example, the SHA256 message digest is used to compute the fingerprint.
+
+```bash
+
+openssl x509 -noout -fingerprint -sha256 -inform pem <<EOF
+-----BEGIN CERTIFICATE-----
+MIIBlzCCAT2g...
+-----END CERTIFICATE-----
+EOF
+
+```
+
+The output of the above command can be used as a fingerprint. The fingerprint and the message digest algorithm (in this case, SHA256) must be configured in the DHCP server so that the device can obtain the necessary configuration parameters during provisioning. Additionally, the device must be configured to allow the use of the configured message digest algorithm.
+
+### Configuring isc-dhcp-client
 
 On the client side, the configuration must be updated as well. If the client is using the ISC DHCP client, the configuration file is typically located at `/etc/dhcp/dhclient.conf`. To configure the client to obtain the necessary parameters for zero touch provisioning via DHCP, add the following lines to the configuration file:
 
@@ -116,7 +136,7 @@ After making changes to the configuration files, it is necessary to restart the 
 
 With these configuration changes in place, the device should be able to obtain the necessary TLS settings and endpoint for zero touch provisioning via DHCP. This can simplify the device provisioning process, particularly for large deployments where manually configuring each device can be time-consuming and error-prone.
 
-## Connect with client library
+### Connect with client library
 
 When the DHCP client leases file is updated with a new vendor-encapsulated-options, the [client library](../client-library) needs to be notified of the update. To accomplish this on Linux, `inotify` can be used to watch the leases file and notify the client library about the new configuration, or the client library can periodically pull the configuration from the leases file.
 
