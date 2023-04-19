@@ -1,7 +1,7 @@
 ---
 title: 'Client Library'
 description: 'How to create a client of plgd Device Provisioning Service?'
-date: '2021-02-15'
+date: '2023-04-19'
 categories: [zero-touch, provisioning]
 keywords: [provisioning]
 weight: 2
@@ -32,7 +32,7 @@ The API is defined in the public header files provided in the distributed packag
 A DPS client device is an extension of an [IoTivity](https://github.com/iotivity/iotivity-lite) device. Define your desired device and add DPS code to automatically provision the device.
 
 Start up the DPS initialization by calling the `plgd_dps_init` function, which allocates and initializes required data structures.
-Use setters `plgd_dps_set_endpoint`, `plgd_dps_set_manager_callbacks`, `plgd_dps_set_skip_verify`, `plgd_dps_set_configuration_resource`, `plgd_dps_set_retry_configuration`, `plgd_dps_set_cloud_observer_configuration` and `plgd_dps_pki_set_expiring_limit` to configure the device.
+Use setters `plgd_dps_set_endpoint`, `plgd_dps_set_manager_callbacks`, `plgd_dps_set_skip_verify`, `plgd_dps_set_configuration_resource`, `plgd_dps_time_configure`, `plgd_dps_set_retry_configuration`, `plgd_dps_set_cloud_observer_configuration` and `plgd_dps_pki_set_expiring_limit` to configure the device.
 
 ### Set DPS Endpoint
 
@@ -67,7 +67,10 @@ typedef enum {
   PLGD_DPS_GET_OWNER = 1 << 10,
   PLGD_DPS_HAS_OWNER = 1 << 11,
   PLGD_DPS_TRANSIENT_FAILURE = 1 << 14,
-  PLGD_DPS_FAILURE = 1 << 15,
+  PLGD_DPS_GET_TIME = 1 << 12,
+  PLGD_DPS_HAS_TIME = 1 << 13,
+  PLGD_DPS_TRANSIENT_FAILURE = 1 << 29,
+  PLGD_DPS_FAILURE = 1 << 30,
 } plgd_dps_status_t;
 ```
 
@@ -85,6 +88,12 @@ dps_status_handler(plgd_dps_context_t *ctx, plgd_dps_status_t status, void *data
   }
   if ((status & PLGD_DPS_INITIALIZED) != 0) {
     PRINT("\t\t-Initialized\n");
+  }
+  if ((status & PLGD_DPS_GET_TIME) != 0) {
+    PRINT("\t\t-Get time\n");
+  }
+  if ((status & PLGD_DPS_HAS_TIME) != 0) {
+    PRINT("\t\t-Has time\n");
   }
   if ((status & PLGD_DPS_GET_OWNER) != 0) {
     PRINT("\t\t-Get owner\n");
@@ -190,7 +199,19 @@ If a step in the provisioning algorithm encounters an error, or if it does not t
 
 The application uses the following retry intervals [10s, 20s, 40s, 80s, 120s] and forever loops through the array (i.e. when the last retry interval was 120s then the next will be 10s again) until the provisioning process succeeds. To read more about the retry mechanism of the DPS Client Library, read [here](../retry-mechanism).
 
+### Time synchronization
+
+In order for the TLS handshake to verify the server certificate and for certificate rotation to occur, the device must have the correct time. Time synchronization can be achieved by utilizing DPS clients to synchronize with the DPS server. To enable time synchronization, the function `plgd_dps_time_configure(true)` should be called. It's important to note that IoTivity-Lite needs to be compiled with the cmake option `-DPLGD_DEV_TIME_ENABLED=ON` in order to enable the [time synchronization feature](../../features/time-synchronization) in the IoTivity-Lite library, and initialized with `plgd_time_init`.
+
+{{< note >}}
+To compensate for the disabled time verification during the TLS handshake, time synchronization is established through a separate connection. Once synchronization is completed, the connection is terminated and the device's time is adjusted to bring it back into alignment. While this approach may not provide pinpoint accuracy, it is adequate for verifying the server certificate during the TLS handshake and for certificate rotation. For more precise time synchronization, utilizing NTP or another time synchronization protocol would be recommended.
+{{< /note >}}
+
 ### Certificate renewal
+
+{{< note >}}
+Proper device functionality is contingent upon time synchronization.
+{{< /note >}}
 
 A certificate retrieved from the DPS service can be in one of the following states:
 
