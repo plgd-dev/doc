@@ -10,25 +10,38 @@ weight: 2
 ---
 This guide will walk you through the process of discovering, on-boarding, controlling your secure [OCF Device](https://openconnectivity.org/specs/OCF_Device_Specification_v2.2.6.pdf) using **plgd/client-application** on your PC.
 
-## Prerequisite
+## Installation of the Client Application
 
-- The Cloud Server is running on your Raspberry Pi.
+### Using the Docker Image
 
-## Install client application
+{{< note >}}
+Before you proceed to run the client application, ensure that [Docker](https://docs.docker.com/get-docker) is already installed on your computer.
+{{< /note >}}
 
-1. Download the latest version of the client application from [here](https://github.com/plgd-dev/client-application/releases)
+To run the client application, execute the following command in your terminal:
 
-    ```shell script
-    curl https://github.com/plgd-dev/client-application/releases/download/v0.4.3/client-application_0.4.3_linux_amd64.tar.gz --output client-application_0.4.3_linux_amd64.tar.gz
-    tar -xzf client-application_0.4.3_linux_amd64.tar.gz
-    ```
+```shell script
+docker run --rm -it -e NUM_DEVICES=1 -p 8080:8080 ghcr.io/plgd-dev/client-application:latest
+```
 
-2. Run the client application:
+The Docker image also comes with a virtual device that can be discovered on the local network. By setting the value of `NUM_DEVICES`, you can specify the number of virtual devices to be discovered on the local network. If you wish to modify the client application's configuration, mount the `config.yaml` file to the Docker container at the path `/plgd/config.yaml`. The logs of the client application can be found in the `/tmp/client-application.log` file within the Docker container.
 
-    ```shell script
-    cd client-application_0.4.3_linux_amd64
-    ./client-application
-    ```
+### Installation on Linux/Windows/MacOS
+
+{{< note >}}
+The [Cloud Server](../start-device/) must be running on your Raspberry Pi or on some other machine on your local network.
+{{< /note >}}
+
+Firstly, download the latest version of the client application from [here](https://github.com/plgd-dev/client-application/releases) for your operating system. Below is an example of how to download and run the client application for Linux:
+
+```shell script
+curl https://github.com/plgd-dev/client-application/releases/download/v0.5.0/client-application_0.5.0_linux_amd64.tar.gz --output client-application_0.5.0_linux_amd64.tar.gz
+tar -xzf client-application_0.5.0_linux_amd64.tar.gz
+cd client-application_0.5.0_linux_amd64
+./client-application
+```
+
+## How to Use the Client Application
 
 The Client Application is now running on your PC. The application has opened a port for access from a browser via [http://localhost:8080](http://localhost:8080).
 By running the client application, the client application will automatically create a config.yaml file and www directory in the current directory.
@@ -37,8 +50,6 @@ By running the client application, the client application will automatically cre
 To onboard devices to the try.plgd.cloud, use the [config.yaml](../remote-access/#configyaml-file) file.
 To read more about how to change the config.yaml, continue [here](https://github.com/plgd-dev/client-application#yaml-configuration).
 {{< /note >}}
-
-## How to Use the Client Application
 
 ### Initializing the Client Application
 

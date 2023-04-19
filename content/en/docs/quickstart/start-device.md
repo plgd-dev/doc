@@ -8,7 +8,7 @@ categories: ['quickstart']
 keywords: ['quickstart', 'device', 'iotivity']
 weight: 1
 ---
-This guide will walk you through the process of starting your [secure Device](https://openconnectivity.org/specs/OCF_Device_Specification_v2.2.3.pdf) using [IoTivity](https://iotivity.org/) library on the Raspberry Pi.
+This guide will walk you through the process of starting your [secure Device](https://openconnectivity.org/specs/OCF_Device_Specification_v2.2.6.pdf) using [IoTivity](https://iotivity.org/) library on the Raspberry Pi.
 
 ## Requirements
 
@@ -56,7 +56,7 @@ Default login username is `pi` and password is `raspberry` if you didn't change.
 ## Install essential build tools
 
 ```shell script
-sudo apt-get update & apt-get install build-essential git curl openssl
+sudo apt-get update & apt-get install build-essential git curl openssl cmake
 ```
 
 ## Install IoTivity Cloud Server example
@@ -69,16 +69,19 @@ sudo apt-get update & apt-get install build-essential git curl openssl
     cd iotivity-lite
     ```
 
-2. Build Cloud Server example in the `port/linux` folder:
+2. Build Cloud Server example:
 
     ```shell script
-    cd port/linux
-    make CLOUD=1 SECURE=1 MNT=1 CREATE=1 OICRES_OBSERVABLE=1 OSCORE=0 cloud_server
+    mkdir build
+    cd build
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=ON -DBUILD_TESTING=OFF -DOC_CLOUD_ENABLED=ON -DOC_COLLECTIONS_IF_CREATE_ENABLED=ON -DOC_MNT_ENABLED=ON -DOC_OSCORE_ENABLED=OFF -DOC_RESOURCE_ACCESS_IN_RFOTM_ENABLED=ON -DOC_DISCOVERY_RESOURCE_OBSERVABLE_ENABLED=ON -DPLGD_DEV_TIME_ENABLED=ON ..
+    make cloud_server
     ```
 
-3. Run Cloud Server example in the `port/linux` folder:
+3. Run Cloud Server example:
 
     ```shell script
+    cd ./apps
     ./cloud_server
     ```
 
