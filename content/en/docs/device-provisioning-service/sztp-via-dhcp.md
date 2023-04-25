@@ -37,37 +37,119 @@ When using the Skip Certificate Verification (TLS) option, the device trusts any
 
 ## How to configure Zero Touch Provisioning via DHCP
 
-### Configuring isc-dhcp-server
+### Configuring kea-dhcp-server
 
-To configure isc-dhcp-server to provide zero touch provisioning via DHCP, modify the `/etc/dhcp/dhcpd.conf` file to include the following lines:
+To configure kea-dhcp-server to provide zero touch provisioning via DHCP, modify the `/etc/kea/kea-dhcp4.conf` file to include the following lines:
 
-```text
-# dns servers
-option domain-name-servers 8.8.8.8;
-# ntp servers
-option ntp-servers pool.ntp.org;
-option space MY-COMPANY;
-option MY-COMPANY.dps-endpoint code 200 = text;
-option MY-COMPANY.dps-certificate-fingerprint code 201 = string;
-option MY-COMPANY.dps-certificate-fingerprint-md-type code 202 = text;
-class "MY-COMPANY-CLASS" {
-  # to match substring of vendor-class-identifier option
-  match if substring (option vendor-class-identifier,0,17) = MY-COMPANY-DEVICE;
-  vendor-option-space MY-COMPANY;
-  option MY-COMPANY.dps-endpoint "coaps+tcp://dps.mycompany.com:5684";
-  # Fingerprint calculated from certificate
-  option MY-COMPANY.dps-certificate-fingerprint 63:25:73:b8:f9:e:b9:24:54:e5:4:c4:79:61:3b:34:21:c5:f7:20:fe:fa:65:f6:f:51:6c:1e:72:5c:ec:73;
-  # Message digest type used to calculate fingerprint
-  option MY-COMPANY.dps-certificate-fingerprint-md-type SHA256;
-}
-subnet 10.115.115.0 netmask 255.255.255.0 {
-  range 10.115.115.100 10.115.115.200;
-  # gateway address
-  option routers 10.115.115.1;
-  # set static ip based on mac address
-  host test {
-    hardware ethernet 08:00:27:49:cb:b2;
-    fixed-address 10.115.115.11;
+```jsonc
+{
+  "Dhcp4": {
+    "interfaces-config": {
+        "interfaces": [ "eth0" ] // your network interfaces where you want to provide DHCP
+    },
+    "option-data": [
+      {
+        "space": "dhcp4",
+        "name": "domain-name",
+        "code": 15,
+        "data": "example.org" // your domain name
+      },
+      {
+        "space": "dhcp4",
+        "name": "domain-name-servers",
+        "code": 6,
+        "data": "8.8.8.8" // your DNS server
+      },
+      {
+        "space": "dhcp4",
+        "name": "ntp-servers",
+        "code": 42,
+        "data": "213.81.129.99" // your NTP server
+      }
+    ],
+    "option-def": [
+      {
+        "space": "MY-COMPANY",
+        "name": "dps-endpoint", // endpoint of DPS service
+        "code": 200,
+        "type": "string"
+      },
+      {
+        "space": "MY-COMPANY",
+        "name": "dps-certificate-fingerprint", // fingerprint of any DPS certificate in the chain
+        "code": 201,
+        "type": "binary"
+      },
+      {
+        "space": "MY-COMPANY",
+        "name": "dps-certificate-fingerprint-md-type", // message digest type used to calculate the fingerprint
+        "code": 202,
+        "type": "string"
+      }
+    ],
+    "client-classes": [
+      {
+        "name": "MY-COMPANY-CLASS",
+        // to match substring of vendor-class-identifier option
+        "test": "substring(option[60].hex,0,10) == 'MY-COMPANY-DEVICE'",
+        "option-def": [
+          {
+            "name": "vendor-encapsulated-options",
+            "code": 43,
+            "type": "empty",
+            "encapsulate": "MY-COMPANY"
+          }
+        ],
+        "option-data": [
+          {
+            "space": "MY-COMPANY",
+            "name": "dps-endpoint",
+            "data": "coaps+tcp://dps.mycompany.com:5684"
+          },
+          {
+            "space": "MY-COMPANY",
+            "name": "dps-certificate-fingerprint",
+            "data": "A1E1C34C3E03178DE47779F992287DFEB4B7702F80EED915DDECD654E4C64FE2"
+          },
+          {
+            "space": "MY-COMPANY",
+            "name": "dps-certificate-fingerprint-md-type",
+            "data": "SHA256"
+          }
+        ]
+      }
+    ],
+    "subnet4": [
+      {
+        "id": 1,
+        "subnet": "10.115.115.0/24",
+        "pools": [
+          {
+            "pool": "10.115.115.100 - 10.115.115.200"
+          }
+        ],
+        "option-data": [
+          {
+            "space": "dhcp4",
+            "name": "routers",
+            "code": 3,
+            "data": "10.115.115.10"
+          }
+        ]
+      }
+    ],
+    "host-reservation-identifiers": [
+      "hw-address"
+    ],
+    "reservation-mode": "global",
+    "reservations": [
+ //   # set static ip
+      {
+        "hostname": "test",
+        "hw-address": "08:00:27:49:cb:b2",
+        "ip-address": "10.115.115.11"
+      }
+    ]
   }
 }
 ```
@@ -78,7 +160,7 @@ After configuring the DHCP server, it is necessary to reload the configuration f
 
 ```bash
 
-sudo systemctl restart isc-dhcp-server
+sudo systemctl restart kea-dhcp4-server
 
 ```
 
