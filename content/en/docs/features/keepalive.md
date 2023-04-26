@@ -10,8 +10,7 @@ weight: 4
 
 ## Device (iotivity-lite) KeepAlive to CoAP Gateway
 
-When a device is connected to coap-gateway and signed in, it will send a ping (a signal to check the connection) every 20 seconds. This delay is set by a defined macro [PING_DELAY](https://github.com/iotivity/iotivity-lite/blob/6ffd7aa0a259a59632de1e491131db242a62938a/api/cloud/oc_cloud_manager.c#L43).
-After sending a ping, the device will wait for a response (pong) for 1 second. If a response is not received within this time, the delay between pings will be decreased to [4](https://github.com/iotivity/iotivity-lite/blob/6ffd7aa0a259a59632de1e491131db242a62938a/api/cloud/oc_cloud_manager.c#L44) seconds. If the device fails to receive a response for six consecutive pings, it will initiate a [reconnect process](/docs/architecture/component-overview/#reconnect-a-device).
+Once a device is connected to the coap-gateway and signed in, it sends a ping signal every `20` seconds to verify the connection. After sending a ping, the device waits for a response (known as pong) for `4` seconds. If no response is received during this time, the delay between pings is decreased to `4` seconds. If the device misses six consecutive pings without any response, it will initiate a [reconnect process](../../architecture/component-overview/#reconnect-a-device). The behavior of this process can be configured through the set callback function using [oc_cloud_set_keepalive](http://iotivity.org/iotivity-lite-doxygen/oc__cloud_8h.html#ac24bd82a6c24b565b3f5509dcee43519).
 
 ## CoAP Gateway KeepAlive to Device
 
