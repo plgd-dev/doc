@@ -235,6 +235,10 @@ Reconnecting is a crucial operation in IoT devices, but it can also be an expens
 It's worth noting that during the reconnect process, the device's CPU may be heavily utilized.
 {{< /note >}}
 
+##### Retry mechanism
+
+The system's retry mechanism works by trying to establish a connection at set time intervals. These intervals are 2, 4, 8, 16, 32, and 64 seconds. If all the attempts fail, the device restarts the process from the beginning. When a connection is successfully established, the retry mechanism is reset and the connection is maintained using the [keep-alive mechanism](../../features/keepalive).
+
 ##### Establishing a TLS Connection
 
 The first step in the reconnect process is to establish a secure connection using Transport Layer Security (TLS). This ensures that all data transmitted between the device and the server is encrypted and protected from unauthorized access.

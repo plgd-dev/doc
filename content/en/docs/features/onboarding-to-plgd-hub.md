@@ -139,7 +139,7 @@ deactivate S
 
 ### Hub Onboarding Configuration
 
-Each device hosts the `coapcloudconf`resource where the `hub onboarding configuration` has to be set. Resource definition can be found [here](https://github.com/openconnectivityfoundation/cloud-services/blob/master/swagger2.0/oic.r.coapcloudconf.swagger.json#L215). Setting the resource with required values will trigger the onboarding process, which is in detail described [here](../../architecture/component-overview/#device-onboarding.
+Each device hosts the `coapcloudconf`resource where the `hub onboarding configuration` has to be set. Resource definition can be found [here](https://github.com/openconnectivityfoundation/cloud-services/blob/master/swagger2.0/oic.r.coapcloudconf.swagger.json#L215). Setting the resource with required values will trigger the onboarding process, which is in detail described [here](../../architecture/component-overview/#device-onboarding).
 
 ## Connection authentication and encryption
 
