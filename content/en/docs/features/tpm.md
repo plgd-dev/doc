@@ -56,6 +56,22 @@ To meet the **requirements** for an identity certificate
 - the elliptic curves must be `secp256r1` or `secp384r1`
 - the subject common name must be in the format of `uuid:<GUID>`, where GUID is the device UUID.
 
+{{< note >}}
+
+The default message digest signature algorithm for identity CSR is `SHA256`. However, if you need to use `SHA384`(need to be allowed by `oc_sec_certs_md_set_algorithms_allowed`), you can call the following function:
+
+```c
+oc_sec_certs_md_set_signature_algorithm(MBEDTLS_MD_SHA384);
+```
+
+Similarly, the default elliptic curve group for identity CSR is `secp256r1`. If you want to use `secp384r1`(need to be allowed by `oc_sec_certs_ecp_set_group_ids_allowed`), you can call the following function:
+
+```c
+oc_sec_certs_ecp_set_group_id(MBEDTLS_ECP_DP_SECP384R1);
+```
+
+{{< /note >}}
+
 ## TPM Integration
 
 In OCF, certificates are typically stored in the credential resource `/oic/sec/cred` using PEM, DER, or RAW formats. If TPM is integrated, the private key is kept within the TPM, and the credential resource only holds the public certificate along with a reference key pointing to the private key in the TPM. This way, all private key-related functions are handled by the TPM, including data signing and encryption. As a **reference key**, either the public key or its hash can be used.
@@ -76,7 +92,7 @@ To integrate TPM with iotivity-lite, the mbedtls library is used for cryptograph
 1. **Generate public and private key**: The `mbedtls_pk_ecp_gen_key` function generates a private key for the CSR of the identity certificate when iotivity-lite doesn't have a private key in the keypair storage. In this function, a private key needs to be generated in the TPM, and the public key `mbedtls_pk_context` needs to be filled.
 2. **Free private key in TPM**: The `pk_free_key` function frees the private key in the TPM. This function is called when a factory reset is performed or when the keypair storage does not match the TPM during the generation of the CSR with the reference key.
 3. **Store reference key to credential resource**: The `mbedtls_pk_write_key_der` function writes the private key to a buffer for the credential resource. A reference key associated with the private key in the TPM needs to be created according to `mbedtls_pk_context *pk`. This reference key is written to the buffer and stored in the credential resource or keypair storage
-4. **Load public key with reference key**: This function parses the public key/certificate and private key from the keypair storage or credential resource. The reference key to the private key in the TPM, as written by `mbedtls_pk_write_key_der`, needs to be used as the key to set the public key mbedtls_pk_context *pk by the TPM chip.
+4. **Load public key with reference key**: This function parses the public key/certificate and private key from the keypair storage or credential resource. The reference key to the private key in the TPM, as written by `mbedtls_pk_write_key_der`, needs to be used as the key to set the public key `mbedtls_pk_context *pk` by the TPM chip.
 
 To generate reference key from `mbedtls_pk_context *pk` you can use following function:
 
@@ -85,20 +101,30 @@ To generate reference key from `mbedtls_pk_context *pk` you can use following fu
 #include <mbedtls/sha256.h>
 #include <stdint.h>
 
+#define MD_SHA256_SIZE (32)
+
+/**
+ * @brief Gets the reference key as hash(SHA-256) for a given public key.
+ *
+ * @param pk Pointer to an mbedtls_pk_context struct containing the public key.
+ * @param buf Pointer to the buffer to store the reference key.
+ * @param size Size of the buffer.
+ * @return The length of the reference key (32 bytes) on success, or -1 on failure.
+ */
 int get_reference_key(const mbedtls_pk_context *pk, uint8_t *buf, size_t size) {
-    if (size < 32) {
+    if (size < MD_SHA256_SIZE) {
         // buffer is too small
         return -1;
     }
     unsigned char pubkey[120];
-    // marshal pubkey to pubkey, it is stored at the end of pubkey.
+    // Marshal pk to pubkey buffer. The marshaled public key is stored at the end of the pubkey buffer.
     int ret = mbedtls_pk_write_pubkey_der(pk, pubkey, sizeof(pubkey));
     if (ret < 0) {
         // error occurs
         return ret;
     }
     mbedtls_sha256(pubkey + size - ret, ret, buf, 0);
-    return 32;
+    return MD_SHA256_SIZE;
 }
 ```
 
@@ -108,6 +134,7 @@ To make use of these TPM functions in iotivity-lite, you need to set the TPM imp
 
 #include <iotivity-lite/oc_pki.h>
 
+// Set TPM functions for PKI to iotivity-lite
 oc_pki_pk_functions_t pk_functions = {
     .mbedtls_pk_ecp_gen_key = tpm_mbedtls_pk_ecp_gen_key,
     .pk_free_key = tpm_pk_free_key,
