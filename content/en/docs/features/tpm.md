@@ -91,8 +91,8 @@ To integrate TPM with iotivity-lite, the mbedtls library is used for cryptograph
 
 1. **Generate public and private key**: The `mbedtls_pk_ecp_gen_key` function generates a private key for the CSR of the identity certificate when iotivity-lite doesn't have a private key in the keypair storage. In this function, a private key needs to be generated in the TPM, and the public key `mbedtls_pk_context` needs to be filled.
 2. **Free private key in TPM**: The `pk_free_key` function frees the private key in the TPM. This function is called when a factory reset is performed or when the keypair storage does not match the TPM during the generation of the CSR with the reference key.
-3. **Store reference key to credential resource**: The `mbedtls_pk_write_key_der` function writes the private key to a buffer for the credential resource. A reference key associated with the private key in the TPM needs to be created according to `mbedtls_pk_context *pk`. This reference key is written to the buffer and stored in the credential resource or keypair storage
-4. **Load public key with reference key**: This function parses the public key/certificate and private key from the keypair storage or credential resource. The reference key to the private key in the TPM, as written by `mbedtls_pk_write_key_der`, needs to be used as the key to set the public key `mbedtls_pk_context *pk` by the TPM chip.
+3. **Store reference key to credential resource**: The `mbedtls_pk_write_key_der` function writes the reference key to a buffer for the credential resource or keypair storage. A reference key associated with the private key in the TPM needs to be created according to `mbedtls_pk_context *pk`.
+4. **Load public key with reference key**: The `mbedtls_pk_parse_key` function parses the public key/certificate and reference key from the keypair storage or credential resource. The reference key to the private key in the TPM, as written by `mbedtls_pk_write_key_der`, needs to be used as the key to set the public key `mbedtls_pk_context *pk` by the TPM chip.
 
 To generate reference key from `mbedtls_pk_context *pk` you can use following function:
 
