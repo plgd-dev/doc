@@ -14,6 +14,8 @@
 #ifndef PLGD_DPS_H
 #define PLGD_DPS_H
 
+#include "oc_config.h"
+
 #ifndef OC_SECURITY
 #error "OC_SECURITY must be defined"
 #endif
@@ -55,6 +57,7 @@ typedef struct plgd_dps_context_t plgd_dps_context_t;
  * @brief DPS provisioning status flags.
  */
 typedef enum {
+  /* UNINITIALIZED = 0 */
   PLGD_DPS_INITIALIZED = 1 << 0,
   PLGD_DPS_GET_CREDENTIALS = 1 << 1,
   PLGD_DPS_HAS_CREDENTIALS = 1 << 2,
@@ -66,8 +69,10 @@ typedef enum {
   PLGD_DPS_RENEW_CREDENTIALS = 1 << 9,
   PLGD_DPS_GET_OWNER = 1 << 10,
   PLGD_DPS_HAS_OWNER = 1 << 11,
-  PLGD_DPS_TRANSIENT_FAILURE = 1 << 14,
-  PLGD_DPS_FAILURE = 1 << 15,
+  PLGD_DPS_GET_TIME = 1 << 12,
+  PLGD_DPS_HAS_TIME = 1 << 13,
+  PLGD_DPS_TRANSIENT_FAILURE = 1 << 29,
+  PLGD_DPS_FAILURE = 1 << 30,
 } plgd_dps_status_t;
 
 /**
@@ -82,6 +87,7 @@ typedef enum {
   PLGD_DPS_ERROR_SET_CLOUD = 5,
   PLGD_DPS_ERROR_START_CLOUD = 6,
   PLGD_DPS_ERROR_GET_OWNER = 7,
+  PLGD_DPS_ERROR_GET_TIME = 8,
 } plgd_dps_error_t;
 
 /**
@@ -403,7 +409,7 @@ plgd_dps_error_t plgd_dps_get_last_error(const plgd_dps_context_t *ctx) DPS_NONN
  * @return uint16_t current provision status
  */
 DPS_EXPORT
-uint16_t plgd_dps_get_provision_status(const plgd_dps_context_t *ctx) DPS_NONNULL();
+uint32_t plgd_dps_get_provision_status(const plgd_dps_context_t *ctx) DPS_NONNULL();
 
 typedef struct
 {

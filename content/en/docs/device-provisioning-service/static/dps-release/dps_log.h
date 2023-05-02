@@ -22,8 +22,10 @@
 
 #ifndef __FILENAME__
 #ifdef WIN32
+// NOLINTNEXTLINE(bugprone-reserved-identifier)
 #define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 #else
+// NOLINTNEXTLINE(bugprone-reserved-identifier)
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #endif
 #endif /* !__FILENAME__ */
