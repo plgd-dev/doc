@@ -102,6 +102,10 @@ To configure kea-dhcp-server to provide zero touch provisioning via DHCP, modify
         ],
         "option-data": [
           {
+            "name": "vendor-encapsulated-options",
+            "code": 43
+          },
+          {
             "space": "MY-COMPANY",
             "name": "dps-endpoint",
             "data": "coaps+tcp://dps.mycompany.com:5684"
