@@ -149,5 +149,5 @@ if (!oc_pki_set_pk_functions(&pk_functions)) {
 ```
 
 {{< note >}}
-An example that demonstrates how to integrate a simulated TPM with iotivity-lite can be found in the [iotivity-lite/cloud_server](https://github.com/iotivity/iotivity-lite/blob/master/apps/cloud_server.c) repository.
+An example that demonstrates how to integrate a simulated TPM with iotivity-lite can be found in the [iotivity-lite/cloud_server](https://github.com/iotivity/iotivity-lite/blob/master/apps/cloud_server.c).
 {{< /note >}}
