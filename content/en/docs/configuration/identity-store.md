@@ -12,7 +12,7 @@ Identity Store manages devices and their owners.
 ## Docker Image
 
 ```bash
-docker pull plgd/identity-store:latest
+docker pull ghcr.io/plgd-dev/hub/identity-store:latest
 ```
 
 ## YAML Configuration

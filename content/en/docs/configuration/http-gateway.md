@@ -12,7 +12,7 @@ HTTP Gateway exposes the client's [REST API](https://petstore.swagger.io/?url=ht
 ## Docker Image
 
 ```bash
-docker pull plgd/http-gateway:latest
+docker pull ghcr.io/plgd-dev/hub/http-gateway:latest
 ```
 
 ## YAML Configuration

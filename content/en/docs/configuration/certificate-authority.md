@@ -14,7 +14,7 @@ Initialization of the SDK requires an Identity Certificate issued by this servic
 ## Docker Image
 
 ```bash
-docker pull plgd/certificate-authority:latest
+docker pull ghcr.io/plgd-dev/hub/certificate-authority:latest
 ```
 
 ## YAML Configuration

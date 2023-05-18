@@ -12,7 +12,7 @@ CoAP Gateway provides API for devices and clients following the [Open Connectivi
 ## Docker Image
 
 ```bash
-docker pull plgd/coap-gateway:latest
+docker pull ghcr.io/plgd-dev/hub/coap-gateway:latest
 ```
 
 ## YAML Configuration

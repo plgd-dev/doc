@@ -12,7 +12,7 @@ OAuth2.0 Mock Server used for automated tests, [bundle container](../quickstart/
 ## Docker Image
 
 ```bash
-docker pull plgd/mock-oauth-server:latest
+docker pull ghcr.io/plgd-dev/hub/mock-oauth-server:latest
 ```
 
 ## YAML Configuration

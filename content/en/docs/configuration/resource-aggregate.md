@@ -12,7 +12,7 @@ Resource Aggregate translates commands to events, stores them to the database an
 ## Docker Image
 
 ```bash
-docker pull plgd/resource-aggregate:latest
+docker pull ghcr.io/plgd-dev/hub/resource-aggregate:latest
 ```
 
 ## YAML Configuration

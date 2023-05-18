@@ -12,7 +12,7 @@ C2C Gateway implements [Open Connectivity Foundation's Cloud API for Cloud Servi
 ## Docker Image
 
 ```bash
-docker pull plgd/cloud2cloud-gateway:latest
+docker pull ghcr.io/plgd-dev/hub/cloud2cloud-gateway:latest
 ```
 
 ## YAML Configuration

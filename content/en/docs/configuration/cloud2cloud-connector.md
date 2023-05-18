@@ -12,7 +12,7 @@ C2C Connector connects to other hub implementing the [Open Connectivity Foundati
 ## Docker Image
 
 ```bash
-docker pull plgd/cloud2cloud-connector:latest
+docker pull ghcr.io/plgd-dev/hub/cloud2cloud-connector:latest
 ```
 
 ## YAML Configuration

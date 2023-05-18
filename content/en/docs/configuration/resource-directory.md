@@ -12,7 +12,7 @@ Resource Directory maintains projection of devices which were requested by clien
 ## Docker Image
 
 ```bash
-docker pull plgd/resource-directory:latest
+docker pull ghcr.io/plgd-dev/hub/resource-directory:latest
 ```
 
 ## YAML Configuration

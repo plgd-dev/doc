@@ -12,7 +12,7 @@ gRPC Gateway exposes the client's gRPC API to manage user's devices.
 ## Docker Image
 
 ```bash
-docker pull plgd/grpc-gateway:latest
+docker pull ghcr.io/plgd-dev/hub/grpc-gateway:latest
 ```
 
 ## YAML Configuration
