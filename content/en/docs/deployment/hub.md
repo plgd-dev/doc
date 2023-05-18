@@ -1,6 +1,6 @@
 ---
-title: 'plgd on K8S'
-description: 'Running plgd hub on Kubernetes'
+title: 'Hub'
+description: 'Running hub on Kubernetes'
 docsOthersDisplay: true
 date: '2021-11-01'
 categories: [deployment, kubernetes]
@@ -36,9 +36,14 @@ plgd    https://charts.plgd.dev
 
 // helm search repo plgd
 NAME            CHART VERSION   APP VERSION     DESCRIPTION
-plgd/plgd-hub   2.1.1           2.1.1           A Helm chart for plgd-hub
+plgd/plgd-dps   0.9.0           0.9.0           A Helm chart for plgd device provisioning service
+plgd/plgd-hub   2.7.15          2.7.15          A Helm chart for plgd-hub
 
 ```
+
+{{< note >}}
+If you want to use also Device provisioning service you need to apply mentioned changes in [Device Provisioning Service](../dps) section to the configuration.
+{{< /note >}}
 
 ### Deployment with Mock OAuth2.0 Server
 
@@ -159,4 +164,4 @@ global:
 ## Troubleshooting
 
 - plgd Dashboard returns "unable to fetch data from from the ./well-known endpoint" error
-  - Not trusted self-signed certificate is used. Import of plgd CA to your system is required. Get the public key by calling `kubectl get secret plgd-ca -o 'go-template={{index .data "ca.crt"}}' | base64 -d`.
+- Not trusted self-signed certificate is used. Import of plgd CA to your system is required. Get the public key by calling `kubectl get secret plgd-ca -o 'go-template={{index .data "ca.crt"}}' | base64 -d`.
