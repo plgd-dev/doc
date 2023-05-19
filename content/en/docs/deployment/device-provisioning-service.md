@@ -8,6 +8,8 @@ keywords: [deployment, kubernetes, k8s, helm, chart]
 weight: 2
 ---
 
+![Deployment diagram](../static/dps-deployment-diagram.drawio.svg "medium-zoom-image")
+
 To enable the Device Provisioning Service, you need to extend the hub configuration.
 
 {{< note >}}
