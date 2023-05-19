@@ -26,19 +26,17 @@ When a device is successfully attested against an enrollment group by the Device
 
 In this flow, the OAuth client is associated with the owner. The client must set the owner claim with the owner in the JWT access token.
 
-When using the `clientCredentials` flow, you cannot use `sub` because the owner will be the OAuth client. Therefore, you need to use another claim to identify the owner.
-
-Extend the hub configuration's `global` section with the following values:
+When using the `clientCredentials` flow, you cannot use `sub` because the owner will be the OAuth client. Therefore, you need to use another claim to identify the owner. We need to override default the hub configuration's section with  new `ownerClaim`, dps and web oauth clients:
 
 ```yaml
 global:
-  ownerClaim: "owner-id"
+  ownerClaim: "https://plgd.dev/owner" # for mockoauthserver
   oauth:
     device:
     - name: "plgd.dps"
-      clientID: "my-client-id"
-      clientSecret: "my-client-secret"
-      grantType: clientCredentials
+      clientID: my-client-id
+      clientSecret: my-client-secret
+      grantType: "clientCredentials"
       scopes: ['openid']
       audience: "https://api.example.com"
 ```
@@ -48,18 +46,22 @@ If you are using a mock OAuth2.0 server, add the following values to the `mockoa
 ```yaml
 mockoauthserver:
   oauth:
-    - name: "plgd.dps"
-      clientID: "my-client-id"
-      clientSecret: "my-client-secret"
-      grantType: "clientCredentials"
-      scopes: ['openid']
+  - name: "plgd.dps"
+    clientID: "test"
+    clientSecret: "test"
+    grantType: "clientCredentials"
+    scopes: ['openid']
+    audience: "https://api.example.com"
+    redirectURL: "https://mock.plgd.cloud/things"
+  - name: "plgd.web"
+    clientID: "test"
+    clientSecret: "test"
+    redirectURL: "https://mock.plgd.cloud/things"
+    scopes: ['openid']
+    useInUi: true
 ```
 
 To enable the Device Provisioning Service, the following configuration needs to extend the hub configuration:
-
-{{< note >}}
-To get access to ghcr.io you need to contact us [connect@plgd.dev](mailto:connect@plgd.dev) to allow your GitHub account to access the plgd device provisioning server images.
-{{< /note >}}
 
 ```yaml
 deviceProvisioningService:
@@ -68,11 +70,17 @@ deviceProvisioningService:
       {
         "auths": {
           "ghcr.io": {
-              "auth": "<GITHUB_TOKEN>"
+              "auth": "<DOCKER_AUTH_TOKEN>"
           }
         }
       }
 ```
+
+{{< note >}}
+
+To access ghcr.io, please reach out to us at [connect@plgd.dev](mailto:connect@plgd.dev) in order to request permission for your GitHub account to access the plgd device provisioning server images. You can refer to the [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) for instructions on how to allow access.
+
+{{< /note >}}
 
 ## Configure Enrollment Groups
 
@@ -87,8 +95,8 @@ In the `deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.c
 ```yaml
 deviceProvisioningService:
   enrollmentGroups:
-    - id: <GUID>
-      owner: <OWNER> # for mockoauthserver use "1"
+    - id: 98be12de-3991-4567-aeea-edd9a656e6df
+      owner: "1" # for mockoauthserver
       preSharedKey: "0123456789012345"
       attestationMechanism:
         x509:
@@ -101,10 +109,9 @@ deviceProvisioningService:
       hub:
         authorization:
           provider:
-            name: "plgd.dps"
-            clientId: "my-client-id"
-            clientSecret: "my-client-secret"
-            audience: "https://api.example.com"
+            name: "plgd.dps" # same as global.oauth.device[].name for dps provider
+            clientId: "test"  # for mockoauthserver
+            clientSecret: "test"  # for mockoauthserver
             scopes: ["openid"]
 ```
 
@@ -112,7 +119,7 @@ If you are using a self-signed certificate, you need to append the custom CA to 
 
 ```yaml
 global:
-  authorizationCAPool: |
+  authorizationCAPool: |-
     ...
     -----BEGIN CERTIFICATE-----
     your custom authorization CA pool in PEM format
@@ -156,6 +163,13 @@ This configuration should be applied only to test environment!
 To deploy the hub with the Device Provisioning Service, apply the following commands:
 
 ```sh
-helm install -f withMock.yaml hub plgd/plgd-hub
-helm install -f withMock.yaml dps plgd/plgd-dps
+helm upgrade -i -f withMock.yaml hub plgd/plgd-hub
+helm upgrade -i -f withMock.yaml dps plgd/plgd-dps
+```
+
+These commands you call multiple times to update the configuration. In this case you need to restart the pods by delteing them:
+
+```sh
+kubectl delete pods $(kubectl get pods | grep "hub-plgd" | cut -d " " -f 1)
+kubectl delete pods $(kubectl get pods | grep "dps-plgd" | cut -d " " -f 1)
 ```

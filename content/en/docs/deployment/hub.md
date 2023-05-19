@@ -54,14 +54,21 @@ Mock OAuth Server shall be used only for test/development purposes. Use with ext
 {{< /warning >}}
 
 ```sh
-echo "global:
+echo "
+global:
   domain: \"example.com\"
   hubId: \"d03a1bb4-0a77-428c-b78c-1c46efe6a38e\"
-  mockoauthserver:
+mockoauthserver:
   enabled: true" > withMock.yaml
 
-helm install -f withMock.yaml hub plgd/plgd-hub
+helm upgrade -i -f withMock.yaml hub plgd/plgd-hub
 ```
+
+{{< note >}}
+
+To use `microk8s` or a similar kubernetes system, ensure that the `ingress`, `dns`, and `storage` addons are enabled. Additionally, configure your Kubernetes cluster to resolve the private domain `*.example.com` through the designated DNS server. For microk8s, use [microk8s enable dns:<DNS_SERVER>](https://microk8s.io/docs/addon-dns) to set up the DNS server.
+
+{{< /note >}}
 
 Deployment of the plgd hub to the Kubernetes cluster is then initiated. Status of the deployment can be verified by calling `kubectl get all`. When all pods are up and running, the plgd Dasboard will become available on your configured domain (e.g. `https://example.com`).
 
@@ -119,7 +126,7 @@ used by plgd hub services. For including custom authorization CA pool into autho
 ```yaml
 global:
   # -- Custom CA certificate for authorization endpoint in PEM format
-  authorizationCAPool: |
+  authorizationCAPool: |-
     -----BEGIN CERTIFICATE-----
     your custom authorization CA pool in PEM format
     -----END CERTIFICATE-----
