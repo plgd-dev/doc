@@ -66,7 +66,7 @@ helm upgrade -i -f withMock.yaml hub plgd/plgd-hub
 
 {{< note >}}
 
-To use `microk8s` or a similar kubernetes system, ensure that the `ingress`, `dns`, and `storage` addons are enabled. Additionally, configure your Kubernetes cluster to resolve the private domain `*.example.com` through the designated DNS server. For microk8s, use [microk8s enable dns:<DNS_SERVER>](https://microk8s.io/docs/addon-dns) to set up the DNS server.
+To use `microk8s` or a similar kubernetes system, ensure that the `ingress`, `dns`, and `storage` addons are enabled. Additionally, configure your Kubernetes cluster to resolve the private domain `*.example.com` through the designated DNS server. For microk8s, use [microk8s enable dns:{DNS_SERVER}](https://microk8s.io/docs/addon-dns) to set up the DNS server.
 
 {{< /note >}}
 

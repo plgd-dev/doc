@@ -173,3 +173,68 @@ These commands you call multiple times to update the configuration. In this case
 kubectl delete pods $(kubectl get pods | grep "hub-plgd" | cut -d " " -f 1)
 kubectl delete pods $(kubectl get pods | grep "dps-plgd" | cut -d " " -f 1)
 ```
+
+The final configuration with mock oauth server should look like this:
+
+```yaml
+global:
+  domain: "example.com"
+  hubId: "d03a1bb4-0a77-428c-b78c-1c46efe6a38e"
+  ownerClaim: "https://plgd.dev/owner"
+mockoauthserver:
+  enabled: true
+  oauth:
+    - name: "plgd.dps"
+      clientID: "test"
+      clientSecret: "test"
+      grantType: "clientCredentials"
+      scopes: ['openid']
+      audience: "https://api.example.com"
+      redirectURL: "https://mock.plgd.cloud/things"
+    - name: "plgd.web"
+      clientID: "test"
+      clientSecret: "test"
+      redirectURL: "https://mock.plgd.cloud/things"
+      scopes: ['openid']
+      useInUi: true
+coapgateway:
+  service:
+    type: NodePort
+    nodePort: 5684
+deviceProvisioningService:
+  image:
+    dockerConfigSecret: |
+      {
+        "auths": {
+          "ghcr.io": {
+              "auth": "amty...CMFh3"
+          }
+        }
+      }
+  service:
+    type: NodePort
+    nodePort: 15684
+  enrollmentGroups:
+    - id: 98be12de-3991-4567-aeea-edd9a656e6df
+      owner: "1" # for mockoauthserver
+      preSharedKey: "0123456789012345" # must be 16 characters
+      attestationMechanism:
+        x509:
+          certificateChain: |-
+            -----BEGIN CERTIFICATE-----
+            MIIBaDCCAQ6gAwIBAgIQM6HFZ+BMuyBspnPJEhPX9DAKBggqhkjOPQQDAjAUMRIw
+            EAYDVQQDEwlNZmdSb290Q0EwHhcNMjIwOTE0MTQyNDEwWhcNMjMwOTE0MTQyNDEw
+            WjAUMRIwEAYDVQQDEwlNZmdSb290Q0EwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNC
+            AAQJWVyzAr0ugzn1rMsPxZiVBvSlegjdnS7m46uN2hKB5UR00oWlE9qj/PmGd9fQ
+            TZp5Bc6JPkTG2QL07CBEIAm2o0IwQDAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/
+            BAUwAwEB/zAdBgNVHQ4EFgQUJEcpCxDACml6nF65kIQiIVpxxb4wCgYIKoZIzj0E
+            AwIDSAAwRQIgISZ/tjmeXieQt4sV/7qbSTjlhDlFC5sU4thtpSFGfq4CIQDez2+g
+            7vHsqw2PCgAm9Qs3ZEQaKMZ2EGuPBvvXZXjPDA==
+            -----END CERTIFICATE-----
+      hub:
+        authorization:
+          provider:
+            name: "plgd.dps"
+            clientId: "test"
+            clientSecret: "test"
+```
