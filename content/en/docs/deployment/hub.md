@@ -61,7 +61,7 @@ global:
 mockoauthserver:
   enabled: true" > withMock.yaml
 
-helm upgrade -i -f withMock.yaml hub plgd/plgd-hub
+helm upgrade -i -n plgd --create-namespace -f withMock.yaml hub plgd/plgd-hub
 ```
 
 {{< note >}}
@@ -70,7 +70,7 @@ To use `microk8s` or a similar kubernetes system, ensure that the `ingress`, `dn
 
 {{< /note >}}
 
-Deployment of the plgd hub to the Kubernetes cluster is then initiated. Status of the deployment can be verified by calling `kubectl get all`. When all pods are up and running, the plgd Dasboard will become available on your configured domain (e.g. `https://example.com`).
+Deployment of the plgd hub to the Kubernetes cluster is then initiated. Status of the deployment can be verified by calling `kubectl -n plgd get all`. When all pods are up and running, the plgd Dasboard will become available on your configured domain (e.g. `https://example.com`).
 
 ### NodePort for CoAP Gateway
 
@@ -115,7 +115,7 @@ oauth:
   web:
     clientID: \"98y239hu94hr2ohu3e23eh\"" > withMock.yaml
 
-helm install -f withMock.yaml hub plgd/plgd-hub
+helm upgrade -i -n plgd --create-namespace -f withMock.yaml hub plgd/plgd-hub
 ```
 
 ### Custom Authorization CA pool
@@ -131,6 +131,12 @@ global:
     your custom authorization CA pool in PEM format
     -----END CERTIFICATE-----
 ```
+
+{{< warning >}}
+
+Please integrate your own PKI for signing certificates used by plgd hub services in a production environment. For detailed instructions on how to do this, refer to this [link](https://cert-manager.io/docs/configuration/ca/).
+
+{{< /warning >}}
 
 ### Using Let's encrypt certificates
 
@@ -171,4 +177,4 @@ global:
 ## Troubleshooting
 
 - plgd Dashboard returns "unable to fetch data from from the ./well-known endpoint" error
-- Not trusted self-signed certificate is used. Import of plgd CA to your system is required. Get the public key by calling `kubectl get secret plgd-ca -o 'go-template={{index .data "ca.crt"}}' | base64 -d`.
+- Not trusted self-signed certificate is used. Import of plgd CA to your system is required. Get the public key by calling `kubectl -n plgd get secret plgd-ca -o 'go-template={{index .data "ca.crt"}}' | base64 -d`.

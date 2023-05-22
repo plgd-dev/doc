@@ -163,15 +163,15 @@ This configuration should be applied only to test environment!
 To deploy the hub with the Device Provisioning Service, apply the following commands:
 
 ```sh
-helm upgrade -i -f withMock.yaml hub plgd/plgd-hub
-helm upgrade -i -f withMock.yaml dps plgd/plgd-dps
+helm upgrade -i -n plgd --create-namespace -f withMock.yaml hub plgd/plgd-hub
+helm upgrade -i -n plgd --create-namespace -f withMock.yaml dps plgd/plgd-dps
 ```
 
 These commands you call multiple times to update the configuration. In this case you need to restart the pods by delteing them:
 
 ```sh
-kubectl delete pods $(kubectl get pods | grep "hub-plgd" | cut -d " " -f 1)
-kubectl delete pods $(kubectl get pods | grep "dps-plgd" | cut -d " " -f 1)
+kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "hub-plgd")
+kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "dps-plgd")
 ```
 
 The final configuration with mock oauth server should look like this:
