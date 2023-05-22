@@ -88,7 +88,7 @@ The enrollment groups can be configured via deployment, utilizing the setup from
 
 {{< note >}}
 
-In the deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain field, please provide the certificate chain in PEM format that was used to sign the device manufacturer certificate (IDevId). The certificate chain should include the intermediate CA certificates and the root CA certificate in the order from the closest intermediate CA leaf up to the root CA.
+In the deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain field, please provide the ECDSA certificate chain in PEM format that was used to sign the device manufacturer certificate (IDevId). The certificate chain should include the intermediate CA certificates and the root CA certificate in the order from the closest intermediate CA leaf up to the root CA.
 
 {{< /note >}}
 
@@ -240,3 +240,69 @@ deviceProvisioningService:
             clientId: "test"
             clientSecret: "test"
 ```
+
+## Test Device Provisioning Service
+
+To test the Device Provisioning Service, follow these steps:
+
+1. Generate the ECDSA root CA and intermediate CA to sign the device manufacturer certificate (IDevId). You can use tools like OpenSSL or the [cert_tool](https://github.com/plgd-dev/hub/pkgs/container/hub%2Fcert-tool). Install the cert_tool using the following command:
+
+   ```sh
+   go install github.com/plgd-dev/hub/v2/tools/cert-tool/cmd@latest
+   mv ~/go/bin/cmd ~/go/bin/cert-tool
+   ```
+
+2. Generate the ECDSA root CA with a validity of 100 years:
+
+   ```sh
+   umask 0077
+   mkdir -p "$HOME/plgd_certs"
+   cd "$HOME/plgd_certs"
+   ~/go/bin/cert-tool --cmd.generateRootCA --outCert=./root_ca.crt --outKey=./root_ca.key --cert.subject.cn=RootCA --cert.validFrom=2023-01-01T12:00:00Z --cert.validFor=876000h
+   ```
+
+3. Generate the ECDSA intermediate CA signed by the root CA with a validity of 100 years:
+
+   ```sh
+   umask 0077
+   cd "$HOME/plgd_certs"
+   ~/go/bin/cert-tool --cmd.generateIntermediateCA --signerCert=./root_ca.crt --signerKey=./root_ca.key --outCert=./intermediate_ca.crt --outKey=./intermediate_ca.key --cert.basicConstraints.maxPathLen=0 --cert.subject.cn="IntermediateCA" --cert.validFrom=2023-01-01T12:00:00Z --cert.validFor=876000h
+   ```
+
+   {{< note >}}
+
+   Set `maxPathLen` to `0` because the intermediate CA will only sign leaf certificates like the device manufacturer certificate (IDevId).
+
+   {{< /note >}}
+
+4. Set the content of `intermediate_ca.crt` to the `deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain` field.
+
+5. Generate the device manufacturer certificate (IDevId) signed by the intermediate CA with a validity of 100 years:
+
+   ```sh
+   umask 0077
+   mkdir -p "$HOME/plgd_certs/device/pki_certs"
+   cd "$HOME/plgd_certs"
+   ~/go/bin/cert-tool --cmd.generateCertificate --signerCert=./intermediate_ca.crt --signerKey=./intermediate_ca.key --outCert=./device/pki_certs/mfgcrt.pem --outKey=./device/pki_certs/mfgkey.pem --cert.subject.cn="IDevId Device01"
+   ```
+
+6. Obtain the root certificate authority that signs the device provisioning service:
+
+   ```sh
+   kubectl -n plgd get secret plgd-ca -o 'go-template={{index .data "ca.crt"}}' | base64 -d > "$HOME/plgd_certs/device/pki_certs/dpsca.pem"
+   ```
+
+7. Set the content of `intermediate_ca.crt` to the `deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain` field using the [yq](https://github.com/mikefarah/yq) tool:
+
+   ```sh
+   cd "$HOME"
+   cat ./withMock.yaml | yq -e ".deviceProvisioningService.enrollmentGroups[0].attestationMechanism.x509.certificateChain=\"$(cat ./plgd_certs/intermediate_ca.crt)\"" > ./withUpdatedMock.yaml
+   helm upgrade -i -n plgd --create-namespace -f withUpdatedMock.yaml dps plgd/plgd-dps
+   kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "dps-plgd")
+   ```
+
+8. Run the example device with the device manufacturer certificate (IDevId):
+
+   ```sh
+   docker run -it --rm -v $HOME/plgd_certs/device/pki_certs:/dps/bin/pki_certs ghcr.io/plgd-dev/device-provisioning-client/dps-cloud-server-debug:latest test-device "coaps+tcp://example.com:15684"
+   ```
