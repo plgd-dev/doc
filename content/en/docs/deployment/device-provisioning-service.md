@@ -61,7 +61,7 @@ mockoauthserver:
     useInUi: true
 ```
 
-To enable the Device Provisioning Service, the following configuration needs to extend the hub configuration:
+To allow download the Device Provisioning Service docker image by k8s, the following configuration needs to extend the configuration:
 
 ```yaml
 deviceProvisioningService:
@@ -84,7 +84,7 @@ To access ghcr.io, please reach out to us at [connect@plgd.dev](mailto:connect@p
 
 ## Configure Enrollment Groups
 
-To configure enrollment groups, you need to extend the hub configuration. In this example, the `https://example.com` is a public domain signed by the Let's Encrypt CA. The hub configuration will be used to set up the enrollment group.
+The enrollment groups can be configured via deployment, utilizing the setup from the hub configuration to populate the values.
 
 {{< note >}}
 
@@ -97,9 +97,10 @@ deviceProvisioningService:
   enrollmentGroups:
     - id: 98be12de-3991-4567-aeea-edd9a656e6df
       owner: "1" # for mockoauthserver
-      preSharedKey: "0123456789012345"
+      preSharedKey: "0123456789012345" # for the client application
       attestationMechanism:
         x509:
+          # certificate for validation the device manufacturer certificate (IDevId)
           certificateChain: |-
             -----BEGIN CERTIFICATE-----
             MIIBaDCCAQ6gAwIBAgIQM6HFZ+BMuyBspnPJEhPX9DAKBggqhkjOPQQDAjAUMRIw
@@ -115,7 +116,7 @@ deviceProvisioningService:
             scopes: ["openid"]
 ```
 
-If you are using a self-signed certificate, you need to append the custom CA to `authorizationCAPool`:
+When utilizing a PKI certificate for `example.com`, it is necessary to append the custom CA to the `authorizationCAPool`:
 
 ```yaml
 global:
@@ -130,6 +131,7 @@ deviceProvisioningService:
         certificateAuthority:
           grpc:
             tls:
+              # set CA with your custom CA configured in global.authorizationCAPool
               caPool: "/certs/extra/ca.crt"
 ```
 
@@ -167,7 +169,7 @@ helm upgrade -i -n plgd --create-namespace -f withMock.yaml hub plgd/plgd-hub
 helm upgrade -i -n plgd --create-namespace -f withMock.yaml dps plgd/plgd-dps
 ```
 
-These commands you call multiple times to update the configuration. In this case you need to restart the pods by delteing them:
+You can execute these commands multiple times to update the configuration. In such cases, you will need to restart the pods by deleting them:
 
 ```sh
 kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "hub-plgd")
