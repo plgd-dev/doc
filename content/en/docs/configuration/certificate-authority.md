@@ -87,4 +87,8 @@ Signer configuration to issue identity certificates for devices or client applic
 | `signer.expiresIn` | string | `The time up to which the certificate is valid.` |  `"87600h"` |
 | `signer.hubID` | string | `Hub ID which is stored in coap-gw certificate and it cannot be used in the common name in the CSR.` | `""` |
 
-> Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+{{< note >}}
+
+Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+
+{{< /note >}}

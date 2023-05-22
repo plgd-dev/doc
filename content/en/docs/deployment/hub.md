@@ -70,7 +70,7 @@ To use `microk8s` or a similar kubernetes system, ensure that the `ingress`, `dn
 
 {{< /note >}}
 
-Deployment of the plgd hub to the Kubernetes cluster is then initiated. Status of the deployment can be verified by calling `kubectl -n plgd get all`. When all pods are up and running, the plgd Dasboard will become available on your configured domain (e.g. `https://example.com`).
+Deployment of the plgd hub to the Kubernetes cluster is then initiated. Status of the deployment can be verified by calling `kubectl -n plgd get all`. When all pods are up and running, the plgd Dashboard will become available on your configured domain (e.g. `https://example.com`).
 
 ### NodePort for CoAP Gateway
 
@@ -90,7 +90,7 @@ This configuration should be applied only to test environment!
 
 ### Deployment with Auth0 OAuth2.0 Server
 
-Our [try.plgd.cloud](https://try.plgd.cloud) instance which is available for free uses [Auth0 Identity Provider](https://auth0.com). Example configuration enabling an integration with an external OAuth2.0 Server should contain OAuth2.0 configuration for the device as well as the dasboard. All required values are part of the `global.` index.
+Our [try.plgd.cloud](https://try.plgd.cloud) instance which is available for free uses [Auth0 Identity Provider](https://auth0.com). Example configuration enabling an integration with an external OAuth2.0 Server should contain OAuth2.0 configuration for the device as well as the Dashboard. All required values are part of the `global.` index.
 
 ```sh
 echo "global:

@@ -59,4 +59,8 @@ Signer configuration to issue ID/access tokens of OAuth provider for mock testin
 | `oauthSigner.clients[0].accessTokenLifetime` | string | `validity of generated access token lifetime. 0s means forever.` | `"0s"` |
 | `oauthSigner.clients[0].codeRestrictionLifetime` | string | `define period how long cannot be used again authorization code in exchange after first use.` | `"0s"` |
 
-> Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+{{< note >}}
+
+Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+
+{{< /note >}}
