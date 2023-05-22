@@ -34,8 +34,8 @@ global:
   oauth:
     device:
     - name: "plgd.dps"
-      clientID: my-client-id
-      clientSecret: my-client-secret
+      clientID: "<MY_CLIENT_ID>"
+      clientSecret: "<MY_CLIENT_SECRET>"
       grantType: "clientCredentials"
       scopes: ['openid']
       audience: "https://api.example.com"
@@ -88,7 +88,7 @@ The enrollment groups can be configured via deployment, utilizing the setup from
 
 {{< note >}}
 
-In the `deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain` field, provide the certificate chain in PEM format that has used to sign the device manufacturer certificate (IDevId). The certificate chain should include the root CA certificate and the intermediate CA certificates.
+In the deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain field, please provide the certificate chain in PEM format that was used to sign the device manufacturer certificate (IDevId). The certificate chain should include the intermediate CA certificates and the root CA certificate in the order from the closest intermediate CA leaf up to the root CA.
 
 {{< /note >}}
 
