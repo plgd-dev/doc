@@ -116,6 +116,16 @@ deviceProvisioningService:
             scopes: ["openid"]
 ```
 
+{{< note >}}
+
+To successfully manage the device from local network, make sure to set the `owner` field to the corresponding `SubjectId` value and configure the `preSharedKey` as `Key` in the login screen of the [plgd/client-application](../../quickstart/local-discovery.md).
+
+![Login to Client Application](../static/psk-login.png)
+
+If `preSharedKey` is not set, the device will be managed only via certificate authentication.
+
+{{< /note >}}
+
 ### Custom CA for Certificate Authority
 
 When utilizing a PKI certificate for `example.com`, it is necessary to append the custom CA to the `authorizationCAPool`:
