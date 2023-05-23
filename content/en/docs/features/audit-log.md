@@ -4,7 +4,7 @@ description: 'What is Audit Log and how does it work?'
 date: '2021-06-11'
 categories: [features]
 keywords: ['duplicated events', 'audit log', 'device twin']
-weight: 9
+weight: 90
 ---
 
 TODO

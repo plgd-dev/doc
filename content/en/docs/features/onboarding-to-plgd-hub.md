@@ -4,7 +4,7 @@ description: 'How to onboard the device to the plgd hub?'
 date: '2022-12-13'
 categories: [architecture, d2c, provisioning, onboarding]
 keywords: [architecture, d2c, provisioning, onboarding, oauth]
-weight: 2
+weight: 20
 ---
 
 Device can be remotely accessed when it's onboarded and connected to the plgd hub. The connection between the device and the hub is a secure CoAP over TCP/UDP connection. Combination of JWT token and Identity certificate guarantees zero trust security on this end-to-end integration.

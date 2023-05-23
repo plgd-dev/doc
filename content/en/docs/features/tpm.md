@@ -4,7 +4,7 @@ description: 'How TPM can enhance security with iotivity-lite?'
 date: '2023-04-28'
 categories: [features]
 keywords: [features, security, tpm]
-weight: 10
+weight: 110
 ---
 
 The TPM (Trusted Platform Module) is a microcontroller chip that provides hardware-based security for computer systems. It is used to securely store and manage cryptographic keys, including private keys for various types of certificates such as SSL/TLS certificates and IDevID certificates.

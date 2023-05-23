@@ -4,7 +4,7 @@ description: 'How to synchronize time on the device?'
 date: '2023-03-20'
 categories: [features]
 keywords: [time-synchronization, iotivity-lite, provisioning, zero-touch, TLS, NTP, GPS, time server]
-weight: 10
+weight: 100
 ---
 
 When a device experiences a disruption in power supply, such as during a power outage or when the device's motherboard clock battery fails, the time on the device can become unsynchronized. Similarly, if the battery of the device runs out of power, the time can also become desynchronized.

@@ -4,9 +4,8 @@ description: 'How keepalive works with plgd hub'
 date: '2023-01-10'
 categories: [features]
 keywords: ['keepalive', 'timeout', 'iotivity-lite', 'coap-gateway']
-weight: 4
+weight: 40
 ---
-
 
 ## Device (iotivity-lite) KeepAlive to CoAP Gateway
 
