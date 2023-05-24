@@ -1,5 +1,5 @@
 ---
-title: 'Test'
+title: 'Verify Device Onboarding'
 description: 'How to test Device Provisioning Service'
 docsOthersDisplay: true
 date: '2023-05-18'
@@ -8,7 +8,7 @@ keywords: [deployment, kubernetes, k8s, helm, chart]
 weight: 20
 ---
 
-To test the Device Provisioning Service, follow these steps:
+To verify device onboarding to the Device Provisioning Service for [Trusted Network](#onboarding-device-in-trusted-network) or [Zero Trusted Network](#onboarding-device-in-zero-trust-network) follow these steps:
 
 {{< note >}}
 
@@ -36,6 +36,8 @@ These steps will enable you to generate the necessary certificates and configure
 
 {{< /note >}}
 
+### Generate certificates
+
 1. Generate the ECDSA root CA with a validity of 100 years:
 
    ```sh
@@ -59,9 +61,7 @@ These steps will enable you to generate the necessary certificates and configure
 
    {{< /note >}}
 
-3. Set the content of `intermediate_ca.crt` to the `deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain` field.
-
-4. Generate the device manufacturer certificate (IDevId) signed by the intermediate CA with a validity of 100 years and store it in the `mfgcrt.pem` and `mfgkey.pem` files:
+3. Generate the device manufacturer certificate (IDevId) signed by the intermediate CA with a validity of 100 years and store it in the `mfgcrt.pem` and `mfgkey.pem` files:
 
    ```sh
    umask 0077
@@ -70,13 +70,7 @@ These steps will enable you to generate the necessary certificates and configure
    ~/go/bin/cert-tool --cmd.generateCertificate --signerCert=./intermediate_ca.crt --signerKey=./intermediate_ca.key --outCert=./device/pki_certs/mfgcrt.pem --outKey=./device/pki_certs/mfgkey.pem --cert.subject.cn="IDevId Device01"
    ```
 
-5. Obtain the root certificate authority that signs the device provisioning service and store it in the `dpsca.pem` file:
-
-   ```sh
-   kubectl -n plgd get secret plgd-ca -o 'go-template={{index .data "ca.crt"}}' | base64 -d > "$HOME/plgd_certs/device/pki_certs/dpsca.pem"
-   ```
-
-6. Set the content of `intermediate_ca.crt` to the `deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain` field using the [yq](https://github.com/mikefarah/yq) tool:
+4. Set the content of `intermediate_ca.crt` to the `deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain` field using the [yq](https://github.com/mikefarah/yq) tool:
 
    ```sh
    cd "$HOME"
@@ -85,8 +79,40 @@ These steps will enable you to generate the necessary certificates and configure
    kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "dps-plgd")
    ```
 
-7. Run the example device with the device manufacturer certificate (IDevId):
+Now, you can test the Device Provisioning Service with the following methods depending on the network trust level:
+
+### Onboarding device in Zero trust network
+
+In Zero trust network, device need to verify the Device Provisioning Service certificate. So, you need to obtain the root certificate authority that signs the device provisioning service and store it in the `dpsca.pem` file.
+
+1. Obtain the root certificate authority that signs the device provisioning service and store it in the `dpsca.pem` file:
+
+   ```sh
+   kubectl -n plgd get secret plgd-ca -o 'go-template={{index .data "ca.crt"}}' | base64 -d > "$HOME/plgd_certs/device/pki_certs/dpsca.pem"
+   ```
+
+2. Run the example device with the device manufacturer certificate (IDevId):
 
    ```sh
    docker run -it --rm -v $HOME/plgd_certs/device/pki_certs:/dps/bin/pki_certs ghcr.io/plgd-dev/device-provisioning-client/dps-cloud-server-debug:latest test-device "coaps+tcp://example.com:15684"
+   ```
+
+### Onboarding device in Trusted network
+
+In Trusted network device can skip validation of the Device Provisioning Service certificate. In this mode device doesn't need to obtain the root certificate authority that signs the device provisioning service.
+
+{{< note >}}
+
+   If file `$HOME/plgd_certs/device/pki_certs/dpsca.pem` exists, you can remove it with the following command:
+
+   ```sh
+   rm "$HOME/plgd_certs/device/pki_certs/dpsca.pem"
+   ```
+
+{{< /note >}}
+
+1. Run the example device with the device manufacturer certificate (IDevId):
+
+   ```sh
+   docker run -it --rm -v $HOME/plgd_certs/device/pki_certs:/dps/bin/pki_certs ghcr.io/plgd-dev/device-provisioning-client/dps-cloud-server-debug:latest test-device "coaps+tcp://example.com:15684" --no-verify-ca
    ```

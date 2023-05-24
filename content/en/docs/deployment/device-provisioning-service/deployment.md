@@ -10,7 +10,11 @@ weight: 10
 
 ![Deployment diagram](../static/dps-deployment-diagram.drawio.svg "medium-zoom-image")
 
-To enable the Device Provisioning Service, you need to extend the hub configuration.
+To deploy the Device Provisioning Service, you will need to follow the instructions outlined in the provided page to extend the hub helm configuration.
+
+{{< warning >}}
+The basic deployment uses Mock OAuth Server, so it shall be used only for test/development purposes. Use with extra care! For production, follow the instructions in [Advanced configuration](../advanced).
+{{< /warning >}}
 
 {{< note >}}
 Before deploying the Device Provisioning Service on Kubernetes, make sure to follow the steps in [Hub](../hub) first. Then apply the changes from this page to the configuration. Once done, you can deploy the hub with the Device Provisioning Service.
@@ -28,22 +32,11 @@ In this flow, the OAuth client is associated with the owner. The client must set
 
 When using the `clientCredentials` flow, you cannot use `sub` because the owner will be the OAuth client. Therefore, you need to use another claim to identify the owner. We need to override default the hub configuration's section with  new `ownerClaim`, dps and web oauth clients:
 
+For a mock OAuth2.0 server, we need to add the following values to the `mockoauthserver` section:
+
 ```yaml
 global:
   ownerClaim: "https://plgd.dev/owner" # for mockoauthserver
-  oauth:
-    device:
-    - name: "plgd.dps"
-      clientID: "<MY_CLIENT_ID>"
-      clientSecret: "<MY_CLIENT_SECRET>"
-      grantType: "clientCredentials"
-      scopes: ['openid']
-      audience: "https://api.example.com"
-```
-
-If you are using a mock OAuth2.0 server, add the following values to the `mockoauthserver` section:
-
-```yaml
 mockoauthserver:
   oauth:
   - name: "plgd.dps"
@@ -60,6 +53,12 @@ mockoauthserver:
     scopes: ['openid']
     useInUi: true
 ```
+
+{{< warning >}}
+
+For production, you need to set the OAuth server client credential flow, as is described in [Customize OAuth server client credential flow](../advanced).
+
+{{< /warning >}}
 
 To allow download the Device Provisioning Service docker image by k8s, the following configuration needs to extend the configuration:
 
@@ -86,9 +85,11 @@ To access ghcr.io, please reach out to us at [connect@plgd.dev](mailto:connect@p
 
 The enrollment groups can be configured via deployment, utilizing the setup from the hub configuration to populate the values.
 
+In the `deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain` field, please provide the ECDSA certificate chain in PEM format that was used to sign the device manufacturer certificate (IDevId). The certificate chain should include the intermediate CA certificates and the root CA certificate in the order from the closest intermediate CA leaf up to the root CA. In [verify the onboarding device](../verify-device-onboarding#generate-certificates), in step `4.` this value is set.
+
 {{< note >}}
 
-In the deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain field, please provide the ECDSA certificate chain in PEM format that was used to sign the device manufacturer certificate (IDevId). The certificate chain should include the intermediate CA certificates and the root CA certificate in the order from the closest intermediate CA leaf up to the root CA.
+More information about the enrollment group configuration can be found [here](../../../configuration/device-provisioning-service/#enrollment_groups).
 
 {{< /note >}}
 
@@ -116,7 +117,7 @@ deviceProvisioningService:
             scopes: ["openid"]
 ```
 
-{{< note >}}
+{{< tip >}}
 
 To successfully manage the device from local network, make sure to set the `owner` field to the corresponding `SubjectId` value and configure the `preSharedKey` as `Key` in the login screen of the [plgd/client-application](../../../quickstart/local-discovery).
 
@@ -124,34 +125,7 @@ To successfully manage the device from local network, make sure to set the `owne
 
 If `preSharedKey` is not set, the device will be managed only via certificate authentication.
 
-{{< /note >}}
-
-### Custom CA for Certificate Authority
-
-When utilizing a PKI certificate for `example.com`, it is necessary to append the custom CA to the `authorizationCAPool`:
-
-```yaml
-global:
-  authorizationCAPool: |-
-    ...
-    -----BEGIN CERTIFICATE-----
-    your custom authorization CA pool in PEM format
-    -----END CERTIFICATE-----
-deviceProvisioningService:
-  enrollmentGroups:
-    - hub:
-        certificateAuthority:
-          grpc:
-            tls:
-              # set CA with your custom CA configured in global.authorizationCAPool
-              caPool: "/certs/extra/ca.crt"
-```
-
-{{< note >}}
-
-More information about the enrollment group configuration can be found [here](../../../configuration/device-provisioning-service/#enrollment_groups).
-
-{{< /note >}}
+{{< /tip >}}
 
 ## NodePort for Device Provisioning Service
 
@@ -252,3 +226,7 @@ deviceProvisioningService:
             clientId: "test"
             clientSecret: "test"
 ```
+
+## Deployment to production
+
+To deploy the Device Provisioning Service to production, you need to follow [Advanced configuration](../advanced).
