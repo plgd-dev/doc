@@ -8,7 +8,7 @@ keywords: [deployment, kubernetes, k8s, helm, chart]
 weight: 10
 ---
 
-![Deployment diagram](/docs/deployment/hub/static/hub-deployment-diagram.drawio.svg "medium-zoom-image")
+![Deployment diagram](../static/hub-deployment-diagram.drawio.svg "medium-zoom-image")
 
 Quickest way how to install your own instance of the plgd hub is to use the Mock OAuth2.0 Server. With this option enabled, no authentication is available. The JWT token is automatically issued for the default user.
 
