@@ -83,7 +83,7 @@ Now, you can test the Device Provisioning Service with the following methods dep
 
 ### Onboarding device in Zero trust network
 
-In Zero trust network, device need to verify the Device Provisioning Service certificate. So, you need to obtain the root certificate authority that signs the device provisioning service and store it in the `dpsca.pem` file.
+To set up a Zero Trust network, it is essential for the device to authenticate the Device Provisioning Service certificate. Therefore, you must acquire the root certificate authority responsible for signing the device provisioning service and save it as the dpsca.pem file specifically for the example device.
 
 1. Obtain the root certificate authority that signs the device provisioning service and store it in the `dpsca.pem` file:
 
@@ -96,6 +96,14 @@ In Zero trust network, device need to verify the Device Provisioning Service cer
    ```sh
    docker run -it --rm -v $HOME/plgd_certs/device/pki_certs:/dps/bin/pki_certs ghcr.io/plgd-dev/device-provisioning-client/dps-cloud-server-debug:latest test-device "coaps+tcp://example.com:15684"
    ```
+
+{{< note >}}
+
+In a real-world scenario, as a device manufacturer, it is crucial to ship the device to customers with the RootCA (Root Certificate Authority) of the Device Provisioning Service pre-installed during manufacturing process. This ensures that the device can trust the certificates issued by the Device Provisioning Service. The RootCA should be securely embedded in the device's firmware and can only be modified through firmware updates.
+
+Additionally, as the manufacturer, you provide the customer with an Intermediate CA (Intermediate Certificate Authority) or offer a service that allows them to obtain a signed certificate for their specific device provisioning service. This Intermediate CA enables the customer to sign certificates for their devices, ensuring secure communication within their network.
+
+{{< /note >}}
 
 ### Onboarding device in Trusted network
 
@@ -116,3 +124,9 @@ In Trusted network device can skip validation of the Device Provisioning Service
    ```sh
    docker run -it --rm -v $HOME/plgd_certs/device/pki_certs:/dps/bin/pki_certs ghcr.io/plgd-dev/device-provisioning-client/dps-cloud-server-debug:latest test-device "coaps+tcp://example.com:15684" --no-verify-ca
    ```
+
+{{< warning >}}
+
+In a specific use-case, there might be a requirement to allow onboarding of devices using any vendor's Device Provisioning Service without validating the Device Provisioning Service certificate. However, it is important to note that this approach poses a significant security risk in a real-world scenario. It is essential to exercise caution and consider the potential consequences of bypassing certificate validation, as it could potentially compromise the security and integrity of the network.
+
+{{< /warning >}}

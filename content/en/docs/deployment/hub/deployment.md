@@ -13,7 +13,7 @@ weight: 10
 Quickest way how to install your own instance of the plgd hub is to use the Mock OAuth2.0 Server. With this option enabled, no authentication is available. The JWT token is automatically issued for the default user.
 
 {{< warning >}}
-Mock OAuth Server shall be used only for test/development purposes. Use with extra care! For production, follow the instructions in [Advanced configuration](../advanced).
+The Mock OAuth Server should only be utilized for **testing** and **development purposes**. Exercise additional caution when using it! For production environments, please follow the deployment instructions provided in the [Advanced Configuration](../advanced) section to ensure proper setup.
 {{< /warning >}}
 
 ```sh
@@ -51,6 +51,6 @@ coapgateway:
 This configuration should be applied only to test environment!
 {{< /warning >}}
 
-## Deployment to production
+## Deploying to Production
 
-To deploy the Device Provisioning Service to production, you need to follow [Advanced configuration](../advanced).
+In order to deploy the Device Provisioning Service to a production environment, please refer to the [Advanced Configuration](../advanced) section for detailed instructions.

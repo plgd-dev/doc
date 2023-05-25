@@ -8,7 +8,7 @@ keywords: [deployment, kubernetes, k8s, helm, chart]
 weight: 20
 ---
 
-### Deployment with Auth0 OAuth2.0 Server
+## Deployment with Auth0 OAuth2.0 Server
 
 Our [try.plgd.cloud](https://try.plgd.cloud) instance which is available for free uses [Auth0 Identity Provider](https://auth0.com). Example configuration enabling an integration with an external OAuth2.0 Server should contain OAuth2.0 configuration for the device as well as the Dashboard. All required values are part of the `global.` index.
 
@@ -38,7 +38,7 @@ oauth:
 helm upgrade -i -n plgd --create-namespace -f withMock.yaml hub plgd/plgd-hub
 ```
 
-### Custom Authorization CA pool
+## Custom Authorization CA pool
 
 By default, the plgd hub Helm chart expect that certificate used by OAuth 2.0 server is signed by the same CA as rest of certificates
 used by plgd hub services. For including custom authorization CA pool into authorization section, use following configuration attribute:
@@ -58,7 +58,7 @@ Please integrate your own PKI for signing certificates used by plgd hub services
 
 {{< /warning >}}
 
-### Using Let's encrypt certificates
+## Using Let's encrypt certificates
 
 By default, the plgd hub Helm chart issues a self-signed CA certificate, used to sign domain certificates of all exposed services. To encrypt the external communication with the certificates signed by the Let's Encrypt CAs, create an issuer:
 

@@ -110,7 +110,7 @@ Client configurations to internally connect to Identity Store service.
 ### Public Configuration
 
 These configurations are `CoAP Cloud Conf` information for device registration to plgd hub as well as root CA certificate, certificate authority address to get identity certificate for ssl connection to plgd hub before device registration.
-This will be served by HTTP Gateway API as defined [here](https://github.com/plgd-dev/hub/blob/main/http-gateway/uri/uri.go#L14) and also see [hub-configuration](https://try.plgd.cloud/.well-known/hub-configuration).
+This will be served by HTTP Gateway API as defined [here](https://github.com/plgd-dev/hub/blob/main/http-gateway/uri/uri.go#L14) and also see [hub-configuration](https://try.plgd.cloud/.well-known/configuration).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |

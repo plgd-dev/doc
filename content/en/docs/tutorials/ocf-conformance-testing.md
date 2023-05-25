@@ -89,7 +89,7 @@ The `cloudServerTrustAnchorCertificate` value should contain a correctly formatt
 "cloudServerTrustAnchorCertificate": "-----BEGIN CERTIFICATE-----\r\n ... \r\n-----END CERTIFICATE-----",
 ```
 
-The certificate can be retrieved from the plgd hub #bundle by opening `https://{FQDN}/.well-known/hub-configuration`. Copy the value of the `certificateAuthorities` property into the `cloudServerTrustAnchorCertificate` value with proper formatting.
+The certificate can be retrieved from the plgd hub #bundle by opening `https://{FQDN}/.well-known/configuration`. Copy the value of the `certificateAuthorities` property into the `cloudServerTrustAnchorCertificate` value with proper formatting.
 
 {{< warning >}}
 The certificate is regenerated whenever plgd hub #bundle is started. So if you restart your bundle instance, then you must update your PICS configuration as well.
@@ -513,7 +513,7 @@ Start the plgd hub #bundle with default configuration. Modify the PICS configura
 "cloudClientTrustAnchorCertificate: "...",
 ```
 
-For the `cloudClientTrustAnchorCertificate` use the root certificate authority certificate of the plgd hub #bundle. You can obtain the certificate by sending a `GET` request to `https://{FQDN}/.well-known/hub-configuration`. Use the `certificateAuthorities` contained in the JSON response.
+For the `cloudClientTrustAnchorCertificate` use the root certificate authority certificate of the plgd hub #bundle. You can obtain the certificate by sending a `GET` request to `https://{FQDN}/.well-known/configuration`. Use the `certificateAuthorities` contained in the JSON response.
 
 The root certificate authority can also be obtained by accessing the `data` folder of the running bundle. The certificate is stored in the `data/certs/root_ca.crt` file.
 
@@ -612,7 +612,7 @@ Next, modify the PICS configuration file to contain the following:
 "cloudClientTrustAnchorCertificate: "...",
 ```
 
-For the `cloudClientTrustAnchorCertificate` use the root certificate authority certificate of the plgd hub #bundle. You can obtain the certificate by sending a `GET` request to `https://{FQDN}/.well-known/hub-configuration`. Use the `certificateAuthorities` contained in the JSON response.
+For the `cloudClientTrustAnchorCertificate` use the root certificate authority certificate of the plgd hub #bundle. You can obtain the certificate by sending a `GET` request to `https://{FQDN}/.well-known/configuration`. Use the `certificateAuthorities` contained in the JSON response.
 
 {{< note >}}
 If you're using an older versions of the CTT see the note in [Section CT6.3.1](#ct631-c2c-origin-cloud---devices-level-events)
