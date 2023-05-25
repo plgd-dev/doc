@@ -1,5 +1,5 @@
 ---
-title: 'Overview'
+title: 'Deployment'
 description: 'Overview of plgd deployments'
 docsOthersDisplay: true
 date: '2023-05-24'

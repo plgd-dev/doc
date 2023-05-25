@@ -1,5 +1,5 @@
 ---
-title: 'Deployment'
+title: 'Device Provisioning Service'
 description: 'Running Device Provisioning Service on Kubernetes'
 docsOthersDisplay: true
 date: '2023-05-18'
