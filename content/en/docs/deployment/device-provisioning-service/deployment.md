@@ -28,11 +28,13 @@ When a device is successfully attested against an enrollment group by the Device
 
 ### Client credential flow
 
-In this flow, the OAuth client is associated with the owner. The client must set the owner claim with the owner in the JWT access token.
+In the client credential flow, the OAuth client is linked to its owner. To establish this connection, the client must include the owner's details in the JWT access token by setting the `<OWNER_CLAIM>` owner claim. This access token serves multiple purposes: as a sign-in token, an authorization code for sign-up, and a refresh token to extend the device's access to the hub.
 
-When using the `clientCredentials` flow, you cannot use `sub` because the owner will be the OAuth client. Therefore, you need to use another claim to identify the owner. We need to override default the hub configuration's section with  new `ownerClaim`, dps and web oauth clients:
+When the hub receives the access token, it extracts the owner's information from it. To obtain a new access token from the OAuth server, the hub appends the owner as query parameters, using the format `<OWNER_CLAIM>=<OWNER>`. This enables the hub to authenticate and retrieve the appropriate access token associated with the owner from the OAuth server.
 
-For a mock OAuth2.0 server, we need to add the following values to the `mockoauthserver` section:
+In the `clientCredentials` flow, you can't use the `sub` claim because the owner is the OAuth client itself. Therefore, you need to utilize another claim to identify the owner. By setting the `<OWNER_CLAIM>` to the same value in both the DPS OAuth client and the WWW OAuth client, you establish a connection between the user and their associated DPS devices. The same connection via  the `<OWNER_CLAIM>` needs to be applied to all OAuth clients used for accessing hub devices.
+
+For a mock OAuth2.0 server, we need to override default the hub configuration's section with new `<OWNER_CLAIM>`, DPS and WWW OAuth clients.
 
 ```yaml
 global:
