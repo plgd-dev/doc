@@ -7,6 +7,12 @@ keywords: [provisioning, TPM, device-twin]
 weight: 1
 ---
 
+## HTTP API
+
+The HTTP API is a RESTful API that enables users to manage the devices in the system. It provides a simple and intuitive interface for performing maintenance tasks, managing device metadata, and controlling the devices from the cloud or local network. The HTTP API is built on top of the CoAP Gateway and Resource Directory, which handle the communication with the devices.
+
+[HTTP API](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/http-gateway/swagger.yaml)
+
 ## Device Twin
 
 The device twin in IoT Hub represents the current state of each device's resource. Whenever a connected device undergoes any changes, it notifies the IoT Hub using the CoAP Gateway observations. These observations are initiated as soon as the device successfully connects and authenticates with the hub. All changes made by the device are persisted as an audit log in the EventStore. The latest version of the device twin is then made available to clients through the Resource Directory.
