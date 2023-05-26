@@ -8,16 +8,16 @@ keywords: [deployment, kubernetes, k8s, helm, chart]
 weight: 10
 ---
 
-![Deployment diagram](../static/dps-deployment-diagram.drawio.svg "medium-zoom-image")
+![Deployment diagram](/docs/deployment/device-provisioning-service/static/dps-deployment-diagram.drawio.svg "medium-zoom-image")
 
 To deploy the Device Provisioning Service, you will need to follow the instructions outlined in the provided page to extend the hub helm configuration.
 
 {{< warning >}}
-The basic deployment uses Mock OAuth Server, so it shall be used only for test/development purposes. Use with extra care! For production, follow the instructions in [Advanced configuration](../advanced).
+The basic deployment uses Mock OAuth Server, so it shall be used only for test/development purposes. Use with extra care! For production, follow the instructions in [Advanced configuration](/docs/deployment/device-provisioning-service/advanced).
 {{< /warning >}}
 
 {{< note >}}
-Before deploying the Device Provisioning Service on Kubernetes, make sure to follow the steps in [Hub](../hub) first. Then apply the changes from this page to the configuration. Once done, you can deploy the hub with the Device Provisioning Service.
+Before deploying the Device Provisioning Service on Kubernetes, make sure to follow the steps in [Hub](/docs/deployment/device-provisioning-service/hub) first. Then apply the changes from this page to the configuration. Once done, you can deploy the hub with the Device Provisioning Service.
 {{< /note >}}
 
 For Device Provisioning Service, all configuration values are documented [here](https://github.com/plgd-dev/device-provisioning-service/blob/main/charts/device-provisioning-service/README.md#values).
@@ -58,7 +58,7 @@ mockoauthserver:
 
 {{< warning >}}
 
-For production, you need to set the OAuth server client credential flow, as is described in [Customize OAuth server client credential flow](../advanced).
+For production, you need to set the OAuth server client credential flow, as is described in [Customize OAuth server client credential flow](/docs/deployment/device-provisioning-service/advanced).
 
 {{< /warning >}}
 
@@ -87,11 +87,11 @@ To access ghcr.io, please reach out to us at [connect@plgd.dev](mailto:connect@p
 
 The enrollment groups can be configured via deployment, utilizing the setup from the hub configuration to populate the values.
 
-In the `deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain` field, please provide the ECDSA certificate chain in PEM format that was used to sign the device manufacturer certificate (IDevId). The certificate chain should include the intermediate CA certificates and the root CA certificate in the order from the closest intermediate CA leaf up to the root CA. In [verify the onboarding device](../verify-device-onboarding#generate-certificates), in step `4.` this value is set.
+In the `deviceProvisioningService.enrollmentGroups[].attestationMechanism.x509.certificateChain` field, please provide the ECDSA certificate chain in PEM format that was used to sign the device manufacturer certificate (IDevId). The certificate chain should include the intermediate CA certificates and the root CA certificate in the order from the closest intermediate CA leaf up to the root CA. In [verify the onboarding device](/docs/deployment/device-provisioning-service/verify-device-onboarding#generate-certificates), in step `4.` this value is set.
 
 {{< note >}}
 
-More information about the enrollment group configuration can be found [here](../../../configuration/device-provisioning-service/#enrollment_groups).
+More information about the enrollment group configuration can be found [here](/docs/configuration/device-provisioning-service/#enrollment_groups).
 
 {{< /note >}}
 
@@ -121,9 +121,9 @@ deviceProvisioningService:
 
 {{< tip >}}
 
-To successfully manage the device from local network, make sure to set the `owner` field to the corresponding `SubjectId` value and configure the `preSharedKey` as `Key` in the login screen of the [plgd/client-application](../../../quickstart/local-discovery).
+To successfully manage the device from local network, make sure to set the `owner` field to the corresponding `SubjectId` value and configure the `preSharedKey` as `Key` in the login screen of the [plgd/client-application](/docs/quickstart/local-discovery).
 
-![Login to Client Application](../static/psk-login.png)
+![Login to Client Application](/docs/deployment/device-provisioning-service/static/psk-login.png)
 
 If `preSharedKey` is not set, the device will be managed only via certificate authentication.
 
@@ -233,4 +233,4 @@ deviceProvisioningService:
 
 ## Deployment to production
 
-To deploy the Device Provisioning Service to production, you need to follow [Advanced configuration](../advanced).
+To deploy the Device Provisioning Service to production, you need to follow [Advanced configuration](/docs/deployment/device-provisioning-service/advanced).

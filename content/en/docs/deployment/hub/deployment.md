@@ -8,12 +8,12 @@ keywords: [deployment, kubernetes, k8s, helm, chart]
 weight: 10
 ---
 
-![Deployment diagram](../static/hub-deployment-diagram.drawio.svg "medium-zoom-image")
+![Deployment diagram](/docs/deployment/hub/static/hub-deployment-diagram.drawio.svg "medium-zoom-image")
 
 Quickest way how to install your own instance of the plgd hub is to use the Mock OAuth2.0 Server. With this option enabled, no authentication is available. The JWT token is automatically issued for the default user.
 
 {{< warning >}}
-The Mock OAuth Server should only be utilized for **testing** and **development purposes**. Exercise additional caution when using it! For production environments, please follow the deployment instructions provided in the [Advanced Configuration](../advanced) section to ensure proper setup.
+The Mock OAuth Server should only be utilized for **testing** and **development purposes**. Exercise additional caution when using it! For production environments, please follow the deployment instructions provided in the [Advanced Configuration](/docs/deployment/hub/advanced) section to ensure proper setup.
 {{< /warning >}}
 
 ```sh
@@ -53,4 +53,4 @@ This configuration should be applied only to test environment!
 
 ## Deploying to Production
 
-In order to deploy the Device Provisioning Service to a production environment, please refer to the [Advanced Configuration](../advanced) section for detailed instructions.
+In order to deploy the Device Provisioning Service to a production environment, please refer to the [Advanced Configuration](/docs/deployment/hub/advanced) section for detailed instructions.

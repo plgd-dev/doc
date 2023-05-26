@@ -17,7 +17,7 @@ The Device Identity Certificate Management component handles the generation and 
 
 The TPM Integration feature facilitates the integration of Trusted Platform Modules (TPMs) into the devices. TPMs are microcontroller chips that provide hardware-based security for computer systems. This feature validates and verifies TPMs, enhancing the overall security of the devices and the system.
 
-[Learn more about TPM Integration](../tpm)
+[Learn more about TPM Integration](/docs/features/secured-onboarding-devices/tpm)
 
 ## Certificate Authority Integration
 
@@ -27,4 +27,4 @@ The Certificate Authority Integration feature enables the integration of certifi
 
 The Automatic Device Provisioning feature enables devices to be automatically provisioned into the system. It simplifies and accelerates the onboarding process by reducing manual intervention, saving time and effort. The Device Provisioning Service (DPS) is an excellent choice for various provisioning scenarios to connect and configure devices to the IoT Hub.
 
-[Learn more about Device Provisioning Service](../provisioning)
+[Learn more about Device Provisioning Service](/docs/features/secured-onboarding-devices/provisioning)

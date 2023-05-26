@@ -15,7 +15,7 @@ The CoAP gateway acts as a CoAP Client, communicating with IoT devices, which se
 - [Authenticate and authorize requests (see 5.5.5)](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=15) from the device in conjunction with an OAuth2.0 Server
 - Process device CRUDN operations which are by their nature forwarded to the [Resource Aggregate](#resource-aggregate) or [Resource Directory](#resource-directory)
 
-![L3](../static/component-coapgateway.svg "medium-zoom-image")
+![L3](/docs/architecture/static/component-coapgateway.svg "medium-zoom-image")
 
 ### Operational flow
 
@@ -237,7 +237,7 @@ It's worth noting that during the reconnect process, the device's CPU may be hea
 
 ##### Retry mechanism
 
-The system's retry mechanism works by trying to establish a connection at set time intervals. These intervals are 2, 4, 8, 16, 32, and 64 seconds. If all the attempts fail, the device restarts the process from the beginning. When a connection is successfully established, the retry mechanism is reset and the connection is maintained using the [keep-alive mechanism](/features/monitoring-and-diagnostic/keepalive).
+The system's retry mechanism works by trying to establish a connection at set time intervals. These intervals are 2, 4, 8, 16, 32, and 64 seconds. If all the attempts fail, the device restarts the process from the beginning. When a connection is successfully established, the retry mechanism is reset and the connection is maintained using the [keep-alive mechanism](/docs/features/monitoring-and-diagnostics/keepalive).
 
 ##### Establishing a TLS Connection
 
@@ -328,11 +328,11 @@ D -> D: Cleanup cloud configuration
 
 ## gRPC Gateway
 
-![L3](../static/component-grpcgateway.svg "medium-zoom-image")
+![L3](/docs/architecture/static/component-grpcgateway.svg "medium-zoom-image")
 
 ## HTTP Gateway
 
-![L3](../static/component-httpgateway.svg "medium-zoom-image")
+![L3](/docs/architecture/static/component-httpgateway.svg "medium-zoom-image")
 
 ## Resource Aggregate
 
@@ -425,22 +425,22 @@ Aggregate -down-> (DeviceMetadataSnapshotTaken)
 More detailed flows on which commands trigger which events can be found in the [commands proto file](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/pb/commands.proto).
 {{< /note >}}
 
-![L3](../static/component-resourceaggregate.svg "medium-zoom-image")
+![L3](/docs/architecture/static/component-resourceaggregate.svg "medium-zoom-image")
 
 ## Resource Directory
 
-![L3](../static/component-resourcedirectory.svg "medium-zoom-image")
+![L3](/docs/architecture/static/component-resourcedirectory.svg "medium-zoom-image")
 
 ## Device
 
-![L3](../static/component-device.svg "medium-zoom-image")
+![L3](/docs/architecture/static/component-device.svg "medium-zoom-image")
 
 ## Client
 
 WIP
 [8.1.2.2 OCF Cloud User Authorization of Mediator](https://openconnectivity.org/specs/OCF_Device_To_Cloud_Services_Specification_v2.2.1.pdf#page=31)
 
-![L3](../static/component-clients.svg "medium-zoom-image")
+![L3](/docs/architecture/static/component-clients.svg "medium-zoom-image")
 
 ## Event Bus
 

@@ -24,12 +24,12 @@ With the default configuration, the plgd d2d client provisions the device with t
 
 ### Own device
 
-Part of the device ownership transfer is the credentials provisioning. As you know from the [d2d client initialization](../client-initialization), there are more options, depending on your setup, on how to request and provision credentials. The same requirements and flow applies also for device credential provisioning.
+Part of the device ownership transfer is the credentials provisioning. As you know from the [d2d client initialization](/docs/device-to-device-client/client-initialization), there are more options, depending on your setup, on how to request and provision credentials. The same requirements and flow applies also for device credential provisioning.
 
 #### Devices and single client
 
 {{% note %}}
-More on this deployment option [here](../client-initialization/#devices-and-single-client).
+More on this deployment option [here](/docs/device-to-device-client/client-initialization/#devices-and-single-client).
 {{% /note %}}
 
 The pre-shared key is setup on the device by the D2D client service.
@@ -56,7 +56,7 @@ return Device owned
 #### Client requests the identity certificate on its own
 
 {{% note %}}
-More on this deployment option [here](../client-initialization/#devices-plgd-hub-and-1n-clients).
+More on this deployment option [here](/docs/device-to-device-client/client-initialization/#devices-plgd-hub-and-1n-clients).
 {{% /note %}}
 
 The d2d client service requests the identity certificate from the plgd Certificate Authority for the device on its own.
@@ -93,7 +93,7 @@ deactivate C
 #### User agent mediates CSR from the client
 
 {{% note %}}
-More on this deployment option [here](../client-initialization/#devices-plgd-hub-and-1n-clients).
+More on this deployment option [here](/docs/device-to-device-client/client-initialization/#devices-plgd-hub-and-1n-clients).
 {{% /note %}}
 
 The d2d client service is unable to reach the plgd Certificate Authority service. Therefore the plgd d2d web app gets the Identity CSR from the d2d client service and requests the certificate from the plgd Certificate Authority on its own, which is then sent back to the d2d client service. The web app is in the mediator role, assuming the PC where it's loaded has access to both, plgd hub as well as to the d2d client service.

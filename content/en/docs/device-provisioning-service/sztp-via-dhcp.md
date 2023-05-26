@@ -224,7 +224,7 @@ With these configuration changes in place, the device should be able to obtain t
 
 ### Connect with client library
 
-When the DHCP client leases file is updated with a new vendor-encapsulated-options, the [client library](../client-library) needs to be notified of the update. To accomplish this on Linux, `inotify` can be used to watch the leases file and notify the client library about the new configuration, or the client library can periodically pull the configuration from the leases file.
+When the DHCP client leases file is updated with a new vendor-encapsulated-options, the [client library](/docs/device-provisioning-service/client-library) needs to be notified of the update. To accomplish this on Linux, `inotify` can be used to watch the leases file and notify the client library about the new configuration, or the client library can periodically pull the configuration from the leases file.
 
 Once the new vendor-encapsulated-options parsed from the leases file, it can be set to the client library.
 Similar function need to be called for the changes to take effect:

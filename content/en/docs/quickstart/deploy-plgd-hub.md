@@ -9,7 +9,7 @@ keywords: ['quickstart', 'bundle', 'deployment', 'd2c']
 weight: 3
 ---
 
-There are multiple ways how to start using / testing the plgd hub on your own infrastructure. If you're just trying to get in touch with this IoT framework, go back to [Control device remotely](../remote-access) tutorial and use our free [try.plgd.cloud](https://tryplgd.cloud) instance. In case you want to **get in touch** with the system localy and you have the [Docker installed](https://docs.docker.com/get-docker/), use our [plgd hub #Bundle](#plgd-bundle).
+There are multiple ways how to start using / testing the plgd hub on your own infrastructure. If you're just trying to get in touch with this IoT framework, go back to [Control device remotely](/docs/quickstart/remote-access) tutorial and use our free [try.plgd.cloud](https://tryplgd.cloud) instance. In case you want to **get in touch** with the system localy and you have the [Docker installed](https://docs.docker.com/get-docker/), use our [plgd hub #Bundle](#plgd-bundle).
 
 ## Kubernetes
 
@@ -19,7 +19,7 @@ To read more on how to deploy plgd hub to Kubernetes using helm chart, continue 
 
 ## plgd Bundle
 
-Bundle deployment hosts core plgd hub services with mocked OAuth Server in a single Docker image. All services which hosts the gRPC or HTTP API are proxied through the NGINX with configurable `NGINX_PORT` and `FQDN`. Client application used in the [Control device remotely](../remote-access) works also with the bundle.
+Bundle deployment hosts core plgd hub services with mocked OAuth Server in a single Docker image. All services which hosts the gRPC or HTTP API are proxied through the NGINX with configurable `NGINX_PORT` and `FQDN`. Client application used in the [Control device remotely](/docs/quickstart/remote-access) works also with the bundle.
 
 {{< warning >}}
 Bundle version of plgd services should be used only for simple testing and development purposes. Performance evaluations, production environment or other sensitive deployments should deploy plgd services using the plgd HELM chart.

@@ -11,7 +11,7 @@ Various failures can occur as a DPS device is running. Some failures are recover
 
 The mechanism is illustrated by the following diagram:
 
-![Retry mechanism](../static/retry-mechanism.drawio.svg)
+![Retry mechanism](/docs/device-provisioning-service/static/retry-mechanism.drawio.svg)
 
 The used retry interval is determined by the retry counter and the retry configuration. Internally, DPS client library uses a counter to keep track of the number of retries and timeouts.
 

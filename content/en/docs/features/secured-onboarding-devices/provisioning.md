@@ -47,4 +47,4 @@ In a Zero Trust Environment, the Device Provisioning Service Certificate is avai
 
 DPS includes the ability to synchronize device time according to the Device Provisioning Service. This feature ensures accurate timekeeping across connected devices, aiding in synchronization and data analysis.
 
-[Learn more about Time Synchronization](../time-synchronization)
+[Learn more about Time Synchronization](/docs/features/secured-onboarding-devices/time-synchronization)
