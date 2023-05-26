@@ -45,10 +45,10 @@ plgd/plgd-hub   2.7.15          2.7.15          A Helm chart for plgd-hub
 
 Hub Deployment focuses on deploying the plgd hub, which serves as a central management system for your devices. By utilizing HTTP, gRPC, and Cloud2Cloud API, you can effectively control and interact with your devices. The documentation offers detailed instructions and information to guide you through the hub deployment process.
 
-[Learn more about Hub deployment](../hub/)
+[Learn more about Hub deployment](./../hub/)
 
 ### Device Provisioning Service deployment
 
 Device Provisioning Service Deployment extends the capabilities of the hub deployment by introducing the Device Provisioning Service. This service enables you to onboard devices to the hub seamlessly, eliminating the need for manual intervention. The documentation outlines the steps and resources required for deploying the Device Provisioning Service.
 
-[Learn more about Device Provisioning Service deployment](../device-provisioning-service/)
+[Learn more about Device Provisioning Service deployment](./../device-provisioning-service/)

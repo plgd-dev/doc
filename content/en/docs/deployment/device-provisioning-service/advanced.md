@@ -104,6 +104,8 @@ global:
     web:
       clientID: "<MY_WWW_CLIENT_ID>"
       audience: "https://example.com"
+mockoauthserver:
+  enabled: false
 deviceProvisioningService:
   enrollmentGroups:
   - owner: "<OWNER>"
@@ -119,7 +121,7 @@ deviceProvisioningService:
 
 Make sure to replace `<KEYCLOAK_REALM_ADDRESS>`, `<MY_CLIENT_SECRET>`, `<OWNER_CLAIM>`, `<OWNER>`, `<MY_DPS_CLIENT_ID>`, and `<MY_DPS_CLIENT_SECRET>` with the appropriate values for your setup.
 
-To apply the modifications, please follow the instructions provided in the [Deploy the hub with Device Provisioning Service](../deployment.md#deploy-the-hub-with-device-provisioning-service) document.
+To apply the modifications, please follow the instructions provided in the [Deploy the hub with Device Provisioning Service](../deployment.md#deploy-the-hub-with-device-provisioning-service).
 
 ## Customize client certificates for DPS
 
