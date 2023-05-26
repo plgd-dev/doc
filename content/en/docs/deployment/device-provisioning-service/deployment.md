@@ -164,6 +164,8 @@ kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "hub-plgd")
 kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "dps-plgd")
 ```
 
+## Final configuration with mock oauth server
+
 The final configuration with mock oauth server should look like this:
 
 ```yaml

@@ -52,23 +52,20 @@ In the process of acquiring an device access token from the OAuth server, the De
      - Access Type: confidential
      - Service Accounts Enabled: On
      - Authorization Enabled: On
-     - OpenID Connect Compatibility Modes:
-       - Use Refresh Tokens: On
 
    - Credentials:
      - Client Authenticator: Client Id and Secret
      - Secret: `<MY_DPS_CLIENT_SECRET>`
 
    - Mapper:
-     - Create a custom owner id:
+     - Create a custom `Hardcoded claim` mapper:
        - Token Claim Name: `<OWNER_CLAIM>`
        - Claim value: `<OWNER>`
        - Claim JSON Type: String
-       - Add to ID token: On
        - Add to access token: On
        - Add to userinfo: On
 
-2. Create a WWW OAuth client with a mapper that adds the `<OWNER_CLAIM>` claim to the user JWT token. You can use the `user-property` mapper with the following configuration to map the `id` property to the `<OWNER_CLAIM>` claim:
+2. Create a WWW OAuth client with a mapper that adds the `<OWNER_CLAIM>` claim to the user JWT token. You can use the `User Property` mapper with the following configuration to map the `id` property to the `<OWNER_CLAIM>` claim:
 
    - Settings:
      - Enabled: On
@@ -93,6 +90,7 @@ In the helm chart, add the following configuration:
 ```yaml
 global:
   ownerClaim: `<OWNER_CLAIM>`
+  authority: `<KEYCLOAK_REALM_ADDRESS>`
   oauth:
     device:
     ...
@@ -119,7 +117,9 @@ deviceProvisioningService:
           scopes: ["openid"]
 ```
 
-Make sure to replace `<MY_CLIENT_SECRET>`, `<OWNER_CLAIM>`, `<OWNER>`, `<MY_DPS_CLIENT_ID>`, and `<MY_DPS_CLIENT_SECRET>` with the appropriate values for your setup.
+Make sure to replace `<KEYCLOAK_REALM_ADDRESS>`, `<MY_CLIENT_SECRET>`, `<OWNER_CLAIM>`, `<OWNER>`, `<MY_DPS_CLIENT_ID>`, and `<MY_DPS_CLIENT_SECRET>` with the appropriate values for your setup.
+
+To apply the modifications, please follow the instructions provided in the [Deploy the hub with Device Provisioning Service](../deployment.md#deploy-the-hub-with-device-provisioning-service) document.
 
 ## Customize client certificates for DPS
 
