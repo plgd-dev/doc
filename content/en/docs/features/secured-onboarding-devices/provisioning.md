@@ -9,7 +9,7 @@ weight: 10
 
 The Device Provisioning Service (DPS) is a versatile solution that enables seamless device connectivity and configuration to IoT Hub. It offers a range of provisioning scenarios, making it an excellent choice for various use cases. Some key features of DPS include:
 
-[Learn more about Device Provisioning Service](/device-provisioning-service)
+[Learn more about Device Provisioning Service](/docs/device-provisioning-service)
 
 ## Zero-touch Provisioning
 
@@ -47,4 +47,4 @@ In a Zero Trust Environment, the Device Provisioning Service Certificate is avai
 
 DPS includes the ability to synchronize device time according to the Device Provisioning Service. This feature ensures accurate timekeeping across connected devices, aiding in synchronization and data analysis.
 
-[Learn more about Time Synchronization](/docs/features/secured-onboarding-devices/time-synchronization)
+[Learn more about Time Synchronization](/docs/device-provisioning-service/time-synchronization)
