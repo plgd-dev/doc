@@ -237,7 +237,7 @@ It's worth noting that during the reconnect process, the device's CPU may be hea
 
 ##### Retry mechanism
 
-The system's retry mechanism works by trying to establish a connection at set time intervals. These intervals are 2, 4, 8, 16, 32, and 64 seconds. If all the attempts fail, the device restarts the process from the beginning. When a connection is successfully established, the retry mechanism is reset and the connection is maintained using the [keep-alive mechanism](../../features/keepalive).
+The system's retry mechanism works by trying to establish a connection at set time intervals. These intervals are 2, 4, 8, 16, 32, and 64 seconds. If all the attempts fail, the device restarts the process from the beginning. When a connection is successfully established, the retry mechanism is reset and the connection is maintained using the [keep-alive mechanism](/features/monitoring-and-diagnostic/keepalive).
 
 ##### Establishing a TLS Connection
 
