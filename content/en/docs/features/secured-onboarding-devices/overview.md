@@ -27,4 +27,4 @@ The Certificate Authority Integration feature enables the integration of certifi
 
 The Automatic Device Provisioning feature enables devices to be automatically provisioned into the system. It simplifies and accelerates the onboarding process by reducing manual intervention, saving time and effort. The Device Provisioning Service (DPS) is an excellent choice for various provisioning scenarios to connect and configure devices to the IoT Hub.
 
-[Learn more about Device Provisioning Service](/docs/features/secured-onboarding-devices/provisioning)
+[Learn more about Device Provisioning Service](/docs/device-provisioning-service/)

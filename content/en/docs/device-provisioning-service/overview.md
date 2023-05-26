@@ -11,13 +11,14 @@ Provisioning millions of devices in a secure and scalable manner without requiri
 
 ## When to use Device Provisioning Service
 
-plgd ecosystem supports [various provisioning scenarios](https://plgd.dev/features/provisioning/), including Zero-touch provisioning handled by the DPS. It's your perfect choice when you try to solve:
+plgd ecosystem supports various provisioning scenarios, including Zero-touch provisioning handled by the DPS. It's your perfect choice when you try to solve:
 
 - Provision huge number of devices without hard-coding plgd hub connection
 - Distribute devices across different plgd hub instances based on custom identifier (e.g. serial number)
 - Distribute devices to customer specific environments while securing the communication using customer's custom certificate
 - Distribute devices based on a use-case to support solution isolation use-cases
 - Drive custom ACL and Identity Certificate for devices based on a security requirements or use-cases
+- Reprovision the device when it is not able to connect to the plgd hub
 - Blacklist devices which were compromised, discontinued, ...
 - Certificate rotation
 - ... and more
