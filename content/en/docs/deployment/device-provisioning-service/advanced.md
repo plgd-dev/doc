@@ -54,11 +54,11 @@ In the process of acquiring an device access token from the OAuth server, the De
      - Authorization Enabled: On
      - OpenID Connect Compatibility Modes:
        - Use Refresh Tokens: On
-  
+
    - Credentials:
      - Client Authenticator: Client Id and Secret
      - Secret: `<MY_DPS_CLIENT_SECRET>`
-  
+
    - Mapper:
      - Create a custom owner id:
        - Token Claim Name: `<OWNER_CLAIM>`

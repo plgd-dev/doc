@@ -7,14 +7,20 @@ keywords: [provisioning, TPM, device-twin]
 weight: 1
 ---
 
-## [Device Twin](../device-twin)
+## Device Twin
 
 The device twin in Device Hub represents the current state of each device's resource. Whenever a connected device undergoes any changes, it notifies the Device Hub using the CoAP Gateway observations. These observations are initiated as soon as the device successfully connects and authenticates with the hub. All changes made by the device are persisted as an audit log in the EventStore. The latest version of the device twin is then made available to clients through the Resource Directory.
 
-## [JetStream as an EventBus](../jetstream)
+[Learn more about Device Twin](../device-twin)
+
+## JetStream as an EventBus
 
 By default, Device Hub services utilize NATS as an EventBus and MongoDB as an EventStore. However, there are certain use-cases that require direct subscription to the internal messaging system rather than communicating through the Device Hub gateways. To simplify data reconciliation and allow for easier scaling of consumers, Device Hub supports an alternative EventBus called JetStream. JetStream is built on top of NATS and persists all published events. By leveraging JetStream as an EventBus, users gain the ability to access older, as-yet-unprocessed messages without directly accessing the EventStore.
 
-## [Pending Commands](../pending-commands)
+[Learn more about JetStream as an EventBus](../jetstream)
+
+## Pending Commands
 
 Each command issued is converted into an event and placed in a pending state, awaiting processing by one of the gateways (primarily the CoAP Gateway). When a pending event is processed by a gateway, it triggers the execution of a confirmation command, which in turn is converted into a confirmation event. If a device is offline, the event remains in a pending state until it can be processed. To limit the waiting time, a `time_to_live` parameter can be set for each command, specifying its expiration. Once an event expires, the hub no longer processes it. It is also possible to cancel a resource command, resulting in a confirmation event with the status set to `Canceled`. However, if a cancellation command is issued after confirmation, the cancellation fails. If a pending command expires or is canceled before the confirmation command is executed, the confirmation command fails.
+
+[Learn more about Pending Commands](../pending-commands)

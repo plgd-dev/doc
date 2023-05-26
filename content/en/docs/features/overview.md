@@ -1,5 +1,5 @@
 ---
-title: 'Overview'
+title: 'Features'
 description: 'What are the features of plgd system?'
 date: '2023-05-23'
 categories: [zero-touch, provisioning. features]
