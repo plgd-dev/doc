@@ -1,4 +1,4 @@
 ---
-title: 'Device Hub'
+title: 'IoT Hub'
 weight: 10
 ---

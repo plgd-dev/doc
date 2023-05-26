@@ -1,6 +1,6 @@
 ---
 title: 'Advanced Configuration'
-description: 'How to customize the Device Hub deployment'
+description: 'How to customize the IoT Hub deployment'
 docsOthersDisplay: true
 date: '2021-11-01'
 categories: [deployment, kubernetes]

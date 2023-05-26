@@ -9,13 +9,13 @@ weight: 1
 
 ## Device Twin
 
-The device twin in Device Hub represents the current state of each device's resource. Whenever a connected device undergoes any changes, it notifies the Device Hub using the CoAP Gateway observations. These observations are initiated as soon as the device successfully connects and authenticates with the hub. All changes made by the device are persisted as an audit log in the EventStore. The latest version of the device twin is then made available to clients through the Resource Directory.
+The device twin in IoT Hub represents the current state of each device's resource. Whenever a connected device undergoes any changes, it notifies the IoT Hub using the CoAP Gateway observations. These observations are initiated as soon as the device successfully connects and authenticates with the hub. All changes made by the device are persisted as an audit log in the EventStore. The latest version of the device twin is then made available to clients through the Resource Directory.
 
 [Learn more about Device Twin](../device-twin)
 
 ## JetStream as an EventBus
 
-By default, Device Hub services utilize NATS as an EventBus and MongoDB as an EventStore. However, there are certain use-cases that require direct subscription to the internal messaging system rather than communicating through the Device Hub gateways. To simplify data reconciliation and allow for easier scaling of consumers, Device Hub supports an alternative EventBus called JetStream. JetStream is built on top of NATS and persists all published events. By leveraging JetStream as an EventBus, users gain the ability to access older, as-yet-unprocessed messages without directly accessing the EventStore.
+By default, IoT Hub services utilize NATS as an EventBus and MongoDB as an EventStore. However, there are certain use-cases that require direct subscription to the internal messaging system rather than communicating through the IoT Hub gateways. To simplify data reconciliation and allow for easier scaling of consumers, IoT Hub supports an alternative EventBus called JetStream. JetStream is built on top of NATS and persists all published events. By leveraging JetStream as an EventBus, users gain the ability to access older, as-yet-unprocessed messages without directly accessing the EventStore.
 
 [Learn more about JetStream as an EventBus](../jetstream)
 

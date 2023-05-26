@@ -29,6 +29,8 @@ The File-based Root Certificate feature enables the system to use a file-based a
 
 The TPM Integration feature facilitates the integration of Trusted Platform Modules (TPMs) into the devices. TPMs are microcontroller chips that provide hardware-based security for computer systems. This feature validates and verifies TPMs, enhancing the overall security of the devices and the system.
 
+[Learn more about TPM Integration](../tpm)
+
 ## Certificate Authority Integration
 
 The Certificate Authority Integration feature enables the integration of certificate authorities (CAs) into the system. It ensures the validation and verification of certificates issued by trusted CAs, further enhancing the security and trustworthiness of the system.
@@ -47,24 +49,7 @@ In a Trusted Environment, there is no Device Provisioning Service Certificate re
 
 ## Automatic Device Provisioning
 
-The Automatic Device Provisioning feature enables devices to be automatically provisioned into the system. It simplifies and accelerates the onboarding process by reducing manual intervention, saving time and effort. The Device Provisioning Service (DPS) is an excellent choice for various provisioning scenarios to connect and configure devices to the IoT Hub. These scenarios include:
+The Automatic Device Provisioning feature enables devices to be automatically provisioned into the system. It simplifies and accelerates the onboarding process by reducing manual intervention, saving time and effort. The Device Provisioning Service (DPS) is an excellent choice for various provisioning scenarios to connect and configure devices to the IoT Hub. 
 
-- Zero-touch provisioning to a single IoT solution without hardcoding IoT Hub connection information at the factory (initial setup).
-- Load-balancing devices across multiple hubs.
-- Connecting devices to their owner's IoT solution based on sales transaction data (multitenancy).
-- Connecting devices to a particular IoT solution depending on the use-case (solution isolation).
-- Connecting a device to the IoT hub with the lowest latency (geo-sharding).
-- Reprovisioning based on a change in the device.
-- Rolling the keys used by the device to connect to IoT Hub (when not using X.509 certificates to connect).
+[Learn more about Automatic Device Provisioning](../provisioning)
 
-### Time Service
-
-The Time Service feature automatically sets the device time during onboarding and device connection reestablishment. It ensures accurate and synchronized timekeeping across devices, improving system functionality. Proper time synchronization is crucial for secure communication, especially during TLS certificate verification.
-
-### Configure access from local network
-
-The Configure access from local network feature allows users to access devices directly from their local network. It enables convenient maintenance tasks and device management within the system.
-
-## Onboarding to plgd hub
-
-Devices can be remotely accessed when they are onboarded and connected to the plgd hub. The connection between the device and the hub is a secure CoAP (Constrained Application Protocol) over TCP/UDP connection. The combination of JWT (JSON Web Token) token and Identity certificate guarantees a zero trust security approach in the end-to-end integration.
