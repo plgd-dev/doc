@@ -6,6 +6,7 @@ date: '2023-05-24'
 categories: [deployment, kubernetes]
 keywords: [deployment, kubernetes, k8s, helm, chart]
 weight: 1
+hiddenInMenu: true
 ---
 
 In this section, you can find several examples of how to deploy plgd hub with external OAuth2.0 Server or with mocked one for development purposes.

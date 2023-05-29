@@ -6,6 +6,7 @@ date: '2021-11-01'
 categories: [deployment, kubernetes]
 keywords: [deployment, kubernetes, k8s, helm, chart]
 weight: 10
+hiddenInMenu: true
 ---
 
 ![Deployment diagram](/docs/deployment/hub/static/hub-deployment-diagram.drawio.svg "medium-zoom-image")
