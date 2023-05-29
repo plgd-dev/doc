@@ -6,7 +6,7 @@ date: '2023-05-18'
 categories: [deployment, kubernetes]
 keywords: [deployment, kubernetes, k8s, helm, chart]
 weight: 10
-hiddenInMenu: true
+isMainSectionPage: true
 ---
 
 ![Deployment diagram](/docs/deployment/device-provisioning-service/static/dps-deployment-diagram.drawio.svg "medium-zoom-image")
