@@ -5,6 +5,7 @@ date: '2023-05-23'
 categories: [zero-touch, provisioning. features]
 keywords: [provisioning, TPM, device-twin]
 weight: 1
+hiddenInMenu: true
 ---
 
 ## Audit Log

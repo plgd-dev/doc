@@ -5,6 +5,7 @@ date: '2023-05-23'
 categories: [zero-touch, provisioning. features]
 keywords: [provisioning, TPM, device-twin]
 weight: 1
+hiddenInMenu: true
 ---
 
 The Secured Onboarding of Devices feature in the plgd system ensures a secure and reliable procedure for incorporating devices into the system. It encompasses various tasks such as managing device identity certificates, integrating with root certification authorities, and generating per device chain of trust certificates. The system relies on X.509 certificates for device identity and authentication purposes, following the [OCF specifications](https://openconnectivity.org/developer/specifications/).
