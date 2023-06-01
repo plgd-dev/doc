@@ -24,7 +24,7 @@ The HTTP API is a RESTful API that allows users to manage devices in the system.
 
 The GRPC API is a protocol buffer-based API that enables users to manage devices in the system. It offers a simple and intuitive interface for performing maintenance tasks, managing device metadata, and controlling devices from the cloud or local network. The GRPC API is also built on top of the CoAP Gateway and Resource Directory.
 
-[Link to GRPC API Documentation](https://htmlpreview.github.io/?https://github.com/plgd-dev/hub/blob/jkralik/feature/doc-protobufs/grpc-gateway/pb/doc.html#grpcgateway.pb.GrpcGateway)
+[Link to GRPC API Documentation](https://htmlpreview.github.io/?https://github.com/plgd-dev/hub/blob/main/grpc-gateway/pb/doc.html#grpcgateway.pb.GrpcGateway)
 
 ### Device Twin
 
