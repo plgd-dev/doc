@@ -30,7 +30,7 @@ helm upgrade -i -n plgd --create-namespace -f withMock.yaml hub plgd/plgd-hub
 
 {{< note >}}
 
-To use `microk8s` or a similar kubernetes system, ensure that the `ingress`, `dns`, and `storage` addons are enabled. Additionally, configure your Kubernetes cluster to resolve the private domain `*.example.com` through the designated DNS server. For microk8s, use [microk8s enable dns:{DNS_SERVER}](https://microk8s.io/docs/addon-dns) to set up the DNS server.
+To use `microk8s` or a similar kubernetes system, ensure that the `ingress`, `dns`, and `storage` add-ons are enabled. Additionally, configure your Kubernetes cluster to resolve the private domain `*.example.com` through the designated DNS server. For microk8s, use [microk8s enable dns:{DNS_SERVER}](https://microk8s.io/docs/addon-dns) to set up the DNS server.
 
 {{< /note >}}
 
@@ -38,8 +38,7 @@ Deployment of the plgd hub to the Kubernetes cluster is then initiated. Status o
 
 ## NodePort for CoAP Gateway
 
-In case you install plgd hub into [microk8s.io/](https://microk8s.io/), it's required to enable also
-nodePort for the CoAP Gateway Service and extend the port range of the K8S API Server. To extend the port range, add `--service-node-port-range=5683-32767` to `/var/snap/microk8s/current/args/kube-apiserver`. For the CoAP Gateway Service, apply following values:
+If you install the plgd hub into [microk8s.io/](https://microk8s.io/), it is also required to enable nodePort for the CoAP Gateway Service and extend the port range of the K8S API Server. To extend the port range, add `--service-node-port-range=5683-32767` to `/var/snap/microk8s/current/args/kube-apiserver`. For the CoAP Gateway Service, apply following values:
 
 ```yaml
 coapgateway:
@@ -49,7 +48,7 @@ coapgateway:
 ```
 
 {{< warning >}}
-This configuration should be applied only to test environment!
+This configuration should only be applied in a test environment!
 {{< /warning >}}
 
 ## Deploying to Production

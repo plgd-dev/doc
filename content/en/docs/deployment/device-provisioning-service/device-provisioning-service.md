@@ -146,7 +146,7 @@ The port is set to `15684` because the default port `5684` is already used by th
 {{< /note >}}
 
 {{< warning >}}
-This configuration should be applied only to test environment!
+This configuration should only be applied in a test environment!
 {{< /warning >}}
 
 ## Deploy the hub with Device Provisioning Service

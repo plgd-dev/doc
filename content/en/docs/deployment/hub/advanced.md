@@ -96,5 +96,15 @@ global:
 
 ## Troubleshooting
 
-- plgd Dashboard returns "unable to fetch data from from the ./well-known endpoint" error
-- Not trusted self-signed certificate is used. Import of plgd CA to your system is required. Get the public key by calling `kubectl -n plgd get secret plgd-ca -o 'go-template={{index .data "ca.crt"}}' | base64 -d`.
+### Issue: Unable to fetch data from the ./well-known endpoint in browser
+
+If you encounter the error message `unable to fetch data from the ./well-known endpoint` when using the plgd Dashboard, it is likely due to the usage of a self-signed certificate that is not trusted. To resolve this issue, you need to import the plgd certificate authority (CA) into your system. Follow the steps below to obtain the public key:
+
+1. Open a terminal or command prompt.
+2. Execute the following command:
+
+   ```sh
+   kubectl -n plgd get secret plgd-ca -o 'go-template={{index .data "ca.crt"}}' | base64 -d.
+   ```
+
+By running this command, you will retrieve the plgd CA's public key.

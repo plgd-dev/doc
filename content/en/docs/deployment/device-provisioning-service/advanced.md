@@ -40,7 +40,7 @@ At the end of the integration process, you will establish a connection between t
 
 To create a custom mapper, you can define a specific logic that sets the `<OWNER_CLAIM>` to the appropriate value for your requirements. This allows you to tailor the association between the user and the OAuth DPS client according to your specific needs.
 
-In the process of acquiring an device access token from the OAuth server, the Device Provisioning Service incorporates a query parameter in the request called `<OWNER_CLAIM>=<OWNER>`. This parameter specifies the desired `<OWNER_CLAIM>` value to be associated with the access token.
+In the process of acquiring a device access token from the OAuth server, the Device Provisioning Service incorporates a query parameter in the request called `<OWNER_CLAIM>=<OWNER>`. This parameter specifies the desired `<OWNER_CLAIM>` value to be associated with the access token.
 
 {{< /note >}}
 
@@ -119,7 +119,7 @@ deviceProvisioningService:
           scopes: ["openid"]
 ```
 
-Make sure to replace `<KEYCLOAK_REALM_ADDRESS>`, `<MY_CLIENT_SECRET>`, `<OWNER_CLAIM>`, `<OWNER>`, `<MY_DPS_CLIENT_ID>`, and `<MY_DPS_CLIENT_SECRET>` with the appropriate values for your setup.
+Make sure to replace `<KEYCLOAK_REALM_ADDRESS>`, `<OWNER_CLAIM>`, `<OWNER>`, `<MY_DPS_CLIENT_ID>`, and `<MY_DPS_CLIENT_SECRET>` with the appropriate values for your setup.
 
 To apply the modifications, please follow the instructions provided in the [Deploy the hub with Device Provisioning Service](/docs/deployment/device-provisioning-service/deployment#deploy-the-hub-with-device-provisioning-service).
 
