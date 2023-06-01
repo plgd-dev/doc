@@ -80,9 +80,11 @@ OAuth2.0 Client is used to issuing an authorization code used by the Onboarding 
 | `apis.coap.authorization.providers[].http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.coap.authorization.providers[].http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
 
-::: tip Audience
+{{< tip >}}
+
 You might have one client, but multiple APIs in the OAuth system. What you want to prevent is to be able to contact all the APIs of your system with one token. This audience allows you to request the token for a specific API. If you configure it to myplgdc2c.api in the Auth0, you have to set it here if you want to also validate it.
-:::
+
+{{< /tip >}}
 
 ### Event Bus
 
