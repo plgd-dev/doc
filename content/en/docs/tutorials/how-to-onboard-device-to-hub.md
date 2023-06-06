@@ -4,10 +4,11 @@ description: 'How to onboard the device to the plgd hub?'
 date: '2022-12-13'
 categories: [architecture, d2c, provisioning, onboarding]
 keywords: [architecture, d2c, provisioning, onboarding, oauth]
-weight: 2
+weight: 20
 ---
 
 Device can be remotely accessed when it's onboarded and connected to the plgd hub. The connection between the device and the hub is a secure CoAP over TCP/UDP connection. Combination of JWT token and Identity certificate guarantees zero trust security on this end-to-end integration.
+
 To onboard the device to the plgd hub, following configuration data are needed:
 
 - coapGatewayAddress - address of the plgd hub in the format `<scheme>://<host>:<port>`
@@ -17,10 +18,10 @@ To onboard the device to the plgd hub, following configuration data are needed:
 - certificateAuthorities - trusted certificates used to verify the authenticity of the plgd hub
 
 {{< warning >}}
-Only the device owner, [Zero-touch Provisioning service](../../device-provisioning-service/overview/) or an authorized client are allowed to provision the device with all the configuration data required for the device to cloud connectivity.
+Only the device owner, [Zero-touch Provisioning service](/docs/device-provisioning-service/overview/) or an authorized client are allowed to provision the device with all the configuration data required for the device to cloud connectivity.
 {{< /warning >}}
 
-The [device onboarding process](../../architecture/component-overview/#device-onboarding) starts right after successful provisioning.
+The [device onboarding process](/docs/architecture/component-overview/#device-onboarding) starts right after successful provisioning.
 
 ## How to onboard
 
@@ -31,12 +32,12 @@ To enable device to cloud connectivity, following tasks need to be successfully 
 - The `hub onboarding configuration` is set so the device knows where to connect and how to authorize the connection
 
 {{< note >}}
-These steps are reduced to one click when using [Device to Device Client](../../device-to-device-client/overview/) or fully automated when using [Zero Touch Provisioning](../../device-provisioning-service/overview/).
+These steps are reduced to one click when using [Device to Device Client](/docs/device-to-device-client/overview/) or fully automated when using [Zero Touch Provisioning](/docs/device-provisioning-service/overview/).
 {{< /note >}}
 
 ### Certificate Authority configuration
 
-Certificates can be configured only in the provisioning state. More information about this process can be found [here](../../tutorials/change-provision-status).
+Certificates can be configured only in the provisioning state. More information about this process can be found [here](/docs/tutorials/change-provision-status).
 
 When device is in provisioning state we can add the certificate authority to the device through credentials resource with body:
 
@@ -84,7 +85,7 @@ deactivate S
 
 ### Device ACLs
 
-As the device acts as a server, it uses the concepts of ACLs for the client authorization. More information about ACLs and how to configure them can be found [here](../../tutorials/acl).
+As the device acts as a server, it uses the concepts of ACLs for the client authorization. More information about ACLs and how to configure them can be found [here](/docs/tutorials/acl).
 
 For Hub to device communication, the device needs to have the following ACLs configured:
 
@@ -139,7 +140,7 @@ deactivate S
 
 ### Hub Onboarding Configuration
 
-Each device hosts the `coapcloudconf`resource where the `hub onboarding configuration` has to be set. Resource definition can be found [here](https://github.com/openconnectivityfoundation/cloud-services/blob/master/swagger2.0/oic.r.coapcloudconf.swagger.json#L215). Setting the resource with required values will trigger the onboarding process, which is in detail described [here](../../architecture/component-overview/#device-onboarding).
+Each device hosts the `coapcloudconf`resource where the `hub onboarding configuration` has to be set. Resource definition can be found [here](https://github.com/openconnectivityfoundation/cloud-services/blob/master/swagger2.0/oic.r.coapcloudconf.swagger.json#L215). Setting the resource with required values will trigger the onboarding process, which is in detail described [here](/docs/architecture/component-overview/#device-onboarding).
 
 ## Connection authentication and encryption
 

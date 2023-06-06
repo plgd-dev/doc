@@ -1,6 +1,4 @@
 ---
-title: 'Deployment'
-weight: 4
+title: 'Deployment to K8S'
+weight: 5
 ---
-
-

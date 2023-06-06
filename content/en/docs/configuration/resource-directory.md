@@ -12,7 +12,7 @@ Resource Directory maintains projection of devices which were requested by clien
 ## Docker Image
 
 ```bash
-docker pull plgd/resource-directory:latest
+docker pull ghcr.io/plgd-dev/hub/resource-directory:latest
 ```
 
 ## YAML Configuration
@@ -25,9 +25,9 @@ A configuration template is available on [resource-directory/config.yaml](https:
 | ---------- | -------- | -------------- | ------- |
 | `log.level` | string | `Logging enabled from level.` | `"info"` |
 | `log.encoding` | string | `Logging format. The supported values are: "json", "console"` | `"json"` |
-| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `"false` |
-| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn` |
-| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano` |
+| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `false` |
+| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn"` |
+| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano"` |
 
 ### gRPC API
 
@@ -110,7 +110,7 @@ Client configurations to internally connect to Identity Store service.
 ### Public Configuration
 
 These configurations are `CoAP Cloud Conf` information for device registration to plgd hub as well as root CA certificate, certificate authority address to get identity certificate for ssl connection to plgd hub before device registration.
-This will be served by HTTP Gateway API as defined [here](https://github.com/plgd-dev/hub/blob/main/http-gateway/uri/uri.go#L14) and also see [hub-configuration](https://try.plgd.cloud/.well-known/hub-configuration).
+This will be served by HTTP Gateway API as defined [here](https://github.com/plgd-dev/hub/blob/main/http-gateway/uri/uri.go#L14) and also see [hub-configuration](https://try.plgd.cloud/.well-known/configuration).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
@@ -122,4 +122,8 @@ This will be served by HTTP Gateway API as defined [here](https://github.com/plg
 | `publicConfiguration.defaultCommandTimeToLive` | string | `Exposes default command time to live for CreateResource, RetrieveResource, UpdateResource, DeleteResource, and UpdateDeviceMetadata commands when it is not set in the request. 0s - means forever.` | `"0s"` |
 | `publicConfiguration.authorizationServer` | string | `Authority is the address of the token-issuing authentication server. Services will use this URI to find and retrieve the public key that can be used to validate the token’s signature. Must be same as in coap-gateway configuration.` | `""` |
 
-> Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+{{< note >}}
+
+Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+
+{{< /note >}}

@@ -7,12 +7,12 @@ keywords: [configuration]
 weight: 10
 ---
 
-OAuth2.0 Mock Server used for automated tests, [bundle container](../quickstart/deploy-plgd-hub/#plgd-bundle) and optionally deployment using the HELM chart for the **development purposes**.
+OAuth2.0 Mock Server used for automated tests, [bundle container](/docs/quickstart/deploy-plgd-hub/#plgd-bundle) and optionally deployment using the HELM chart for the **development purposes**.
 
 ## Docker Image
 
 ```bash
-docker pull plgd/mock-oauth-server:latest
+docker pull ghcr.io/plgd-dev/hub/mock-oauth-server:latest
 ```
 
 ## YAML Configuration
@@ -25,9 +25,9 @@ A configuration template is available on [test/oauth-server/config.yaml](https:/
 | ---------- | -------- | -------------- | ------- |
 | `log.level` | string | `Logging enabled from level.` | `"info"` |
 | `log.encoding` | string | `Logging format. The supported values are: "json", "console"` | `"json"` |
-| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `"false` |
-| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn` |
-| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano` |
+| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `false` |
+| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn"` |
+| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano"` |
 
 ### HTTP API
 
@@ -59,4 +59,8 @@ Signer configuration to issue ID/access tokens of OAuth provider for mock testin
 | `oauthSigner.clients[0].accessTokenLifetime` | string | `validity of generated access token lifetime. 0s means forever.` | `"0s"` |
 | `oauthSigner.clients[0].codeRestrictionLifetime` | string | `define period how long cannot be used again authorization code in exchange after first use.` | `"0s"` |
 
-> Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+{{< note >}}
+
+Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+
+{{< /note >}}

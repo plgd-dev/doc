@@ -89,7 +89,7 @@ The `cloudServerTrustAnchorCertificate` value should contain a correctly formatt
 "cloudServerTrustAnchorCertificate": "-----BEGIN CERTIFICATE-----\r\n ... \r\n-----END CERTIFICATE-----",
 ```
 
-The certificate can be retrieved from the plgd hub #bundle by opening `https://{FQDN}/.well-known/hub-configuration`. Copy the value of the `certificateAuthorities` property into the `cloudServerTrustAnchorCertificate` value with proper formatting.
+The certificate can be retrieved from the plgd hub #bundle by opening `https://{FQDN}/.well-known/configuration`. Copy the value of the `certificateAuthorities` property into the `cloudServerTrustAnchorCertificate` value with proper formatting.
 
 {{< warning >}}
 The certificate is regenerated whenever plgd hub #bundle is started. So if you restart your bundle instance, then you must update your PICS configuration as well.
@@ -200,7 +200,7 @@ In the sidebar select **Environment**, open the **Globals** pane and setup sever
 
 For `FQDN` use the value obtained in [Run plgd hub #bundle in Ubuntu machine](#run-plgd-hub-bundle-in-ubuntu-machine). `CLIENT_SECRET` can be any non-empty value. `NGROK_URL` value is provided by the ngrok application as described in the _User Guide_ section **Setup for all Origin Cloud test cases**.
 
-![Global variables in Postman](../static/ocf-conformance-testing-postman-globals.png)
+![Global variables in Postman](/docs/tutorials/static/ocf-conformance-testing-postman-globals.png)
 
 #### Get Authorization Token
 
@@ -218,7 +218,7 @@ Each command to `cloud2cloud connector` (Origin Cloud) requires an authorization
 
 Keep default values in the remaining fields.
 
-![Authorization in Postman](../static/ocf-conformance-testing-postman-authorization.png)
+![Authorization in Postman](/docs/tutorials/static/ocf-conformance-testing-postman-authorization.png)
 
 Click on the **Get New Access Token** button and you should obtain a new valid JWT token. Postman will store the token and it will be available under the selected **Token Name**. This token can be used to validate all Origin Cloud API commands.
 
@@ -310,7 +310,7 @@ Use the Postman console to examine the redirect chain that gets generated after 
 | GET         | `https://795c-178-41-204-73.ngrok.io/authorize?client_id=client123&redirect_uri=...`             | 302         |
 | GET         | `https://795c-178-41-204-73.ngrok.io/login_screen?id=CNZX2QIAC0`                                 |             |
 
-![Redirects in Postman console](../static/ocf-conformance-testing-postman-redirects.png)
+![Redirects in Postman console](/docs/tutorials/static/ocf-conformance-testing-postman-redirects.png)
 
 In the redirect chain there are two groups of requests – those addressed to `{FQDN}` URIs and those addressed to `{NGROK_URL}` URIs. The Origin Cloud handles the first group of requests and they need a valid JWT token in headers. CTT handles the second group of requests, and these requests do not require the original JWT token in headers. So to make this work, simply take the first address prefixed by `{NGROK_URL}` and copy it to your browser. It will redirect you to the login screen and allow you to enter the credentials and then grant the requested scope in the consent screen.
 
@@ -513,7 +513,7 @@ Start the plgd hub #bundle with default configuration. Modify the PICS configura
 "cloudClientTrustAnchorCertificate: "...",
 ```
 
-For the `cloudClientTrustAnchorCertificate` use the root certificate authority certificate of the plgd hub #bundle. You can obtain the certificate by sending a `GET` request to `https://{FQDN}/.well-known/hub-configuration`. Use the `certificateAuthorities` contained in the JSON response.
+For the `cloudClientTrustAnchorCertificate` use the root certificate authority certificate of the plgd hub #bundle. You can obtain the certificate by sending a `GET` request to `https://{FQDN}/.well-known/configuration`. Use the `certificateAuthorities` contained in the JSON response.
 
 The root certificate authority can also be obtained by accessing the `data` folder of the running bundle. The certificate is stored in the `data/certs/root_ca.crt` file.
 
@@ -612,7 +612,7 @@ Next, modify the PICS configuration file to contain the following:
 "cloudClientTrustAnchorCertificate: "...",
 ```
 
-For the `cloudClientTrustAnchorCertificate` use the root certificate authority certificate of the plgd hub #bundle. You can obtain the certificate by sending a `GET` request to `https://{FQDN}/.well-known/hub-configuration`. Use the `certificateAuthorities` contained in the JSON response.
+For the `cloudClientTrustAnchorCertificate` use the root certificate authority certificate of the plgd hub #bundle. You can obtain the certificate by sending a `GET` request to `https://{FQDN}/.well-known/configuration`. Use the `certificateAuthorities` contained in the JSON response.
 
 {{< note >}}
 If you're using an older versions of the CTT see the note in [Section CT6.3.1](#ct631-c2c-origin-cloud---devices-level-events)

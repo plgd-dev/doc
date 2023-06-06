@@ -5,7 +5,7 @@ docsOthersDisplay: true
 date: '2022-05-19'
 categories: [features]
 keywords: [opentelemetry, tracing]
-weight: 6
+weight: 60
 ---
 
 Traces track the progression of a single request, called a trace. The request may be initiated by a user or an application. Distributed tracing is a form of tracing that traverses process, network and security boundaries. Each unit of work in a trace is called a span; a trace is a tree of spans. Spans are objects that represent the work being done by individual services or components involved in a request as it flows through a system. A span contains a span context, which is a set of globally unique identifiers that represent the unique request that each span is a part of. A span provides Request, Error and Duration (RED) metrics that can be used to debug availability as well as performance issues.
@@ -13,7 +13,7 @@ Traces track the progression of a single request, called a trace. The request ma
 > For more information, see the [traces specification](https://opentelemetry.io/docs/reference/specification/overview/#tracing-signal), which covers concepts including: trace, span, parent/child relationship, span context, attributes, events and links.
 
 This example shows open telemetry tracing in action:
-![opentelemetry-update-resource](../static/opentelemetry-update-resource.png)
+![opentelemetry-update-resource](/docs/features/control-plane/static/opentelemetry-update-resource.png)
 
 ## plgd & Open Telemetry
 

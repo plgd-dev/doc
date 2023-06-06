@@ -4,7 +4,7 @@ description: 'How to persist plgd events in the JetStream'
 date: '2021-07-01'
 categories: [features]
 keywords: ['persistence', 'message log', 'nats']
-weight: 8
+weight: 80
 ---
 
 By default, plgd hub services use NATS as an EventBus and MongoDB as an EventStore. Some use-cases require subscription directly to the internal messaging system instead of communicating with the plgd using its gateways. To simplify the data reconciliation and scale consumers easier, plgd supports [JetStream](https://github.com/nats-io/jetstream) technology as an alternative EventBus. JetStream is built on top of NATS, persisting all published events. Using JetStream as an EventBus allows you to access older, not yet processed messages without accessing the EventStore.

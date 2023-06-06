@@ -9,8 +9,8 @@ weight: 3
 
 ## System Context Diagram
 
-![L1](../static/system-plgd.svg "medium-zoom-image")
+![L1](/docs/architecture/static/system-plgd.svg "medium-zoom-image")
 
 ## plgd Context Diagram
 
-![L2](../static/container-plgd.svg "medium-zoom-image")
+![L2](/docs/architecture/static/container-plgd.svg "medium-zoom-image")

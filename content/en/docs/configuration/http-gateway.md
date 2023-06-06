@@ -12,7 +12,7 @@ HTTP Gateway exposes the client's [REST API](https://petstore.swagger.io/?url=ht
 ## Docker Image
 
 ```bash
-docker pull plgd/http-gateway:latest
+docker pull ghcr.io/plgd-dev/hub/http-gateway:latest
 ```
 
 ## YAML Configuration
@@ -25,9 +25,9 @@ A configuration template is available on [http-gateway/config.yaml](https://gith
 | ---------- | -------- | -------------- | ------- |
 | `log.level` | string | `Logging enabled from level.` | `"info"` |
 | `log.encoding` | string | `Logging format. The supported values are: "json", "console"` | `"json"` |
-| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `"false` |
-| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn` |
-| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano` |
+| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `false` |
+| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn"` |
+| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano"` |
 
 ### HTTP API
 
@@ -91,4 +91,8 @@ These configurations are for `plgd Dashboard` as described in [here](https://git
 | `ui.webConfiguration.deviceOAuthClient.scopes` | string array | `List of required scopes.` | `""` |
 | `ui.webConfiguration.deviceOAuthClient.providerName` | string | `Name of provider, which needs to be set to cloud resource during cloud provisioning.` | `"plgd"` |
 
-> Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+{{< note >}}
+
+Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+
+{{< /note >}}

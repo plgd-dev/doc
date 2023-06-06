@@ -12,7 +12,7 @@ Identity Store manages devices and their owners.
 ## Docker Image
 
 ```bash
-docker pull plgd/identity-store:latest
+docker pull ghcr.io/plgd-dev/hub/identity-store:latest
 ```
 
 ## YAML Configuration
@@ -25,9 +25,9 @@ A configuration template is available on [identity-store/config.yaml](https://gi
 | ---------- | -------- | -------------- | ------- |
 | `log.level` | string | `Logging enabled from level.` | `"info"` |
 | `log.encoding` | string | `Logging format. The supported values are: "json", "console"` | `"json"` |
-| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `"false` |
-| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn` |
-| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano` |
+| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `false` |
+| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn"` |
+| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano"` |
 
 ### gRPC API
 
@@ -89,4 +89,8 @@ plgd hub uses MongoDB database as owner's device store.
 | `clients.storage.mongoDB.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `clients.storage.mongoDB.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
 
-> Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+{{< note >}}
+
+Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+
+{{< /note >}}

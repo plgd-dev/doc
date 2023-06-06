@@ -12,7 +12,7 @@ CoAP Gateway provides API for devices and clients following the [Open Connectivi
 ## Docker Image
 
 ```bash
-docker pull plgd/coap-gateway:latest
+docker pull ghcr.io/plgd-dev/hub/coap-gateway:latest
 ```
 
 ## YAML Configuration
@@ -26,9 +26,9 @@ A configuration template is available on [coap-gateway/config.yaml](https://gith
 | `log.dumpBody` | bool | `Set to true if you would like to dump raw messages.` | `false` |
 | `log.level` | string | `Logging enabled from level.` | `"info"` |
 | `log.encoding` | string | `Logging format. The supported values are: "json", "console"` | `"json"` |
-| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `"false` |
-| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn` |
-| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano` |
+| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `false` |
+| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn"` |
+| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano"` |
 
 ### CoAP API
 
@@ -80,9 +80,11 @@ OAuth2.0 Client is used to issuing an authorization code used by the Onboarding 
 | `apis.coap.authorization.providers[].http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.coap.authorization.providers[].http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
 
-::: tip Audience
+{{< tip >}}
+
 You might have one client, but multiple APIs in the OAuth system. What you want to prevent is to be able to contact all the APIs of your system with one token. This audience allows you to request the token for a specific API. If you configure it to myplgdc2c.api in the Auth0, you have to set it here if you want to also validate it.
-:::
+
+{{< /tip >}}
 
 ### Event Bus
 
@@ -154,4 +156,8 @@ Client configurations to internally connect to Resource Directory service.
 | `taskQueue.size` | int | `Size of queue. If it exhausted, submit returns error.` | `2097152` |
 | `taskQueue.maxIdleTime` | string | `Sets up the interval time of cleaning up goroutines. Zero means never cleanup.` | `10m` |
 
-> Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+{{< note >}}
+
+Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+
+{{< /note >}}

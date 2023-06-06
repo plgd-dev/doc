@@ -46,7 +46,7 @@ For IoTivity, href is used to match the ACL.
 
 When device is in read for ownership transfer method (RFOTM) state, only device configuration resources and OCF public resources are accessible. ACL is applied only in normal device state. To allow access to the resources in RFOTM state you need to have enabled the feature in IoTivity lite via `cmake -DOC_RESOURCE_ACCESS_IN_RFOTM_ENABLED=ON ...` when building IoTivity lite and mark each resource via function [oc_resource_set_access_in_RFOTM](https://github.com/iotivity/iotivity-lite/blob/ac61ae3b5e6a2fd4cbaab3c8b909209cb8dda982/include/oc_acl.h#L235). The default value is `OFF`.
 
-To update ACL device need to be in provisioning state. To change device state is described in [here](../../tutorials/change-provision-status).
+To update ACL device need to be in provisioning state. To change device state is described in [here](/docs/tutorials/change-provision-status).
 
 The update of ACL is done via `POST` method on the `/oic/sec/acl2` resource with body:
 

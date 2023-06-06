@@ -29,7 +29,7 @@ The Docker image also comes with a virtual device that can be discovered on the 
 ### Installation on Linux/Windows/MacOS
 
 {{< note >}}
-The [Cloud Server](../start-device/) must be running on your Raspberry Pi or on some other machine on your local network.
+The [Cloud Server](/docs/quickstart/start-device/) must be running on your Raspberry Pi or on some other machine on your local network.
 {{< /note >}}
 
 Firstly, download the latest version of the client application from [here](https://github.com/plgd-dev/client-application/releases) for your operating system. Below is an example of how to download and run the client application for Linux:
@@ -47,7 +47,7 @@ The Client Application is now running on your PC. The application has opened a p
 By running the client application, the client application will automatically create a config.yaml file and www directory in the current directory.
 
 {{< note >}}
-To onboard devices to the try.plgd.cloud, use the [config.yaml](../remote-access/#configyaml-file) file.
+To onboard devices to the try.plgd.cloud, use the [config.yaml](/docs/quickstart/remote-access/#configyaml-file) file.
 To read more about how to change the config.yaml, continue [here](https://github.com/plgd-dev/client-application#yaml-configuration).
 {{< /note >}}
 

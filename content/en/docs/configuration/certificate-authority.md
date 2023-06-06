@@ -14,7 +14,7 @@ Initialization of the SDK requires an Identity Certificate issued by this servic
 ## Docker Image
 
 ```bash
-docker pull plgd/certificate-authority:latest
+docker pull ghcr.io/plgd-dev/hub/certificate-authority:latest
 ```
 
 ## YAML Configuration
@@ -27,9 +27,9 @@ A configuration template is available on [certificate-authority/config.yaml](htt
 | ---------- | -------- | -------------- | ------- |
 | `log.level` | string | `Logging enabled from level.` | `"info"` |
 | `log.encoding` | string | `Logging format. The supported values are: "json", "console"` | `"json"` |
-| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `"false` |
-| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn` |
-| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano` |
+| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `false` |
+| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn"` |
+| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano"` |
 
 ### gRPC API
 
@@ -87,4 +87,8 @@ Signer configuration to issue identity certificates for devices or client applic
 | `signer.expiresIn` | string | `The time up to which the certificate is valid.` |  `"87600h"` |
 | `signer.hubID` | string | `Hub ID which is stored in coap-gw certificate and it cannot be used in the common name in the CSR.` | `""` |
 
-> Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+{{< note >}}
+
+Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
+
+{{< /note >}}

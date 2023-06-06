@@ -12,7 +12,7 @@ C2C Connector connects to other hub implementing the [Open Connectivity Foundati
 ## Docker Image
 
 ```bash
-docker pull plgd/cloud2cloud-connector:latest
+docker pull ghcr.io/plgd-dev/hub/cloud2cloud-connector:latest
 ```
 
 ## YAML Configuration
@@ -25,9 +25,9 @@ A configuration template is available in [cloud2cloud-connector/config.yaml](htt
 | ---------- | -------- | -------------- | ------- |
 | `log.level` | string | `Logging enabled from level.` | `"info"` |
 | `log.encoding` | string | `Logging format. The supported values are: "json", "console"` | `"json"` |
-| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `"false` |
-| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn` |
-| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano` |
+| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `false` |
+| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn"` |
+| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano"` |
 
 ### HTTP API
 
@@ -62,9 +62,11 @@ A configuration template is available in [cloud2cloud-connector/config.yaml](htt
 | `apis.http.authorization.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.http.authorization.http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
 
-::: tip Audience
+{{< tip >}}
+
 You might have one client, but multiple APIs in the OAuth system. What you want to prevent is to be able to contact all the APIs of your system with one token. This audience allows you to request the token for a specific API. If you configure it to myplgdc2c.api in the Auth0, you have to set it here if you want to also validate it.
-:::
+
+{{< /tip >}}
 
 ### Identity Store Client
 
