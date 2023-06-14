@@ -44,7 +44,7 @@ Identity certificates can be deleted using the following methods:
 
 1. **Device Signoff**: Devices can initiate the deletion of their own identity certificates by sending signoff requests to the plgd hub(coap-gateway).
 
-2. **Device Deletion from Hub**: When a device is deleted from the hub through the [gRPC Gateway API](https://htmlpreview.github.io/?https://github.com/plgd-dev/hub/blob/main/grpc-gateway/pb/doc.html#grpcgateway.pb.GrpcGateway)/[HTTP Gateway API](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/http-gateway/swagger.yaml), the associated identity certificate records are also deleted.
+2. **Device Deletion from Hub**: When a device is deleted from the hub through the [gRPC Gateway API](/docs/features/control-plane/grpc-api)/[HTTP Gateway API](/docs/features/control-plane/http-api), the associated identity certificate records are also deleted.
 
 3. **Certificate Authority API**: The PLGD CA provides an API ([HTTP](#http-api)/[gRPC)](#grpc-api)) that allows requesting the deletion of identity certificates.
 
