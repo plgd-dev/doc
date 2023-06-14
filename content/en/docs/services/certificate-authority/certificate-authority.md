@@ -24,16 +24,4 @@ If the CSR's Common Name (CN) does not meet the requirements for a user identity
 
 ## Identity Certificate Management
 
-The PLGD CA includes comprehensive mechanisms for managing the lifecycle and security of identity certificates.
-
-## gRPC API
-
-The PLGD CA provides a gRPC API that enables requesting the issuance of identity certificates and managing their lifecycle.
-
-[Link to gRPC API Documentation](/docs/services/certificate-authority/grpc-api/)
-
-## HTTP API
-
-The PLGD CA also offers an HTTP API for requesting the issuance of identity certificates and managing their lifecycle.
-
-[Link to HTTP API Documentation](/docs/services/certificate-authority/http-api/)
+The PLGD CA includes comprehensive mechanisms for managing the lifecycle and security of identity certificates. This encompasses the issuance, renewal, and deletion of identity certificates. For detailed information on how to manage identity certificates, please refer to the [Identity Certificate Management Documentation](/docs/services/certificate-authority/identity-certificate-management).
