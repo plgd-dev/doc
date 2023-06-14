@@ -7,7 +7,6 @@ keywords: [attestation, x509, TPM, manufacturer-certificate]
 weight: 3
 ---
 
-
 Most important part of the zero-touch provisioning is the attestation mechanism, a method used to confirm a device's identity. Each enrollment group needs to have the attestation mechanism configured. Selected method and it's configuration is used to identify to which enrollment group the device opening the connection to the DPS belongs to.
 The Device Provisioning Service supports 2 forms of attestations:
 
