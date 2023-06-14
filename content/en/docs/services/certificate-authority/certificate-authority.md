@@ -30,7 +30,7 @@ The PLGD CA includes comprehensive mechanisms for managing the lifecycle and sec
 
 The PLGD CA provides a gRPC API that enables requesting the issuance of identity certificates and managing their lifecycle.
 
-[Link to gRPC API Documentation](https://htmlpreview.github.io/?https://raw.githubusercontent.com/plgd-dev/hub/jkralik/fix/ca-docs/certificate-authority/pb/doc.html#certificateauthority.pb.CertificateAuthority)
+[Link to gRPC API Documentation](https://htmlpreview.github.io/?https://raw.githubusercontent.com/plgd-dev/hub/main/certificate-authority/pb/doc.html#certificateauthority.pb.CertificateAuthority)
 
 ## HTTP API
 
