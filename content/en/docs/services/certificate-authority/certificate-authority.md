@@ -30,15 +30,13 @@ The PLGD CA includes comprehensive mechanisms for managing the lifecycle and sec
 
 The PLGD CA provides a gRPC API that enables requesting the issuance of identity certificates and managing their lifecycle.
 
-[Link to gRPC API Documentation](https://htmlpreview.github.io/?https://raw.githubusercontent.com/plgd-dev/hub/main/certificate-authority/pb/doc.html#certificateauthority.pb.CertificateAuthority)
+[Link to gRPC API Documentation](/docs/services/certificate-authority/grpc-api/)
 
 ## HTTP API
 
 The PLGD CA also offers an HTTP API for requesting the issuance of identity certificates and managing their lifecycle.
 
-[Link to HTTP API Documentation](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/certificate-authority/pb/service.swagger.json)
-
-{{< iframe https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/certificate-authority/pb/service.swagger.json >}}
+[Link to HTTP API Documentation](/docs/services/certificate-authority/http-api/)
 
 ### Deletion of Identity Certificates
 
