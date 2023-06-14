@@ -38,6 +38,8 @@ The PLGD CA also offers an HTTP API for requesting the issuance of identity cert
 
 [Link to HTTP API Documentation](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/certificate-authority/pb/service.swagger.json)
 
+{{< iframe https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/certificate-authority/pb/service.swagger.json >}}
+
 ### Deletion of Identity Certificates
 
 Identity certificates can be deleted using the following methods:
