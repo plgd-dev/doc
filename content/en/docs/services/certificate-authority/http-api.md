@@ -7,4 +7,4 @@ keywords: [security, identity-certificate, certificate]
 weight: 10
 ---
 
-{{< iframe "https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/certificate-authority/pb/service.swagger.json" >}}
+{{< iframe "<https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/certificate-authority/pb/service.swagger.json>" >}}
