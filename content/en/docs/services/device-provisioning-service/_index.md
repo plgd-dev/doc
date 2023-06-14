@@ -1,4 +1,4 @@
 ---
 title: 'Device Provisioning Service'
-weight: 7
+weight: 1
 ---

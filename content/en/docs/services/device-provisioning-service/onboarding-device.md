@@ -10,12 +10,12 @@ weight: 4
 
 IoTivity devices can be extended by the Device Provisioning Client library, which enables you to use the zero-touch provisioning feature. Integrating this library into your device enables you to start the automated provisioning through 2 APIs.
 
-- DPS Client Library API of the [DPS Client library](/docs/device-provisioning-service/client-library#dps-client-api)
-- Configuring the [DPS resource](/docs/device-provisioning-service/client-library#dps-configuration-resource)
+- DPS Client Library API of the [DPS Client library](/docs/services/device-provisioning-service/client-library#dps-client-api)
+- Configuring the [DPS resource](/docs/services/device-provisioning-service/client-library#dps-configuration-resource)
 
 ## DPS Client Library API
 
-Provisioning process can be initiated by your application or immediately when the device is started. This can be all managed by your device firmware, without any external interaction. To read more about how to interact and configure the DPS Client Library, read [here](/docs/device-provisioning-service/client-library).
+Provisioning process can be initiated by your application or immediately when the device is started. This can be all managed by your device firmware, without any external interaction. To read more about how to interact and configure the DPS Client Library, read [here](/docs/services/device-provisioning-service/client-library).
 
 ## DPS Resource
 
