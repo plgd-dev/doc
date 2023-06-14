@@ -14,11 +14,11 @@ The PLGD Certificate Authority (CA) is responsible for issuing OCF (Open Connect
 
 A Certificate Signing Request (CSR) is a request sent to the PLGD CA by a user or device, seeking the issuance of an identity certificate. The CSR includes a Universally Unique Identifier (UUID) in the Common Name (CN) field, following the format `uuid:<ID>`. Before signing the CSR and issuing the OCF identity certificate, the PLGD CA verifies the authenticity of the request.
 
-### User Identity Certificate CSR
+### User OCF Identity Certificate CSR
 
 A CSR is considered a user identity CSR if the Common Name (CN) matches the "owner" claim of the provided JSON Web Token (JWT) or a derived value from it. The PLGD CA ensures the validity of the JWT before proceeding with the certificate signing process. Multiple user identity certificates can be obtained simultaneously for different key-pairs.
 
-### Device Identity Certificate CSR
+### Device OCF Identity Certificate CSR
 
 If the CSR's Common Name (CN) does not meet the requirements for a user identity CSR, it is treated as a device identity CSR. The PLGD CA has strict policies in place to prevent unauthorized devices or users from obtaining identity certificates that have already been signed for other devices.
 
@@ -42,15 +42,15 @@ The PLGD CA also offers an HTTP API for requesting the issuance of identity cert
 
 Identity certificates can be deleted using the following methods:
 
-1. **Device Signoff**: Devices can initiate the deletion of their own identity certificates by sending signoff requests to the PLGD CA.
+1. **Device Signoff**: Devices can initiate the deletion of their own identity certificates by sending signoff requests to the plgd hub(coap-gateway).
 
-2. **Device Deletion from Hub**: When a device is deleted from the hub through the grpc-gw (gRPC Gateway) interface, the associated identity certificate records are also deleted.
+2. **Device Deletion from Hub**: When a device is deleted from the hub through the [gRPC Gateway API](https://htmlpreview.github.io/?https://github.com/plgd-dev/hub/blob/main/grpc-gateway/pb/doc.html#grpcgateway.pb.GrpcGateway)/[HTTP Gateway API](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/http-gateway/swagger.yaml), the associated identity certificate records are also deleted.
 
 3. **Certificate Authority API**: The PLGD CA provides an API ([HTTP](#http-api)/[gRPC)](#grpc-api)) that allows requesting the deletion of identity certificates.
 
 ### Automatic Deletion of Other Certificates
 
-Certificates other than identity certificates are automatically deleted once they expire. This automated process ensures a clean and secure certificate infrastructure by removing expired certificates from the system.
+Certificates other than OCF device identity certificates are automatically deleted once they expire. This automated process ensures a clean and secure certificate infrastructure by removing expired certificates from the system.
 
 {{< note >}}
 
