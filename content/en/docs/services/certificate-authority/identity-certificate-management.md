@@ -22,8 +22,8 @@ Identity certificates have a validity period, after which they expire. The PLGD 
 Identity certificates can be deleted using various methods:
 
 - **Device Signoff**: Devices can initiate the deletion of their own identity certificates by sending signoff requests to the PLGD CA.
-- **Device Deletion from Hub**: When a device is deleted from the hub using the appropriate interface (e.g., gRPC Gateway API or HTTP Gateway API), the associated identity certificate records are also deleted.
-- **Certificate Authority API**: The PLGD CA provides both an HTTP API and a gRPC API that allow requesting the deletion of identity certificates.
+- **Device Deletion from Hub**: When a device is deleted from the hub using the appropriate interface [gRPC Gateway API](/docs/features/control-plane/grpc-api) or [HTTP Gateway API](/docs/features/control-plane/http-api), the associated identity certificate records are also deleted.
+- **Certificate Authority API**: The PLGD CA provides both an [gRPC API](/docs/services/certificate-authority/grpc-api) and a [HTTP API](/docs/services/certificate-authority/http-api)  that allow requesting the deletion of identity certificates.
 
 These deletion mechanisms provide flexibility and control over the management of identity certificates, ensuring that certificates are removed as needed to maintain security and integrity.
 
