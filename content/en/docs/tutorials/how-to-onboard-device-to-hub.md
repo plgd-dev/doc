@@ -18,7 +18,7 @@ To onboard the device to the plgd hub, following configuration data are needed:
 - certificateAuthorities - trusted certificates used to verify the authenticity of the plgd hub
 
 {{< warning >}}
-Only the device owner, [Zero-touch Provisioning service](/docs/device-provisioning-service/overview/) or an authorized client are allowed to provision the device with all the configuration data required for the device to cloud connectivity.
+Only the device owner, [Zero-touch Provisioning service](/docs/services/device-provisioning-service/overview/) or an authorized client are allowed to provision the device with all the configuration data required for the device to cloud connectivity.
 {{< /warning >}}
 
 The [device onboarding process](/docs/architecture/component-overview/#device-onboarding) starts right after successful provisioning.
@@ -32,7 +32,7 @@ To enable device to cloud connectivity, following tasks need to be successfully 
 - The `hub onboarding configuration` is set so the device knows where to connect and how to authorize the connection
 
 {{< note >}}
-These steps are reduced to one click when using [Device to Device Client](/docs/device-to-device-client/overview/) or fully automated when using [Zero Touch Provisioning](/docs/device-provisioning-service/overview/).
+These steps are reduced to one click when using [Device to Device Client](/docs/device-to-device-client/overview/) or fully automated when using [Zero Touch Provisioning](/docs/services/device-provisioning-service/overview/).
 {{< /note >}}
 
 ### Certificate Authority configuration

@@ -18,13 +18,13 @@ The Device to IoT Hub communication is facilitated by the CoAP Gateway, allowing
 
 The HTTP API is a RESTful API that allows users to manage devices in the system. It provides a user-friendly interface for performing maintenance tasks, managing device metadata, and controlling devices either from the cloud or the local network. The HTTP API is built on top of the CoAP Gateway and Resource Directory, which handle communication with the devices.
 
-[Link to HTTP API Documentation](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/http-gateway/swagger.yaml)
+[Link to HTTP API Documentation](/docs/features/control-plane/http-api)
 
 ### GRPC API
 
 The GRPC API is a protocol buffer-based API that enables users to manage devices in the system. It offers a simple and intuitive interface for performing maintenance tasks, managing device metadata, and controlling devices from the cloud or local network. The GRPC API is also built on top of the CoAP Gateway and Resource Directory.
 
-[Link to GRPC API Documentation](https://htmlpreview.github.io/?https://github.com/plgd-dev/hub/blob/main/grpc-gateway/pb/doc.html#grpcgateway.pb.GrpcGateway)
+[Link to GRPC API Documentation](/docs/features/control-plane/grpc-api)
 
 ### Device Twin
 

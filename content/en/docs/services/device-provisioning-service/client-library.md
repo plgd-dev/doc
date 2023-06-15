@@ -23,9 +23,9 @@ Please examine the contents of the provided pkg-config (`.pc`) file and install 
 
 The API is defined in the public header files provided in the distributed package.
 
-- [dps.h](/docs/device-provisioning-service/static/dps-release/dps.h)
-- [dps_export.h](/docs/device-provisioning-service/static/dps-release/dps_export.h)
-- [dps_log.h](/docs/device-provisioning-service/static/dps-release/dps_log.h)
+- [dps.h](/docs/services/device-provisioning-service/static/dps-release/dps.h)
+- [dps_export.h](/docs/services/device-provisioning-service/static/dps-release/dps_export.h)
+- [dps_log.h](/docs/services/device-provisioning-service/static/dps-release/dps_log.h)
 
 ### Initialize DPS
 
@@ -197,11 +197,11 @@ After the provisioning is successfully finished, the connection to the DPS endpo
 
 If a step in the provisioning algorithm encounters an error, or if it does not trigger the next step (for example, the answer from DPS endpoint didn’t come, thus the handler didn’t trigger and schedule the next step), then the step is retried after a small interval.
 
-The application uses the following retry intervals [10s, 20s, 40s, 80s, 120s] and forever loops through the array (i.e. when the last retry interval was 120s then the next will be 10s again) until the provisioning process succeeds. To read more about the retry mechanism of the DPS Client Library, read [here](/docs/device-provisioning-service/retry-mechanism).
+The application uses the following retry intervals [10s, 20s, 40s, 80s, 120s] and forever loops through the array (i.e. when the last retry interval was 120s then the next will be 10s again) until the provisioning process succeeds. To read more about the retry mechanism of the DPS Client Library, read [here](/docs/services/device-provisioning-service/retry-mechanism).
 
 ### Time synchronization
 
-In order for the TLS handshake to verify the server certificate and for certificate rotation to occur, the device must have the correct time. Time synchronization can be achieved by utilizing DPS clients to synchronize with the DPS server. To enable time synchronization, the function `plgd_dps_time_configure(true)` should be called. It's important to note that IoTivity-Lite needs to be compiled with the cmake option `-DPLGD_DEV_TIME_ENABLED=ON` in order to enable the [time synchronization feature](/docs/device-provisioning-service/time-synchronization) in the IoTivity-Lite library, and initialized with `plgd_time_init`.
+In order for the TLS handshake to verify the server certificate and for certificate rotation to occur, the device must have the correct time. Time synchronization can be achieved by utilizing DPS clients to synchronize with the DPS server. To enable time synchronization, the function `plgd_dps_time_configure(true)` should be called. It's important to note that IoTivity-Lite needs to be compiled with the cmake option `-DPLGD_DEV_TIME_ENABLED=ON` in order to enable the [time synchronization feature](/docs/services/device-provisioning-service/time-synchronization) in the IoTivity-Lite library, and initialized with `plgd_time_init`.
 
 {{< note >}}
 To compensate for the disabled time verification during the TLS handshake, time synchronization is established through a separate connection. Once synchronization is completed, the connection is terminated and the device's time is adjusted to bring it back into alignment. While this approach may not provide pinpoint accuracy, it is adequate for verifying the server certificate during the TLS handshake and for certificate rotation. For more precise time synchronization, utilizing NTP or another time synchronization protocol would be recommended.

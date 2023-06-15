@@ -1,10 +1,11 @@
 ---
-title: 'Overview'
+title: 'Device Provisioning Service'
 description: 'What is plgd Device Provisioning Service?'
 date: '2022-01-26'
 categories: [zero-touch, provisioning]
 keywords: [provisioning, TPM, manufacturer-certificate]
 weight: 1
+isMainSectionPage: true
 ---
 
 Provisioning millions of devices in a secure and scalable manner without requiring any human interaction is what our plgd Device Provisioning Service (DPS) solves. Doesn't matter if you're running the plgd hub on-premise, off-premise or a fully managed instance, the DPS makes sure it trusts only your devices and provision them to the right plgd hub instance. Exactly no human interaction, zero-touch to provision and pre-configure millions of devices just-in-time and securely, using manufacturer certificates or TPMs.

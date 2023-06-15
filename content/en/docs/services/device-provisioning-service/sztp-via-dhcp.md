@@ -33,7 +33,7 @@ However, the root certificate authority via DHCP is too large. Therefore, the us
 This is the simplest way to configure the device, but an intruder can steal the device when it is connected to the network with an untrusted DHCP server and replace the DPS endpoint with the intruder's server.
 {{< /warning >}}
 
-When using the Skip Certificate Verification (TLS) option, the device trusts any certificates sent by the DPS service, but the DPS service still verifies the device's certificate during the TLS handshake. This option should only be used when the device is connected to a trusted network, since an untrusted network could allow an attacker to steal the device and replace the DPS endpoint with their own server. If you want to skip the certificate verification to the DPS service, you can set the `skip_verify` parameter to true using the `plgd_dps_set_skip_verify` function. More details on this function can be found in the [dps.h](https://docs.plgd.dev/docs/device-provisioning-service/static/dps-release/dps.h).
+When using the Skip Certificate Verification (TLS) option, the device trusts any certificates sent by the DPS service, but the DPS service still verifies the device's certificate during the TLS handshake. This option should only be used when the device is connected to a trusted network, since an untrusted network could allow an attacker to steal the device and replace the DPS endpoint with their own server. If you want to skip the certificate verification to the DPS service, you can set the `skip_verify` parameter to true using the `plgd_dps_set_skip_verify` function. More details on this function can be found in the [dps.h](/docs/services/device-provisioning-service/static/dps-release/dps.h).
 
 ## How to configure Zero Touch Provisioning via DHCP
 
@@ -224,7 +224,7 @@ With these configuration changes in place, the device should be able to obtain t
 
 ### Connect with client library
 
-When the DHCP client leases file is updated with a new vendor-encapsulated-options, the [client library](/docs/device-provisioning-service/client-library) needs to be notified of the update. To accomplish this on Linux, `inotify` can be used to watch the leases file and notify the client library about the new configuration, or the client library can periodically pull the configuration from the leases file.
+When the DHCP client leases file is updated with a new vendor-encapsulated-options, the [client library](/docs/services/device-provisioning-service/client-library) needs to be notified of the update. To accomplish this on Linux, `inotify` can be used to watch the leases file and notify the client library about the new configuration, or the client library can periodically pull the configuration from the leases file.
 
 Once the new vendor-encapsulated-options parsed from the leases file, it can be set to the client library.
 Similar function need to be called for the changes to take effect:
