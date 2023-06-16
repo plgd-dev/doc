@@ -48,7 +48,7 @@ deactivate ResourceAggregate
 Bus --> Client : ResourceUpdated
 deactivate Client
 
-== Resource content changed - Update device twin ==
+== Resource changed - Update device twin ==
 
 Server -> Gateway : [NOTIFY] 'oic.r.temperature' changed
 activate Gateway
@@ -81,7 +81,7 @@ control "Event Bus" as Bus
 Client -> Server : [UPDATE] 'oic.r.temperature'
 Server -> Client : OK
 
-== Resource content changed - Update device twin ==
+== Resource changed - Update device twin ==
 
 Server -> Gateway : [NOTIFY] 'oic.r.temperature' changed
 activate Gateway
