@@ -1,5 +1,5 @@
 ---
-title: 'Feature list'
+title: 'Features'
 description: 'What features provides Device Provisioning Service?'
 date: '2023-05-19'
 categories: [zero-touch, provisioning]
