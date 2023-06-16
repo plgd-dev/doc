@@ -7,4 +7,4 @@ keywords: [security, coap, features, api]
 weight: 10
 ---
 
-{{< iframe "<https://petstore.swagger.io/?url=http://localhost:1313/docs/services/coap-gateway/static/swagger.json>" >}}
+{{< iframe "<https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/jkralik/doc/coap-gw-swagger/coap-gateway/swagger.yaml>" >}}
