@@ -1,5 +1,5 @@
 ---
-title: 'Feature list'
+title: 'Features'
 description: 'What features provides Certificate Authority?'
 date: '2023-06-14'
 categories: [security, certificate]
