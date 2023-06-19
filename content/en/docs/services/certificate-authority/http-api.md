@@ -2,8 +2,8 @@
 title: 'HTTP API'
 description: 'Certificate Authority HTTP API'
 date: '2023-06-14'
-categories: [security, certificate]
-keywords: [security, identity-certificate, certificate]
+categories: [certificate]
+keywords: [identity-certificate, certificate]
 weight: 10
 ---
 

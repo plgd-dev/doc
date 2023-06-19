@@ -2,8 +2,8 @@
 title: 'gRPC Gateway'
 description: 'What is plgd gRPC Gateway?'
 date: '2023-06-16'
-categories: [security, gateway, iot]
-keywords: [security, grpc, iot]
+categories: [gateway, iot]
+keywords: [grpc, iot]
 weight: 1
 isMainSectionPage: true
 ---

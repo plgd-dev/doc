@@ -2,8 +2,8 @@
 title: 'Identity Store'
 description: 'What is plgd Identity Store?'
 date: '2023-06-16'
-categories: [security, storage]
-keywords: [security, users, owners]
+categories: [storage]
+keywords: [users, owners]
 weight: 1
 isMainSectionPage: true
 ---
