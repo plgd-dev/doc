@@ -2,8 +2,8 @@
 title: 'Features'
 description: 'What features provides Certificate Authority?'
 date: '2023-06-14'
-categories: [security, certificate]
-keywords: [security, identity-certificate, certificate, features]
+categories: [certificate]
+keywords: [identity-certificate, certificate, features]
 weight: 2
 ---
 

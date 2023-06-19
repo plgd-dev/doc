@@ -2,8 +2,8 @@
 title: 'HTTP Gateway'
 description: 'What is plgd HTTP Gateway?'
 date: '2023-06-16'
-categories: [security, gateway, iot]
-keywords: [security, http, iot]
+categories: [gateway, iot]
+keywords: [http, iot]
 weight: 1
 isMainSectionPage: true
 ---

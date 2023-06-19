@@ -2,8 +2,8 @@
 title: 'CoAP Gateway'
 description: 'What is plgd CoAP Gateway?'
 date: '2023-06-16'
-categories: [security, gateway, iot]
-keywords: [security, coap, iot]
+categories: [gateway, iot]
+keywords: [coap, iot]
 weight: 1
 isMainSectionPage: true
 ---

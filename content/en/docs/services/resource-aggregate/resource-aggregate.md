@@ -2,13 +2,11 @@
 title: 'Resource Aggregate'
 description: 'What is plgd Resource Aggregate?'
 date: '2023-06-16'
-categories: [security, storage]
-keywords: [security, users, owners]
+categories: [storage]
+keywords: [users, owners]
 weight: 1
 isMainSectionPage: true
 ---
-
-## Resource Aggregate Overview
 
 The Resource Aggregate is a fundamental concept in plgd that scopes every transaction on a device's resource. It builds its internal state based on a single fine-grained event stream, ensuring consistency and integrity.
 

@@ -2,8 +2,8 @@
 title: 'CoAP API'
 description: 'CoAP Gateway API'
 date: '2023-06-14'
-categories: [security, gateway, api]
-keywords: [security, coap, features, api]
+categories: [gateway, api]
+keywords: [coap, features, api]
 weight: 10
 ---
 
