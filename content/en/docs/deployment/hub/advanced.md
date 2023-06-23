@@ -38,6 +38,8 @@ oauth:
 helm upgrade -i -n plgd --create-namespace -f withMock.yaml hub plgd/plgd-hub
 ```
 
+To configure the OAuth server, it is necessary to enable a redirect URL that permits any redirect within the domain for the web client. The web client utilizes redirects to display pages within the user interface (UI). For instance, when accessing `https://example.com/devices/{deviceId}` in the UI, the OAuth flow utilizes the opened URL as the redirect_uri. Therefore, it is essential to authorize `https://example.com/*` as a valid redirect URL to enable access to any subpage within the UI.
+
 ## Custom Authorization CA pool
 
 By default, the plgd hub Helm chart expect that certificate used by OAuth 2.0 server is signed by the same CA as rest of certificates
