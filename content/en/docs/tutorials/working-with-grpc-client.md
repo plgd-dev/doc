@@ -85,12 +85,14 @@ To return values of binary switch resources hosted by devices with ids `deviceID
 
 The `SubscribeToEvents` command opens the stream, which content is driven by the control message.
 
-**To control the content of the stream, send a `SubscribeToEvents` message with the following options:**
+**To control the content of the stream, send a `SubscribeToEvents` message with the following options for example:**
 
-- `action.create_subscription.event_filter` set to `ONLINE` to receive **devices events** which changed their status to `ONLINE`
-- `action.create_subscription.{device_id_filter, event_filter}` set to `RESOURCE_PUBLISHED` to receive **device events**
-- `action.create_subscription.{resource_id_filter, event_filter}` set to `CONTENT_CHANGED` to receive **resource events**
-- `action.create_subscription` without any set of filters will receive all devices events from the hub.
+- Set `action.create_subscription.event_filter` to `DEVICE_METADATA_UPDATED` to receive events for devices that have changed their status (e.g., ONLINE/OFFLINE) among the selected devices in `device_id_filter`.
+- Set `action.create_subscription.{device_id_filter, event_filter}` and set `event_filter` to `RESOURCE_PUBLISHED, RESOURCE_UNPUBLISHED` to receive device events for the selected devices in `device_id_filter`.
+- Use `action.create_subscription.{href_filter}` to receive resource events from all devices for the selected resources specified in `href_filter`.
+- Set `action.create_subscription.{device_id_filter, href_filter, event_filter}` and set `event_filter` to `CONTENT_CHANGED` to receive resource events from filtered resources specified in `href_filter` among the selected devices in `device_id_filter`.
+- Use `action.create_subscription.{resource_id_filter}` to receive resource events from the selected device resources specified in `resource_id_filter`.
+- If no filters are set, using `action.create_subscription` alone will receive all device events from the hub.
 
 The first event returned after the successful subscription is of type `OperationProcessed`. Property `OperationProcessed.error_status.code` contains information if the subscription was successful. If it was successful, property `subscriptionId` is set. All events belonging to a single `SubscribeToEvents` request are then identified by this `subscriptionId`.
 
