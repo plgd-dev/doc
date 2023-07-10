@@ -35,20 +35,6 @@ This authorization is tied to the connection, meaning that if a device gets disc
 
 Once device authentication is completed, the synchronization of the device twin begins. The device publishes resources, and the CoAP gateway subscribes to these resources, forwarding any changes to the IoT hub to update the device twin.
 
-### Efficient Device Twin Synchronization using Entity Tag (ETAG)
-
-The CoAP gateway employs the Entity Tag (ETAG) mechanism to monitor resource changes. An ETAG, is used to determine if a resource has been modified on the device. The Hub stores the ETAG for each resource along with the timestamp of the last change.
-
-The CoAP gateway supports two types of resource observation:
-
-- **Batch observation**: In this mode, the ETAG is associated with the overall state of resources. Whenever a change occurs, the Hub updates the ETAG for all affected resources with the same timestamp. Consequently, if the device goes offline and reconnects later, the Hub can send the stored latest ETAG of the resources to the device.
-  {{< note >}}
-  To use this option, the device needs to support batch observation mode. For iotivity-lite, it should be enabled via the `-DOC_DISCOVERY_RESOURCE_OBSERVABLE_ENABLED=ON` cmake option.
-  {{< /note >}}
-- **Per resource observation**: In this mode, the ETAG for each resource needs to be stored. Similar to batch observation, when the device goes offline and reconnects, the Hub can send the corresponding ETAG for each observed resource.
-
-When the CoAP gateway initiates resource observation, it sends the ETAG to the device. Subsequently, when the resource undergoes changes, the device sends the updated ETAG back to the CoAP gateway.
-
 ## Process Events to the Device
 
 During the device twin synchronization, the CoAP gateway subscribes to events from the IoT hub and translates them into CoAP commands to be sent to devices. If any event is awaiting the device's online status, the CoAP gateway immediately sends it to the device.
