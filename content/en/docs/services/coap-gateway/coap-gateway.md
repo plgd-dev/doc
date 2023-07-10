@@ -37,7 +37,7 @@ Once device authentication is completed, the synchronization of the device twin 
 
 ### Efficient Device Twin Synchronization using Entity Tag (ETAG)
 
-The CoAP gateway employs the Entity Tag (ETAG) mechanism to monitor resource changes. An ETAG, which is a hash of a resource's content, is used to determine if a resource has been modified on the device. The Hub stores the ETAG for each resource along with the timestamp of the last change.
+The CoAP gateway employs the Entity Tag (ETAG) mechanism to monitor resource changes. An ETAG, is used to determine if a resource has been modified on the device. The Hub stores the ETAG for each resource along with the timestamp of the last change.
 
 The CoAP gateway supports two types of resource observation:
 
