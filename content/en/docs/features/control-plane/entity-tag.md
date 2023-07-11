@@ -146,6 +146,8 @@ In order to monitor resource changes and determine if a resource has been modifi
 
 For **Batch Observation**, the ETAG is associated with the overall state of resources. Prior to initiating resource observation, the CoAP gateway retrieves the latest ETAG among all device resources from the Hub Database. During resource observation initiation, the CoAP gateway sends the ETAG to the device. If the received ETAG matches the current state of the resources, the device responds with a code `VALID`. However, if the received ETAG does not match, the device responds with a code `CONTENT` and includes the current ETAG. Consequently, when a resource changes, the device sends the updated ETAG back to the CoAP gateway via a notification. The CoAP gateway transmits the ETAG together with the Content by using the `NotifyResourceChanged` method to the resource-aggregate. This command is then converted into a `ResourceChanged` event, which is saved in a database and distributed through the event bus. In cases where multiple resources change simultaneously, the CoAP gateway updates all affected resources with the same timestamp and ETAG.
 
+The special query to the database efficiently retrieves the latest ETAG value from all device resources without loading the complete set of data. This optimized query solely focuses on performance and retrieves only the required ETAG value, excluding any additional information.
+
 {{< note >}}
 To enable batch observation in IoTivity-lite, you need to activate it using the CMake option `-DOC_DISCOVERY_RESOURCE_OBSERVABLE_ENABLED=ON`.
 {{< /note >}}
