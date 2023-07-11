@@ -130,8 +130,8 @@ Client configurations to internally connect to Resource Aggregate service.
 | `clients.resourceAggregate.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
 | `clients.resourceAggregate.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
 | `clients.resourceAggregate.grpc.keepAlive.permitWithoutStream` | bool | `If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent.` | `false` |
-| `clients.resourceAggregate.deviceStatusExpiration.enabled` | bool | `If ture, refresh device online status in short time than sign token expires.` | `false` |
-| `clients.resourceAggregate.deviceStatusExpiration.ExpiresIn` | bool | `Interval time to refresh device online status.` | `24h` |
+| `clients.resourceAggregate.deviceStatusExpiration.enabled` | bool | `If true, refresh device online status in short time than sign token expires.` | `false` |
+| `clients.resourceAggregate.deviceStatusExpiration.expiresIn` | bool | `The interval time required for refreshing the online status of the device. The specified interval must be equal to or greater than 1 second.` | `0s` |
 
 ### Resource Directory Client
 
