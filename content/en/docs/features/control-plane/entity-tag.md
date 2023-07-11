@@ -98,7 +98,11 @@ There are two methods for updating the ETAG when a resource changes:
 
 ### ETAG Usage by Clients
 
-For any GET or OBSERVE resource request, if the client provides an invalid ETAG, it will be associated with the ETAG of the resource. The ETAG is sent to the client in the response, allowing the client to detect changes in the resource. If the ETAG matches the resource's latest ETAG, the device responds with a `VALID` code and an empty body without the ETAG option. If the ETAG does not match the resource's latest ETAG, the device responds with a `CONTENT` code, the content of the resource, and the latest ETAG. Subsequent observation notifications will contain the ETAG value from the resource.
+The ETAG is sent to the client in the response, allowing the client to detect changes in the resource. If the ETAG matches the resource's latest ETAG, the device responds with a `VALID` code and an empty body without the ETAG option. If the ETAG does not match the resource's latest ETAG, the device responds with a `CONTENT` code, the content of the resource, and the latest ETAG. Subsequent observation notifications will contain the ETAG value from the resource. ETAG is set only for code `CONTENT` responses, for other responses, the ETAG is not set.
+
+{{< note >}}
+For OCF interfaces, the ETAG remains unaffected even if different representations of the resource are available, except for the batch interface (`oic.if.b`). The ETAG is specifically tied to the state of the resource itself, regardless of the interface used.
+{{< /note >}}
 
 ### ETAG Batch GET/Observation for /oic/res
 
@@ -148,6 +152,6 @@ The CoAP gateway supports two types of resource observation:
 To use this option, the device needs to support batch observation mode. For IoTivity-lite, it should be enabled via the `-DOC_DISCOVERY_RESOURCE_OBSERVABLE_ENABLED=ON` CMake option.
 {{< /note >}}
 
-- **Per Resource Observation**: In this mode, the ETAG for each resource needs to be stored. Similar to batch observation, when the device goes offline and reconnects, the Hub can send the corresponding stored ETAG for each observed resource. However, in this case, the ETAG is unique among resources. If the ETAG does not match, the device sends a response with the new ETAG, and the CoAP gateway updates the resource with the new ETAG. If the ETAG matches, the device responds with the code `VALID`, indicating that the resource remains unchanged. In this case, the CoAP gateway does not update the resource and sets the device twin to an in-sync state if all resources are also in sync.
+- **Per Resource Observation**: In this mode, the ETAG for each resource needs to be stored. Similar to batch observation, when the device goes offline and reconnects, the Hub can send the corresponding stored ETAG for each observed resource. However, in this case, the ETAG is unique among resources. If the ETAG does not match, the device sends a response with the current ETAG, and the CoAP gateway updates the resource with the current ETAG. If the ETAG matches, the device responds with the code `VALID`, indicating that the resource remains unchanged. In this case, the CoAP gateway does not update the resource and sets the device twin to an in-sync state if all resources are also in sync.
 
 When the CoAP gateway initiates resource observation, it sends the appropriate ETAG (depending on the mode) to the device. The device responds with a code `VALID` if the ETAG matches or `CONTENT` along with the new ETAG. Subsequently, when the resource changes, the device sends the updated ETAG back to the CoAP gateway in the notification. The CoAP gateway then updates the ETAG for the resource in the Hub using `NotifyResourceChanged` along with the content.
