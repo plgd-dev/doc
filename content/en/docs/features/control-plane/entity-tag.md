@@ -142,16 +142,10 @@ oc_main_shutdown();
 
 ## Efficient Device Twin Synchronization
 
-The CoAP gateway uses the Entity Tag (ETAG) mechanism to monitor resource changes and determine if a resource has been modified on the device. The Hub stores the ETAG for each resource along with the timestamp of the last change.
+In order to monitor resource changes and determine if a resource has been modified on the device, the CoAP gateway utilizes the Entity Tag (ETAG) mechanism. The Hub maintains the ETAG for each resource along with the timestamp of the last change. It is important to note that the timestamp refers to the time when the notification arrives at the CoAP gateway.
 
-The CoAP gateway supports two types of resource observation:
-
-- **Batch Observation**: In this mode, the ETAG is associated with the overall state of resources. Whenever a change occurs, the Hub updates the ETAG for all affected resources with the same timestamp. Consequently, if the device goes offline and reconnects later, the Hub can send the stored latest ETAG among the resources to the device. If the ETAG does not match, the device sends a response with all representations of the resources, including the new ETAG, and the CoAP gateway updates all resources with the same ETAG. If the ETAG matches, the device responds with the code `VALID`, indicating that the resources are unchanged. In this case, the CoAP gateway does not update the resources and sets the device twin to an in-sync state.
+For **Batch Observation**, the ETAG is associated with the overall state of resources. Prior to initiating resource observation, the CoAP gateway retrieves the latest ETAG among all device resources from the Hub Database. During resource observation initiation, the CoAP gateway sends the ETAG to the device. If the received ETAG matches the current state of the resources, the device responds with a code `VALID`. However, if the received ETAG does not match, the device responds with a code `CONTENT` and includes the current ETAG. Consequently, when a resource changes, the device sends the updated ETAG back to the CoAP gateway via a notification. The CoAP gateway then utilizes the `NotifyResourceChanged` command to update the ETAG for the resource in the Hub, along with the corresponding content. In cases where multiple resources change simultaneously, the CoAP gateway updates all affected resources with the same timestamp and ETAG.
 
 {{< note >}}
-To use this option, the device needs to support batch observation mode. For IoTivity-lite, it should be enabled via the `-DOC_DISCOVERY_RESOURCE_OBSERVABLE_ENABLED=ON` CMake option.
+To enable batch observation in IoTivity-lite, you need to activate it using the CMake option `-DOC_DISCOVERY_RESOURCE_OBSERVABLE_ENABLED=ON`.
 {{< /note >}}
-
-- **Per Resource Observation**: In this mode, the ETAG for each resource needs to be stored. Similar to batch observation, when the device goes offline and reconnects, the Hub can send the corresponding stored ETAG for each observed resource. However, in this case, the ETAG is unique among resources. If the ETAG does not match, the device sends a response with the current ETAG, and the CoAP gateway updates the resource with the current ETAG. If the ETAG matches, the device responds with the code `VALID`, indicating that the resource remains unchanged. In this case, the CoAP gateway does not update the resource and sets the device twin to an in-sync state if all resources are also in sync.
-
-When the CoAP gateway initiates resource observation, it sends the appropriate ETAG (depending on the mode) to the device. The device responds with a code `VALID` if the ETAG matches or `CONTENT` along with the new ETAG. Subsequently, when the resource changes, the device sends the updated ETAG back to the CoAP gateway in the notification. The CoAP gateway then updates the ETAG for the resource in the Hub using `NotifyResourceChanged` along with the content.
