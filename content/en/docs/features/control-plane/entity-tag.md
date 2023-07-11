@@ -132,13 +132,11 @@ oc_main_shutdown();
 
 ### Edge Cases
 
-1. Time Synchronization: Ensuring proper time synchronization is crucial for accurately generating the epoch time used in ETAGs. Inconsistent system clock synchronization can lead to disparities when comparing ETAG values. To address this, if the epoch time is less than the current ETAG value, the highest ETAG value plus `oc_random_value()+1` is used as a mitigation strategy.
-2. Storage Failure: If storing ETAG values fails, it can result in the loss of ETAG information and inconsistencies when determining resource modification. To mitigate this issue, the device developer should verify the return value from `oc_etag_dump` to confirm the success of the operation. Storage failures often occur due to insufficient storage space.
-3. ETAG Reset: In the event of a system restart or power outage, the highest ETAG value stored in memory may be lost. To mitigate this, the
-
- ETAG values are not loaded through `oc_etag_load_and_clear`, requiring the client to resynchronize with the device.
-4. Absence of Resources after Device Reboot: ETAG values for non-existing resources are considered when calculating the highest ETAG value in `oc_etag_load_and_clear`. This ensures that ETAG values are not reused by new resources, avoiding conflicts and maintaining consistency.
-5. Addition of Resources after Device Reboot: Similar to creating a new resource, the ETAG value for a newly added resource is set either as the epoch time in milliseconds (`oc_clock_time()`) or as the highest ETAG value `oc_random_value()+1` if the epoch time is less than the current highest ETAG value. This ensures proper tracking of changes for the newly added resource.
+1. **Time Synchronization**: Ensuring proper time synchronization is crucial for accurately generating the epoch time used in ETAGs. Inconsistent system clock synchronization at device can lead to ETAG conflict between the device and client. To address this, if the epoch time is less than the current ETAG value, the highest ETAG value plus `oc_random_value()+1` is used as a mitigation strategy.
+2. **Storage Failure**: If storing ETAG values fails, it can result in the loss of ETAG information and inconsistencies when determining resource modification. To mitigate this issue, the device developer should verify the return value from `oc_etag_dump` to confirm the success of the operation. Storage failures often occur due to insufficient storage space.
+3. **ETAG Reset**: In the event of a system restart without dump or power outage, the highest ETAG value stored in memory may be lost. To mitigate this, the ETAG values are not loaded through `oc_etag_load_and_clear`, requiring the client to resynchronize with the device.
+4. **Absence of Resources after Device Reboot**: ETAG values for non-existing resources are considered when calculating the highest ETAG value in `oc_etag_load_and_clear`. This ensures that ETAG values are not reused by new resources, avoiding conflicts and maintaining consistency.
+5. **Addition of Resources after Device Reboot**: Similar to creating a new resource, the ETAG value for a newly added resource is set either as the epoch time in milliseconds (`oc_clock_time()`) or as the highest ETAG value `oc_random_value()+1` if the epoch time is less than the current highest ETAG value. This ensures proper tracking of changes for the newly added resource.
 
 ## Efficient Device Twin Synchronization
 
