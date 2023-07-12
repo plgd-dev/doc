@@ -27,12 +27,12 @@ For more information about ETAG, refer to the [RFC7252 Section 5.10.6](https://d
 
 In IoTivity-lite, the ETAG is generated using the following algorithm:
 
-1. Take the current time and the current global ETAG value.
-2. If the current time is greater than the global ETAG value, set the current time as the new global ETAG value.
-3. Increment the global ETAG value random number and use it as the resource ETAG for the changed resource.
-4. Set the generated ETAG from step 3 to the changed resource as the resource ETAG.
+1. Obtain the current time and the current global ETAG value.
+2. If the current time exceeds the global ETAG value, update the global ETAG value with the current time.
+3. Generate a random number and add it to the global ETAG value to obtain the new resource ETAG for the modified resource.
+4. Assign the generated ETAG from step 3. to the modified resource as its new ETAG value.
 
-By following this algorithm, the ETAG value is always **increasing and unique for each changed resource among all resources in the device**.
+By following this algorithm, the ETAG is always **increasing and unique for each changed resource among all resources in the device**.
 
 When handling load operations, the global ETAG value is determined by taking the maximum value among all existing ETAGs, combining it with the current time, and adding a random number (refer to `oc_etag_load_and_clear`). The inclusion of the time component serves to minimize potential collisions between the ETAGs of device resources and the cached ETAGs stored in clients. Additionally, the introduction of a random number introduces an element of uncertainty to the ETAG, particularly in cases where time synchronization is not precise.
 
