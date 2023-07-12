@@ -34,7 +34,7 @@ In IoTivity-lite, the ETAG is generated using the following algorithm:
 
 By following this algorithm, the ETAG value is always **increasing and unique for each changed resource among all resources in the device**.
 
-During load, the global ETAG value is calculated as the maximum value among all ETAGs and the current time, plus a random number(see `oc_etag_load_and_clear`). The time component helps remove collisions between the ETAGs of device resources and the cached ETAGs in clients, while the random number adds uncertainty to the ETAG when the time is not synchronized.
+When handling load operations, the global ETAG value is determined by taking the maximum value among all existing ETAGs, combining it with the current time, and adding a random number (refer to `oc_etag_load_and_clear`). The inclusion of the time component serves to minimize potential collisions between the ETAGs of device resources and the cached ETAGs stored in clients. Additionally, the introduction of a random number introduces an element of uncertainty to the ETAG, particularly in cases where time synchronization is not precise.
 
 {{< note >}}
 
@@ -114,7 +114,7 @@ There are two methods for updating the ETAG when a resource changes:
 
 ### ETAG Usage by Clients
 
-Clients can cache the device resources as proxy to reduce network traffic, for that it need to have cached etag with GET responses. As the ETAG is encoded in each `CONTENT` response for GET command from the device, the client can check if the associated ETAG is still valid, by sending ETAG in request to the device. If the ETAG is valid the device responds with a `VALID` code without body, or a `CONTENT` code with the current ETAG and the body if the ETAG is not valid.
+To optimize network traffic, clients can cache device resources as a proxy. This caching process requires the client to store the cached ETAG received with GET responses. Each `CONTENT` response from the device includes an encoded ETAG for the GET request. To determine if the ETAG is still valid, the client can send the ETAG in a request to the device. If the ETAG is valid, the device will respond with a `VALID` code and no body. If the ETAG is not valid, the device will respond with a `CONTENT` code containing the current ETAG and the corresponding body.
 
 {{< note >}}
 For OCF interfaces, the ETAG remains unaffected even if different representations of the resource are available, except for the batch interface (`oic.if.b`). The ETAG is specifically tied to the state of the resource itself, regardless of the interface used.
@@ -122,7 +122,9 @@ For OCF interfaces, the ETAG remains unaffected even if different representation
 
 ### ETAG Batch interface for /oic/res
 
-For the `/oic/res` resource, the ETAG is the highest ETAG value among all device resources in the collection. If multiple resources in the collection change simultaneously, the ETAG is the highest among all changed resources. If client make GET request with the ETAG that match the highest ETAG value among all resources, the response contains `VALID` code without body otherwise the response contains `CONTENT` code, the content of all resources, and the highest ETAG value among all resources.
+When accessing the `/oic/res` resource, the ETAG represents the highest ETAG value among all the device resources in that collection. If multiple resources within the collection undergo simultaneous changes, the ETAG will be set to the highest value among all the modified resources.
+
+If a client sends a GET request with an ETAG that matches the highest ETAG value among all the resources, the response will consist of a `VALID` code without a body. However, if the ETAG provided by the client does not match the highest ETAG value, the response will include a `CONTENT` code along with the content of all the resources and the highest ETAG value among them.
 
 ### Loading and Dumping ETAGs
 
@@ -157,7 +159,54 @@ oc_main_shutdown();
 
 ## Efficient Device Twin Synchronization
 
-In order to monitor resource changes and determine if a resource has been modified on the device, the CoAP gateway utilizes the Entity Tag (ETAG) mechanism. The Hub maintains the ETAG for each resource along with the timestamp of the last change. It is important to note that the timestamp refers to the time when the notification arrives at the CoAP gateway.
+{{< plantuml id="etag-batch-observe" >}}
+@startuml Sequence
+skinparam backgroundColor transparent
+hide footbox
+
+entity Device as "Device"
+participant CGW as "CoAP Gateway"
+participant RA as "Resource Aggregate"
+participant EB as "Event Bus"
+participant RD as "Resource Directory"
+
+Device -> CGW ++: Sign In
+CGW ->Device: Signed In
+CGW -> RA++: UpdateDeviceMetadataRequest with\nTwinSynchronization.State = SYNCING
+RA -> EB: DeviceMetadataUpdated with\nTwinSynchronization.State = SYNCING
+RA -> CGW
+deactivate RA
+CGW -> RD++: Get latest ETAG from the all device resources
+RD -> Database: Get latest ETAG from the all device resources
+Database -> RD: The latest ETAG
+RD -> CGW: The latest ETAG
+deactivate RD
+CGW -> Device++: Batch observe resources with latest ETAG
+alt ETAG == highest ETAG among all device resources
+Device -> CGW: Respond with code VALID
+else ETAG != highest ETAG among all device resources
+Device -> CGW: Current representation of resources with the current ETAG
+CGW -> RA++: BatchNotifyResourceChangedRequest with the current ETAG
+  RA --> Database: Store ResourceChanged event that contains the current ETAG for each resource
+  RA --> EB: Publish ResourceChanged event that contains the current ETAG for each resource
+return BatchNotifyResourceChangedResponse
+end
+CGW -> RA++: UpdateDeviceMetadataRequest with\nTwinSynchronization.State = IN_SYNC
+RA -> EB: DeviceMetadataUpdated with\nTwinSynchronization.State = IN_SYNC
+RA -> CGW: UpdateDeviceMetadataResponse
+deactivate RA
+
+== Resource content changed ==
+
+Device -> CGW : [NOTIFY] 'oic.r.temperature' changed with the current ETAG
+CGW -> RA++: NotifyResourceChangedRequest with the current ETAG
+RA -> Database: Store ResourceChanged event that contains the current ETAG
+RA -> EB: Publish ResourceChanged event that contains the current ETAG
+
+@enduml
+{{< /plantuml >}}
+
+In order to monitor resource changes and determine if a resource has been modified on the device, the CoAP gateway utilizes the Entity Tag (ETAG) mechanism.
 
 For **Batch Observation**, the ETAG is associated with the overall state of resources. Prior to initiating resource observation, the CoAP gateway retrieves the latest ETAG among all device resources from the Hub Database. During resource observation initiation, the CoAP gateway sends the ETAG to the device. If the received ETAG matches the current state of the resources, the device responds with a code `VALID`. However, if the received ETAG does not match, the device responds with a code `CONTENT` and includes the current ETAG. Consequently, when a resource changes, the device sends the updated ETAG back to the CoAP gateway via a notification. The CoAP gateway transmits the ETAG together with the Content by using the `NotifyResourceChanged` method to the resource-aggregate. This command is then converted into a `ResourceChanged` event, which is saved in a database and distributed through the event bus. In cases where multiple resources change simultaneously, the CoAP gateway updates all affected resources with the same timestamp and ETAG.
 
