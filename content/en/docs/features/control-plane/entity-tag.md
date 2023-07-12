@@ -181,10 +181,10 @@ RD -> Database: Get latest ETAG from the all device resources
 Database -> RD: The latest ETAG
 RD -> CGW: The latest ETAG
 deactivate RD
-CGW -> Device++: Batch observe resources with latest ETAG
-alt ETAG == highest ETAG among all device resources
+CGW -> Device++: Batch observe resources with the latest ETAG
+alt Latest ETAG == highest ETAG among all device resources
 Device -> CGW: Respond with code VALID
-else ETAG != highest ETAG among all device resources
+else Latest ETAG != highest ETAG among all device resources
 Device -> CGW: Current representation of resources with the current ETAG
 CGW -> RA++: BatchNotifyResourceChangedRequest with the current ETAG
   RA --> Database: Store ResourceChanged event that contains the current ETAG for each resource
