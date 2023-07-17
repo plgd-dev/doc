@@ -215,3 +215,7 @@ The special query to the database efficiently retrieves the latest ETAG value fr
 {{< note >}}
 To enable batch observation in IoTivity-lite, you need to activate it using the CMake option `-DOC_DISCOVERY_RESOURCE_OBSERVABLE_ENABLED=ON`.
 {{< /note >}}
+
+{{< tip >}}
+To identify the resource responsible for updating the ETAG during batch observation, you can refer to the device's debug logs. To enable the device debug logs, use the `-DOC_DEBUG_ENABLED=ON` flag, and set the filter function using [oc_log_set_function](https://github.com/iotivity/iotivity-lite/blob/6a12a6e2bd30552ac77274805f95945efd79a1c8/include/oc_log.h#L181-L191).
+{{< /tip >}}
