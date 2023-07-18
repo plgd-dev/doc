@@ -109,8 +109,8 @@ bool oc_etag_load_and_clear()
 
 There are two methods for updating the ETAG when a resource changes:
 
-- `oc_notify_observers`: Notifies all observers that the resource has changed, what internally invokes `oc_resource_update_etag`.
-- `oc_resource_update_etag`: Updates the ETAG without notifying observers about the content change. This could be useful for non-observable resources.
+- `oc_notify_resource_changed`: This function internally triggers `oc_notify_observers` for the observable resource and `oc_resource_update_etag`.
+- `oc_resource_update_etag`: This function updates the ETAG without informing observers about the change in content. It can be beneficial for resources that are not observable.
 
 ### ETAG Usage by Clients
 
