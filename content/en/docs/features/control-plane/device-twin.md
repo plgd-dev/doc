@@ -152,9 +152,15 @@ CGW -> RA++: UpdateDeviceMetadataRequest with\nTwinSynchronization.State = SYNCI
 RA -> EB: DeviceMetadataUpdated with\nTwinSynchronization.State = SYNCING
 RA -> CGW
 deactivate RA
-CGW -> Device++: Batch observe
-Device -> CGW: Current representation of resources
-CGW -> RA++: BatchNotifyResourceChangedRequest
+activate Device
+alt ForceResynchronization == false
+  CGW -> Device: Batch observe with incremental changes and ETAGs
+  Device -> CGW: BatchNotifyResourceChangedRequest with all incremental changes
+else ForceResynchronization == true
+  CGW -> Device: Batch observe
+  Device -> CGW: Current representation of all resources
+end
+  CGW -> RA++: BatchNotifyResourceChangedRequest with increment changes
   RA --> EB: ResourceChanged event for all changed resources
 return BatchNotifyResourceChangedResponse
 CGW -> RA++: UpdateDeviceMetadataRequest with\nTwinSynchronization.State = IN_SYNC
@@ -313,3 +319,48 @@ deactivate CGW
 deactivate Device
 @enduml
 {{< /plantuml >}}
+
+#### Force Resynchronization
+
+Force resynchronization refers to the process of refreshing all resources from the device and updating the twin. Its primary purpose is to resolve potential synchronization issues and ensure there are no operational discrepancies between the device and its twin. It also enable twin.
+
+To trigger force resynchronization, the client must send the `UpdateDeviceMetadataRequest` with the `TwinForceResynchronization` parameter. It's important to note that force resynchronization will only take place if the device is online or comes online.
+
+To ensure that the resynchronization is successfully completed, the client should wait for the `DeviceMetadataUpdated` event, wherein the `TwinSynchronization.State` parameter is set to `IN_SYNC`. This indicates that the force resynchronization process has been successfully executed and the device and its twin are now in sync.
+
+{{< plantuml id="device-metadata-twin-force-resynchronization" >}}
+@startuml Sequence
+skinparam backgroundColor transparent
+hide footbox
+
+entity Device as Device
+participant CGW as "CoAP Gateway"
+participant RA as "Resource Aggregate"
+control EB as "Event Bus"
+entity "Client" as Client
+
+Client -> RA : UpdateDeviceMetadataRequest with\nTwinForceResynchronization = true, correlationId = "abc"
+activate Client
+activate RA
+activate Device
+RA -> Client : UpdateDeviceMetadataResponse
+RA --> EB : DeviceMetadataUpdatePending with\nTwinForceResynchronization = true, correlationId = "abc"
+deactivate RA
+EB --> CGW : DeviceMetadataUpdatePending with\nTwinForceResynchronization = true, correlationId = "abc"
+activate CGW
+CGW -> RA : ConfirmDeviceMetadataUpdateRequest with\n TwinForceResynchronization = true, correlationId = "abc"
+activate RA
+RA --> EB : DeviceMetadataUpdated with\nTwinEnabled = true, TwinSynchronization.State = OUT_OF_SYNC, Twin.ForceResynchronizationAt = unix timestamp in ns, correlationId = "abc"
+deactivate RA
+EB --> Client : DeviceMetadataUpdated with\nTwinEnabled = true, TwinSynchronization.State = OUT_OF_SYNC, Twin.ForceResynchronizationAt = unix timestamp in ns, correlationId == "abc"
+deactivate Client
+RA -> CGW : ConfirmDeviceMetadataUpdateResponse
+CGW -> Device: Get device resources links\nto check if batch observation is supported
+Device->CGW: Device resources links
+ref over CGW, RA, EB, Device: Device Twin Synchronization
+deactivate CGW
+deactivate Device
+@enduml
+{{< /plantuml >}}
+
+To stop force resynchronization send `CancelDeviceMetadataUpdateRequest` with `correlationId` used in `UpdateDeviceMetadataRequest`.
