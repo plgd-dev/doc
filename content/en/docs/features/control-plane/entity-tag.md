@@ -109,15 +109,19 @@ To identify the specific resource ETAG used in the batch ETAG response, the clie
 
 #### Incremental Changes
 
-When making a GET request, clients can include ETAGs with the query parameter `incChanges` to request incremental changes from the device. Each ETAG provided by the client corresponds to a different resource ETAG.
+To request incremental changes from a device through a GET request, clients can include an `ETAG-0` in the option, along with multiple query parameters using the following format: `incChanges=<ETAG-1 in base64>..<ETAG-20 in base64>, incChanges=<ETAG-21 in base64>..<ETAG-40 in base64>, incChanges=...`. Each `ETAG` provided by the client corresponds to a different resource's `ETAG`, and the `ETAG-0` in the option represents the latest `ETAG` among all resources.
+
+If the value of `ETAG-0` is the same as the highest `ETAG` among all the resources on the device, it indicates that the client is already up to date with the latest changes. Consequently, the device will respond with the `VALID` code, as mentioned in the previous section.
 
 {{< note >}}
-The number of ETAGs that can be included in the options is limited by the size of the datagram in UDP transport, which is typically 1152 bytes in most cases. Therefore, the entire CoAP packet size must be kept below 1152 bytes to ensure proper transmission. For optimal performance with a 1152-byte datagram, it is recommended to have a maximum of 96 ETAGs included.
 
-The query parameter `incChanges` change the processing requested ETAGs options by device which is described in [RFC7252 Section 5.10.6.2](https://datatracker.ietf.org/doc/html/rfc7252#section-5.10.6.2)
+The query's capacity to include ETAGs is limited to 255 due to restrictions on the option size and the maximum transmission unit (MTU) for datagrams in UDP transport, typically set at 1152 bytes in most cases. As a result, to ensure proper transmission, the entire CoAP packet size must not exceed the MTU. For optimal performance with a 1152-byte datagram, it is advisable to limit the usage to a maximum of 60 ETAGs (20 ETAGs per query).
+
+In the case of TCP transport, the limit is determined by the protocol data unit size, referred to as `OC_PDU_SIZE` in iotivity-lite.
+
 {{< /note >}}
 
-The device responds with incremental changes, indicated by the `CONTENT` response code, only if the provided ETAGs are smaller than the global ETAG, and it one of the ETAGs provided by the client corresponds to a resource on the device, starting from this ETAG, the device will send all resources with ETAGs greater than the provided ETAG. The resources will be ordered based on the device's preference. If list resources is empty, the device will respond with a `VALID` code.
+The device responds with incremental changes, indicated by the `CONTENT` response code, only if the provided ETAGs are smaller than the global ETAG, and it one of the ETAGs provided by the client corresponds to a resource on the device, starting from this ETAG, the device will send all resources with ETAGs greater than the provided ETAG.
 
 ### Loading and Dumping ETAGs
 
