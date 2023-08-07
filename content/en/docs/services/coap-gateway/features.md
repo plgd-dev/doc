@@ -20,5 +20,6 @@ weight: 2
 ### Planned Features
 
 - **&#x2610; Device Twin Synchronization with ETAG:** Implementing the ETAG mechanism will ensure that device twin synchronization occurs only when the device's state has changed since the last synchronization. This optimization reduces unnecessary data transfer between the CoAP gateway and the IoT hub, enhancing performance when the device is online.
+- **&#x2610; Monitoring Device Connectivity:** Monitors device connectivity status to determine if a device is online or offline.
 - **&#x2610; Device Logging:** Introduce device logging capabilities to record detailed activity logs of each device. The logs can be forwarded to the Open Telemetry collector for further analysis and monitoring purposes.
 - **&#x2610; OpenTelemetry Metrics:** The CoAP gateway will incorporate OpenTelemetry metrics, providing detailed insights into the gateway's performance and resource utilization. This feature will allow for comprehensive monitoring and analysis of the gateway's behavior.

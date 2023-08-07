@@ -36,4 +36,7 @@ Here's an overview of the functionalities provided by the HTTP Gateway:
    - GetPendingCommands: Retrieves pending commands for devices.
    - CancelPendingCommands: Cancels resource commands.
 
+5. Service management:
+   - GetServicesMetadata: Retrieves metadata of services, which are running.
+
 For more detailed information, refer to the [HTTP Gateway API documentation](/docs/services/http-gateway/http-api). Additionally, specific details about the integration with the gRPC Gateway API can be found [here](/docs/services/grpc-gateway/grpc-api).
