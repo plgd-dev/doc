@@ -36,7 +36,4 @@ Here's an overview of the functionalities provided by the gRPC Gateway:
    - GetPendingCommands: Retrieves pending commands for devices.
    - CancelPendingCommands: Cancels resource commands.
 
-5. Service management:
-   - GetServicesMetadata: Retrieves metadata of services, which are running.
-
 For more detailed information, please refer to the [gRPC Gateway API documentation](/docs/services/grpc-gateway/grpc-api).

@@ -24,17 +24,10 @@ More information about the JetStream can be found [here](https://docs.nats.io/je
 - `ownerID` is the owner of the device. It is calculated as `uuid.NewV5(uuid.NamespaceURL, value of JWT ownerClaim)`.
 - `deviceID` is the UUID of the device.
 - `hrefID` is the identifier of resource. It is calculated as `uuid.NewV5(uuid.NamespaceURL, href)`, where the `href` is a resource path. (eg "/oic/d").
-- `serviceType` is a type of service like `coap-gateway`.
-
-### Events
-
-Each event is compressed by [snappy](https://github.com/google/snappy) and encoded in protobuf [event envelope](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/cqrs/eventbus/pb/eventbus.proto). The event envelope consist of `Event.data` containing the event and `Event.event_type` describing the type of the event.
-
-### Service events
-
-- `plgd.service-types.{serviceType}.metadata.{eventType}` publishes metadata events of types `servicemetadataupdated` for service type `serviceType`.
 
 ### Device events
+
+Each event is compressed by [snappy](https://github.com/google/snappy) and encoded in protobuf [devices event envelope](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/cqrs/eventbus/pb/eventbus.proto). The event envelope consist of `Event.data` containing the event and `Event.event_type` describing the type of the event.
 
 #### Resource links
 
