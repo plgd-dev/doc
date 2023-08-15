@@ -24,7 +24,7 @@ Periodically, each CoAP gateway process instance updates a shared record in data
 
 To calculate the `recordID` for updating the record within a 1-minute period, the following logic in Golang is employed:
 
-```golang
+```golang\(recordID-1\)
     now := time.Now().UnixNano()
     period := 1 * time.Minute
     recordID = now - (now % int64(period))
@@ -40,8 +40,8 @@ The `TerminateConnectionsByService` function is designed exclusively for service
 
 ### Example
 
-We expanded our setup to include two CoAP gateways within a k8s environment, operating on a 1-minute check interval. In the database, both the previous(recordID-0) and current(recordID-1) records held the IDs UUID-0 and UUID-1 for the two CoAP gateways. However, one instance (UUID-1) experienced an OOM (Out of Memory) event, resulting in a restart. This led to two CoAP gateway instances existing concurrently, and the current record(recordID-1) now encompassed UUID-0, UUID-1, and the new UUID-2 due to the restarted gateway receiving a new UUID.
+We expanded our setup to include two CoAP gateways within a k8s environment, operating on a 1-minute check interval. In the database, both the previous(`recordID-0`) and current(`recordID-1`) records held the IDs UUID-0 and UUID-1 for the two CoAP gateways. However, one instance (UUID-1) experienced an OOM (Out of Memory) event, resulting in a restart. This led to two CoAP gateway instances existing concurrently, and the current record(`recordID-1`) now encompassed UUID-0, UUID-1, and the new UUID-2 due to the restarted gateway receiving a new UUID.
 
-As time advanced by 1 minute, a new record(recordID-2) was created, prompting an examination of the preceding records. The earliest previous record(recordID-0) included UUID-0 and UUID-1, while the most recent previous record(recordID-1) held UUID-0, UUID-1, and UUID-2. During this scenario, the coap-gateway hadn't yet detected the termination of one of the gateways, and consequently, all records(recordID-0) preceding the last one were deleted.
+As time advanced by 1 minute, a new record(`recordID-2`) was created, prompting an examination of the preceding records. The earliest previous record(`recordID-0`) included UUID-0 and UUID-1, while the most recent previous record(`recordID-1`) held UUID-0, UUID-1, and UUID-2. During this scenario, the coap-gateway hadn't yet detected the termination of one of the gateways, and consequently, all records(`recordID-0`) preceding the last one were deleted.
 
-After another minute had passed, a fresh record was established, leading to an assessment of the past two records in chronological order. The first of these previous records(recordID-1) encompassed UUID-0, UUID-1, and UUID-2, whereas the most recent record contained only UUID-0 and UUID-2(recordID-2). At this juncture, the termination of UUID-1 was successfully identified, allowing the coap-gateway responsible for record creation to transition all devices connected to the terminated gateway into an offline state.
+After another minute had passed, a fresh record was established, leading to an assessment of the past two records in chronological order. The first of these previous records(`recordID-1`) encompassed UUID-0, UUID-1, and UUID-2, whereas the most recent record contained only UUID-0 and UUID-2(`recordID-2`). At this juncture, the termination of UUID-1 was successfully identified, allowing the coap-gateway responsible for record creation to transition all devices connected to the terminated gateway into an offline state.
