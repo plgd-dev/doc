@@ -109,9 +109,20 @@ To identify the specific resource ETAG used in the batch ETAG response, the clie
 
 #### Incremental Changes
 
-To request incremental changes from a device through a GET request, clients can include an `ETAG-0` in the option, along with multiple query parameters using the following format: `incChanges=<ETAG-1 in base64>..<ETAG-20 in base64>, incChanges=<ETAG-21 in base64>..<ETAG-40 in base64>, incChanges=...`. Each `ETAG` provided by the client corresponds to a different resource's `ETAG`, and the `ETAG-0` in the option represents the latest `ETAG` among all resources.
+The incremental changes enables clients to request modifications to resources that have occurred since the most recent notification from observation or GET request. To request incremental changes from a device through a GET request, clients can include an `ETAG-0 Value` in the [CoAP option](https://datatracker.ietf.org/doc/html/rfc7252#section-5.10.6), along with multiple [CoAP query parameters](https://datatracker.ietf.org/doc/html/rfc7252#section-5.10.1) using the following format: `incChanges=<ETAG-1 Value in base64>..<ETAG-20 Value in base64>`, `incChanges=<ETAG-21 Value in base64>..<ETAG-40 Value in base64>`,`incChanges=...`. Each `ETAG` provided by the client corresponds to a different resource's `ETAG`, and the `ETAG-0 Value` in the option represents the latest `ETAG Value` among all resources. The ETag-0 Value is encoded in binary format as it resides within the CoAP option, while the remaining ETAG-1+ values are encoded in base64 format. This choice is due to their storage in query parameters, which require compliance with UTF-8 encoding.
 
-If the value of `ETAG-0` is the same as the highest `ETAG` among all the resources on the device, it indicates that the client is already up to date with the latest changes. Consequently, the device will respond with the `VALID` code, as mentioned in the previous section.
+{{< note >}}
+
+If we were to illustrate this in terms of HTTP, it would resemble the following:
+
+```http
+GET /oic/res?incChanges=<ETAG-1 Value in base64>..<ETAG-20 Value in base64>&incChanges=<ETAG-21 Value in base64>..<ETAG-40 Value in base64>&incChanges=... HTTP/1.1
+ETag: <ETAG-0 Value>
+```
+
+{{< /note >}}
+
+If the value of `ETAG-0 Value` is the same as the highest `ETAG` among all the resources on the device, it indicates that the client is already up to date with the latest changes. Consequently, the device will respond with the `VALID` code, as mentioned in the previous section.
 
 {{< note >}}
 
@@ -121,7 +132,7 @@ In the case of TCP transport, the limit is determined by the protocol data unit 
 
 {{< /note >}}
 
-The device responds with incremental changes, indicated by the `CONTENT` response code, only if the provided ETAGs are smaller than the global ETAG, and it one of the ETAGs provided by the client corresponds to a resource on the device, starting from this ETAG, the device will send all resources with ETAGs greater than the provided ETAG.
+The device sends incremental changes (shown by the `CONTENT` response code) if the given ETAGs are smaller than the global ETAG. If one of the client's ETAGs matches a device resource, the device will transmit all resources with higher ETAGs from that point. In short, you'll receive only changed or all resources.
 
 ### Loading and Dumping ETAGs
 
