@@ -86,7 +86,7 @@ For OCF interfaces, the ETAG remains unaffected even if different representation
 
 ### ETAG Batch interface for /oic/res
 
-When accessing the `/oic/res` resource, the ETAG represents the highest ETAG value among all the device resources in that collection. If multiple resources within the collection undergo simultaneous changes, the ETAG will be set to the highest value among all the modified resources.
+When accessing the `/oic/res` resource, the ETAG represents the highest ETAG value among all the device resources in that collection and the collection ETAG itself. If multiple resources within the collection undergo simultaneous changes, the ETAG will be set to the highest value among all the modified resources.
 
 If a client sends a GET request with an ETAG that matches the highest ETAG value among all the resources, the response will consist of a `VALID` code without a body. However, if the ETAG provided by the client does not match the highest ETAG value, the response will include a `CONTENT` code along with the content of all the resources and the highest ETAG value among them.
 
@@ -105,7 +105,7 @@ To support the use of ETAGs, the representation of the resource in the batch res
 ]
 ```
 
-To identify the specific resource ETAG used in the batch ETAG response, the client should conduct a comparison between the ETAG value of each resource within the batch response and the ETAG value provided in the CoAP option by the client.
+To identify the specific resource ETAG used in the batch ETAG response, the client should conduct a comparison between the ETAG value of each resource within the batch response and the ETAG value provided in the CoAP option by the client. In case the collection resource ETAG has been used, the ETAG is not included in the body response.
 
 #### Incremental Changes
 
@@ -137,6 +137,12 @@ The device sends incremental changes (shown by the `CONTENT` response code) if t
 ### Loading and Dumping ETAGs
 
 During device startup, the device developer loads the ETAGs using `oc_etag_load_and_clear` and clears the existing storage. Additionally, when properly shutting down IoTivity-lite, the ETAGs are stored in the storage using `oc_etag_dump`. Improper shutdown results in the ETAGs not being stored, leading to their absence upon restart. The device developer should call `oc_etag_load_and_clear` after creating all resources and before the first run by calling `oc_main_poll_v1`, and `oc_etag_dump` before calling `oc_main_shutdown`.
+
+{{< note >}}
+
+When utilizing the `oc_etag_dump` function to safeguard ETAGs, both the ETAG associated with each resource and the hash (SHA1) of its content are stored. Should the hash of the content differ from the stored hash during the loading process using `oc_etag_load_and_clear`, the existing ETAG is invalidated, prompting the creation of a fresh ETAG. The process of computing the hash entails initiating a GET request via the `x.plgd.if.etag` interface, if supported by the resource. Alternatively, the `oic.if.baseline` interface is employed. Notably, the `x.plgd.if.etag` interface allows for the exclusion of certain properties from the hash computation. For example, the `/x.plgd.dev/time` resource has a `time` property that consists of a timestamp. This specific property does not contribute to the hash computation.
+
+{{< /note >}}
 
 ```c
 int ret = oc_main_init(&handler);
