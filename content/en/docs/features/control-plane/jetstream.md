@@ -88,7 +88,7 @@ It's required from you to create event streams before the JetStream can be used 
 Set env variable `JETSTREAM=true` of bundle
 
 ```bash
-docker run -it --rm -e JETSTREAM=true --network=host -v `pwd`/.tmp/data:/data plgd/bundle:vnext)
+docker run -it --rm -e JETSTREAM=true --network=host -v `pwd`/.tmp/data:/data ghcr.io/plgd-dev/hub/bundle:latest)
 ```
 
 ### Enable jetstream manually

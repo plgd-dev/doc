@@ -30,7 +30,7 @@ Bundle version of plgd services should be used only for simple testing and devel
 To deploy and access plgd hub on your local PC using bundle, run single command:
 
 ```bash
-docker run -d --name plgd -p 443:443 -p 5683:5683 -p 5684:5684 plgd/bundle:vnext
+docker run -d --name plgd -p 443:443 -p 5683:5683 -p 5684:5684 ghcr.io/plgd-dev/hub/bundle:latest
 ```
 
 After couple of seconds your plgd hub will become available. The plgd dashboard can be opened in your browser at [https://localhost/](https://localhost/).
