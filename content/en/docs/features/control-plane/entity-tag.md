@@ -171,6 +171,7 @@ oc_main_shutdown();
 5. **Addition of Resources after Device Reboot**: When new resources are added after a device reboot, the ETAG is set using the algorithm described in the [ETAG Generation Algorithm](#etag-generation-algorithm). This ensures proper tracking of changes for the newly added resource and maintains synchronization with the global ETAG.
 6. **Global ETAG Overflow**: In the event that the global ETAG reaches its maximum value and overflows, all resource ETAGs must be reinitialized. This prevents potential conflicts and ensures the continued accurate tracking of resource changes.
 7. **Software update**: When a software update occurs, the ETAGs are cleared. This prevents potential conflicts and ensures the continued accurate tracking of resource changes.
+8. **Modifying Access Control Lists (ACLs)**: Whenever alterations are made to ACLs, the corresponding resources impacted by these ACL changes must also update their ETAG values. This requirement extends to all parent collections, including the discovery resource, to ensure synchronization with the batch interface.
 
 ## Efficient Device Twin Synchronization
 
