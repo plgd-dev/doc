@@ -13,7 +13,7 @@ The CoAP gateway is responsible for the connection management including the up t
 
 In the context of managing CoAP gateways and their associated devices, the process of setting devices to an offline state involves a series of steps:
 
-1. **Generation of Unique IDs**: Each instance of a CoAP gateway initiates with a unique identification (ID) generated during its initialization. These IDs play a dual role – they are stored in a database for reference and are also associated with device metadata. This association allows for streamlined updates regarding the online status of the devices.
+1. **Generation of Unique IDs**: Each instance of a CoAP gateway is initiated with a unique identification (ID) generated during its initialization. These IDs play a dual role – they are stored in a database for reference and are also associated with device metadata. This association allows for streamlined updates regarding the online status of the devices.
 
 2. **RecordID Calculation**: To determine the appropriate `recordID` for updating the record within a N-minute period, a Golang logic is utilized:
 
@@ -28,15 +28,15 @@ In the context of managing CoAP gateways and their associated devices, the proce
    ```golang
    type SharedRecord struct {
        RecordID          int64    `bson:"_id"`            // ID of the record moving forward in time
-       CoAPGatewayIDs    []string `bson:"coapgatewayids"` // IDs of lived CoAP gateways during the period
+       CoAPGatewayIDs    []string `bson:"coapgatewayids"` // IDs of active CoAP gateways during the period
    }
    ```
 
-   If the record has already been created, move on to the subsequent step. Otherwise, await the next time interval and initiate the process again starting from step `2.`
+   If the record has already been created, wait for the next time interval and initiate the process again, starting from step `2.` Otherwise, proceed to the subsequent step.
 
-4. **Termination Detection**: Upon the creation of a new record, the system examines records with a `recordID` corresponding to the time within the last periods. This examination encompasses CoAP gateways that were operational before the current period.
+4. **Termination Detection**: Upon the creation of a new record, the system examines previous records and creates a list of all CoAP gateways.
 
-5. **Gateway Exclusion**: CoAP gateways active within the current period and the previous period are excluded from the list of operational gateways derived in the previous step.
+5. **Gateway Exclusion**: CoAP gateways active within the current period and the previous period are excluded from the list of gateways derived in the previous step.
 
 6. **Device Transition to Offline**: The remaining CoAP gateways in the list are identified as terminated. To ensure accurate device status, the system uses the Resource Aggregate command `TerminateConnectionsByService`. This command transitions devices associated with terminated CoAP gateways to an offline state.
 
