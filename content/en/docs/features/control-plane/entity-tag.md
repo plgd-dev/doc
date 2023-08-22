@@ -116,7 +116,7 @@ The incremental changes feature enables clients to request modifications to reso
 If we were to illustrate this in terms of HTTP, it would resemble the following:
 
 ```http
-GET /oic/res?incChanges=<ETAG-1 Value in base64>..<ETAG-20 Value in base64>&incChanges=<ETAG-21 Value in base64>..<ETAG-40 Value in base64>&incChanges=... HTTP/1.1
+GET /oic/res?incChanges=<ETAG-1 Value in base64>..<ETAG-20 Value in base64>&incChanges... HTTP/1.1
 ETag: <ETAG-0 Value>
 ```
 
