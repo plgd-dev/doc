@@ -322,7 +322,7 @@ deactivate Device
 
 #### Force Resynchronization
 
-Force resynchronization refers to the process of refreshing all resources from the device and updating the twin. Its primary purpose is to resolve potential synchronization issues and ensure there are no operational discrepancies between the device and its twin. It also enable twin.
+Force resynchronization refers to the process of refreshing all resources from the device and updating the twin. Its primary purpose is to resolve potential synchronization issues and ensure there are no operational discrepancies between the device and its twin. It also enable the device twin.
 
 To trigger force resynchronization, the client must send the `UpdateDeviceMetadataRequest` with the `TwinForceResynchronization` parameter. It's important to note that force resynchronization will only take place if the device is online or comes online.
 
