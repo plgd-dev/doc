@@ -42,14 +42,8 @@ extern "C" {
 #endif /* DPS_SHARED_LIBRARY */
 
 #if defined(__GNUC__) || defined(__clang__)
-#define DPS_NONNULL(...) __attribute__((nonnull(__VA_ARGS__)))
-#define DPS_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
 #define DPS_UNREACHABLE __builtin_unreachable()
 #else /* !GNUC && !__clang__ */
-/// Warn about NULL being used for value that is expected to be non-NULL.
-#define DPS_NONNULL(...)
-/// Warn that the return value is not checked.
-#define DPS_WARN_UNUSED_RESULT
 /// Mark unreachable code.
 #define DPS_UNREACHABLE
 #endif /* GNUC || __clang__ */
