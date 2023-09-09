@@ -14,34 +14,41 @@
 #ifndef PLGD_DPS_LOG_H
 #define PLGD_DPS_LOG_H
 
-#include "dps_compiler.h"
-#include "oc_clock_util.h"
+#include "plgd/dps_compiler.h"
+
+#include <oc_log.h>
+#include <util/oc_compiler.h>
+
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <sys/time.h>
 #include <time.h>
-
-#ifndef __FILENAME__
-#ifdef WIN32
-// NOLINTNEXTLINE(bugprone-reserved-identifier)
-#define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
-#else
-// NOLINTNEXTLINE(bugprone-reserved-identifier)
-#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-#endif
-#endif /* !__FILENAME__ */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+/**
+ * Log component determines the source of the message.
+ */
 typedef enum {
-  DPS_LOG_LEVEL_DEBUG,
-  DPS_LOG_LEVEL_WARNING,
-  DPS_LOG_LEVEL_INFO,
-  DPS_LOG_LEVEL_ERROR,
-} plgd_dps_log_level_t;
+  PLGD_DPS_LOG_COMPONENT_DEFAULT = 1 << 0, ///< default, non-specific component
+} plgd_dps_log_component_t;
 
-typedef void (*plgd_dps_print_log_fn_t)(plgd_dps_log_level_t log_level, const char *format, ...);
+/**
+ * @brief Custom logging function
+ *
+ * @param level log level of the message
+ * @param component log component of the message
+ * @param file file of the log message call
+ * @param line line of the log message call in \p file
+ * @param func_name function name in which the log message call is invoked
+ * @param format format of the log message
+ */
+typedef void (*plgd_dps_print_log_fn_t)(oc_log_level_t level, plgd_dps_log_component_t component, const char *file,
+                                        int line, const char *func_name, const char *format, ...) OC_PRINTF_FORMAT(6, 7)
+  OC_NONNULL();
 
 /// @brief Set global logging function
 DPS_EXPORT
@@ -49,45 +56,41 @@ void plgd_dps_set_log_fn(plgd_dps_print_log_fn_t log_fn);
 
 /// @brief Get global logging function
 DPS_EXPORT
-plgd_dps_print_log_fn_t plgd_dps_get_log_fn(void);
+plgd_dps_print_log_fn_t plgd_dps_get_log_fn(void) OC_RETURNS_NONNULL;
 
-#define DPS_LOG(log_level, ...)                                                                                        \
-  do {                                                                                                                 \
-    plgd_dps_print_log_fn_t _dps_log_fn = plgd_dps_get_log_fn();                                                       \
-    if (_dps_log_fn != NULL) {                                                                                         \
-      _dps_log_fn((log_level), __VA_ARGS__);                                                                           \
-    } else {                                                                                                           \
-      char dps_log_fn_buf[64] = { 0 };                                                                                 \
-      oc_clock_time_rfc3339(dps_log_fn_buf, sizeof(dps_log_fn_buf));                                                   \
-      const char *log_level_str = "D";                                                                                 \
-      switch (log_level) {                                                                                             \
-      case DPS_LOG_LEVEL_DEBUG:                                                                                        \
-        log_level_str = "D";                                                                                           \
-        break;                                                                                                         \
-      case DPS_LOG_LEVEL_INFO:                                                                                         \
-        log_level_str = "I";                                                                                           \
-        break;                                                                                                         \
-      case DPS_LOG_LEVEL_WARNING:                                                                                      \
-        log_level_str = "W";                                                                                           \
-        break;                                                                                                         \
-      case DPS_LOG_LEVEL_ERROR:                                                                                        \
-        log_level_str = "E";                                                                                           \
-        break;                                                                                                         \
-      }                                                                                                                \
-      printf("[DPS %s] %s: %s <%s:%d>: ", dps_log_fn_buf, log_level_str, __FILENAME__, __func__, __LINE__);            \
-      printf(__VA_ARGS__);                                                                                             \
-      printf("\n");                                                                                                    \
-    }                                                                                                                  \
-  } while (0)
+/**
+ * @brief Set log level of the global logger, logs with lower importance will be
+ * ignored. It is thread safe.
+ *
+ * @param level Log level
+ * @note If log level is not set, the default log level is OC_LOG_LEVEL_INFO.
+ */
+DPS_EXPORT
+void plgd_dps_log_set_level(oc_log_level_t level);
 
-#ifdef DPS_DBG_ENABLED
-#define DPS_DBG(...) DPS_LOG(DPS_LOG_LEVEL_DEBUG, __VA_ARGS__)
-#else /* !DPS_DBG_ENABLED */
-#define DPS_DBG(...)
-#endif /* DPS_DBG_ENABLED */
-#define DPS_INFO(...) DPS_LOG(DPS_LOG_LEVEL_INFO, __VA_ARGS__)
-#define DPS_WRN(...) DPS_LOG(DPS_LOG_LEVEL_WARNING, __VA_ARGS__)
-#define DPS_ERR(...) DPS_LOG(DPS_LOG_LEVEL_ERROR, __VA_ARGS__)
+/**
+ * @brief Get log level of the global logger. It is thread safe.
+ *
+ * @return Log level
+ */
+DPS_EXPORT
+oc_log_level_t plgd_dps_log_get_level(void);
+
+/**
+ * @brief Set enabled log components of the global logger. It is thread safe.
+ *
+ * @param components mask of enabled log components
+ */
+DPS_EXPORT
+void plgd_dps_log_set_components(uint32_t components);
+
+/**
+ * @brief Get enabled log components of the global logger. It is thread safe.
+ *
+ * @return uint32_t mask of enabled log components
+ */
+DPS_EXPORT
+uint32_t plgd_dps_log_get_components(void);
 
 #ifdef __cplusplus
 }

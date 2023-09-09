@@ -36,21 +36,22 @@
 #error "OC_STORAGE must be defined"
 #endif
 
-#include "dps_compiler.h"
-#include "oc_client_state.h"
-#include "oc_cloud.h"
-#include "oc_ri.h"
-#include "oc_session_events.h"
+#include "plgd/dps_compiler.h"
+
+#include <mbedtls/md.h>
+#include <oc_client_state.h>
+#include <oc_cloud.h>
+#include <oc_ri.h>
+#include <oc_session_events.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <mbedtls/md.h>
+#include <util/oc_compiler.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-struct plgd_dps_context_t;
 typedef struct plgd_dps_context_t plgd_dps_context_t;
 
 /**
@@ -125,7 +126,7 @@ plgd_dps_context_t *plgd_dps_get_context(size_t device);
  * @return size_t index of device
  */
 DPS_EXPORT
-size_t plgd_dps_get_device(const plgd_dps_context_t *ctx) DPS_NONNULL();
+size_t plgd_dps_get_device(const plgd_dps_context_t *ctx) OC_NONNULL();
 
 typedef struct
 {
@@ -166,7 +167,7 @@ typedef struct
  * @endcode
  */
 DPS_EXPORT
-void plgd_dps_set_manager_callbacks(plgd_dps_context_t *ctx, plgd_dps_manager_callbacks_t callbacks) DPS_NONNULL(1);
+void plgd_dps_set_manager_callbacks(plgd_dps_context_t *ctx, plgd_dps_manager_callbacks_t callbacks) OC_NONNULL(1);
 
 /**
  * @brief Start DPS manager to provision device.
@@ -192,7 +193,7 @@ void plgd_dps_set_manager_callbacks(plgd_dps_context_t *ctx, plgd_dps_manager_ca
  * @return -1 on failure
  */
 DPS_EXPORT
-int plgd_dps_manager_start(plgd_dps_context_t *ctx) DPS_NONNULL();
+int plgd_dps_manager_start(plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Check whether DPS manager has been started.
@@ -204,7 +205,7 @@ int plgd_dps_manager_start(plgd_dps_context_t *ctx) DPS_NONNULL();
  * @see plgd_dps_manager_start
  */
 DPS_EXPORT
-bool plgd_dps_manager_is_started(const plgd_dps_context_t *ctx) DPS_NONNULL();
+bool plgd_dps_manager_is_started(const plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Stop DPS manager.
@@ -215,7 +216,7 @@ bool plgd_dps_manager_is_started(const plgd_dps_context_t *ctx) DPS_NONNULL();
  * @param ctx dps context (cannot be NULL)
  */
 DPS_EXPORT
-void plgd_dps_manager_stop(plgd_dps_context_t *ctx) DPS_NONNULL();
+void plgd_dps_manager_stop(plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Restart DPS manager to provision device by given server.
@@ -230,7 +231,7 @@ void plgd_dps_manager_stop(plgd_dps_context_t *ctx) DPS_NONNULL();
  * @see plgd_dps_manager_stop
  */
 DPS_EXPORT
-int plgd_dps_manager_restart(plgd_dps_context_t *ctx) DPS_NONNULL();
+int plgd_dps_manager_restart(plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Start cloud manager with previously set server and callbacks.
@@ -240,7 +241,7 @@ int plgd_dps_manager_restart(plgd_dps_context_t *ctx) DPS_NONNULL();
  * @return false otherwise
  */
 DPS_EXPORT
-bool plgd_cloud_manager_start(const plgd_dps_context_t *ctx) DPS_NONNULL();
+bool plgd_cloud_manager_start(const plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Clean-up of DPS provisioning on factory reset.
@@ -258,7 +259,7 @@ bool plgd_cloud_manager_start(const plgd_dps_context_t *ctx) DPS_NONNULL();
  * @return -1 on failure
  */
 DPS_EXPORT
-int plgd_dps_on_factory_reset(plgd_dps_context_t *ctx) DPS_NONNULL();
+int plgd_dps_on_factory_reset(plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Controls whether a dps client verifies the device provision service's certificate chain against trust anchor
@@ -268,7 +269,7 @@ int plgd_dps_on_factory_reset(plgd_dps_context_t *ctx) DPS_NONNULL();
  * @param skip_verify skip verification of the DPS service
  */
 DPS_EXPORT
-void plgd_dps_set_skip_verify(plgd_dps_context_t *ctx, bool skip_verify) DPS_NONNULL();
+void plgd_dps_set_skip_verify(plgd_dps_context_t *ctx, bool skip_verify) OC_NONNULL();
 
 /**
  * @brief Get `skip verify` value from context.
@@ -280,7 +281,7 @@ void plgd_dps_set_skip_verify(plgd_dps_context_t *ctx, bool skip_verify) DPS_NON
  * @see plgd_dps_set_skip_verify
  */
 DPS_EXPORT
-bool plgd_dps_get_skip_verify(const plgd_dps_context_t *ctx) DPS_NONNULL();
+bool plgd_dps_get_skip_verify(const plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Set endpoint of the DPS service.
@@ -291,7 +292,7 @@ bool plgd_dps_get_skip_verify(const plgd_dps_context_t *ctx) DPS_NONNULL();
  * @param endpoint endpoint of the provisioning server (cannot be NULL)
  */
 DPS_EXPORT
-void plgd_dps_set_endpoint(plgd_dps_context_t *ctx, const char *endpoint) DPS_NONNULL();
+void plgd_dps_set_endpoint(plgd_dps_context_t *ctx, const char *endpoint) OC_NONNULL();
 
 /**
  * @brief Copy endpoint of the DPS service to output buffer.
@@ -304,7 +305,7 @@ void plgd_dps_set_endpoint(plgd_dps_context_t *ctx, const char *endpoint) DPS_NO
  * @return <0 on error
  */
 DPS_EXPORT
-int plgd_dps_get_endpoint(const plgd_dps_context_t *ctx, char *buffer, size_t buffer_size) DPS_NONNULL();
+int plgd_dps_get_endpoint(const plgd_dps_context_t *ctx, char *buffer, size_t buffer_size) OC_NONNULL();
 
 /**
  * @brief Check if the value of the DPS service endpoint is an empty string.
@@ -314,7 +315,7 @@ int plgd_dps_get_endpoint(const plgd_dps_context_t *ctx, char *buffer, size_t bu
  * @return false otherwise
  */
 DPS_EXPORT
-bool plgd_dps_endpoint_is_empty(const plgd_dps_context_t *ctx) DPS_NONNULL();
+bool plgd_dps_endpoint_is_empty(const plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Force all steps of the provisioning process to be executed.
@@ -327,7 +328,7 @@ bool plgd_dps_endpoint_is_empty(const plgd_dps_context_t *ctx) DPS_NONNULL();
  * @see plgd_dps_manager_start
  */
 DPS_EXPORT
-void plgd_dps_force_reprovision(plgd_dps_context_t *ctx) DPS_NONNULL();
+void plgd_dps_force_reprovision(plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Check if force reprovision flag is set.
@@ -337,7 +338,7 @@ void plgd_dps_force_reprovision(plgd_dps_context_t *ctx) DPS_NONNULL();
  * @return false force reprovision is not set
  */
 DPS_EXPORT
-bool plgd_dps_has_forced_reprovision(const plgd_dps_context_t *ctx) DPS_NONNULL();
+bool plgd_dps_has_forced_reprovision(const plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Configuration resource
@@ -361,7 +362,7 @@ bool plgd_dps_has_forced_reprovision(const plgd_dps_context_t *ctx) DPS_NONNULL(
  * @param create set true for creating resource. set false to free memory of created resource.
  */
 DPS_EXPORT
-void plgd_dps_set_configuration_resource(plgd_dps_context_t *ctx, bool create) DPS_NONNULL();
+void plgd_dps_set_configuration_resource(plgd_dps_context_t *ctx, bool create) OC_NONNULL();
 
 /**
  * @brief Maximal size of the retry configuration array
@@ -378,7 +379,7 @@ void plgd_dps_set_configuration_resource(plgd_dps_context_t *ctx, bool create) D
  * @return false on failure
  */
 DPS_EXPORT
-bool plgd_dps_set_retry_configuration(plgd_dps_context_t *ctx, const uint8_t cfg[], size_t cfg_size) DPS_NONNULL(1);
+bool plgd_dps_set_retry_configuration(plgd_dps_context_t *ctx, const uint8_t cfg[], size_t cfg_size) OC_NONNULL(1);
 
 /**
  * @brief Get retry counter configuration.
@@ -391,7 +392,7 @@ bool plgd_dps_set_retry_configuration(plgd_dps_context_t *ctx, const uint8_t cfg
  * @return <0 on failure
  */
 DPS_EXPORT
-int plgs_dps_get_retry_configuration(const plgd_dps_context_t *ctx, uint8_t *buffer, size_t buffer_size) DPS_NONNULL();
+int plgs_dps_get_retry_configuration(const plgd_dps_context_t *ctx, uint8_t *buffer, size_t buffer_size) OC_NONNULL();
 
 /**
  * @brief Get last provisioning error.
@@ -400,7 +401,7 @@ int plgs_dps_get_retry_configuration(const plgd_dps_context_t *ctx, uint8_t *buf
  * @return plgd_dps_error_t last provisioning error
  */
 DPS_EXPORT
-plgd_dps_error_t plgd_dps_get_last_error(const plgd_dps_context_t *ctx) DPS_NONNULL();
+plgd_dps_error_t plgd_dps_get_last_error(const plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Get provision status.
@@ -409,7 +410,7 @@ plgd_dps_error_t plgd_dps_get_last_error(const plgd_dps_context_t *ctx) DPS_NONN
  * @return uint16_t current provision status
  */
 DPS_EXPORT
-uint32_t plgd_dps_get_provision_status(const plgd_dps_context_t *ctx) DPS_NONNULL();
+uint32_t plgd_dps_get_provision_status(const plgd_dps_context_t *ctx) OC_NONNULL();
 
 typedef struct
 {
@@ -429,7 +430,7 @@ typedef struct
  */
 DPS_EXPORT
 bool plgd_dps_set_cloud_observer_configuration(plgd_dps_context_t *ctx, uint8_t max_retry_count,
-                                               uint8_t retry_interval_s) DPS_NONNULL();
+                                               uint8_t retry_interval_s) OC_NONNULL();
 
 /**
  * @brief Get cloud observer configuration
@@ -439,7 +440,7 @@ bool plgd_dps_set_cloud_observer_configuration(plgd_dps_context_t *ctx, uint8_t 
  */
 DPS_EXPORT
 plgd_cloud_status_observer_configuration_t plgd_dps_get_cloud_observer_configuration(const plgd_dps_context_t *ctx)
-  DPS_NONNULL();
+  OC_NONNULL();
 
 /**
  * @brief Set expiring-in limit of DPS certificates.
@@ -453,7 +454,7 @@ plgd_cloud_status_observer_configuration_t plgd_dps_get_cloud_observer_configura
  * @param expiring_limit limit value in seconds
  */
 DPS_EXPORT
-void plgd_dps_pki_set_expiring_limit(plgd_dps_context_t *ctx, uint16_t expiring_limit) DPS_NONNULL();
+void plgd_dps_pki_set_expiring_limit(plgd_dps_context_t *ctx, uint16_t expiring_limit) OC_NONNULL();
 
 /**
  * @brief Get expiring-in limit of DPS certificates
@@ -462,7 +463,7 @@ void plgd_dps_pki_set_expiring_limit(plgd_dps_context_t *ctx, uint16_t expiring_
  * @return expiring-in limit in seconds
  */
 DPS_EXPORT
-uint16_t plgd_dps_pki_get_expiring_limit(const plgd_dps_context_t *ctx) DPS_NONNULL();
+uint16_t plgd_dps_pki_get_expiring_limit(const plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Set certificate fingerprint of the provisioning server.
@@ -479,7 +480,7 @@ uint16_t plgd_dps_pki_get_expiring_limit(const plgd_dps_context_t *ctx) DPS_NONN
  */
 DPS_EXPORT
 bool plgd_dps_set_certificate_fingerprint(plgd_dps_context_t *ctx, mbedtls_md_type_t md_type,
-                                          const uint8_t *fingerprint, size_t size) DPS_NONNULL(1);
+                                          const uint8_t *fingerprint, size_t size) OC_NONNULL(1);
 
 /**
  * @brief Copy certificate fingerprint of the DPS service to output buffer.
@@ -494,7 +495,7 @@ bool plgd_dps_set_certificate_fingerprint(plgd_dps_context_t *ctx, mbedtls_md_ty
  */
 DPS_EXPORT
 int plgd_dps_get_certificate_fingerprint(const plgd_dps_context_t *ctx, mbedtls_md_type_t *md_type, uint8_t *buffer,
-                                         size_t buffer_size) DPS_NONNULL();
+                                         size_t buffer_size) OC_NONNULL();
 
 /**
  * @brief Set the vendor encapsulated option code for the DPS endpoint. Used during call
@@ -504,8 +505,7 @@ int plgd_dps_get_certificate_fingerprint(const plgd_dps_context_t *ctx, mbedtls_
  * @param code vendor encapsulated option code for the DPS endpoint
  */
 DPS_EXPORT
-void plgd_dps_dhcp_set_vendor_encapsulated_option_code_dps_endpoint(plgd_dps_context_t *ctx, uint8_t code)
-  DPS_NONNULL();
+void plgd_dps_dhcp_set_vendor_encapsulated_option_code_dps_endpoint(plgd_dps_context_t *ctx, uint8_t code) OC_NONNULL();
 
 /**
  * @brief Get the vendor encapsulated option code for the DPS endpoint. Used during call
@@ -515,7 +515,7 @@ void plgd_dps_dhcp_set_vendor_encapsulated_option_code_dps_endpoint(plgd_dps_con
  * @return uint8_t vendor encapsulated option code for the DPS endpoint
  */
 DPS_EXPORT
-uint8_t plgd_dps_dhcp_get_vendor_encapsulated_option_code_dps_endpoint(const plgd_dps_context_t *ctx) DPS_NONNULL();
+uint8_t plgd_dps_dhcp_get_vendor_encapsulated_option_code_dps_endpoint(const plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
  * @brief Set the vendor encapsulated option code for the DPS certificate fingerprint. Used during call
@@ -526,7 +526,7 @@ uint8_t plgd_dps_dhcp_get_vendor_encapsulated_option_code_dps_endpoint(const plg
  */
 DPS_EXPORT
 void plgd_dps_dhcp_set_vendor_encapsulated_option_code_dps_certificate_fingerprint(plgd_dps_context_t *ctx,
-                                                                                   uint8_t code) DPS_NONNULL();
+                                                                                   uint8_t code) OC_NONNULL();
 
 /**
  * @brief Get the vendor encapsulated option code for the DPS certificate fingerprint. Used during call
@@ -537,7 +537,7 @@ void plgd_dps_dhcp_set_vendor_encapsulated_option_code_dps_certificate_fingerpri
  */
 DPS_EXPORT
 uint8_t plgd_dps_dhcp_get_vendor_encapsulated_option_code_dps_certificate_fingerprint(const plgd_dps_context_t *ctx)
-  DPS_NONNULL();
+  OC_NONNULL();
 
 /**
  * @brief Convert isc-dhcp leases file vendor encapsulated options to byte array.
@@ -550,7 +550,7 @@ uint8_t plgd_dps_dhcp_get_vendor_encapsulated_option_code_dps_certificate_finger
  */
 DPS_EXPORT
 ssize_t plgd_dps_hex_string_to_bytes(const char *hex_string, size_t hex_string_size, uint8_t *buffer,
-                                     size_t buffer_size) DPS_NONNULL(1);
+                                     size_t buffer_size) OC_NONNULL(1);
 
 /**
  * @brief DPS dhcp plgd_dps_dhcp_set_values_from_vendor_encapsulated_options return values.
@@ -573,7 +573,7 @@ typedef enum {
 DPS_EXPORT
 plgd_dps_dhcp_set_values_t plgd_dps_dhcp_set_values_from_vendor_encapsulated_options(
   plgd_dps_context_t *ctx, const uint8_t *vendor_encapsulated_options, size_t vendor_encapsulated_options_size)
-  DPS_NONNULL();
+  OC_NONNULL();
 
 #ifdef __cplusplus
 }
