@@ -109,14 +109,14 @@ To identify the specific resource ETAG used in the batch ETAG response, the clie
 
 #### Incremental Changes
 
-The incremental changes feature enables clients to request modifications to resources that have occurred since the most recent notification from observation or GET request. To request incremental changes from a device through a GET request, clients can include an `ETAG-0 Value` in the [CoAP option](https://datatracker.ietf.org/doc/html/rfc7252#section-5.10.6), along with multiple [CoAP query parameters](https://datatracker.ietf.org/doc/html/rfc7252#section-5.10.1) using the following format: `incChanges=<ETAG-1 Value in base64>..<ETAG-20 Value in base64>`, `incChanges=<ETAG-21 Value in base64>..<ETAG-40 Value in base64>`,`incChanges=...`. Each `ETAG` provided by the client corresponds to a different resource's `ETAG`, and the `ETAG-0 Value` in the option represents the latest `ETAG Value` among all resources. The ETag-0 Value is encoded in binary format as it resides within the CoAP option, while the remaining ETAG-1+ values are encoded in base64 format. This choice is due to their storage in query parameters, which require compliance with UTF-8 encoding.
+The incremental changes feature enables clients to request modifications to resources that have occurred since the most recent notification from observation or GET request. To request incremental changes from a device through a GET request, clients can include an `ETAG-0 Value` in the [CoAP option](https://datatracker.ietf.org/doc/html/rfc7252#section-5.10.6), along with multiple [CoAP query parameters](https://datatracker.ietf.org/doc/html/rfc7252#section-5.10.1) using the following format: `incChanges=<ETAG-1 Value in base64>,<ETAG-2 Value in base64>..<ETAG-20 Value in base64>`, `incChanges=<ETAG-21 Value in base64>,..<ETAG-40 Value in base64>`,`incChanges=...`. Each `ETAG` provided by the client corresponds to a different resource's `ETAG`, and the `ETAG-0 Value` in the option represents the latest `ETAG Value` among all resources. The ETag-0 value is encoded in binary format as it resides within the CoAP option, while the remaining ETag-1+ values are encoded in base64 format, separated by a comma `,`. This choice is due to their storage in query parameters, which require compliance with UTF-8 encoding.
 
 {{< note >}}
 
 If we were to illustrate this in terms of HTTP, it would resemble the following:
 
 ```http
-GET /oic/res?incChanges=<ETAG-1 Value in base64>..<ETAG-20 Value in base64>&incChanges... HTTP/1.1
+GET /oic/res?incChanges=<ETAG-1 Value in base64>,..<ETAG-20 Value in base64>&incChanges... HTTP/1.1
 ETag: <ETAG-0 Value>
 ```
 
