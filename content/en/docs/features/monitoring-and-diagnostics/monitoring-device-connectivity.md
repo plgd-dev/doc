@@ -11,79 +11,182 @@ The CoAP gateway is responsible for the connection management including the up t
 
 ## Managing Service Status Updates
 
-In the context of managing CoAP gateways and their associated devices, the process of setting devices to an offline state involves a series of steps:
+In the context of managing CoAP gateways and their associated devices, the process of setting devices to an offline state involves a series of structured steps:
 
-1. **Generation of Unique IDs**: Each instance of a CoAP gateway is initiated with a unique identification (ID) generated during its initialization. These IDs play a dual role – they are stored in a database for reference and are also associated with device metadata. This association allows for streamlined updates regarding the online status of the devices.
+1. **Generation of Unique IDs**: Each CoAP gateway instance is initialized with a distinct, automatically generated identification (ID). These IDs serve a dual purpose – they are stored in a database for reference and are also linked to device metadata. This linkage facilitates streamlined updates regarding the online status of connected devices.
 
-2. **RecordID Calculation**: To determine the appropriate `recordID` for updating the record within a N-minute period, a Golang logic is utilized:
-
-   ```golang
-   now := time.Now().UnixNano()
-   period := N * time.Minute
-   recordID = now - (now % int64(period))
-   ```
-
-3. **Shared Record Updating**: Regularly, each CoAP gateway instance contributes to a shared record among CoAP gateways in the database by appending its unique ID. The record being updated changes cyclically over time. Both the current shared record and the previous one are retained in the database for historical reference. The structure of the record is defined by the `SharedRecord` type in Golang:
-
-   ```golang
-   type SharedRecord struct {
-       RecordID          int64    `bson:"_id"`            // ID of the record moving forward in time
-       CoAPGatewayIDs    []string `bson:"coapgatewayids"` // IDs of active CoAP gateways during the period
-   }
-   ```
-
-   If the record has already been created, wait for the next time interval and initiate the process again, starting from step `2.` Otherwise, proceed to the subsequent step.
-
-4. **Termination Detection**: Upon the creation of a new record, the system examines previous records and creates a list of all CoAP gateways.
-
-5. **Gateway Exclusion**: CoAP gateways active within the current period and the previous period are excluded from the list of gateways derived in the previous step.
-
-6. **Device Transition to Offline**: The remaining CoAP gateways in the list are identified as terminated. To ensure accurate device status, the system uses the Resource Aggregate command `TerminateConnectionsByService`. This command transitions devices associated with terminated CoAP gateways to an offline state.
+2. **Updating Record in the Database (DB)**: Periodically, each CoAP gateway dispatches a `UpdateServicesMetadata` request to update the Database via the resource-aggregate. This request includes the ID, time to live(TTL), and a timestamp indicating when the request was created. The request is processed into an event and stored in the database. If a CoAP gateway's time in the resource aggregate expires, the update operation fails, and the respective coap-gateway is terminated by sending a self-destruct signal (SIGTERM). During event processing, the resource aggregate calculates the `onlineValidUntil` based on the time to live and the duration the request has been in the system. While processing the request, other online services are also validated, and if they are no longer valid, they are transitioned to the offline state. The `onlineValidUntil` parameter is crucial for determining whether a service is online or offline. If `onlineValidUntil` lies in the future, the service is considered online; otherwise, it is marked as offline.
 
    {{< warning >}}
 
-   The `TerminateConnectionsByService` function is designed exclusively for service usage. As a result, this command does not rely on JWT for authorization. It's important to note that this function should not be callable from public endpoints. Instead, the sole method of authorization employed is mutual TLS authentication between the CoAP gateway and the Resource Aggregate.
+   The `UpdateServicesMetadata` function is exclusively designed for internal service usage. Consequently, this command does not rely on JWT for authorization. It is essential to note that this function should not be accessible from public endpoints. Instead, the sole method of authorization utilized is mutual TLS authentication between the CoAP gateway and the Resource Aggregate.
 
    {{< /warning >}}
 
-7. **Record Cleanup**: For effective management, records corresponding to periods before the last two update periods are purged. This practice maintains relevant records and prevents unnecessary data accumulation.
+3. **Processing ServicesMetadataUpdated**: Initially, the response containing the new validity information is forwarded to the CoAP gateway, which is then utilized to calculate the timing of the next update. In the event that any offline services are encompassed within the `ServicesMetadataUpdated` event, the resource-aggregate proceeds to iterate through all devices that are linked to these offline services. It triggers the `UpdateDeviceMetadata` operation for each device, commanding a transition to an OFFLINE state, effectively disassociating them from the respective service. Once all devices have undergone this update, and the `DeviceMetadataUpdated` event has been disseminated, the resource aggregate initiates the `ConfirmOfflineServices` procedure, which serves the purpose of purging offline services from the database.
 
-In summary, the process of managing device states and setting them to an offline state within the context of CoAP gateways involves the systematic updating of shared records with unique gateway IDs, cyclic record management, dynamic `recordID` calculation, detection of terminated gateways, transition of associated devices to an offline state, and routine record cleanup. This comprehensive approach ensures that the documentation accurately reflects the current operational status of devices and gateways while maintaining historical context.
+4. **Iterate Until onlineValidUntil Expires**: The CoAP gateway continuously iterates through the update process until the `onlineValidUntil` parameter reaches its expiration. These updates are scheduled at intervals of one-third until the service's expiration deadline, denoted by `onlineValidUntil`. With each successful update, the `onlineValidUntil` parameter is refreshed with a new value. However, if the time surpasses the `onlineValidUntil` parameter, the service is deemed offline, so the CoAP gateway initiate a self-termination process (SIGTERM).
+
+{{< plantuml id="update-services-metadata" >}}
+@startuml Sequence
+skinparam backgroundColor transparent
+hide footbox
+
+participant CoAPGateway as "CoAP Gateway"
+participant ResourceAggregate as "Resource Aggregate"
+participant EventBus as "Event Bus"
+
+CoAPGateway -> CoAPGateway++: Generate Unique ID
+return Unique ID
+CoAPGateway -> ResourceAggregate++: Send UpdateServicesMetadataRequest with\nTTL, ID, Timestamp
+return UpdateServicesMetadataResponse with\nonlineValidUntil
+activate CoAPGateway
+loop every 1/3 until onlineValidUntil
+   CoAPGateway -> ResourceAggregate++: Send UpdateServicesMetadataRequest with\nTTL, ID, Timestamp
+   ResourceAggregate -> ResourceAggregate: Process ServicesMetadataUpdated with\nOnline and Offline services
+   ResourceAggregate -> CoAPGateway: Send UpdateServicesMetadataResponse with\nonlineValidUntil
+   deactivate CoAPGateway
+   loop for each offline service
+      loop for each device associated with the offline service
+         ResourceAggregate -> ResourceAggregate: Send UpdateDeviceMetadataRequest with\nDevice ID, Connection.Status = OFFLINE
+         ResourceAggregate -> EventBus: Publish DeviceMetadataUpdated with\nConnection.Status = OFFLINE, Service.Id = ""
+      end
+      ResourceAggregate -> ResourceAggregate: Confirm Offline Services
+   end
+   deactivate ResourceAggregate
+end
+
+== Device Online ==
+
+CoAPGateway -> ResourceAggregate++ : Send UpdateDeviceMetadataRequest with\nDevice ID, Connection.Status = ONLINE, Service.Id = "ID"
+ResourceAggregate -> EventBus: Publish DeviceMetadataUpdated with\nConnection.Status = ONLINE, Service.Id = "ID"
+return UpdateDeviceMetadataResponse
+
+@enduml
+{{< /plantuml >}}
 
 ### Example
 
 This series of steps describes the process of expanding the setup, encountering an Out of Memory event, recording and analyzing gateway states, and identifying gateway termination within a Kubernetes environment using CoAP gateways.
 
 1. **Initial Setup Expansion:**
-   - Add two CoAP gateways to the k8s environment.
-   - Configure a 1-minute check interval for their operation.
-   - In the database, both previous (`recordID-0`) and current (`recordID-1`) records contain UUIDs for the gateways (UUID-0 and UUID-1).
+   - Added two CoAP gateways to the Kubernetes (k8s) environment.
+   - Configured a 1-minute time to live, so each CoAP gateway will update the database every minute.
+   - Current time is `Wed Sep 27 2023 13:47:20 GMT+0000`.
+   - In the database, there are two CoAP gateways in the online state:
+
+     ```jsonc
+     {
+        "online": [
+           {
+              "id": "ID-0",
+              "onlineValidUntil": "1695822490000000000" // Wed Sep 27 2023 13:48:10 GMT+0000
+           },
+           {
+              "id": "ID-1",
+              "onlineValidUntil": "1695822500000000000" // Wed Sep 27 2023 13:48:20 GMT+0000
+           }
+        ],
+        "offline": []
+     }
+     ```
 
 2. **OOM Event and Restart:**
-   - One gateway instance (UUID-1) experiences an OOM event and restarts.
-   - Two CoAP gateway instances exist concurrently.
-   - The current record (`recordID-1`) now includes UUID-0, UUID-1, and new UUID-2 due to the restarted gateway.
+   - One gateway instance (ID-1) experiences an Out of Memory (OOM) event and restarts.
+   - Two CoAP gateway instances exist concurrently (ID-0 and ID-2), while ID-1 is dead but still in the online state.
+   - Current time is `Wed Sep 27 2023 13:47:30 GMT+0000`.
 
-3. **Creation of New Record (`recordID-2`):**
-   - After 1 minute, a new record (`recordID-2`) is created.
-   - Examine previous records for analysis.
+     ```jsonc
+     {
+        "online": [
+           {
+              "id": "ID-0",
+              "onlineValidUntil": "1695822490000000000" // Wed Sep 27 2023 13:48:10 GMT+0000
+           },
+           {
+              "id": "ID-1", // Dead instance
+              "onlineValidUntil": "1695822500000000000" // Wed Sep 27 2023 13:48:20 GMT+0000
+           },
+           {
+              "id": "ID-2", // New instance
+              "onlineValidUntil": "1695822510000000000" // Wed Sep 27 2023 13:48:30 GMT+0000
+           }
+        ],
+        "offline": []
+     }
+     ```
 
-4. **Examination of Previous Records:**
-   - The earliest previous record (`recordID-0`) contains UUID-0 and UUID-1.
-   - The most recent previous record (`recordID-1`) contains UUID-0, UUID-1, and UUID-2.
-   - CoAP gateway hasn't detected termination of one gateway.
+3. **Update record by CoAP gateway (ID-0):**
+   - After 20 seconds, the CoAP gateway (ID-0) updates its record.
+   - Current time is `Wed Sep 27 2023 13:47:50 GMT+0000`.
+   - CoAP gateway hasn't detected the termination of one gateway.
+   - Update the record for ID-0.
 
-5. **Deletion of Earlier Records:**
-   - All records (`recordID-0`) preceding the last one are deleted.
+    ```jsonc
+     {
+        "online": [
+           {
+              "id": "ID-0",
+              "onlineValidUntil": "1695815330000000000" // Wed Sep 27 2023 11:48:50 GMT+0000
+           },
+           {
+              "id": "ID-1", // Dead instance
+              "onlineValidUntil": "1695822500000000000" // Wed Sep 27 2023 13:48:20 GMT+0000
+           },
+           {
+              "id": "ID-2",
+              "onlineValidUntil": "1695822510000000000" // Wed Sep 27 2023 13:48:30 GMT+0000
+           }
+        ],
+        "offline": []
+     }
+     ```
 
-6. **Creation of Another New Record:**
-   - After another minute, a fresh record is established.
-   - Analyze the last records in chronological order.
+4. **Update record by CoAP gateway (ID-2):**
+   - After 21 seconds, the CoAP gateway (ID-2) updates its record.
+   - Current time is `Wed Sep 27 2023 13:48:11 GMT+0000`.
+   - CoAP gateway detects the termination of one gateway (ID-1).
+   - The database is updated for ID-2, and ID-1 is moved to the offline state.
 
-7. **Analysis of Recent Records:**
-   - The first previous record (`recordID-1`) includes UUID-0, UUID-1, and UUID-2.
-   - The most recent record (`recordID-2`) contains UUID-0 and UUID-2.
+    ```jsonc
+     {
+        "online": [
+           {
+              "id": "ID-0",
+              "onlineValidUntil": "1695815330000000000" // Wed Sep 27 2023 11:48:50 GMT+0000
+           },
+           {
+              "id": "ID-2",
+              "onlineValidUntil": "1695815351000000000" // Wed Sep 27 2023 13:49:11 GMT+0000
+           }
+        ],
+        "offline": [
+           {
+              "id": "ID-1", // Dead instance
+              "onlineValidUntil": "1695822500000000000" // Wed Sep 27 2023 13:48:20 GMT+0000
+           }
+        ]
+     }
+     ```
 
-8. **Identification of Gateway Termination:**
-   - Termination of UUID-1 is identified.
-   - CoAP-gateway responsible for record creation transitions devices connected to the terminated gateway into an offline state.
+5. **Update all devices associated with ID-1:**
+   - Update all devices associated with ID-1 to the offline state and send the event `DeviceMetadataUpdated` to the event bus.
+
+6. **Confirm offline services:**
+   - Confirm offline services and remove them from the database.
+
+   ```jsonc
+     {
+         "online": [
+           {
+              "id": "ID-0",
+              "onlineValidUntil": "1695815330000000000" // Wed Sep 27 2023 11:48:50 GMT+0000
+           },
+           {
+              "id": "ID-2",
+              "onlineValidUntil": "1695815351000000000" // Wed Sep 27 2023 13:49:11 GMT+0000
+           }
+        ],
+        "offline": [],
+     }
+   ```
