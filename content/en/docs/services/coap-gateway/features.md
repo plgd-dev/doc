@@ -16,9 +16,10 @@ weight: 2
 - **&#x2611; Device Twin Synchronization:** After authentication, the CoAP gateway synchronizes the device twin by subscribing to device resources, forwarding changes to the IoT hub, and ensuring an accurate representation of the device's state.
 - **&#x2611; Event Processing:** The CoAP gateway subscribes to events from the IoT hub and converts them into CoAP commands, allowing seamless communication with devices during the device twin synchronization process.
 - **&#x2611; Time Resource:** The CoAP gateway provides the current time to authenticated devices, allowing them to synchronize their internal clocks.
+- **&#x2611; Device Twin Synchronization with ETAG:** Implementing the ETAG mechanism will ensure that device twin synchronization occurs only when the device's state has changed since the last synchronization. This optimization reduces unnecessary data transfer between the CoAP gateway and the IoT hub, enhancing performance when the device is online.
+- **&#x2611; Monitoring Device Connectivity:** Monitors device connectivity status to determine if a device is online or offline.
 
 ### Planned Features
 
-- **&#x2610; Device Twin Synchronization with ETAG:** Implementing the ETAG mechanism will ensure that device twin synchronization occurs only when the device's state has changed since the last synchronization. This optimization reduces unnecessary data transfer between the CoAP gateway and the IoT hub, enhancing performance when the device is online.
 - **&#x2610; Device Logging:** Introduce device logging capabilities to record detailed activity logs of each device. The logs can be forwarded to the Open Telemetry collector for further analysis and monitoring purposes.
 - **&#x2610; OpenTelemetry Metrics:** The CoAP gateway will incorporate OpenTelemetry metrics, providing detailed insights into the gateway's performance and resource utilization. This feature will allow for comprehensive monitoring and analysis of the gateway's behavior.
