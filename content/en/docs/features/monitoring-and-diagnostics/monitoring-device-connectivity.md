@@ -49,7 +49,7 @@ loop every 1/3 until heartbeatValidUntil
    loop for each offline service
       loop for each device associated with the offline service
          ResourceAggregate -> ResourceAggregate: Send UpdateDeviceMetadataRequest with\nDevice ID, Connection.Status = OFFLINE
-         ResourceAggregate -> EventBus: Publish DeviceMetadataUpdated with\nConnection.Status = OFFLINE, ServiceId = ""
+         ResourceAggregate -> EventBus: Publish DeviceMetadataUpdated with\nConnection.Status = OFFLINE, Connection.ServiceId = ""
       end
       ResourceAggregate -> ResourceAggregate: Confirm the offline service
    end
@@ -59,7 +59,7 @@ end
 == Device Online ==
 
 CoAPGateway -> ResourceAggregate++ : Send UpdateDeviceMetadataRequest with\nDevice ID, Connection.Status = ONLINE, ServiceId = "Service ID"
-ResourceAggregate -> EventBus: Publish DeviceMetadataUpdated with\nConnection.Status = ONLINE, ServiceId = "Service ID"
+ResourceAggregate -> EventBus: Publish DeviceMetadataUpdated with\nConnection.Status = ONLINE, Connection.ServiceId = "Service ID"
 return UpdateDeviceMetadataResponse
 
 @enduml
