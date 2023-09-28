@@ -23,7 +23,7 @@ In the context of managing CoAP gateways and their associated devices, the proce
 
    {{< /warning >}}
 
-3. **Processing ServicesMetadataUpdated**: Initially, the response containing the new validity information is forwarded to the CoAP gateway, which is then utilized to calculate the timing of the next update. In the event that any offline services are encompassed within the `ServicesMetadataUpdated` event, the resource-aggregate proceeds to iterate through all devices that are linked to these offline services. It triggers the `UpdateDeviceMetadata` operation for each device, commanding a transition to an OFFLINE state, effectively disassociating them from the respective service. Once all devices have undergone this update, and the `DeviceMetadataUpdated` event has been disseminated, the resource aggregate initiates the `ConfirmOfflineServices` procedure, which serves the purpose of purging offline services from the database.
+3. **Processing ServicesMetadataUpdated**: Initially, the response containing the new validity information is forwarded to the CoAP gateway, which is then utilized to calculate the timing of the next update. In the event that any offline services are encompassed within the `ServicesMetadataUpdated` event, the resource-aggregate proceeds to iterate through all devices that are linked to these offline services. It triggers the `UpdateDeviceMetadata` operation for each device with a **nil-uuid** user id, commanding a transition to an OFFLINE state, effectively disassociating them from the respective service. Once all devices have undergone this update, and the `DeviceMetadataUpdated` event has been disseminated, the resource aggregate initiates the `ConfirmOfflineServices` procedure, which serves the purpose of purging offline services from the database.
 
 4. **Iterate Until heartbeatValidUntil Expires**: The CoAP gateway continuously iterates through the update process until the `heartbeatValidUntil` parameter reaches its expiration. These updates are scheduled at intervals of one-third until the service's expiration deadline, denoted by `heartbeatValidUntil`. With each successful update, the `heartbeatValidUntil` parameter is refreshed with a new value. However, if the time surpasses the `heartbeatValidUntil` parameter, the service is deemed offline, so the CoAP gateway initiate a self-termination process (SIGTERM).
 
@@ -49,7 +49,7 @@ loop every 1/3 until heartbeatValidUntil
    loop for each offline service
       loop for each device associated with the offline service
          ResourceAggregate -> ResourceAggregate: Send UpdateDeviceMetadataRequest with\nDevice ID, Connection.Status = OFFLINE
-         ResourceAggregate -> EventBus: Publish DeviceMetadataUpdated with\nConnection.Status = OFFLINE, Connection.ServiceId = ""
+         ResourceAggregate -> EventBus: Publish DeviceMetadataUpdated with\nConnection.Status = OFFLINE, Connection.ServiceId = "", AuditContext.UserId = "00000000-0000-0000-0000-000000000000"
       end
       ResourceAggregate -> ResourceAggregate: Confirm the offline service
    end
