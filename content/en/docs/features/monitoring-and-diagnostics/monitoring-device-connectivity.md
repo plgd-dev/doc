@@ -51,7 +51,7 @@ loop every 1/3 until onlineValidUntil
          ResourceAggregate -> ResourceAggregate: Send UpdateDeviceMetadataRequest with\nDevice ID, Connection.Status = OFFLINE
          ResourceAggregate -> EventBus: Publish DeviceMetadataUpdated with\nConnection.Status = OFFLINE, Service.Id = ""
       end
-      ResourceAggregate -> ResourceAggregate: Confirm Offline Services
+      ResourceAggregate -> ResourceAggregate: Confirm the offline service
    end
    deactivate ResourceAggregate
 end
