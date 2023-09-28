@@ -19,7 +19,4 @@ weight: 2
 - **&#x2611; Command Expiration:** Each command has a valid until time and requires a confirmation event. If the confirmation event is not received before the valid until time, the pending command is considered invalid and discarded.
 - **&#x2611; Cancel Commands:** The Resource Aggregate supports the cancellation of pending commands, allowing the gateway to cancel a command that has not yet been processed by the Resource Aggregate.
 - **&#x2611; Pending Command Execution on Device Online:** Commands that are awaiting the device's online status are immediately processed when the device comes online.
-
-### Planned Features
-
-- **&#x2610; Hub Identification in Events:** Add the hub ID to events to enable the identification of the hub that generated the event.
+- **&#x2611; Hub Identification in Events:** Add the hub ID to events to enable the identification of the hub that generated the event.
