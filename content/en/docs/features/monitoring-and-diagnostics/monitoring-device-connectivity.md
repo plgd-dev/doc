@@ -9,17 +9,17 @@ weight: 2
 
 The CoAP gateway is responsible for the connection management including the up to date representation of the device status. This information is driven through the Resource Aggregate command - `UpdateDeviceMetadata`, that gets initiated when device connection status changes - device connects or disconnects from the CoAP Gateway. However, there are various scenarios to consider, such as unexpected termination of the CoAP Gateway, due to factors like node failure, power loss or others.
 
-## Managing Service Status Updates
+## Managing Service Heartbeat Updates
 
 In the context of managing CoAP gateways and their associated devices, the process of setting devices to an offline state involves a series of structured steps:
 
 1. **Generation of Unique IDs**: Each CoAP gateway instance is initialized with a distinct, automatically generated identification (service ID). These IDs serve a dual purpose – they are stored in a database for reference and are also linked to device metadata. This linkage facilitates streamlined updates regarding the online status of connected devices.
 
-2. **Updating Record in the Database (DB)**: Periodically, each CoAP gateway dispatches a `UpdateServicesMetadata` request to update the Database via the resource-aggregate. This request includes the service ID, time to live(TTL), and a timestamp indicating when the request was created. The request is processed into an event and stored in the database. If a CoAP gateway's time in the resource aggregate expires, the update operation fails, and the respective coap-gateway is terminated by sending a self-destruct signal (SIGTERM). During event processing, the resource aggregate calculates the `heartbeatValidUntil` based on the time to live and the duration the request has been in the system. While processing the request, other online services are also validated, and if they are no longer valid, they are transitioned to the offline state. The `heartbeatValidUntil` parameter is crucial for determining whether a service is online or offline. If `heartbeatValidUntil` lies in the future, the service is considered online; otherwise, it is marked as offline.
+2. **Updating Record in the Database (DB)**: Periodically, each CoAP gateway dispatches a `UpdateServiceMetadata` request to update the Database via the resource-aggregate. This request includes the service ID, time to live(TTL), and a timestamp indicating when the request was created. The request is processed into an event and stored in the database. If a CoAP gateway's time in the resource aggregate expires, the update operation fails, and the respective coap-gateway is terminated by sending a self-destruct signal (SIGTERM). During event processing, the resource aggregate calculates the `heartbeatValidUntil` based on the time to live and the duration the request has been in the system. While processing the request, other online services are also validated, and if they are no longer valid, they are transitioned to the offline state. The `heartbeatValidUntil` parameter is crucial for determining whether a service is online or offline. If `heartbeatValidUntil` lies in the future, the service is considered online; otherwise, it is marked as offline.
 
    {{< warning >}}
 
-   The `UpdateServicesMetadata` function is exclusively designed for internal service usage. Consequently, this command does not rely on JWT for authorization. It is essential to note that this function should not be accessible from public endpoints. Instead, the sole method of authorization utilized is mutual TLS authentication between the CoAP gateway and the Resource Aggregate.
+   The `UpdateServiceMetadata` function is exclusively designed for internal service usage. Consequently, this command does not rely on JWT for authorization. It is essential to note that this function should not be accessible from public endpoints. Instead, the sole method of authorization utilized is mutual TLS authentication between the CoAP gateway and the Resource Aggregate.
 
    {{< /warning >}}
 
@@ -38,13 +38,13 @@ participant EventBus as "Event Bus"
 
 CoAPGateway -> CoAPGateway++: Generate Unique ID
 return Unique ID
-CoAPGateway -> ResourceAggregate++: Send UpdateServicesMetadataRequest with\nTTL, ID, Timestamp
-return UpdateServicesMetadataResponse with\nheartbeatValidUntil
+CoAPGateway -> ResourceAggregate++: Send UpdateServiceMetadataRequest with\nTTL, ID, Timestamp
+return UpdateServiceMetadataResponse with\nheartbeatValidUntil
 activate CoAPGateway
 loop every 1/3 until heartbeatValidUntil
-   CoAPGateway -> ResourceAggregate++: Send UpdateServicesMetadataRequest with\nTTL, Service ID, Timestamp
+   CoAPGateway -> ResourceAggregate++: Send UpdateServiceMetadataRequest with\nTTL, Service ID, Timestamp
    ResourceAggregate -> ResourceAggregate: Process ServicesMetadataUpdated with\nOnline and Offline services
-   ResourceAggregate -> CoAPGateway: Send UpdateServicesMetadataResponse with\nheartbeatValidUntil
+   ResourceAggregate -> CoAPGateway: Send UpdateServiceMetadataResponse with\nheartbeatValidUntil
    deactivate CoAPGateway
    loop for each offline service
       loop for each device associated with the offline service
