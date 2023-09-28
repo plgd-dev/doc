@@ -13,19 +13,21 @@ The CoAP gateway is responsible for the connection management including the up t
 
 In the context of managing CoAP gateways and their associated devices, the process of setting devices to an offline state involves a series of structured steps:
 
-1. **Generation of Unique IDs**: Each CoAP gateway instance is initialized with a distinct, automatically generated identification (service ID). These IDs serve a dual purpose – they are stored in a database for reference and are also linked to device metadata. This linkage facilitates streamlined updates regarding the online status of connected devices.
+1. **Generating Unique Service ID**: Each instance of a CoAP gateway initiates with a unique ID, generated during startup. These IDs are stored in a database for reference and are also associated with the metadata of each device.
 
-2. **Updating Record in the Database (DB)**: Periodically, each CoAP gateway dispatches a [UpdateServiceMetadata request](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/pb/commands.proto#L668) to update the Database via the resource-aggregate. This request includes the service ID, [time to live(TTL)](https://github.com/plgd-dev/hub/blob/main/charts/plgd-hub/values.yaml#L887), and a timestamp indicating when the request was created. The request is processed into an event and stored in the database. If a CoAP gateway's time in the resource aggregate expires, the update operation fails, and the respective coap-gateway is terminated by sending a self-destruct signal (SIGTERM). During event processing, the resource aggregate calculates the `heartbeatValidUntil` based on the time to live and the duration the request has been in the system. While processing the request, other online services are also validated, and if they are no longer valid, they are transitioned to the offline state. The `heartbeatValidUntil` parameter is crucial for determining whether a service is online or offline. If `heartbeatValidUntil` lies in the future, the service is considered online; otherwise, it is marked as offline.
+2. **Sending Heartbeat**: Periodically, each CoAP gateway sends a heartbeat using the [UpdateServiceMetadata command](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/pb/commands.proto#L668) to update the heartbeat entries managed by the Resource Aggregate. This request includes the service ID, [time to live (TTL)](https://github.com/plgd-dev/hub/blob/main/charts/plgd-hub/values.yaml#L887), and a timestamp indicating when the request was created. The request is transformed into an event after it's successfully stored in the event store. During command-to-event transformation, the Resource Aggregate calculates the `heartbeatValidUntil` based on the time to live and the duration of the request. If the latest heartbeats are no longer valid, they are set in the new event as expired. 
+
+In case the heartbeat update came too late - the previous one already expired and it's present in the expired list, the update operation fails and the requesting CoAP Gateway is terminated by sending a self-destruct signal - SIGTERM. 
 
    {{< warning >}}
 
-   The `UpdateServiceMetadata` function is exclusively designed for internal service usage. Consequently, this command does not rely on JWT for authorization. It is essential to note that this function should not be accessible from public endpoints. Instead, the sole method of authorization utilized is mutual TLS authentication between the CoAP gateway and the Resource Aggregate.
+   The `UpdateServiceMetadata` function is exclusively designed for internal service usage. Consequently, this command does not rely on JWT for authorization. It is essential to note that this function should not be accessible from public endpoints. Authentication using mutual TLS authentication is in place.
 
    {{< /warning >}}
 
-3. **Processing ServicesMetadataUpdated**: Initially, the response containing the new validity information is forwarded to the CoAP gateway, which is then utilized to calculate the timing of the next update. In the event that any offline services are encompassed within the [ServicesMetadataUpdated event](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/pb/events.proto#L219), the resource-aggregate proceeds to iterate through all devices that are linked to these offline services. It triggers the `UpdateDeviceMetadata` operation for each device with a **nil-uuid** user id, commanding a transition to an OFFLINE state, effectively disassociating them from the respective service. Once all devices have undergone this update, and the `DeviceMetadataUpdated` event has been disseminated, the resource aggregate initiates the `ConfirmOfflineServices` procedure, which serves the purpose of purging offline services from the database.
+3. **Updating Device Status**: As soon as the Resource Aggregate identifies expired CoAP Gateways and marks them as expired, the procedure to set devices previously connected to this Gateway offline starts. Devices whose connection was maintained by matching service ID are identified and their status is set to offline using the standard `UpdateDeviceMetadata` command. The audit context of this command contains a **nil-uuid** user ID. Once all devices have undergone this update, the Resource Aggregate initiates the `ConfirmOfflineServices` procedure, which purges offline gateways from the event store.
 
-4. **Iterate Until heartbeatValidUntil Expires**: The CoAP gateway continuously iterates through the update process until the `heartbeatValidUntil` parameter reaches its expiration. These updates are scheduled at intervals of one-third until the service's expiration deadline, denoted by `heartbeatValidUntil`. With each successful update, the `heartbeatValidUntil` parameter is refreshed with a new value. However, if the time surpasses the `heartbeatValidUntil` parameter, the service is deemed offline, so the CoAP gateway initiate a self-termination process (SIGTERM).
+4. **Handling Response**: The response [ServicesMetadataUpdated](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/pb/events.proto#L219) contains the validity of the heartbeat, which helps the CoAP Gateway to decide on when to send the next heartbeat. The next heartbeat is scheduled at intervals of one-third until the service's expiration deadline, denoted by returned `heartbeatValidUntil`.
 
 {{< plantuml id="update-services-metadata" >}}
 @startuml Sequence
@@ -43,10 +45,10 @@ return UpdateServiceMetadataResponse with\nheartbeatValidUntil
 activate CoAPGateway
 loop every 1/3 until heartbeatValidUntil
    CoAPGateway -> ResourceAggregate++: Send UpdateServiceMetadataRequest with\nTTL, Service ID, Timestamp
-   ResourceAggregate -> ResourceAggregate: Process ServicesMetadataUpdated with\nOnline and Offline services
+   ResourceAggregate -> ResourceAggregate: Process ServicesMetadataUpdated with\nValid and Expired service's heartbeats
    ResourceAggregate -> CoAPGateway: Send UpdateServiceMetadataResponse with\nheartbeatValidUntil
    deactivate CoAPGateway
-   loop for each offline service
+   loop for each expired service's heartbeat
       loop for each device associated with the offline service
          ResourceAggregate -> ResourceAggregate: Send UpdateDeviceMetadataRequest with\nDevice ID, Connection.Status = OFFLINE
          ResourceAggregate -> EventBus: Publish DeviceMetadataUpdated with\nConnection.Status = OFFLINE, Connection.ServiceId = "", AuditContext.UserId = "00000000-0000-0000-0000-000000000000"
@@ -69,15 +71,15 @@ return UpdateDeviceMetadataResponse
 
 This series of steps describes the process of expanding the setup, encountering an Out of Memory event, recording and analyzing gateway states, and identifying gateway termination within a Kubernetes environment using CoAP gateways and the Resource Aggregate.
 
-1. **Initial Setup Expansion:**
-   - Added two CoAP gateways to the Kubernetes (k8s) environment.
-   - Configured a 1-minute time to live, so each CoAP gateway will update the database every minute.
-   - Current time is `Wed Sep 27 2023 13:47:20 GMT+0000`.
-   - In the database, there are two CoAP gateways in the online state:
+1. **Initial Sequence:**
+   - Added two CoAP Gateways to the Kubernetes (k8s) environment.
+   - Configured a 1-minute time to live, so each CoAP Gateway will update its metadata every minute.
+   - The current time is `Wed Sep 27 2023 13:47:20 GMT+0000`.
+   - In the Event Store, there are two CoAP Gateways with valid heartbeats:
 
      ```jsonc
      {
-        "online": [
+        "valid": [
            {
               "id": "ID-0",
               "heartbeatValidUntil": "1695822490000000000" // Wed Sep 27 2023 13:48:10 GMT+0000
@@ -87,18 +89,18 @@ This series of steps describes the process of expanding the setup, encountering 
               "heartbeatValidUntil": "1695822500000000000" // Wed Sep 27 2023 13:48:20 GMT+0000
            }
         ],
-        "offline": []
+        "expired": []
      }
      ```
 
 2. **OOM Event and Restart:**
    - One gateway instance (ID-1) experiences an Out of Memory (OOM) event and restarts.
-   - Two CoAP gateway instances exist concurrently (ID-0 and ID-2), while ID-1 is dead but still in the online state.
-   - Current time is `Wed Sep 27 2023 13:47:30 GMT+0000`.
+   - Two CoAP Gateway instances exist concurrently (ID-0 and ID-2), while ID-1 is dead but the heartbeat is still valid.
+   - The current time is `Wed Sep 27 2023 13:47:30 GMT+0000`.
 
      ```jsonc
      {
-        "online": [
+        "valid": [
            {
               "id": "ID-0",
               "heartbeatValidUntil": "1695822490000000000" // Wed Sep 27 2023 13:48:10 GMT+0000
@@ -112,19 +114,19 @@ This series of steps describes the process of expanding the setup, encountering 
               "heartbeatValidUntil": "1695822510000000000" // Wed Sep 27 2023 13:48:30 GMT+0000
            }
         ],
-        "offline": []
+        "expired": []
      }
      ```
 
-3. **Update record by CoAP gateway (ID-0):**
-   - After 40 seconds, the CoAP gateway (ID-0) updates its record 2 times.
-   - For second update the current time is `Wed Sep 27 2023 13:47:50 GMT+0000`.
+3. **CoAP Gateway (ID-0) sends heartbeat:**
+   - After 40 seconds, the CoAP Gateway (ID-0) sends heartbeat 2 times.
+   - The current time during the second heartbeat is `Wed Sep 27 2023 13:47:50 GMT+0000`.
    - Resource Aggregate hasn't detected the termination of one gateway.
    - Update the record for ID-0.
 
     ```jsonc
      {
-        "online": [
+        "valid": [
            {
               "id": "ID-0",
               "heartbeatValidUntil": "1695815330000000000" // Wed Sep 27 2023 11:48:50 GMT+0000
@@ -138,19 +140,19 @@ This series of steps describes the process of expanding the setup, encountering 
               "heartbeatValidUntil": "1695822510000000000" // Wed Sep 27 2023 13:48:30 GMT+0000
            }
         ],
-        "offline": []
+        "expired": []
      }
      ```
 
-4. **Update record by CoAP gateway (ID-2):**
-   - After 61 seconds, the CoAP gateway (ID-2) updates its record 2 times.
-   - For second update the current time is `Wed Sep 27 2023 13:48:11 GMT+0000`.
+4. **CoAP Gateway (ID-2) sends heartbeat:**
+   - After 61 seconds, the CoAP Gateway (ID-2) sends heartbeat 2 times.
+   - The current time during the second heartbeat is `Wed Sep 27 2023 13:48:11 GMT+0000`.
    - Resource Aggregate detects the termination of one gateway (ID-1).
-   - The database is updated for ID-2, and ID-1 is moved to the offline state.
+   - The Event Store is updated for ID-2, and ID-1 is marked as expired.
 
     ```jsonc
      {
-        "online": [
+        "valid": [
            {
               "id": "ID-0",
               "heartbeatValidUntil": "1695815330000000000" // Wed Sep 27 2023 11:48:50 GMT+0000
@@ -160,7 +162,7 @@ This series of steps describes the process of expanding the setup, encountering 
               "heartbeatValidUntil": "1695815351000000000" // Wed Sep 27 2023 13:49:11 GMT+0000
            }
         ],
-        "offline": [
+        "expired": [
            {
               "id": "ID-1", // Dead instance
               "heartbeatValidUntil": "1695822500000000000" // Wed Sep 27 2023 13:48:20 GMT+0000
@@ -169,15 +171,15 @@ This series of steps describes the process of expanding the setup, encountering 
      }
      ```
 
-5. **Update all devices associated with ID-1:**
-   - The Resource Aggregate updates all devices associated with ID-1 to the offline state and sends the `DeviceMetadataUpdated` event to the event bus.
+5. **Update status of all devices associated with ID-1:**
+   - The Resource Aggregate updates all devices associated with ID-1 to the offline state and sends the `DeviceMetadataUpdated` event to the Event Bus.
 
-6. **Confirm offline services:**
-   - The Resource Aggregate confirms the offline services and removes them from the database.
+6. **Confirm offline service:**
+   - The Resource Aggregate confirms the offline services and removes them from the Event Store.
 
    ```jsonc
      {
-         "online": [
+         "valid": [
            {
               "id": "ID-0",
               "heartbeatValidUntil": "1695815330000000000" // Wed Sep 27 2023 11:48:50 GMT+0000
@@ -187,6 +189,6 @@ This series of steps describes the process of expanding the setup, encountering 
               "heartbeatValidUntil": "1695815351000000000" // Wed Sep 27 2023 13:49:11 GMT+0000
            }
         ],
-        "offline": [],
+        "expired": [],
      }
    ```
