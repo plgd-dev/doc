@@ -67,7 +67,7 @@ return UpdateDeviceMetadataResponse
 
 ### Example
 
-This series of steps describes the process of expanding the setup, encountering an Out of Memory event, recording and analyzing gateway states, and identifying gateway termination within a Kubernetes environment using CoAP gateways.
+This series of steps describes the process of expanding the setup, encountering an Out of Memory event, recording and analyzing gateway states, and identifying gateway termination within a Kubernetes environment using CoAP gateways and the Resource Aggregate.
 
 1. **Initial Setup Expansion:**
    - Added two CoAP gateways to the Kubernetes (k8s) environment.
@@ -119,7 +119,7 @@ This series of steps describes the process of expanding the setup, encountering 
 3. **Update record by CoAP gateway (ID-0):**
    - After 20 seconds, the CoAP gateway (ID-0) updates its record.
    - Current time is `Wed Sep 27 2023 13:47:50 GMT+0000`.
-   - CoAP gateway hasn't detected the termination of one gateway.
+   - Resource Aggregate hasn't detected the termination of one gateway.
    - Update the record for ID-0.
 
     ```jsonc
@@ -145,7 +145,7 @@ This series of steps describes the process of expanding the setup, encountering 
 4. **Update record by CoAP gateway (ID-2):**
    - After 21 seconds, the CoAP gateway (ID-2) updates its record.
    - Current time is `Wed Sep 27 2023 13:48:11 GMT+0000`.
-   - CoAP gateway detects the termination of one gateway (ID-1).
+   - Resource Aggregate detects the termination of one gateway (ID-1).
    - The database is updated for ID-2, and ID-1 is moved to the offline state.
 
     ```jsonc
@@ -170,10 +170,10 @@ This series of steps describes the process of expanding the setup, encountering 
      ```
 
 5. **Update all devices associated with ID-1:**
-   - Update all devices associated with ID-1 to the offline state and send the event `DeviceMetadataUpdated` to the event bus.
+   - The Resource Aggregate updates all devices associated with ID-1 to the offline state and sends the `DeviceMetadataUpdated` event to the event bus.
 
 6. **Confirm offline services:**
-   - Confirm offline services and remove them from the database.
+   - The Resource Aggregate confirms the offline services and removes them from the database.
 
    ```jsonc
      {
