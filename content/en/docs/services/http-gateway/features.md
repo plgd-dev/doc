@@ -18,4 +18,4 @@ weight: 2
 
 ### Planned Features
 
-- **&#x2610; Metrics:** The gRPC Gateway will provide metrics and monitoring capabilities, allowing visibility into its performance, resource utilization, and operational insights.
+- **&#x2610; Metrics:** The HTTP Gateway will provide metrics and monitoring capabilities, allowing visibility into its performance, resource utilization, and operational insights.
