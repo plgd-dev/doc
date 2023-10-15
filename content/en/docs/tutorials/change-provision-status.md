@@ -43,7 +43,7 @@ After changing state of device we can update device secure sources such as crede
 
 {{< plantuml id="update-secure-resources" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 box "D2D Client"

@@ -51,7 +51,7 @@ The Enrollment Group created during the operation setup state has a set of requi
 
 {{< plantuml id="dps-overview" >}}
 @startuml
-skinparam backgroundColor transparent
+skinparam backgroundColor lightgrey
 hide footbox
 
 actor "Solution Operator" as op

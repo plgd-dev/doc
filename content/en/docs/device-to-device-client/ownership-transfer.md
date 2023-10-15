@@ -36,7 +36,7 @@ The pre-shared key is setup on the device by the D2D client service.
 
 {{< plantuml id="own-device-devices-and-single-client" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 box "D2D Client"
@@ -63,7 +63,7 @@ The d2d client service requests the identity certificate from the plgd Certifica
 
 {{< plantuml id="own-device-client-requests-the-identity-certificate-on-it-s-own" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 box "D2D Client"
@@ -100,7 +100,7 @@ The d2d client service is unable to reach the plgd Certificate Authority service
 
 {{< plantuml id="direct-csr" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 box "D2D Client"

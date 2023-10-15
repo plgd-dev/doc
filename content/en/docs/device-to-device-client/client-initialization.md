@@ -65,7 +65,7 @@ This option requires that the [plgd d2d client](https://github.com/plgd-dev/clie
 
 {{< plantuml id="direct-csr" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 actor U as "User"
@@ -113,7 +113,7 @@ In case the [plgd d2d client](https://github.com/plgd-dev/client-application) or
 
 {{< plantuml id="mediated-csr" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 actor U as "User"
