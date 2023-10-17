@@ -29,7 +29,7 @@ The only viable path forward is collaboration between companies and market verti
 - Embedded systems engineering and cloud-native application development are likely orthogonal skill sets for the organizations whose products would benefit the most from internet connectivity
 - The immense complexity of managing your own deployment means the market requires managed services
 - There is no seamless portability for IoT devices between clouds
-  - Extremely important if we want to decouple the networking costs from hardware costs for customers, like we do for cell phones
+- Extremely important if we want to decouple the networking costs from hardware costs for customers, like we do for cell phones
 - Lack of an industry standard increases the attack surface of the industry
 
 ## plgd Goals

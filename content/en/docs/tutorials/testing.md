@@ -7,7 +7,6 @@ keywords: [tutorials, testing]
 weight: 9
 ---
 
-
 ## Testing plgd hub pull requests
 
 When a developer creates a pull request at [plgd hub](https://github.com/plgd-dev/hub), it automatically triggers tests. The tests pulls the latest IoTivity-lite release, which is represented by docker image `ghcr.io/iotivity/iotivity-lite/cloud-server-debug:latest`. It contains all functionality to run with the hub and it is updated when new IoTivity-lite release is published.

@@ -26,7 +26,7 @@ Our proposed solution to this problem is to emulate a container runtime interfac
 - Embedded systems engineering and cloud-native application development are typically orthogonal skill sets in the companies whose products would benefit the most from internet connectivity.
 - The immense complexity of managing IoT deployments requires managed services.
 - There is no seamless portability for IoT devices between clouds.
-  - Hardware costs should be decoupled from networking costs like cell phones.
+- Hardware costs should be decoupled from networking costs like cell phones.
 - The Lack of industry standards increases the attack surface of the entire IoT industry.
 
 ## plgd Goals

@@ -36,7 +36,7 @@ IoT itself is most likely not a domain of your business; it is a group of techno
 ### Technical Contraints
 
 - **CoAP**
-  - OCF mandates [CoAP](https://coap.technology/) support for compliant [devices](https://github.com/iotivity/iotivity-lite).
+    OCF mandates [CoAP](https://coap.technology/) support for compliant [devices](https://github.com/iotivity/iotivity-lite).
 - **CoAP over TCP**
     While UDP may be preferred for messaging over local networks where "chattiness" is highly detrimental due to power or bandwidth constraints, CoAP over TCP is preferred for situations where a device is communicating with a remote server, due to the greater QoS guarantees; and TCP has substantially better support than UDP in cloud-native use cases.
 - **TLS**
@@ -68,15 +68,15 @@ Servers (IoT Devices) which are OCF enabled are represented in the form of **res
 **Connected server / client can:**
 
 - Publish / Unpublish resources
-  - A resource is represented by a URI and properties (resource types and interfaces)
+   - A resource is represented by a URI and properties (resource types and interfaces)
 - Browse Resources
-  - Browse resources published by servers to the Resource Directory
+   - Browse resources published by servers to the Resource Directory
 - Retrieve Resource
-  - Resource Bounded context keeps up-to-date representation of each remote resource
+   - Resource Bounded context keeps up-to-date representation of each remote resource
 - Update resource representation
-  - Resource Bounded context propagates each update to the device's resource
+   - Resource Bounded context propagates each update to the device's resource
 - Observe Resource
-  - Each change of the resource creates an event to which client or device can be subscribed
+   - Each change of the resource creates an event to which client or device can be subscribed
 
 ### Identities Bounded Context
 
@@ -88,7 +88,7 @@ The connected server / client belongs to the user who requested the authorizatio
 **Connected server / client can:**
 
 - Sign-up
-  - Registration to the plgd hub with a valid authorization code
+   - Registration to the plgd hub with a valid authorization code
 - Sign-in
-  - Authorize connection with provided access token
+   - Authorize connection with provided access token
 - Sign-out
