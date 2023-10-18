@@ -31,7 +31,7 @@ In the context of managing CoAP gateways and their associated devices, the proce
 
 {{< plantuml id="update-services-metadata" >}}
 @startuml Sequence
-skinparam backgroundColor lightgrey
+skinparam backgroundColor grey
 hide footbox
 
 participant CoAPGateway as "CoAP Gateway"
