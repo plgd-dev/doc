@@ -29,7 +29,7 @@ Use [plgd Client Application](https://github.com/plgd-dev/client-application) fo
 
 {{< plantuml id="device-onboarding" >}}
 @startuml Sequence
-skinparam backgroundColor lightgrey
+skinparam backgroundColor grey
 hide footbox
 
 participant D as "Device"
@@ -60,7 +60,7 @@ The TCP connection which the device established to the CoAP Gateway is now authe
 
 {{< plantuml id="hub-registration" >}}
 @startuml Sequence
-skinparam backgroundColor lightgrey
+skinparam backgroundColor grey
 hide footbox
 
 participant D as "Device"
@@ -89,7 +89,7 @@ Only JWT access tokens are supported on the device.
 
 {{< plantuml id="device-authorization" >}}
 @startuml Sequence
-skinparam backgroundColor lightgrey
+skinparam backgroundColor grey
 hide footbox
 
 participant D as "Device"
@@ -159,7 +159,7 @@ If you want to know more about Device Twin and it's state changes, please go to 
 
 {{< plantuml id="resource-publish" >}}
 @startuml Sequence
-skinparam backgroundColor lightgrey
+skinparam backgroundColor grey
 hide footbox
 
 participant D as "Device"
@@ -194,7 +194,7 @@ If you want to know more about Device Twin and it's state changes, please go to 
 
 {{< plantuml id="resource-update" >}}
 @startuml Sequence
-skinparam backgroundColor lightgrey
+skinparam backgroundColor grey
 hide footbox
 
 participant D as "Device"
@@ -289,7 +289,7 @@ A user might decide to delete the device directly using the plgd API. This appro
 
 {{< plantuml id="device-delete" >}}
 @startuml
-skinparam backgroundColor lightgrey
+skinparam backgroundColor grey
 hide footbox
 
 participant C as "Client"
@@ -344,7 +344,7 @@ Every transaction on the device's resource is scoped to the single [aggregate](h
 
 {{< plantuml id="commands-events-overview" >}}
 @startuml
-skinparam backgroundColor lightgrey
+skinparam backgroundColor grey
 
 left to right direction
 skinparam usecase {

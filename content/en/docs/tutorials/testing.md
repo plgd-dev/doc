@@ -14,7 +14,7 @@ When a developer creates a pull request at [plgd hub](https://github.com/plgd-de
 
 {{< plantuml id="testing-plgd-hub" >}}
 @startuml
-skinparam backgroundColor lightgrey
+skinparam backgroundColor grey
 hide footbox
 
 participant D as "Developer"
@@ -38,7 +38,7 @@ When a developer creates a pull request at [iotivity-lite](https://github.com/io
 
 {{< plantuml id="testing-iotivity-lite" >}}
 @startuml
-skinparam backgroundColor lightgrey
+skinparam backgroundColor grey
 hide footbox
 
 participant D as "Developer"
