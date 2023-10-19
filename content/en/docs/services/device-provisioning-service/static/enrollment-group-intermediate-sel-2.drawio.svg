@@ -1,4 +1,4 @@
-<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="711px" height="33px" viewBox="-0.5 -0.5 711 33" content="&lt;mxfile&gt;&lt;diagram id=&quot;Y8ExfZqDZafEvIbOSx8d&quot; name=&quot;Page-1&quot;&gt;3ZZNb5wwEIZ/DcdU/kigOaZkm/YQVWoOOTvYC1aMjbzeLNtfHxsPC4iNFlXZtikX7HfsGTPP2Cahed3eWdZU94YLlRDE24TeJoQQiol/BWUflWt0FYXSSh4lPAgP8pcAEYG6lVxsJgOdMcrJZioWRmtRuInGrDW76bC1UdOoDSvFTHgomJqrj5K7KqqfERr0b0KWVR+5Nzyx4rm0ZqshnDZaREvNei8wdFMxbnYjia4SmltjXGzVbS5UyGqfsDjv6xvWw4qt0G7JBCD0wtQWPvpniE1QfgMLdPs+HZWrlW/hhH45LBv5DmebSnDoMCVL7duFX4CwXngR1kmf0xsw1JLz4DH4aILnui1D+XyKxEh8B7f73n8oKBxa2riiAnUtlcqNMrZbHE0Ru8ZZ0I12I33dPSGcs+ZZjCzkNksRghlQfPjS9+c5hLSGTxHtSIKc3glTC2f3fghYL6HQofApdHdDFWEKFVCNKqjXGBRueXA8IPQNoHicaDoj+j2QqAWXzAkg6+NQ/A8DxscIM4Q6kosJ0wyhPD8PYZydRnx1JsTZDPFK8wt/VmonnfeUsroJyXzaNIeP/RiYu5NyKeHR4DFcD9D9aFgRUhEDvwPulPy9Hd1fh6e3NPlIrH9rS+f+OXpox5H9NU3fhzpdQP1cmxzjpdTpf0/9xEE+A3oE+9tX9Z87yH13+LPrbKMfZ7p6BQ==&lt;/diagram&gt;&lt;/mxfile&gt;">
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="711px" height="33px" viewBox="-0.5 -0.5 711 33" content="&lt;mxfile&gt;&lt;diagram id=&quot;Y8ExfZqDZafEvIbOSx8d&quot; name=&quot;Page-1&quot;&gt;3ZZbb9sgFMc/jR83cUnt7LFzs24PU6X1Yc/UEBuVi0VI4/TTDwLEtpyqVtX0MkeK4X/gHHx+B+wMl7K7NqRtfmvKRIYA7TJ8lSG0WAL374V9EDDIg1AbToMEe+GWP7Ioxnn1llO2GQ20WgvL27FYaaVYZUcaMUbvxsPWWoyjtqRmE+G2ImKq/uXUNkFdAtDrPxmvmxQ5Ge5IdV8bvVUxXIbwEvhfMEuSXEVh0xCqdwMJrzJcGq1taMmuZMJnNmUtzPvxhPW4bMOUnTMBhQkPRGzjk//xsREoL+MC7T7lpLFSuBbM8PfjsoHrULJpGI0dInitXLtyC2DGCQ/MWO4SexkNklPqPXofrfcsu9qX0NeADYW7d7tP/n1RQd9S2lZNVNdciFILbQ6Lwzkg32Dhda3sQF8fLh/OGn3PBhZ0VeQAxBmxAuHC9ac5jGn1j8K6gRRzes20ZNbs3ZBU/xdhRqr+2N31pQRxrIBmUEZJI7F666PjHqFrRIqnieYTor88CckoJ5ZFsi4Ohh8YMDxFmABwIDmbMC4AKMvzEIbF84gvzoS4mCBeKfrFHZjKcus85US2Ppl3m/b4sJ8Ds9KKzSY8GDyE6wDam5ZUPhUh8CvgztH77ej0Tnx+S6PPxPpFW7p018lDO4xM72r8OtTxDOrn2uQQzqWO/3vq5zzIF293kLtu/2V3sA0+nvHqHw==&lt;/diagram&gt;&lt;/mxfile&gt;" style="background-color: rgb(128, 128, 128);">
     <defs/>
     <g>
         <path d="M 0 1 L 120 1 L 120 1 L 130 16 L 120 31 L 120 31 L 0 31 L 0 16 Z" fill="#60a917" stroke="#2d7600" stroke-miterlimit="10" pointer-events="all"/>
@@ -91,7 +91,7 @@
         <g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/>
         <a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank">
             <text text-anchor="middle" font-size="10px" x="50%" y="100%">
-                Viewer does not support full SVG 1.1
+                Text is not SVG - cannot display
             </text>
         </a>
     </switch>
