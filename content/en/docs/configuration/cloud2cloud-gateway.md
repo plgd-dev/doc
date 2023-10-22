@@ -38,7 +38,7 @@ A configuration template is available in [cloud2cloud-gateway/config.yaml](https
 | `apis.http.readHeaderTimeout` | string | `The amount of time allowed to read request headers by the server. If readHeaderTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `4s` |
 | `apis.http.writeTimeout` | string | `The maximum duration before the server times out writing of the response. A zero or negative value means there will be no timeout.` | `16s` |
 | `apis.http.idleTimeout` | string | `The maximum amount of time the server waits for the next request when keep-alives are enabled. If idleTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `30s` |
-| `apis.http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `apis.http.tls.caPool` | string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `apis.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.http.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
@@ -49,7 +49,7 @@ A configuration template is available in [cloud2cloud-gateway/config.yaml](https
 | `apis.http.authorization.http.maxIdleConnsPerHost` | int | `If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used.` | `16` |
 | `apis.http.authorization.http.idleConnTimeout` | string | `The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit.` | `30s` |
 | `apis.http.authorization.http.timeout` | string | `A time limit for requests made by this Client. A Timeout of zero means no timeout.` | `10s` |
-| `apis.http.authorization.http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `apis.http.authorization.http.tls.caPool` | string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `apis.http.authorization.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.http.authorization.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.http.authorization.http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
@@ -63,7 +63,7 @@ plgd hub uses NATS messaging system as an event bus.
 | `clients.eventBus.nats.url` | string | `URL to nats messaging system.` | `"nats://localhost:4222"` |
 | `clients.eventBus.nats.pendingLimits.msgLimit` | int | `Limit number of messages in queue. -1 means unlimited` | `524288` |
 | `clients.eventBus.nats.pendingLimits.bytesLimit` | int | `Limit buffer size of queue. -1 means unlimited` | `67108864` |
-| `clients.eventBus.nats.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `clients.eventBus.nats.tls.caPool` | string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.eventBus.nats.tls.keyFile` | string | `File name of private key in PEM format.` | `""` |
 | `clients.eventBus.nats.tls.certFile` | string | `File name of certificate in PEM format.` | `""` |
 | `clients.eventBus.nats.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
@@ -75,7 +75,7 @@ Client configurations to internally connect to GRPC Gateway service.
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
 | `clients.grpcGateway.grpc.address` | string | `GRPC Gateway service address.` | `"127.0.0.1:9100"` |
-| `clients.grpcGateway.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `clients.grpcGateway.grpc.tls.caPool` | string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.grpcGateway.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `clients.grpcGateway.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `clients.grpcGateway.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
@@ -93,7 +93,7 @@ Client configurations to internally connect to the Resource Aggregate service.
 | `clients.resourceAggregate.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
 | `clients.resourceAggregate.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
 | `clients.resourceAggregate.grpc.keepAlive.permitWithoutStream` | bool | `If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent.` | `false` |
-| `clients.resourceAggregate.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `clients.resourceAggregate.grpc.tls.caPool` | string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.resourceAggregate.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `clients.resourceAggregate.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `clients.resourceAggregate.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
@@ -108,7 +108,7 @@ plgd hub uses MongoDB database as the owner's device store.
 | `clients.storage.mongoDB.database` | string | `Name of database.` | `"cloud2cloudGateway"` |
 | `clients.storage.mongoDB.maxPoolSize` | int | `Limits number of connections.` | `16` |
 | `clients.storage.mongoDB.maxConnIdleTime` | string | `Close connection when idle time reach the value.` | `4m` |
-| `clients.storage.mongoDB.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `clients.storage.mongoDB.tls.caPool` | string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.storage.mongoDB.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `clients.storage.mongoDB.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `clients.storage.mongoDB.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
@@ -119,7 +119,7 @@ plgd hub uses MongoDB database as the owner's device store.
 | ---------- | -------- | -------------- | ------- |
 | `clients.subscription.http.reconnectInterval` | string | `try to reconnect after interval to resource-directory when connection was closed` | `"10s"` |
 | `clients.subscription.http.emitEventTimeout` | string | `timeout for send event` | `"5s"` |
-| `clients.subscription.http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `clients.subscription.http.tls.caPool` | string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.subscription.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `clients.subscription.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `clients.subscription.http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |

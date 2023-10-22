@@ -40,7 +40,7 @@ HTTP API of the OAuth Server service as defined [here](https://github.com/plgd-d
 | `apis.http.readHeaderTimeout` | string | `The amount of time allowed to read request headers by the server. If readHeaderTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `4s` |
 | `apis.http.writeTimeout` | string | `The maximum duration before the server times out writing of the response. A zero or negative value means there will be no timeout.` | `16s` |
 | `apis.http.idleTimeout` | string | `The maximum amount of time the server waits for the next request when keep-alives are enabled. If idleTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `30s` |
-| `apis.http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `apis.http.tls.caPool` | string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `apis.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.http.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
