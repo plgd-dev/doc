@@ -45,7 +45,7 @@ gRPC API of the Certificate Authority service as defined [here](https://github.c
 | `apis.grpc.keepAlive.maxConnectionAgeGrace` | string | `An additive period after MaxConnectionAge after which the connection will be forcibly closed. 0s means infinity.` | `0s` |
 | `apis.grpc.keepAlive.time` | string | `After a duration of this time if the server doesn't see any activity it pings the client to see if the transport is still alive.` | `2h` |
 | `apis.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
-| `apis.grpc.tls.caPool` | string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `apis.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `apis.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.grpc.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
@@ -57,7 +57,7 @@ gRPC API of the Certificate Authority service as defined [here](https://github.c
 | `apis.grpc.authorization.http.maxIdleConnsPerHost` | int | `If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used.` | `16` |
 | `apis.grpc.authorization.http.idleConnTimeout` | string | `The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit.` | `30s` |
 | `apis.grpc.authorization.http.timeout` | string | `A time limit for requests made by this Client. A Timeout of zero means no timeout.` | `10s` |
-| `apis.grpc.authorization.http.tls.caPool` | string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `apis.grpc.authorization.http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `apis.grpc.authorization.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.grpc.authorization.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.grpc.authorization.http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
