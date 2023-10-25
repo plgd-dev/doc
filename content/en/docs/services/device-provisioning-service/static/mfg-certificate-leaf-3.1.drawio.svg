@@ -1,4 +1,4 @@
-<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="712px" height="32px" viewBox="-0.5 -0.5 712 32" content="&lt;mxfile&gt;&lt;diagram id=&quot;Y8ExfZqDZafEvIbOSx8d&quot; name=&quot;Page-1&quot;&gt;zZTBbtswDIafxscNttSm29F10+4yDFgPO6sWYwuVRUNhGmdPPymi4nhpgR6KYTk41EeJpPjTLmQzTA9ejf131GALUeqpkHeFEDdfb8IzgkMCshIJdN7ohKoZPJrfwLBkujMatouNhGjJjEvYonPQ0oIp73G/3LZBu8w6qg4uwGOr7CX9ZTT1iX4py5l/A9P1OXN2PKn2ufO4c5zOoYPkGVSOwlu3vdK4P0NyXcjGI1KyhqkBG5uaG5bO3b/hPVXswdG7DnAdL8ru+NY/Y3JRNjVXSIfcj54GG6yqkLenusuw0Grbg+aFsqZzwW5DBeADeAFPJjS1ZsdgtI4RY4wxRh6mLo7P5ySZSP8x7CHHjwNVRcshtT3TjbG2QYshx92xwwGho4wKITfHX8xEHp/hlc08c9VVWBNM9GNUraGc97KZ3N94JZjOEDf3AXAA8oewhb1X1+lEfgN4uZ/HqZIsQX82SpkpnuDuFHjWMhgs5xvSigtp105/Cq+Uo3hHsVLDGHv6tB1Pl/0v1a7+ljtoWzW3dX39bs2DpyxX6/r+FeE/QOaV+Gc6h+X8eTj6zj6+cv0H&lt;/diagram&gt;&lt;/mxfile&gt;">
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="711px" height="31px" viewBox="-0.5 -0.5 711 31" content="&lt;mxfile&gt;&lt;diagram id=&quot;Y8ExfZqDZafEvIbOSx8d&quot; name=&quot;Page-1&quot;&gt;zVTBbtswDP0aHzfIUhrk6rppdxkKNIeeVUuxhcqioTCJs6+vVFFxvLRAD8UwB3DIR4mk3qNciLofH7wcut+gtC04U2Mh7grOFysW3hE4JUCwZQJab1SCygnYmD+aQNrX7o3Su9lCBLBohjnYgHO6wRkmvYfjfNkW7LzqIFt9BWwaaa/RZ6OwS+iKsQn/pU3b5co58CKb19bD3lG5gosVi78U7mVORcCukwqOF5BYF6L2AJisfqy1jcxm1tK++0+i57a9dvilDdTHQdo9Hf0pFuesrqhDPGVSOuxtsMpC3J77ZsFRctdpRY60pnXBbkIH2gfgoD2awGxFgd4oFTPGHEPM3I9tnKGfSTee/mPaU84fp6qMlgNsOkK3xtoaLIQadw5czLgFhxkKzG/fn1gJPbzqDxbT4JWL4KMe8XGQjcFc95pM4jceSY8XEJH7oKHX6E9hSb4IN2lHvgbkHqeZKgVJ0F3MU8YkjXF7TjxpGQyS8xNp+ZW0a6d+hHvlMJ6RL2U/RE5fdsP5sP+l2uXfcgdty/q2qm6+rHmIMLZcV/cfCP8NMi/5P9M5uNPn4T128QUW6zc=&lt;/diagram&gt;&lt;/mxfile&gt;" style="background-color: rgb(128, 128, 128);">
     <defs/>
     <g>
         <path d="M 0 0 L 120 0 L 120 0 L 130 15 L 120 30 L 120 30 L 0 30 L 0 15 Z" fill="none" stroke="none" pointer-events="all"/>
@@ -40,7 +40,7 @@
         <g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/>
         <a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank">
             <text text-anchor="middle" font-size="10px" x="50%" y="100%">
-                Viewer does not support full SVG 1.1
+                Text is not SVG - cannot display
             </text>
         </a>
     </switch>

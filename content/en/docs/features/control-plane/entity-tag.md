@@ -186,7 +186,7 @@ The N-latest ETAGs retrieved from the database is configurable in CoAP gateway. 
 
 {{< plantuml id="etag-batch-observe" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 entity Device as "Device"

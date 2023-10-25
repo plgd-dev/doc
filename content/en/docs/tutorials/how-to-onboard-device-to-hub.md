@@ -65,7 +65,7 @@ The update device credentials is done via POST method on the /oic/sec/cred resou
 
 {{< plantuml id="add-ca" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 box "D2D Client"
@@ -120,7 +120,7 @@ The update device ACL is done via POST method on the /oic/sec/acl2 resource:
 
 {{< plantuml id="add-hub-acl" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 box "D2D Client"
@@ -164,7 +164,7 @@ Before the device can be provisioned, the authorization code must be acquired an
 
 {{< plantuml id="onboard-device" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 box "D2D Client"
@@ -200,7 +200,7 @@ When device provisioning ends with fail state, the device is not registered on t
 skinparam state {
   BackgroundColor<<Shadow>> LightGray
 }
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 state NOT_OWNED <<Shadow>> {
@@ -244,7 +244,7 @@ To offboard the device from the plgd hub, the device can be in the any state. De
 
 {{< plantuml id="offboard-device" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 box "D2D Client"

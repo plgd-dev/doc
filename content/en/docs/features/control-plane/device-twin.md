@@ -18,7 +18,7 @@ The device resources can be updated by more services/users at the same time. The
 
 {{< plantuml id="update-device-twin-from-hub" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 entity "OCF Server" as Server
@@ -69,7 +69,7 @@ The device might be actuated also from the local network. The temperature in the
 
 {{< plantuml id="update-device-twin" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 entity "OCF Client" as Client
@@ -104,7 +104,7 @@ Device metadata contains additional information about the device lifecycle, incl
 
 {{< plantuml id="device-metadata-connect" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 entity Device as "Device"
@@ -136,7 +136,7 @@ The synchronization as it is described in the following sequence diagram occurs 
 
 {{< plantuml id="device-metadata-twin-synchronization-batch" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 entity Device as "Device"
@@ -179,7 +179,7 @@ end note
 
 {{< plantuml id="device-metadata-disconnect" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 entity Device as "Device"
@@ -205,7 +205,7 @@ deactivate CGW
 
 {{< plantuml id="device-metadata-twin-synchronization" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 entity Device as "Device"
@@ -249,7 +249,7 @@ The Twin is disabled only after the `DeviceMetadataUpdated` event is received an
 
 {{< plantuml id="device-metadata-disable-twin" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 entity Device as Device
@@ -287,7 +287,7 @@ Same logic as for disable Twin applies. The Twin is enabled only after the `Devi
 
 {{< plantuml id="device-metadata-enabled-twin" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 entity Device as Device
@@ -330,7 +330,7 @@ To ensure that the resynchronization is successfully completed, the client shoul
 
 {{< plantuml id="device-metadata-twin-force-resynchronization" >}}
 @startuml Sequence
-skinparam backgroundColor transparent
+skinparam backgroundColor grey
 hide footbox
 
 entity Device as Device

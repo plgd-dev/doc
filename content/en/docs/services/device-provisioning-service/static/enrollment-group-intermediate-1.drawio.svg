@@ -1,4 +1,4 @@
-<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="711px" height="31px" viewBox="-0.5 -0.5 711 31" content="&lt;mxfile&gt;&lt;diagram id=&quot;Y8ExfZqDZafEvIbOSx8d&quot; name=&quot;Page-1&quot;&gt;1ZVNb5wwEIZ/DcdW/kigOaZkk/ZQVWoOPTt4FqwYG3m9Wba/vjYeFhAbdQ9p1XDBfmc8Y88zhoyXbf/gRNd8sxJ0xojsM36XMcY4ZeEVlWNSbsh1EmqnZJLoJDyqX4AiQXWvJOwWjt5a7VW3FCtrDFR+oQnn7GHptrV6mbUTNayEx0rotfpTSd8k9RMhk/4FVN2MmUfDk6iea2f3BtMZayBZWjFGQdddI6Q9zCS+yXjprPVp1PYl6FjVsWBp3f0r1tOOHRh/yQIk9CL0Hg/9I+ZmpLzFDfrjWI7GtzqMaMY/n7ZNwkSKXQMSJ0Kr2oRxFTYALggv4LwKNb1FQ6ukjBFjjC5Gbvs6ts/HRIyldwx7HOPHhqJxZKyvGlS3SuvSauuGzfGciBtaRN0aP9O3wxPTeWefYWZhd0VOCK7A5qNXYb6uIZY1HgX6mYQ1fQDbgnfH4ILWK2x0bHyO08PURZRjBzSzDho1gY1bnwJPCMMAKZ4nmq+Ifo0kWpBKeECyIQ+n/zFgeo6wIGQgeTFhXhBSlmcIJ8/xTtO3YU6LP0O//kvQixX0jZEfwtfTeOVDpFy0XSzv0647HfZ9gB++nZcynznPcQeA/nsnqliKlPgNcOfsn93xMJ3+CINt9sPlm98=&lt;/diagram&gt;&lt;/mxfile&gt;">
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="711px" height="31px" viewBox="-0.5 -0.5 711 31" content="&lt;mxfile&gt;&lt;diagram id=&quot;Y8ExfZqDZafEvIbOSx8d&quot; name=&quot;Page-1&quot;&gt;1ZVNb9swDIZ/jY8d9NHa2bFzs26HosB62Fm1GFuoPgxFaZz++kmRFNtwiuXQDZsDONJLkZT40HZBazXcW9Z3D4aDLAjiQ0HvCkKuV8jfg3CIAkVlFForeJTwKDyJN0hi8mt3gsN2ttAZI53o52JjtIbGzTRmrdnPl22MnGftWQsL4alhcqn+FNx1UV0hNOrfQLRdzpwNz6x5aa3Z6ZSuIHSFwi+aFcuhkrDtGDf7iUTXBa2tMS6O1FCDDJXNVYt+X9+xnrZtQbtLHEh0eGVyl07+I+QmqL5NG3SHXJPOKelHuKBfTttGfsLZtgOeJkyKVvtx4zcA1guvYJ3whb1NBiU4DxFDjD5EVkMbWuhTxEbifwh7yPFDU+Ew0sY1XVI3QsraSGOPm6MlYp9xFXSj3UTfHK+QzlnzAhMLuatKhJJH6kB87efLGqayhqPAMJFSTe/BKHD24Jfk/r+JHrn703Q/thKmqQO6SRtljaXubU+BR4R+kCieJ1ouiH4PJBRwwRwksj4Pxf8wYHyOMEPoSPJiwrRCqK7PEI4r84ONP4Y5rn4P/eYPQa8W0NeaX/lXqHbC+UglU30o7/O2Px32/wCvjYaLmU8WT3F7gO6xZ00oRUz8AbhL8teecT8dvwhH2+SjS9e/AA==&lt;/diagram&gt;&lt;/mxfile&gt;" style="background-color: rgb(128, 128, 128);">
     <defs/>
     <g>
         <path d="M 0 0 L 120 0 L 120 0 L 130 15 L 120 30 L 120 30 L 0 30 L 0 15 Z" fill="#60a917" stroke="#2d7600" stroke-miterlimit="10" pointer-events="all"/>
@@ -57,7 +57,7 @@
         <g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/>
         <a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank">
             <text text-anchor="middle" font-size="10px" x="50%" y="100%">
-                Viewer does not support full SVG 1.1
+                Text is not SVG - cannot display
             </text>
         </a>
     </switch>
