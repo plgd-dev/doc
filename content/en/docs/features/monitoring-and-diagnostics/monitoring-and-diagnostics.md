@@ -1,6 +1,7 @@
 ---
 title: 'Monitoring and Diagnostics'
 description: 'What are the monitoring and diagnostic features of plgd system?'
+search: 'Monitoring and Diagnostics'
 date: '2023-05-23'
 categories: [zero-touch, provisioning. features]
 keywords: [provisioning, TPM, device-twin]

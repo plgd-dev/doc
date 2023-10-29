@@ -1,6 +1,7 @@
 ---
 title: 'Device Provisioning Service'
 description: 'What is plgd Device Provisioning Service?'
+search: 'Device Provisioning Service'
 date: '2022-01-26'
 categories: [zero-touch, provisioning]
 keywords: [provisioning, TPM, manufacturer-certificate]
