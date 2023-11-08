@@ -1,7 +1,6 @@
 ---
 title: 'Features'
 description: 'What features provides Device Provisioning Service?'
-search: 'Features Sevices'
 date: '2023-05-19'
 categories: [zero-touch, provisioning]
 keywords: [provisioning, TPM, manufacturer-certificate]

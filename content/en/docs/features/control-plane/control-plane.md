@@ -1,7 +1,6 @@
 ---
 title: 'Control Plane'
 description: 'What are the control plane features of plgd system?'
-search: 'Control Plane'
 date: '2023-05-23'
 categories: [zero-touch, provisioning. features]
 keywords: [provisioning, TPM, device-twin]

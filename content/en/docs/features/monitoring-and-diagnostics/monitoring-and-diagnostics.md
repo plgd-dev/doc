@@ -1,5 +1,5 @@
 ---
-title: 'Monitoring and Diagnostics test title'
+title: 'Monitoring and Diagnostics'
 description: 'What are the monitoring and diagnostic features of plgd system?'
 date: '2023-05-23'
 categories: [zero-touch, provisioning. features]
