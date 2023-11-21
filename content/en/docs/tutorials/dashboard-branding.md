@@ -39,10 +39,9 @@ To create your own theme, follow these steps:
     ./packages/shared-ui/scripts/build.theme.js --themes=mycompany
     ```
 
-To apply these changes and update the UI, follow these instructions:
+The generated theme will be stored in `./build/theme/theme.json`.
 
-- Replace the `theme/theme.json` file with your own theme.
-- If you are using Helm, you can set the theme in JSON format with `.Values.httpgateway.ui.theme`. Alternatively, you can replace the file directly in the Docker image.
+To implement these changes and refresh the UI, you have two options. First, you can set the theme in JSON format using `.Values.httpgateway.ui.theme` in the Helm values file. Alternatively, you can directly replace the file in the Docker image at the path `/usr/local/var/www/theme/theme.json`.
 
 ### Favicon
 
