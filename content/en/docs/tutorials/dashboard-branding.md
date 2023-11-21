@@ -7,23 +7,42 @@ keywords: [dashboard, branding, logo, colors]
 weight: 12
 ---
 
-Dashboard helps you to present to your stakeholders new device features as well as explain how this IoT framework works. To make it more convincing, basic templating functionality was introduced.
+In the plgd hub, customization of the UI for your company is possible. This includes the ability to modify the logo, colors, and even switch to your own preferred theme.
 
-## Colors change
+## Theme
 
-All colors are defined in one [`colors.scss`](https://github.com/plgd-dev/hub/tree/main/http-gateway/web/src/common/styles/colors.scss) file. Changing one of the colors will have an impact on all parts of the application.
+To create your own theme, follow these steps:
 
-## Logo change
+1. Clone the repository by running the following command:
 
-You can change the logo of the application by replacing these files:
+    ```sh
+    git clone https://github.com/plgd-dev/shared-ui.git
+    ```
 
-### Big logo (when the menu is expanded)
+2. Navigate to the cloned directory and install the necessary packages:
 
-[`logo-big.svg`](https://github.com/plgd-dev/hub/tree/main/http-gateway/web/src/assets/img/logo-big.svg) - _Recommended size is 127px \* 35px_
+    ```sh
+    cd shared-ui
+    npm install
+    npm install --save-dev babel-cli
+    ```
 
-### Small logo (when the menu is collapsed)
+3. Create your own theme within the `./src/components/Atomic/_theme/mycompany.ts` directory. You can refer to `./src/components/Atomic/_theme/plgd.ts` as an example.
 
-[`logo-small.svg`](https://github.com/plgd-dev/hub/tree/main/http-gateway/web/src/assets/img/logo-small.svg) - _recommended size is 45px \* 35px_
+   ```sh
+   cp ./src/components/Atomic/_theme/plgd.ts ./src/components/Atomic/_theme/mycompany.ts
+   ```
+
+4. Build your theme by executing the following command:
+
+    ```sh
+    ./packages/shared-ui/scripts/build.theme.js --themes=mycompany
+    ```
+
+To apply these changes and update the UI, follow these instructions:
+
+- Replace the `theme/theme.json` file with your own theme.
+- If you are using Helm, you can set the theme in JSON format with `.Values.httpgateway.ui.theme`. Alternatively, you can replace the file directly in the Docker image.
 
 ### Favicon
 
