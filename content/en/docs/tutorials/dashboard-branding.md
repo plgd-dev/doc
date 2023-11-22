@@ -16,30 +16,29 @@ To create your own theme, follow these steps:
 1. Clone the repository by running the following command:
 
     ```sh
-    git clone https://github.com/plgd-dev/shared-ui.git
+    git clone --recursive --branch v2.15.0 https://github.com/plgd-dev/hub.git
     ```
 
 2. Navigate to the cloned directory and install the necessary packages:
 
     ```sh
-    cd shared-ui
+    cd hub/http-gateway/web
     npm install
-    npm install --save-dev babel-cli
     ```
 
-3. Create your own theme within the `./src/components/Atomic/_theme/mycompany.ts` directory. You can refer to `./src/components/Atomic/_theme/plgd.ts` as an example.
+3. Create your own theme within the `./packages/shared-ui/src/components/Atomic/_theme/mycompany.ts` directory. You can refer to `./packages/shared-ui/src/components/Atomic/_theme/plgd.ts` as an example.
 
    ```sh
-   cp ./src/components/Atomic/_theme/plgd.ts ./src/components/Atomic/_theme/mycompany.ts
+   cp ./packages/shared-ui/src/components/Atomic/_theme/plgd.ts ./packages/shared-ui/src/components/Atomic/_theme/mycompany.ts
    ```
 
 4. Build your theme by executing the following command:
 
     ```sh
-    ./packages/shared-ui/scripts/build.theme.js --themes=mycompany
+    node ./packages/shared-ui/scripts/build.theme.js --themes=mycompany
     ```
 
-The generated theme will be stored in `./build/theme/theme.json`.
+The generated theme will be stored in `./public/theme/theme.json`.
 
 To implement these changes and refresh the UI, you have two options. First, you can set the theme in JSON format using `.Values.httpgateway.ui.theme` in the Helm values file. Alternatively, you can directly replace the file in the Docker image at the path `/usr/local/var/www/theme/theme.json`.
 
