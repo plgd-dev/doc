@@ -8,7 +8,6 @@ keywords: [tutorials, dashboard]
 weight: 1
 ---
 
-
 ## Setup mutual TLS
 
 At coap-gateway you can set up mutual TLS, which verify the signature of the identity certificate of the device via configuration:
