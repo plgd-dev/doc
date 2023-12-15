@@ -23,12 +23,12 @@ A configuration template is available on [coap-gateway/config.yaml](https://gith
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `log.dumpBody` | bool | `Set to true if you would like to dump raw messages.` | `false` |
-| `log.level` | string | `Logging enabled from level.` | `"info"` |
-| `log.encoding` | string | `Logging format. The supported values are: "json", "console"` | `"json"` |
-| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `false` |
-| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn"` |
-| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano"` |
+| `log.dumpBody` | bool | Set to true if you would like to dump raw messages. | `false` |
+| `log.level` | string | Logging enabled from level. | `"info"` |
+| `log.encoding` | string | Logging format. The supported values are: "json", "console" | `"json"` |
+| `log.stacktrace.enabled` | bool | Log stacktrace. | `false` |
+| `log.stacktrace.level` | string | Stacktrace from level. | `"warn"` |
+| `log.encoderConfig.timeEncoder` | string | Time format for logs. The supported values are: "rfc3339nano", "rfc3339". | `"rfc3339nano"` |
 
 ### CoAP API
 
@@ -36,23 +36,23 @@ CoAP API as specified in the [Open Connectivity Foundation - Device to Cloud Ser
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `apis.coap.address` | string | `Listen specification <host>:<port> for coap client connection.` | `"0.0.0.0:5684"` |
-| `apis.coap.protocols` | []string | `Protocol for coap connection. The supported values are: "tcp", "udp" .` | `["tcp"]` |
-| `apis.coap.externalAddress` | string | `External address including public domain/IP for coap client connection.` | `"coap-gw.example.com:5684"` |
-| `apis.coap.maxMessageSize` | int | `Max message size which can be sent/received via coap. i.e. 256*1024 = 262144 bytes.` | `262144` |
-| `apis.coap.ownerCacheExpiration` | string | `Time limit of how long to keep subscribed to device updates after last use of the given cache item.` | `1m` |
-| `apis.coap.subscriptionBufferSize` | int | `The maximum buffer size for one events subscription.` | `1000` |
-| `apis.coap.messagePoolSize` | int | `Defines the maximum preallocated messages in the pool for parse/create coap messages.` | `1000` |
-| `apis.coap.keepAlive.timeout` | string | `Time limit to close inactive connection.` | `20s` |
-| `apis.coap.blockwiseTransfer.enabled` | bool | `If true, enable blockwise transfer of coap messages.` | `true` |
-| `apis.coap.blockwiseTransfer.blockSize` | int | `Size of blockwise transfer block.` | `1024` |
-| `apis.coap.tls.enabled` | bool | `If true, require server certificate for ssl connection.` | `true` |
-| `apis.coap.tls.disconnectOnExpiredCertificate` | bool | `If true, device with expired certificates will be disconnected.` | `false` |
-| `apis.coap.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `apis.coap.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `apis.coap.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `apis.coap.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
-| `apis.coap.tls.identityPropertiesRequired` | bool | `If true, require  EKU with 1.3.6.1.4.1.44924.1.6 and CN with uuid=<deviceID> in client certificate as is defined OCF.` | `true` |
+| `apis.coap.address` | string | Listen specification <host>:<port> for coap client connection. | `"0.0.0.0:5684"` |
+| `apis.coap.protocols` | []string | Protocol for coap connection. The supported values are: "tcp", "udp" . | `["tcp"]` |
+| `apis.coap.externalAddress` | string | External address including public domain/IP for coap client connection. | `"coap-gw.example.com:5684"` |
+| `apis.coap.maxMessageSize` | int | Max message size which can be sent/received via coap. i.e. 256*1024 = 262144 bytes. | `262144` |
+| `apis.coap.ownerCacheExpiration` | string | Time limit of how long to keep subscribed to device updates after last use of the given cache item. | `1m` |
+| `apis.coap.subscriptionBufferSize` | int | The maximum buffer size for one events subscription. | `1000` |
+| `apis.coap.messagePoolSize` | int | Defines the maximum preallocated messages in the pool for parse/create coap messages. | `1000` |
+| `apis.coap.keepAlive.timeout` | string | Time limit to close inactive connection. | `20s` |
+| `apis.coap.blockwiseTransfer.enabled` | bool | If true, enable blockwise transfer of coap messages. | `true` |
+| `apis.coap.blockwiseTransfer.blockSize` | int | Size of blockwise transfer block. | `1024` |
+| `apis.coap.tls.enabled` | bool | If true, require server certificate for ssl connection. | `true` |
+| `apis.coap.tls.disconnectOnExpiredCertificate` | bool | If true, device with expired certificates will be disconnected. | `false` |
+| `apis.coap.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `apis.coap.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `apis.coap.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `apis.coap.tls.clientCertificateRequired` | bool | If true, require client certificate. | `true` |
+| `apis.coap.tls.identityPropertiesRequired` | bool | If true, require  EKU with 1.3.6.1.4.1.44924.1.6 and CN with uuid=<deviceID> in client certificate as is defined OCF. | `true` |
 
 #### OAuth2.0 Client
 
@@ -60,25 +60,25 @@ OAuth2.0 Client is used to issuing an authorization code used by the Onboarding 
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `apis.coap.authorization.ownerClaim` | string | `Claim used to identify owner of the device. Combination of ownerClaim set to sub is not compatible if at least one authorization provider uses grant type clientCredentials.` | `"sub"` |
-| `apis.coap.authorization.deviceIDClaim` | string | `Claim used to identify device id of the device. Empty means that JWT doesn't contain it.` | `""` |
-| `apis.coap.authorization.providers[].name` | string | `Provider name, the register request of the device must contain one of the names of providers.` | `""` |
-| `apis.coap.authorization.providers[].clientID` | string | `Client ID to exchange an authorization code for an access token.` | `""` |
-| `apis.coap.authorization.providers[].clientSecretFile` | string | `File path to client secret required to exchange an authorization code for an access token.` |  `""` |
-| `apis.coap.authorization.providers[].grantType` | string | `A grant type of OAuth provider specifies how the device signing up process is authorized. Combination of apis.coap.authorization.ownerClaim set to sub is not compatible if at least one authorization provider uses grant type clientCredentials. Supported values: authorizationCode, clientCredentials` |  `"authorizationCode"` |
-| `apis.coap.authorization.providers[].scopes` | string array | `List of required scopes.` | `""` |
-| `apis.coap.authorization.providers[].authority` | string | `Authority is the address of the token-issuing authentication server. Services will use this URI to find and retrieve the public key that can be used to validate the token’s signature.` | `""` |
-| `apis.coap.authorization.providers[].audience` | string | `Audience of OAuth provider.` | `""` |
-| `apis.coap.authorization.providers[].redirectURL` | string | `Redirect url used to obtain device access token.` | `""` |
-| `apis.coap.authorization.providers[].http.maxIdleConns` | int | `It controls the maximum number of idle (keep-alive) connections across all hosts. Zero means no limit.` | `16` |
-| `apis.coap.authorization.providers[].http.maxConnsPerHost` | int | `It optionally limits the total number of connections per host, including connections in the dialing, active, and idle states. On limit violation, dials will block. Zero means no limit.` | `32` |
-| `apis.coap.authorization.providers[].http.maxIdleConnsPerHost` | int | `If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used.` | `16` |
-| `apis.coap.authorization.providers[].http.idleConnTimeout` | string | `The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit.` | `30s` |
-| `apis.coap.authorization.providers[].http.timeout` | string | `A time limit for requests made by this Client. A Timeout of zero means no timeout.` | `10s` |
-| `apis.coap.authorization.providers[].http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `apis.coap.authorization.providers[].http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `apis.coap.authorization.providers[].http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `apis.coap.authorization.providers[].http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `apis.coap.authorization.ownerClaim` | string | Claim used to identify owner of the device. Combination of ownerClaim set to sub is not compatible if at least one authorization provider uses grant type clientCredentials. | `"sub"` |
+| `apis.coap.authorization.deviceIDClaim` | string | Claim used to identify device id of the device. Empty means that JWT doesn't contain it. | `""` |
+| `apis.coap.authorization.providers[].name` | string | Provider name, the register request of the device must contain one of the names of providers. | `""` |
+| `apis.coap.authorization.providers[].clientID` | string | Client ID to exchange an authorization code for an access token. | `""` |
+| `apis.coap.authorization.providers[].clientSecretFile` | string | File path to client secret required to exchange an authorization code for an access token. | `""` |
+| `apis.coap.authorization.providers[].grantType` | string | A grant type of OAuth provider specifies how the device signing up process is authorized. Combination of apis.coap.authorization.ownerClaim set to sub is not compatible if at least one authorization provider uses grant type clientCredentials. Supported values: authorizationCode, clientCredentials | `"authorizationCode"` |
+| `apis.coap.authorization.providers[].scopes` | string array | List of required scopes. | `""` |
+| `apis.coap.authorization.providers[].authority` | string | Authority is the address of the token-issuing authentication server. Services will use this URI to find and retrieve the public key that can be used to validate the token's signature. | `""` |
+| `apis.coap.authorization.providers[].audience` | string | Audience of OAuth provider. | `""` |
+| `apis.coap.authorization.providers[].redirectURL` | string | Redirect url used to obtain device access token. | `""` |
+| `apis.coap.authorization.providers[].http.maxIdleConns` | int | It controls the maximum number of idle (keep-alive) connections across all hosts. Zero means no limit. | `16` |
+| `apis.coap.authorization.providers[].http.maxConnsPerHost` | int | It optionally limits the total number of connections per host, including connections in the dialing, active, and idle states. On limit violation, dials will block. Zero means no limit. | `32` |
+| `apis.coap.authorization.providers[].http.maxIdleConnsPerHost` | int | If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used. | `16` |
+| `apis.coap.authorization.providers[].http.idleConnTimeout` | string | The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit. | `30s` |
+| `apis.coap.authorization.providers[].http.timeout` | string | A time limit for requests made by this Client. A Timeout of zero means no timeout. | `10s` |
+| `apis.coap.authorization.providers[].http.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `apis.coap.authorization.providers[].http.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `apis.coap.authorization.providers[].http.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `apis.coap.authorization.providers[].http.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
 
 {{< tip >}}
 
@@ -92,14 +92,14 @@ plgd hub uses NATS messaging system as an event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.eventBus.goPoolSize` | int | `Number of routines to process events in projection.` | `16` |
-| `clients.eventBus.nats.url` | string | `URL to nats messaging system.` | `"nats://localhost:4222"` |
-| `clients.eventBus.nats.pendingLimits.msgLimit` | int | `Limit number of messages in queue. -1 means unlimited` | `524288` |
-| `clients.eventBus.nats.pendingLimits.bytesLimit` | int | `Limit buffer size of queue. -1 means unlimited` | `67108864` |
-| `clients.eventBus.nats.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `clients.eventBus.nats.tls.keyFile` | string | `File name of private key in PEM format.` | `""` |
-| `clients.eventBus.nats.tls.certFile` | string | `File name of certificate in PEM format.` | `""` |
-| `clients.eventBus.nats.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `clients.eventBus.goPoolSize` | int | Number of routines to process events in projection. | `16` |
+| `clients.eventBus.nats.url` | string | URL to nats messaging system. | `"nats://localhost:4222"` |
+| `clients.eventBus.nats.pendingLimits.msgLimit` | int | Limit number of messages in queue. -1 means unlimited | `524288` |
+| `clients.eventBus.nats.pendingLimits.bytesLimit` | int | Limit buffer size of queue. -1 means unlimited | `67108864` |
+| `clients.eventBus.nats.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `clients.eventBus.nats.tls.keyFile` | string | File name of private key in PEM format. | `""` |
+| `clients.eventBus.nats.tls.certFile` | string | File name of certificate in PEM format. | `""` |
+| `clients.eventBus.nats.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
 
 ### Identity Store Client
 
@@ -107,14 +107,14 @@ Client configurations to internally connect to Identity Store service.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.identityStore.grpc.address` | string | `Identity Store service address.` | `"127.0.0.1:9100"` |
-| `clients.identityStore.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `clients.identityStore.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `clients.identityStore.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `clients.identityStore.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
-| `clients.identityStore.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
-| `clients.identityStore.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
-| `clients.identityStore.grpc.keepAlive.permitWithoutStream` | bool | `If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent.` | `false` |
+| `clients.identityStore.grpc.address` | string | Identity Store service address. | `"127.0.0.1:9100"` |
+| `clients.identityStore.grpc.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `clients.identityStore.grpc.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `clients.identityStore.grpc.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `clients.identityStore.grpc.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
+| `clients.identityStore.grpc.keepAlive.time` | string | After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive. | `10s` |
+| `clients.identityStore.grpc.keepAlive.timeout` | string | After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed. | `20s` |
+| `clients.identityStore.grpc.keepAlive.permitWithoutStream` | bool | If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent. | `false` |
 
 ### Resource Aggregate Client
 
@@ -122,16 +122,16 @@ Client configurations to internally connect to Resource Aggregate service.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.resourceAggregate.grpc.address` | string | `Resource aggregate service address.` | `"127.0.0.1:9100"` |
-| `clients.resourceAggregate.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `clients.resourceAggregate.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `clients.resourceAggregate.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `clients.resourceAggregate.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
-| `clients.resourceAggregate.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
-| `clients.resourceAggregate.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
-| `clients.resourceAggregate.grpc.keepAlive.permitWithoutStream` | bool | `If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent.` | `false` |
-| `clients.resourceAggregate.deviceStatusExpiration.enabled` | bool | `If true, refresh device online status in short time than sign token expires.` | `false` |
-| `clients.resourceAggregate.deviceStatusExpiration.expiresIn` | bool | `The interval time required for refreshing the online status of the device. The specified interval must be equal to or greater than 1 second.` | `0s` |
+| `clients.resourceAggregate.grpc.address` | string | Resource aggregate service address. | `"127.0.0.1:9100"` |
+| `clients.resourceAggregate.grpc.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `clients.resourceAggregate.grpc.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `clients.resourceAggregate.grpc.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `clients.resourceAggregate.grpc.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
+| `clients.resourceAggregate.grpc.keepAlive.time` | string | After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive. | `10s` |
+| `clients.resourceAggregate.grpc.keepAlive.timeout` | string | After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed. | `20s` |
+| `clients.resourceAggregate.grpc.keepAlive.permitWithoutStream` | bool | If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent. | `false` |
+| `clients.resourceAggregate.deviceStatusExpiration.enabled` | bool | If true, refresh device online status in short time than sign token expires. | `false` |
+| `clients.resourceAggregate.deviceStatusExpiration.expiresIn` | bool | The interval time required for refreshing the online status of the device. The specified interval must be equal to or greater than 1 second. | `0s` |
 
 ### Resource Directory Client
 
@@ -139,28 +139,28 @@ Client configurations to internally connect to Resource Directory service.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.resourceDirectory.grpc.address` | string | `Resource directory service address.` | `"127.0.0.1:9100"` |
-| `clients.resourceDirectory.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `clients.resourceDirectory.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `clients.resourceDirectory.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `clients.resourceDirectory.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
-| `clients.resourceDirectory.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
-| `clients.resourceDirectory.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
-| `clients.resourceDirectory.grpc.keepAlive.permitWithoutStream` | bool | `If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent.` | `false` |
+| `clients.resourceDirectory.grpc.address` | string | Resource directory service address. | `"127.0.0.1:9100"` |
+| `clients.resourceDirectory.grpc.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `clients.resourceDirectory.grpc.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `clients.resourceDirectory.grpc.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `clients.resourceDirectory.grpc.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
+| `clients.resourceDirectory.grpc.keepAlive.time` | string | After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive. | `10s` |
+| `clients.resourceDirectory.grpc.keepAlive.timeout` | string | After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed. | `20s` |
+| `clients.resourceDirectory.grpc.keepAlive.permitWithoutStream` | bool | If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent. | `false` |
 
 ### Task Queue
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `taskQueue.goPoolSize` | int | `Maximum number of running goroutine instances.` | `1600` |
-| `taskQueue.size` | int | `Size of queue. If it exhausted, submit returns error.` | `2097152` |
-| `taskQueue.maxIdleTime` | string | `Sets up the interval time of cleaning up goroutines. Zero means never cleanup.` | `10m` |
+| `taskQueue.goPoolSize` | int | Maximum number of running goroutine instances. | `1600` |
+| `taskQueue.size` | int | Size of queue. If it exhausted, submit returns error. | `2097152` |
+| `taskQueue.maxIdleTime` | string | Sets up the interval time of cleaning up goroutines. Zero means never cleanup. | `10m` |
 
 ### Service Heartbeat
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `serviceHeartbeat.timeToLive` | string | `Sets the initial validity duration of the coap-gateway instance in the database, with a minimum value of 1 second. This validity is periodically extended until the coap-gateway ends.` | `1m` |
+| `serviceHeartbeat.timeToLive` | string | Sets the initial validity duration of the coap-gateway instance in the database, with a minimum value of 1 second. This validity is periodically extended until the coap-gateway ends. | `1m` |
 
 {{< note >}}
 

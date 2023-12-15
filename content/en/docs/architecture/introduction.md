@@ -55,7 +55,7 @@ IoT itself is most likely not a domain of your business; it is a group of techno
 - **Cost Efficient**
     Many future users won't have the knowledge about infrastructure and operations of the whole system. They might not have their own data center for hosting of the solution. This increases the importance of ease of use and cost efficiency. Most cloud providers offer a similar set of services from a functional point of view. A solution should be able to take advantage of these services to save money, alleviating the burden of missing know-how and increasing runtime optimizations.
 - **Multitenant**
-    Solution providers which have multiple customers should have the ability to use "one" instance of the system for all customers in a secured way. It is important that a client is only able to access the devices it’s authorized to access.
+    Solution providers which have multiple customers should have the ability to use "one" instance of the system for all customers in a secured way. It is important that a client is only able to access the devices it's authorized to access.
 
 ## Domain Decomposition
 

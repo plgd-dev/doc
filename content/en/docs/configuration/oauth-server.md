@@ -23,11 +23,11 @@ A configuration template is available on [test/oauth-server/config.yaml](https:/
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `log.level` | string | `Logging enabled from level.` | `"info"` |
-| `log.encoding` | string | `Logging format. The supported values are: "json", "console"` | `"json"` |
-| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `false` |
-| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn"` |
-| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano"` |
+| `log.level` | string | Logging enabled from level. | `"info"` |
+| `log.encoding` | string | Logging format. The supported values are: "json", "console" | `"json"` |
+| `log.stacktrace.enabled` | bool | Log stacktrace. | `false` |
+| `log.stacktrace.level` | string | Stacktrace from level. | `"warn"` |
+| `log.encoderConfig.timeEncoder` | string | Time format for logs. The supported values are: "rfc3339nano", "rfc3339". | `"rfc3339nano"` |
 
 ### HTTP API
 
@@ -35,15 +35,15 @@ HTTP API of the OAuth Server service as defined [here](https://github.com/plgd-d
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `apis.http.address` | string | `Listen specification <host>:<port> for http client connection.` | `"0.0.0.0:9100"` |
-| `apis.http.readTimeout` | string | `The maximum duration for reading the entire request, including the body by the server. A zero or negative value means there will be no timeout.` | `8s` |
-| `apis.http.readHeaderTimeout` | string | `The amount of time allowed to read request headers by the server. If readHeaderTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `4s` |
-| `apis.http.writeTimeout` | string | `The maximum duration before the server times out writing of the response. A zero or negative value means there will be no timeout.` | `16s` |
-| `apis.http.idleTimeout` | string | `The maximum amount of time the server waits for the next request when keep-alives are enabled. If idleTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `30s` |
-| `apis.http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `apis.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `apis.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `apis.http.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
+| `apis.http.address` | string | Listen specification <host>:<port> for http client connection. | `"0.0.0.0:9100"` |
+| `apis.http.readTimeout` | string | The maximum duration for reading the entire request, including the body by the server. A zero or negative value means there will be no timeout. | `8s` |
+| `apis.http.readHeaderTimeout` | string | The amount of time allowed to read request headers by the server. If readHeaderTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout. | `4s` |
+| `apis.http.writeTimeout` | string | The maximum duration before the server times out writing of the response. A zero or negative value means there will be no timeout. | `16s` |
+| `apis.http.idleTimeout` | string | The maximum amount of time the server waits for the next request when keep-alives are enabled. If idleTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout. | `30s` |
+| `apis.http.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `apis.http.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `apis.http.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `apis.http.tls.clientCertificateRequired` | bool | If true, require client certificate. | `true` |
 
 ### OAuth Signer
 
@@ -51,13 +51,13 @@ Signer configuration to issue ID/access tokens of OAuth provider for mock testin
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `oauthSigner.idTokenKeyFile` | string | `File path to a private RSA key in PEM format required for ID token signing.` | `""` |
-| `oauthSigner.accessTokenKeyFile` | string | `File path to a private ECDSA key in PEM format required for access token signing.` | `""` |
-| `oauthSigner.domain` | string | `Domain address <host>:<port> for OAuth APIs.` | `""` |
-| `oauthSigner.clients[0].id` | string | `client id which is used by oauth clients.` | `"test"` |
-| `oauthSigner.clients[0].authorizationCodeLifetime` | string | `validity of generated authorization code` | `"10m0s"` |
-| `oauthSigner.clients[0].accessTokenLifetime` | string | `validity of generated access token lifetime. 0s means forever.` | `"0s"` |
-| `oauthSigner.clients[0].codeRestrictionLifetime` | string | `define period how long cannot be used again authorization code in exchange after first use.` | `"0s"` |
+| `oauthSigner.idTokenKeyFile` | string | File path to a private RSA key in PEM format required for ID token signing. | `""` |
+| `oauthSigner.accessTokenKeyFile` | string | File path to a private ECDSA key in PEM format required for access token signing. | `""` |
+| `oauthSigner.domain` | string | Domain address <host>:<port> for OAuth APIs. | `""` |
+| `oauthSigner.clients[0].id` | string | client id which is used by oauth clients. | `"test"` |
+| `oauthSigner.clients[0].authorizationCodeLifetime` | string | validity of generated authorization code. | `"10m0s"` |
+| `oauthSigner.clients[0].accessTokenLifetime` | string | validity of generated access token lifetime. 0s means forever. | `"0s"` |
+| `oauthSigner.clients[0].codeRestrictionLifetime` | string | define period how long cannot be used again authorization code in exchange after first use. | `"0s"` |
 
 {{< note >}}
 
