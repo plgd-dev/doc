@@ -30,7 +30,7 @@ scylla:
   enabled: true
 ```
 
-### CqlDB Usage in EventStore
+### CqlDB Usage in EventStore (Resource-Aggregate & Resource-Directory)
 
 Each event is aggregated to a snapshot event stored in EventStore for each resource. The **primary key** consists of a partition key `deviceID` (groupID) and a clustering key `id` (aggregateID), ensuring all resources of one device are stored on the same partition. Additionally, a **Secondary Index** with `serviceID` is employed to mark devices with a specific service as offline when the [service goes offline](/docs/features/monitoring-and-diagnostics/monitoring-device-connectivity).
 
@@ -41,4 +41,3 @@ IdentityStore stores information about device ownership, utilizing a **primary k
 ### CqlDB Usage in CertificateAuthority
 
 CertificateAuthority manages signingRecords holding information on signed Certificate Signing Requests (CSRs). The **primary key** comprises a partition key `id` and clustering keys **owner** and **commonName**. The partition key, determined by a formula utilizing certificate properties, ensures even data distribution. Signing of identity certificate requests is allowed only if the common_name of the CSR matches the `deviceId` with the same owner in the database, or if the record does not exist.
-

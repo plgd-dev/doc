@@ -76,21 +76,53 @@ plgd hub uses NATS messaging system as a event bus.
 | `clients.eventBus.nats.tls.certFile` | string | File name of certificate in PEM format. | `""` |
 | `clients.eventBus.nats.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
 
-### Event Store
+### Event Store Configuration
 
-plgd hub uses MongoDB database as a event store.
+To configure the Event Store, modify the properties under `clients.eventStore` in your configuration file. You can choose between two databases: `MongoDB` and `CqlDB`, and customize their settings accordingly.
+
+#### General Event Store Settings
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
+| `clients.eventStore.use` | string | Database to store events. The supported values are: "mongoDB", "cqlDB". | `"mongoDB"` |
 | `clients.eventStore.cacheExpiration` | string | Expiration time of cached resource in projection. | `20m` |
-| `clients.eventStore.mongoDB.uri` | string | URI to mongo database. | `"mongodb://localhost:27017"` |
-| `clients.eventStore.mongoDB.database` | string | Name of database. | `"eventStore"` |
-| `clients.eventStore.mongoDB.maxPoolSize` | int | Limits number of connections. | `16` |
-| `clients.eventStore.mongoDB.maxConnIdleTime` | string | Close connection when idle time reach the value. | `4m` |
+
+#### MongoDB Configuration
+
+Configure MongoDB settings under `clients.eventStore.mongoDB`.
+
+| Property | Type | Description | Default |
+| ---------- | -------- | -------------- | ------- |
+| `clients.eventStore.mongoDB.uri` | string | URI to the MongoDB database. | `"mongodb://localhost:27017"` |
+| `clients.eventStore.mongoDB.database` | string | Name of the MongoDB database. | `"eventStore"` |
+| `clients.eventStore.mongoDB.maxPoolSize` | int | Limits the number of connections. | `16` |
+| `clients.eventStore.mongoDB.maxConnIdleTime` | string | Closes connection when idle time reaches the specified value. | `4m` |
 | `clients.eventStore.mongoDB.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
 | `clients.eventStore.mongoDB.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
 | `clients.eventStore.mongoDB.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
 | `clients.eventStore.mongoDB.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
+
+#### CqlDB Configuration
+
+Configure CqlDB settings under `clients.eventStore.cqlDB`.
+
+| Property | Type | Description | Default |
+| ---------- | -------- | -------------- | ------- |
+| `clients.eventStore.cqlDB.table` | string | Name of the CqlDB table. | `"events"` |
+| `clients.eventStore.cqlDB.keyspace.name` | string | Name of the CqlDB keyspace. | `"plgdhub"` |
+| `clients.eventStore.cqlDB.keyspace.create` | bool | If true, attempt to create the keyspace if it does not exist. | `true` |
+| `clients.eventStore.cqlDB.keyspace.replication` | object | [Replication map](https://docs.datastax.com/en/cql-oss/3.3/cql/cql_reference/cqlCreateKeyspace.html) determining the data copies in a data center. | `{ "class": "SimpleStrategy", "replication_factor": 1 }` |
+| `clients.eventStore.cqlDB.hosts` | []string | List of hosts to connect to without scheme and port. | `[]` |
+| `clients.eventStore.cqlDB.port` | int | Port to connect to. | `9042` |
+| `clients.eventStore.cqlDB.numConnections` | int | The number of connections to the DB. | `16` |
+| `clients.eventStore.cqlDB.connectTimeout` | string | Time to wait until a successful connection is established. | `10s` |
+| `clients.eventStore.cqlDB.useHostnameResolution` | bool | If true, attempt to resolve IP for FQDN and use it for connection. | `true` |
+| `clients.eventStore.cqlDB.reconnectionPolicy.constant.interval` | string | Time to sleep between connection attempts after a failure. | `3s` |
+| `clients.eventStore.cqlDB.reconnectionPolicy.constant.maxRetries` | int | Number of times to attempt reconnection. | `3` |
+| `clients.eventStore.cqlDB.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `clients.eventStore.cqlDB.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `clients.eventStore.cqlDB.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `clients.eventStore.cqlDB.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
 
 ### Identity Store Client
 

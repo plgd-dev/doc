@@ -69,11 +69,11 @@ gRPC API of the Certificate Authority service as defined [here](https://github.c
 
  | Property | Type | Description | Default |
  | ---------- | -------- | -------------- | ------- |
- | apis.http.address | string | Listen specification <host>:<port> for http client connection. | `"0.0.0.0:9101"` |
- | apis.http.readTimeout | string | The maximum duration for reading the entire request, including the body by the server. A zero or negative value means there will be no timeout. | `8s` |
- | apis.http.readHeaderTimeout | string | The amount of time allowed to read request headers by the server. If readHeaderTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout. | `4s` |
- | apis.http.writeTimeout | string | The maximum duration before the server times out writing of the response. A zero or negative value means there will be no timeout. | `16s` |
- | apis.http.idleTimeout | string | The maximum amount of time the server waits for the next request when keep-alives are enabled. If idleTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout. | `30s` |
+ | `apis.http.address` | string | Listen specification <host>:<port> for http client connection. | `"0.0.0.0:9101"` |
+ | `apis.http.readTimeout` | string | The maximum duration for reading the entire request, including the body by the server. A zero or negative value means there will be no timeout. | `8s` |
+ | `apis.http.readHeaderTimeout` | string | The amount of time allowed to read request headers by the server. If readHeaderTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout. | `4s` |
+ | `apis.http.writeTimeout` | string | The maximum duration before the server times out writing of the response. A zero or negative value means there will be no timeout. | `16s` |
+ | `apis.http.idleTimeout` | string | The maximum amount of time the server waits for the next request when keep-alives are enabled. If idleTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout. | `30s` |
 
 ### Signer
 
@@ -86,6 +86,54 @@ Signer configuration to issue identity certificates for devices or client applic
 | `signer.validFrom` | string | The time from when the certificate is valid. (Format: https://github.com/karrick/tparse) | `"now-1h"` |
 | `signer.expiresIn` | string | The time up to which the certificate is valid. | `"87600h"` |
 | `signer.hubID` | string | Hub ID which is stored in coap-gw certificate and it cannot be used in the common name in the CSR. | `""` |
+
+### Storage Configuration
+
+To configure the Storage, modify the properties under `clients.storage` in your configuration file. You can choose between two databases: `MongoDB` and `CqlDB``, and customize their settings accordingly.
+
+#### General Storage Settings
+
+| Property | Type | Description | Default |
+| ---------- | -------- | -------------- | ------- |
+| `clients.storage.use` | string | Database to store events. The supported values are: "mongoDB", "cqlDB". | `"mongoDB"` |
+| `clients.storage.cleanUpRecords` | string | Schedule time when the expired non-identity certificates will be removed in the cron format | `"0 1 * * *"` |
+
+#### MongoDB Configuration
+
+Configure MongoDB settings under `clients.storage.mongoDB`.
+
+| Property | Type | Description | Default |
+| ---------- | -------- | -------------- | ------- |
+| `clients.storage.mongoDB.uri` | string | URI to the MongoDB database. | `"mongodb://localhost:27017"` |
+| `clients.storage.mongoDB.database` | string | Name of the MongoDB database. | `"eventStore"` |
+| `clients.storage.mongoDB.maxPoolSize` | int | Limits the number of connections. | `16` |
+| `clients.storage.mongoDB.maxConnIdleTime` | string | Closes connection when idle time reaches the specified value. | `4m` |
+| `clients.storage.mongoDB.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `clients.storage.mongoDB.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `clients.storage.mongoDB.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `clients.storage.mongoDB.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
+
+#### CqlDB Configuration
+
+Configure CqlDB settings under `clients.storage.cqlDB`.
+
+| Property | Type | Description | Default |
+| ---------- | -------- | -------------- | ------- |
+| `clients.storage.cqlDB.table` | string | Name of the CqlDB table. | `"events"` |
+| `clients.storage.cqlDB.keyspace.name` | string | Name of the CqlDB keyspace. | `"plgdhub"` |
+| `clients.storage.cqlDB.keyspace.create` | bool | If true, attempt to create the keyspace if it does not exist. | `true` |
+| `clients.storage.cqlDB.keyspace.replication` | object | [Replication map](https://docs.datastax.com/en/cql-oss/3.3/cql/cql_reference/cqlCreateKeyspace.html) determining the data copies in a data center. | `{ "class": "SimpleStrategy", "replication_factor": 1 }` |
+| `clients.storage.cqlDB.hosts` | []string | List of hosts to connect to without scheme and port. | `[]` |
+| `clients.storage.cqlDB.port` | int | Port to connect to. | `9042` |
+| `clients.storage.cqlDB.numConnections` | int | The number of connections to the DB. | `16` |
+| `clients.storage.cqlDB.connectTimeout` | string | Time to wait until a successful connection is established. | `10s` |
+| `clients.storage.cqlDB.useHostnameResolution` | bool | If true, attempt to resolve IP for FQDN and use it for connection. | `true` |
+| `clients.storage.cqlDB.reconnectionPolicy.constant.interval` | string | Time to sleep between connection attempts after a failure. | `3s` |
+| `clients.storage.cqlDB.reconnectionPolicy.constant.maxRetries` | int | Number of times to attempt reconnection. | `3` |
+| `clients.storage.cqlDB.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `clients.storage.cqlDB.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `clients.storage.cqlDB.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `clients.storage.cqlDB.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
 
 {{< note >}}
 

@@ -76,7 +76,7 @@ plgd hub uses NATS messaging system as a event bus.
 
 ### Event Store Configuration
 
-To configure the Event Store, modify the properties under `clients.eventStore` in your Hugo configuration file. You can choose between two databases: `MongoDB` and `CqlDB``, and customize their settings accordingly.
+To configure the Event Store, modify the properties under `clients.eventStore` in your configuration file. You can choose between two databases: `MongoDB` and `CqlDB`, and customize their settings accordingly.
 
 #### General Event Store Settings
 
@@ -101,9 +101,9 @@ Configure MongoDB settings under `clients.eventStore.mongoDB`.
 | `clients.eventStore.mongoDB.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
 | `clients.eventStore.mongoDB.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
 
-#### CqlDB (Scylla) Configuration
+#### CqlDB Configuration
 
-Configure CqlDB (Scylla) settings under `clients.eventStore.cqlDB`.
+Configure CqlDB settings under `clients.eventStore.cqlDB`.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
