@@ -50,7 +50,7 @@ A configuration template is available in [cloud2cloud-connector/config.yaml](htt
 | `apis.http.scopes` | string array | `List of required scopes.` | `""` |
 | `apis.http.authorization.authority` | string | `Authority is the address of the token-issuing authentication server. Services will use this URI to find and retrieve the public key that can be used to validate the token’s signature.` | `""` |
 | `apis.http.authorization.audience` | string | `Identifier of the API configured in your OAuth provider.` | `""` |
-| `apis.http.authorization.ownerClaim` | string | | `Claim used to identify owner of the device.` | `"sub"` |
+| `apis.http.authorization.ownerClaim` | string | `Claim used to identify owner of the device.` | `"sub"` |
 | `apis.http.authorization.redirectURL` | string | `External redirect url to acquire authorization code.` | `""` |
 | `apis.http.authorization.http.maxIdleConns` | int | `It controls the maximum number of idle (keep-alive) connections across all hosts. Zero means no limit.` | `16` |
 | `apis.http.authorization.http.maxConnsPerHost` | int | `It optionally limits the total number of connections per host, including connections in the dialing, active, and idle states. On limit violation, dials will block. Zero means no limit.` | `32` |
