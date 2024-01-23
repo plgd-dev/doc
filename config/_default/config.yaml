@@ -27,6 +27,7 @@ outputs:
     - RSS
     - REDIR
     - HEADERS
+    - ALGOLIA
   section:
     - HTML
     - RSS
@@ -43,6 +44,11 @@ outputFormats:
     mediatype: text/netlify
     baseName: _headers
     isPlainText: true
+    notAlternative: true
+  Algolia:
+    baseName: "algolia"
+    isPlainText: true
+    mediaType: "application/json"
     notAlternative: true
 caches:
   getjson:
@@ -75,4 +81,8 @@ taxonomies:
   category: categories
 params:
   githubRepository: 'https://github.com/plgd-dev/doc/'
+  algolia:
+    indexName: "doc"
+    apiKey: "31dbe24685b8a1a7025c12098b32df37"
+    appId: "42D6VHXINQ"
 ---
