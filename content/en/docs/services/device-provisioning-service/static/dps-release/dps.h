@@ -382,6 +382,45 @@ DPS_EXPORT
 bool plgd_dps_set_retry_configuration(plgd_dps_context_t *ctx, const uint8_t cfg[], size_t cfg_size) OC_NONNULL(1);
 
 /**
+ * @brief Callback invoked by the dps manager when the dps wants to schedule
+ * an action.
+ *
+ * @param ctx dps context
+ * @param action One of PLGD_DPS_GET actions or PLGD_DPS_RENEW_CREDENTIALS to schedule, or 0 for
+ * reinitialization.
+ * @param retry_count Retries count - 0 means the first attempt to perform the
+ * action.
+ * @param delay Delay the action in milliseconds before executing it.
+ * @param timeout Timeout in seconds for the action.
+ * @param user_data User data passed from the caller.
+ *
+ * @return true if the dps manager should continue to schedule the action,
+ *         false if the dps manager should restarts from the beginning.
+ */
+typedef bool (*plgd_dps_schedule_action_cb_t)(plgd_dps_context_t *ctx, plgd_dps_status_t action, uint8_t retry_count,
+                                              uint64_t *delay, uint16_t *timeout, void *user_data) OC_NONNULL(1, 4, 5);
+
+/**
+ * @brief Set a custom scheduler for actions in the cloud manager. By default,
+ * the cloud manager uses its own scheduler.
+ *
+ * This function allows you to set a custom scheduler to define delay and
+ * timeout for actions.
+ *
+ * @param ctx Cloud context to update. Must not be NULL.
+ * @param on_schedule_action Callback invoked by the cloud manager when the
+ * cloud wants to schedule an action.
+ * @param user_data User data passed from the caller to be provided during the
+ * callback.
+ *
+ * @note The provided cloud context (`ctx`) must not be NULL.
+ * @see oc_cloud_schedule_action_cb_t
+ */
+DPS_EXPORT
+void plgd_dps_set_schedule_action(plgd_dps_context_t *ctx, plgd_dps_schedule_action_cb_t on_schedule_action,
+                                  void *user_data) OC_NONNULL(1);
+
+/**
  * @brief Get retry counter configuration.
  *
  * @param ctx dps context (cannot be NULL)
@@ -411,6 +450,17 @@ plgd_dps_error_t plgd_dps_get_last_error(const plgd_dps_context_t *ctx) OC_NONNU
  */
 DPS_EXPORT
 uint32_t plgd_dps_get_provision_status(const plgd_dps_context_t *ctx) OC_NONNULL();
+
+/**
+ * @brief Check whether the device has been provisioned at least once since the last DPS reset initiated by a factory
+ * reset or by setting the endpoint to an empty value in the DPS resource.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @return true if DPS has been successfully provisioned at least once since the DPS context reset.
+ * @return false for otherwise
+ */
+DPS_EXPORT
+bool plgd_dps_has_been_provisioned_since_reset(const plgd_dps_context_t *ctx) OC_NONNULL();
 
 typedef struct
 {
