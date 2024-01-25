@@ -9,7 +9,7 @@ To phrase the issue in another way, _"What are the most common issues preventing
 - Companies are not able or do not have the talent, to complete an end-to-end IoT solution.
 - Deployment is unexpectedly complex and many companies do not have the skills to accomplish a proper strategy.
 - Providing Security needs to be a seamless and secure data fabric platform.
-- It’s difficult to make something at scale while maintaining quality.
+- It's difficult to make something at scale while maintaining quality.
 - Devices need to be scalable so that they connect to everything they need to.
 - There will be a large amount of data to run IoT that will need to be stored.
 
@@ -19,7 +19,7 @@ The only viable path forward is a collaboration between companies and market ver
 
 The device-to-hub communication represents a unique challenge for engineers because there has never been a historical need for engineers to become knowledgeable in both embedded systems and cloud-native application development.
 
-Our proposed solution to this problem is to emulate a container runtime interface (CRI) architecture and embody Conway’s law to establish a loose coupling between the "IoT code" (CoAP / IoTivity) and the portions of the system that are much more familiar to the cloud developers.
+Our proposed solution to this problem is to emulate a container runtime interface (CRI) architecture and embody Conway's law to establish a loose coupling between the "IoT code" (CoAP / IoTivity) and the portions of the system that are much more familiar to the cloud developers.
 
 ## IoT Challenges
 

@@ -23,36 +23,36 @@ A configuration template is available in [cloud2cloud-gateway/config.yaml](https
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `log.level` | string | `Logging enabled from level.` | `"info"` |
-| `log.encoding` | string | `Logging format. The supported values are: "json", "console"` | `"json"` |
-| `log.stacktrace.enabled` | bool | `Log stacktrace.` | `false` |
-| `log.stacktrace.level` | string | `Stacktrace from level.` | `"warn"` |
-| `log.encoderConfig.timeEncoder` | string | `Time format for logs. The supported values are: "rfc3339nano", "rfc3339".` | `"rfc3339nano"` |
+| `log.level` | string | Logging enabled from level. | `"info"` |
+| `log.encoding` | string | Logging format. The supported values are: "json", "console" | `"json"` |
+| `log.stacktrace.enabled` | bool | Log stacktrace. | `false` |
+| `log.stacktrace.level` | string | Stacktrace from level. | `"warn"` |
+| `log.encoderConfig.timeEncoder` | string | Time format for logs. The supported values are: "rfc3339nano", "rfc3339". | `"rfc3339nano"` |
 
 ### HTTP API
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `apis.http.address` | string | `Listen specification <host>:<port> for http client connection.` | `"0.0.0.0:9100"` |
-| `apis.http.readTimeout` | string | `The maximum duration for reading the entire request, including the body by the server. A zero or negative value means there will be no timeout.` | `8s` |
-| `apis.http.readHeaderTimeout` | string | `The amount of time allowed to read request headers by the server. If readHeaderTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `4s` |
-| `apis.http.writeTimeout` | string | `The maximum duration before the server times out writing of the response. A zero or negative value means there will be no timeout.` | `16s` |
-| `apis.http.idleTimeout` | string | `The maximum amount of time the server waits for the next request when keep-alives are enabled. If idleTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `30s` |
-| `apis.http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `apis.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `apis.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `apis.http.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
-| `apis.http.authorization.authority` | string | `Authority is the address of the token-issuing authentication server. Services will use this URI to find and retrieve the public key that can be used to validate the token’s signature.` | `""` |
-| `apis.http.authorization.audience` | string | `Identifier of the API configured in your OAuth provider.` | `""` |
-| `apis.http.authorization.http.maxIdleConns` | int | `It controls the maximum number of idle (keep-alive) connections across all hosts. Zero means no limit.` | `16` |
-| `apis.http.authorization.http.maxConnsPerHost` | int | `It optionally limits the total number of connections per host, including connections in the dialing, active, and idle states. On limit violation, dials will block. Zero means no limit.` | `32` |
-| `apis.http.authorization.http.maxIdleConnsPerHost` | int | `If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used.` | `16` |
-| `apis.http.authorization.http.idleConnTimeout` | string | `The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit.` | `30s` |
-| `apis.http.authorization.http.timeout` | string | `A time limit for requests made by this Client. A Timeout of zero means no timeout.` | `10s` |
-| `apis.http.authorization.http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `apis.http.authorization.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `apis.http.authorization.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `apis.http.authorization.http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `apis.http.address` | string | Listen specification <host>:<port> for http client connection. | `"0.0.0.0:9100"` |
+| `apis.http.readTimeout` | string | The maximum duration for reading the entire request, including the body by the server. A zero or negative value means there will be no timeout. | `8s` |
+| `apis.http.readHeaderTimeout` | string | The amount of time allowed to read request headers by the server. If readHeaderTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout. | `4s` |
+| `apis.http.writeTimeout` | string | The maximum duration before the server times out writing of the response. A zero or negative value means there will be no timeout. | `16s` |
+| `apis.http.idleTimeout` | string | The maximum amount of time the server waits for the next request when keep-alives are enabled. If idleTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout. | `30s` |
+| `apis.http.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `apis.http.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `apis.http.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `apis.http.tls.clientCertificateRequired` | bool | If true, require client certificate. | `true` |
+| `apis.http.authorization.authority` | string | Authority is the address of the token-issuing authentication server. Services will use this URI to find and retrieve the public key that can be used to validate the token's signature. | `""` |
+| `apis.http.authorization.audience` | string | Identifier of the API configured in your OAuth provider. | `""` |
+| `apis.http.authorization.http.maxIdleConns` | int | It controls the maximum number of idle (keep-alive) connections across all hosts. Zero means no limit. | `16` |
+| `apis.http.authorization.http.maxConnsPerHost` | int | It optionally limits the total number of connections per host, including connections in the dialing, active, and idle states. On limit violation, dials will block. Zero means no limit. | `32` |
+| `apis.http.authorization.http.maxIdleConnsPerHost` | int | If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used. | `16` |
+| `apis.http.authorization.http.idleConnTimeout` | string | The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit. | `30s` |
+| `apis.http.authorization.http.timeout` | string | A time limit for requests made by this Client. A Timeout of zero means no timeout. | `10s` |
+| `apis.http.authorization.http.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `apis.http.authorization.http.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `apis.http.authorization.http.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `apis.http.authorization.http.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
 
 ### Event Bus
 
@@ -60,13 +60,13 @@ plgd hub uses NATS messaging system as an event bus.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.eventBus.nats.url` | string | `URL to nats messaging system.` | `"nats://localhost:4222"` |
-| `clients.eventBus.nats.pendingLimits.msgLimit` | int | `Limit number of messages in queue. -1 means unlimited` | `524288` |
-| `clients.eventBus.nats.pendingLimits.bytesLimit` | int | `Limit buffer size of queue. -1 means unlimited` | `67108864` |
-| `clients.eventBus.nats.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `clients.eventBus.nats.tls.keyFile` | string | `File name of private key in PEM format.` | `""` |
-| `clients.eventBus.nats.tls.certFile` | string | `File name of certificate in PEM format.` | `""` |
-| `clients.eventBus.nats.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `clients.eventBus.nats.url` | string | URL to nats messaging system. | `"nats://localhost:4222"` |
+| `clients.eventBus.nats.pendingLimits.msgLimit` | int | Limit number of messages in queue. -1 means unlimited | `524288` |
+| `clients.eventBus.nats.pendingLimits.bytesLimit` | int | Limit buffer size of queue. -1 means unlimited | `67108864` |
+| `clients.eventBus.nats.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `clients.eventBus.nats.tls.keyFile` | string | File name of private key in PEM format. | `""` |
+| `clients.eventBus.nats.tls.certFile` | string | File name of certificate in PEM format. | `""` |
+| `clients.eventBus.nats.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
 
 ### GRPC Gateway Client
 
@@ -74,14 +74,14 @@ Client configurations to internally connect to GRPC Gateway service.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.grpcGateway.grpc.address` | string | `GRPC Gateway service address.` | `"127.0.0.1:9100"` |
-| `clients.grpcGateway.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `clients.grpcGateway.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `clients.grpcGateway.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `clients.grpcGateway.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
-| `clients.grpcGateway.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
-| `clients.grpcGateway.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
-| `clients.grpcGateway.grpc.keepAlive.permitWithoutStream` | bool | `If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent.` | `false` |
+| `clients.grpcGateway.grpc.address` | string | GRPC Gateway service address. | `"127.0.0.1:9100"` |
+| `clients.grpcGateway.grpc.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `clients.grpcGateway.grpc.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `clients.grpcGateway.grpc.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `clients.grpcGateway.grpc.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
+| `clients.grpcGateway.grpc.keepAlive.time` | string | After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive. | `10s` |
+| `clients.grpcGateway.grpc.keepAlive.timeout` | string | After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed. | `20s` |
+| `clients.grpcGateway.grpc.keepAlive.permitWithoutStream` | bool | If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent. | `false` |
 
 ### Resource Aggregate Client
 
@@ -89,14 +89,14 @@ Client configurations to internally connect to the Resource Aggregate service.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.resourceAggregate.grpc.address` | string | `Resource aggregate service address.` | `"127.0.0.1:9100"` |
-| `clients.resourceAggregate.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
-| `clients.resourceAggregate.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
-| `clients.resourceAggregate.grpc.keepAlive.permitWithoutStream` | bool | `If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent.` | `false` |
-| `clients.resourceAggregate.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `clients.resourceAggregate.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `clients.resourceAggregate.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `clients.resourceAggregate.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `clients.resourceAggregate.grpc.address` | string | Resource aggregate service address. | `"127.0.0.1:9100"` |
+| `clients.resourceAggregate.grpc.keepAlive.time` | string | After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive. | `10s` |
+| `clients.resourceAggregate.grpc.keepAlive.timeout` | string | After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed. | `20s` |
+| `clients.resourceAggregate.grpc.keepAlive.permitWithoutStream` | bool | If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent. | `false` |
+| `clients.resourceAggregate.grpc.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `clients.resourceAggregate.grpc.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `clients.resourceAggregate.grpc.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `clients.resourceAggregate.grpc.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
 
 ### Storage
 
@@ -104,33 +104,33 @@ plgd hub uses MongoDB database as the owner's device store.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.storage.mongoDB.uri` | string | `URI to mongo database.` | `"mongodb://localhost:27017"` |
-| `clients.storage.mongoDB.database` | string | `Name of database.` | `"cloud2cloudGateway"` |
-| `clients.storage.mongoDB.maxPoolSize` | int | `Limits number of connections.` | `16` |
-| `clients.storage.mongoDB.maxConnIdleTime` | string | `Close connection when idle time reach the value.` | `4m` |
-| `clients.storage.mongoDB.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `clients.storage.mongoDB.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `clients.storage.mongoDB.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `clients.storage.mongoDB.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `clients.storage.mongoDB.uri` | string | URI to mongo database. | `"mongodb://localhost:27017"` |
+| `clients.storage.mongoDB.database` | string | Name of database. | `"cloud2cloudGateway"` |
+| `clients.storage.mongoDB.maxPoolSize` | int | Limits number of connections. | `16` |
+| `clients.storage.mongoDB.maxConnIdleTime` | string | Close connection when idle time reach the value. | `4m` |
+| `clients.storage.mongoDB.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `clients.storage.mongoDB.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `clients.storage.mongoDB.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `clients.storage.mongoDB.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
 
 ### Subscription
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.subscription.http.reconnectInterval` | string | `try to reconnect after interval to resource-directory when connection was closed` | `"10s"` |
-| `clients.subscription.http.emitEventTimeout` | string | `timeout for send event` | `"5s"` |
-| `clients.subscription.http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `clients.subscription.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `clients.subscription.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `clients.subscription.http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `clients.subscription.http.reconnectInterval` | string | try to reconnect after interval to resource-directory when connection was closed | `"10s"` |
+| `clients.subscription.http.emitEventTimeout` | string | timeout for send event. | `"5s"` |
+| `clients.subscription.http.tls.caPool` | []string | File paths to root certificates in PEM format. | `[]` |
+| `clients.subscription.http.tls.keyFile` | string | File path to the private key in PEM format. | `""` |
+| `clients.subscription.http.tls.certFile` | string | File path to the certificate in PEM format. | `""` |
+| `clients.subscription.http.tls.useSystemCAPool` | bool | If true, use the system certification pool. | `false` |
 
 ### Task Queue
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `taskQueue.goPoolSize` | int | `Maximum number of running goroutine instances.` | `1600` |
-| `taskQueue.size` | int | `Size of queue. If it exhausted, submit returns error.` | `2097152` |
-| `taskQueue.maxIdleTime` | string | `Sets up the interval time of cleaning up goroutines. Zero means never cleanup.` | `10m` |
+| `taskQueue.goPoolSize` | int | Maximum number of running goroutine instances. | `1600` |
+| `taskQueue.size` | int | Size of queue. If it exhausted, submit returns error. | `2097152` |
+| `taskQueue.maxIdleTime` | string | Sets up the interval time of cleaning up goroutines. Zero means never cleanup. | `10m` |
 
 {{< note >}}
 
