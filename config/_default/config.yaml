@@ -20,6 +20,13 @@ googleAnalytics: 'GTM-5B8C4RK'
 algolia:
   index: "doc"
   appID: "42D6VHXINQ"
+  fields:
+    - "title"
+    - "description"
+    - "date"
+    - "categories"
+    - "keywords"
+    - "baseURL"
 pluralizeListTitles: false
 outputs:
   home:

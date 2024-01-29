@@ -4,6 +4,7 @@ description: 'How plgd hub tests iotivity-lite and vice versa'
 date: '2021-10-14'
 categories: [tutorials, testing]
 keywords: [tutorials, testing]
+baseURL: 'https://docs.plgd.dev/docs/tutorials/testing/'
 weight: 9
 ---
 
