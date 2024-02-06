@@ -52,17 +52,25 @@ Having JetStream as an EventBus gives you the possibility to read stored events 
 plgd hub doesn't guarantee delivery of all events to the EventBus. It guarantees that all events are stored in the EventStore in the correct order. In case there is a JetStream / NATS failure and plgd hub was not able to publish some events, they won't be published again and your service has to anyway fallback to reconciliation using plgd gRPC Gateway.
 {{< /warning >}}
 
-## Backup Cluster
+## Data Management and Failover Strategies
 
-The plgd hub is a stateful application, indicating that the data is stored in the EventStore, which is a MongoDB. The data could also be stored in JetStream, a component of NATS. In this section, we will describe how to back up and restore data in the scenario where two clusters are running in different locations (e.g., East US / West US). The primary cluster is used for normal operations, while the secondary cluster serves as a backup for disaster recovery.
+The plgd hub is a stateful application, indicating that the data is stored in the EventStore, which is a MongoDB. The data could also be stored in JetStream, a component of NATS. In this section, we will describe how to back up and restore data in the scenario where two clusters are running in different locations (e.g., East US / West US). The first cluster is used for normal operations, while the secondary cluster serves as a backup for disaster recovery.
 
 ### Backup Databases
 
 To back up the database, two approaches can be used:
 
-* **Passive:** The database is regularly backed up to a different location and can be used in case of failure. Although this approach is simple and requires fewer resources, the data may be outdated. For MongoDB, utilize the `mongodump` tool to create a binary export of the database contents, store it securely, and use it in case of failure. Regular backups are essential to keep the data up-to-date.
+* **Passive Backup**
+  
+  ![passive-backup](/docs/features/monitoring-and-diagnostics/static/disaster-recovery-passive-backup.drawio.svg)
 
-* **Active:** The database actively synchronizes data between two clusters. This approach is more complex and resource-intensive but is more reliable for disaster recovery. For MongoDB, use `cluster-to-cluster-sync` feature to synchronize data between two MongoDB clusters. For more details on this approach, refer to the [MongoDB documentation](https://www.mongodb.com/docs/cluster-to-cluster-sync/current/connecting/onprem-to-onprem/).
+  The database is regularly backed up to a different location and can be used in case of failure. Although this approach is simple and requires fewer resources, the data may be outdated. For MongoDB, utilize the `mongodump` tool to create a binary export of the database contents, store it securely, and use it in case of failure. Regular backups are essential to keep the data up-to-date.
+
+* **Active Backup**
+
+  ![active-backup](/docs/features/monitoring-and-diagnostics/static/disaster-recovery-active-backup.drawio.svg)
+
+  The database actively synchronizes data between two clusters in realtime. This approach is more complex and resource-intensive but is more reliable for disaster recovery. For MongoDB, use `cluster-to-cluster-sync` feature to synchronize data between two MongoDB clusters. For more details on this approach, refer to the [MongoDB documentation](https://www.mongodb.com/docs/cluster-to-cluster-sync/current/connecting/onprem-to-onprem/).
 
 ### Backup JetStream
 
@@ -74,12 +82,20 @@ Devices connected to the hub have access tokens used to authorize device access.
 
 ### Certificates
 
+![certificates](/docs/features/monitoring-and-diagnostics/static/disaster-recovery-certificates.drawio.svg)
+
 The CoAP-Gateway and Device Provisioning Service depend on certificates validated by devices, and these certificates must be signed in the certificates chain by the same Root CAs. It is crucial that the Root CAs used for the primary and secondary clusters are identical. Additionally, the hub ID configured through the [plgd helm chart](https://github.com/plgd-dev/hub/blob/4c4861a4bc483ba4080a1d448063da392eff4026/charts/plgd-hub/values.yaml#L6) must remain consistent.
 
 ### Devices
 
-In the event of a primary cluster failure, and if you are unable to actively change the endpoint in the devices, they won't connect to the hub. Two solutions exist for this issue, as devices are configured with one endpoint to connect to either the CoAP-Gateway or Device Provisioning Service.
+If a primary cluster failure occurs and you cannot dynamically modify the endpoint on the devices, they will be unable to establish a connection with the hub. Devices are set up with a single endpoint to link with either the CoAP-Gateway or the Device Provisioning Service, which may include an IP address or DNS address. To guarantee connectivity to the secondary cluster, adopt one of the provided options:
 
-* **DNS Address:** In case of primary cluster failure, update the DNS record on the DNS server. Allow some time for the change to propagate to all DNS servers. It is recommended to set the time to live (TTL) of the DNS record to a low value, e.g., 30 minutes.
+* **DNS Address as endpoint**
+  
+  In case of primary cluster failure, update the DNS record on the DNS server. It is recommended to set the time to live (TTL) of the DNS record to a low value, e.g., 30 minutes.
 
-* **IP Address:** Changing the IP address could be challenging in case of primary cluster failure, as the public IP address is often assigned to the Internet Service Provider (ISP). However, using an IP load balancer near devices allows changing the IP address of the load balancer to the secondary cluster. For this, you can use HAProxy, which supports layer 4 load balancing. For more information, refer to the [HAProxy documentation](https://www.haproxy.com/documentation/haproxy-configuration-tutorials/load-balancing/tcp/) and [Failover & Worst Case Management With HAProxy](https://www.haproxy.com/blog/failover-and-worst-case-management-with-haproxy).
+* **IP Address as endpoint**
+  
+  ![load-balancer](/docs/features/monitoring-and-diagnostics/static/disaster-recovery-load-balancer.drawio.svg)
+
+  Changing the IP address could be challenging in case of primary cluster failure, as the public IP address is often assigned to the Internet Service Provider (ISP). However, using an IP load balancer near devices allows changing the IP address of the load balancer to the secondary cluster. For this, you can use HAProxy, which supports layer 4 load balancing. For more information, refer to the [HAProxy documentation](https://www.haproxy.com/documentation/haproxy-configuration-tutorials/load-balancing/tcp/) and [Failover & Worst Case Management With HAProxy](https://www.haproxy.com/blog/failover-and-worst-case-management-with-haproxy).
