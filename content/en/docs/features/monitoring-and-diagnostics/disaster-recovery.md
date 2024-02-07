@@ -54,7 +54,7 @@ plgd hub doesn't guarantee delivery of all events to the EventBus. It guarantees
 
 ## Data Management and Failover Strategies
 
-The plgd hub is a stateful application, indicating that the data is stored in the EventStore, serving as the source of truth, which is a MongoDB. In this section, we will describe how to back up and restore data in a scenario where two clusters are running in different locations (e.g., East US / West US). The first cluster is utilized for normal operations, while the secondary cluster serves as a backup for disaster recovery.
+The plgd hub is a stateful event-driven system, meaning that data is stored in the EventStore, which serves as the authoritative source of truth and is implemented using MongoDB. In this section, we will describe how to back up and restore data in a scenario where two clusters are running in different locations (e.g., East US / West US). The first cluster is utilized for normal operations, while the secondary cluster serves as a backup for disaster recovery.
 
 ### Backup Databases
 
