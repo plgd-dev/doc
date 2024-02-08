@@ -101,3 +101,19 @@ If a primary cluster failure occurs and you cannot dynamically modify the endpoi
   ![load-balancer](/docs/features/monitoring-and-diagnostics/static/disaster-recovery-load-balancer.drawio.svg)
 
   Changing the IP address could be challenging in case of primary cluster failure, as the public IP address is often assigned to the Internet Service Provider (ISP). However, using an IP load balancer near devices allows changing the IP address of the load balancer to the secondary cluster. For this, you can use HAProxy, which supports layer 4 load balancing. For more information, refer to the [HAProxy documentation](https://www.haproxy.com/documentation/haproxy-configuration-tutorials/load-balancing/tcp/) and [Failover & Worst Case Management With HAProxy](https://www.haproxy.com/blog/failover-and-worst-case-management-with-haproxy).
+
+* **Update Device Provisioning Service endpoint**
+
+  Under these circumstances, you have the option to update the DPS endpoint to the secondary cluster by utilizing the DHCP server to supply the devices with the updated endpoint. The device retrieves a new configuration from the DPS service, obtaining updated:
+
+  * Time(optional)
+  * Owner
+  * Credentials - Identity certificate, root CA certificate and Pre-shared key(optional)
+  * Access control lists (ACLs)
+  * Cloud configuration - Authorization code, Hub ID, Hub URL, etc.
+  
+  Subsequently, the module connects to the cloud, with the first operation being to sign up for self-registration.
+
+  **From the Hub perspective:**
+
+  The Hub detects that the module has already been registered (from the restored database) because the DeviceID and owner haven't changed, indicating no factory reset occurred. Consequently, the device events will continue from the restored state. If your application relies on event versions, please **be mindful that the version may be in the past**, depending on when the backup was performed.
