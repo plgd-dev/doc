@@ -96,6 +96,99 @@ global:
 ...
 ```
 
+## Configuring Custom Certificate Authority for PLGD Hub Services
+
+PLGD utilizes four types of service certificates:
+
+- **External Services:** (e.g., gRPC Gateway, HTTP Gateway, Certificate Authority) are exposed to the internet.
+- **Internal Services:** (e.g., MongoDB, NATs, Resource Directory, etc.) communicate internally.
+- **CoAP Gateway:** Communicates with devices. The Root CA of the certificate must be the same as the Root CA used by the Certificate Authority Signer.
+- **Certificate Authority Signer:** Used for signing certificates for devices. The Root CA used to sign the certificate is propagated to devices to trust the CoAP Gateway certificate.
+
+In the following steps, it uses one issuer for all service types. For your specific needs, you can separate each type of service by using a different issuer, such as Let's Encrypt for external services. To customize the Issuer for PLGD Hub services, follow these steps:
+
+### Add Custom CA to Kubernetes Secret
+
+Firstly, add the custom CA with the key pair to the Kubernetes secret. For a Cluster Issuer, include it in the `cert-manager` namespace.
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: plgd-ca-secret
+  namespace: cert-manager # or namespace in the case of issuer
+type: kubernetes.io/tls
+data:
+  ca.crt: <RootCA.crt encoded in base64> # Root CA
+  tls.crt: <CA.crt encoded in base64> # Root CA or Intermediate CA
+  tls.key: <CA.key encoded in base64> # Associated private key
+```
+
+Apply the secret to the Kubernetes cluster:
+
+```sh
+kubectl apply -f plgd-ca-secret.yaml
+```
+
+### Configure Issuer to Use Custom CA
+
+Next, configure the issuer to use the custom CA:
+
+```yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer # or Issuer for namespace issuer
+metadata:
+  name: plgd-ca-issuer
+spec:
+  ca:
+    secretName: plgd-ca-secret
+```
+
+Apply the issuer configuration to the Kubernetes cluster:
+
+```sh
+kubectl apply -f plgd-ca-issuer.yaml
+```
+
+### Configure PLGD Hub Helm Chart
+
+Finally, configure the PLGD Hub Helm chart to use the custom CA. Adjust the certificate duration according to your needs:
+
+```yaml
+certmanager:
+  external: # external services
+    cert:
+      duration: 8760h # 1 year for external services
+    issuer:
+      kind: "ClusterIssuer" # or "Issuer"
+      name: "plgd-ca-issuer"
+      group: cert-manager.io
+  internal: # internal services
+    cert:
+      duration: 8760h # 1 year for internal services
+    issuer:
+      kind: "ClusterIssuer" # or "Issuer"
+      name: "plgd-ca-issuer"
+      group: cert-manager.io
+  coap: # CoAP Gateway
+    cert:
+      duration: 8760h # 1 year for CoAP Gateway
+    issuer:
+      kind: "ClusterIssuer" # or "Issuer"
+      name: "plgd-ca-issuer"
+      group: cert-manager.io
+  default: # used when internal, external, or coap is not specified
+    cert:
+      duration: 876000h # 100 years for intermediate CA used to sign device certificates
+    ca: # CA to signing services(in default) and device certificates
+      issuerRef: 
+        kind: "ClusterIssuer" # or "Issuer"
+        name: "plgd-ca-issuer"
+        group: cert-manager.io
+```
+
+Apply the Helm values configuration to the Kubernetes cluster.
+
 ## Troubleshooting
 
 ### Issue: Unable to fetch data from the ./well-known endpoint in browser
