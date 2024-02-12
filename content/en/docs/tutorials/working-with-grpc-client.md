@@ -4,7 +4,13 @@ description: 'Understading API of gRPC Gateway and how to use it in your applica
 date: '2021-05-13'
 categories: [tutorials, grpc gateway]
 keywords: [grpc, gateway, client]
+baseURL: 'https://url.test.com'
 weight: 5
+
+algolia:
+    indexName: "doc"
+    apiKey: "31dbe24685b8a1a7025c12098b32df37"
+    appId: "42D6VHXINQ"
 ---
 
 For creating grpc-client you need to generate a code for your language from proto files, which are stored at [plgd hub](https://github.com/plgd-dev/hub/tree/main/grpc-gateway/pb). The plgd gRPC Gateway uses TLS. The client needs to have therefore properly configured TLS. Here is a simple example how to create a secured gRPC client communicating with the plgd gRPC Gateway.
