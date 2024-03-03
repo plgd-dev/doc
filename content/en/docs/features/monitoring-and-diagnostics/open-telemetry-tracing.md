@@ -17,7 +17,7 @@ This example shows open telemetry tracing in action:
 
 ## plgd & Open Telemetry
 
-The plgd hub services emit telemetry to collectors, secured using TLS and supporting otlp encoding. The open telemetry integration can be enabled globally for each in the [plgd hub helm chart](https://plgd.dev/deployment/k8s/#register-plgd-helm-chart-registry). Read further for more information on how to enable open telemetry in plgd hub helm chart.
+The plgd hub services emit telemetry to collectors, secured using TLS and supporting otlp encoding. The open telemetry integration can be enabled globally for each in the [plgd hub helm chart](/docs/deployment/#register-plgd-helm-chart-registry). Read further for more information on how to enable open telemetry in plgd hub helm chart.
 
 > The request content is included the gRPC as well as CoAP Gateway spans. As the HTTP Gateway is the proxy of the gRPC Gateway, the request content can be found in the gRPC Gateway spans.
 
