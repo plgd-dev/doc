@@ -18,16 +18,6 @@ languages:
   #   weight: 2
 copyright: 'All Rights Reserved © 2020-{year} plgd.dev, s.r.o.'
 googleAnalytics: 'GTM-5B8C4RK'
-algolia:
-  index: "doc"
-  appID: "42D6VHXINQ"
-  fields:
-    - "title"
-    - "description"
-    - "date"
-    - "categories"
-    - "keywords"
-    - "baseURL"
 pluralizeListTitles: false
 outputs:
   home:
@@ -93,16 +83,4 @@ taxonomies:
   category: categories
 params:
   githubRepository: 'https://github.com/plgd-dev/doc/'
-  algolia:
-    indexName: "doc"
-    apiKey: "31dbe24685b8a1a7025c12098b32df37"
-    appId: "42D6VHXINQ"
-    vars:
-      - "title"
-      - "summary"
-      - "date"
-      - "publishdate"
-      - "permalink"
-    params:
-      - "tags"
 ---
