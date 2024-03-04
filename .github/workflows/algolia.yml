@@ -1,0 +1,5 @@
+name: Algolia Push
+
+#tmp just for developing
+on:
+  push:
