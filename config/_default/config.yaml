@@ -3,6 +3,7 @@ baseURL: 'https://docs.plgd.dev/'
 theme: 'plgd'
 title: 'plgd docs'
 defaultContentLanguage: en
+defaultContentLanguageInSubdir: false
 enableEmoji: true
 footnotereturnlinkcontents: ↩
 languageCode: en-us
@@ -57,6 +58,10 @@ outputFormats:
     isPlainText: true
     mediaType: "application/json"
     notAlternative: true
+  JSON:
+    mediaType: "application/json"
+    baseName: "data"
+    isPlainText: true
 caches:
   getjson:
     dir: ':cacheDir/:project'
@@ -92,4 +97,12 @@ params:
     indexName: "doc"
     apiKey: "31dbe24685b8a1a7025c12098b32df37"
     appId: "42D6VHXINQ"
+    vars:
+      - "title"
+      - "summary"
+      - "date"
+      - "publishdate"
+      - "permalink"
+    params:
+      - "tags"
 ---
