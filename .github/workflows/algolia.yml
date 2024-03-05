@@ -15,6 +15,9 @@ jobs:
       - name: Install npm dependencies
         run: npm install --legacy-peer-deps hugo-algolia
 
+      - name: Find hugo-algolia
+      run: find / -name "hugo-algolia" -type f 2>/dev/null
+
       - name: Generate algolia.json
         run: hugo-algolia --config config/_default/config.yaml
 
