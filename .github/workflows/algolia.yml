@@ -3,3 +3,40 @@ name: Algolia Push
 #tmp just for developing
 on:
   push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install npm dependencies
+        run: npm install --legacy-peer-deps hugo-algolia
+
+      - name: Generate algolia.json
+        run: hugo-algolia --config config/_default/config.yaml
+
+      - name: Copy algolia.json to tools/adjust-algolia-output
+        run: cp algolia.json tools/adjust-algolia-output/
+
+      - name: Build Go binary
+        run: go build
+
+      - name: Adjust algolia.json using binary
+        run: ./adjust-algolia-output < ./algolia.json | jq > adjusted-algolia.json
+
+      - name: Move adjusted algolia.json to scripts folder
+        run: mv adjusted-algolia.json scripts/
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install node dependencies
+        run: npm install
+
+      - name: Push to Algolia
+        run: node push-to-algolia.json
