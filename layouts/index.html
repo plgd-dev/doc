@@ -6,9 +6,9 @@
     <title>{{ .Title }}</title>
 </head>
 <body>
-    <header>
-        <h1>{{ .Title }}</h1>
-    </header>
+<!--    <header>-->
+<!--        <h1>{{ .Title }}</h1>-->
+<!--    </header>-->
     <main>
         <!-- Your home page content goes here -->
         {{ with .GetPage "docs/" }}{{ .Render }}{{ end }}
