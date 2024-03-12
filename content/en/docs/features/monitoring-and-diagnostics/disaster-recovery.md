@@ -61,7 +61,7 @@ The plgd hub is a stateful event-driven system, meaning that data is stored in t
 To back up the database, two approaches can be used:
 
 * **Passive Backup**
-  
+
   ![passive-backup](/docs/features/monitoring-and-diagnostics/static/disaster-recovery-passive-backup.drawio.svg)
 
   The database is regularly backed up to a different location and can be used in case of failure. Although this approach is simple and requires fewer resources, the data may become outdated, and the restoration process may take some time. For MongoDB, utilize the `mongodump` tool to create a export of the database contents, store it securely, and use it in case of failure. Regular backups are essential to keep the data up-to-date. For more details on this approach, refer to the [MongoDB documentation](https://www.mongodb.com/docs/database-tools/mongodump/).
@@ -93,11 +93,11 @@ The CoAP-Gateway and Device Provisioning Service depend on certificates validate
 If a primary cluster failure occurs and you cannot dynamically modify the endpoint on the devices, they will be unable to establish a connection with the hub. Devices are set up with a single endpoint to link with either the CoAP-Gateway or the Device Provisioning Service, which may include an IP address or DNS address. To guarantee connectivity to the secondary cluster, adopt one of the provided options:
 
 * **DNS Address as endpoint**
-  
+
   In case of primary cluster failure, update the DNS record on the DNS server. It is recommended to set the time to live (TTL) of the DNS record to a low value, e.g., 30 minutes.
 
 * **IP Address as endpoint**
-  
+
   ![load-balancer](/docs/features/monitoring-and-diagnostics/static/disaster-recovery-load-balancer.drawio.svg)
 
   Changing the IP address could be challenging in case of primary cluster failure, as the public IP address is often assigned to the Internet Service Provider (ISP). However, using an IP load balancer near devices allows changing the IP address of the load balancer to the secondary cluster. For this, you can use HAProxy, which supports layer 4 load balancing. For more information, refer to the [HAProxy documentation](https://www.haproxy.com/documentation/haproxy-configuration-tutorials/load-balancing/tcp/) and [Failover & Worst Case Management With HAProxy](https://www.haproxy.com/blog/failover-and-worst-case-management-with-haproxy).
@@ -105,13 +105,12 @@ If a primary cluster failure occurs and you cannot dynamically modify the endpoi
 * **Update Device Provisioning Service endpoint**
 
   Under these circumstances, you have the option to update the DPS endpoint to the secondary cluster by utilizing the DHCP server to supply the devices with the updated endpoint. The device retrieves a new configuration from the DPS service, obtaining updated:
-
   * Time(optional)
   * Owner
   * Credentials - Identity certificate, root CA certificate and Pre-shared key(optional)
   * Access control lists (ACLs)
   * Cloud configuration - Authorization code, Hub ID, Hub URL, etc.
-  
+
   Subsequently, the module connects to the cloud, with the first operation being to sign up for self-registration.
 
   **From the Hub perspective:**

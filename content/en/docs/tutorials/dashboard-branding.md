@@ -62,7 +62,7 @@ Footer has a dedicated component which can be found in [`footer.js`](https://git
 
 ## Text changes
 
-Every text in this application is coming from a translation file located in [`langauges.json`](https://github.com/plgd-dev/hub/tree/main/http-gateway/web/src/languages/langauges.json). This object contains a language block for each language you support in your application. If a block is missing you can duplicate an existing block and modify the block with the language code that is missing.
+Every text in this application is coming from a translation file located in [`languages.json`](https://github.com/plgd-dev/hub/blob/main/http-gateway/web/src/languages/languages.json). This object contains a language block for each language you support in your application. If a block is missing you can duplicate an existing block and modify the block with the language code that is missing.
 
 Some messages might be missing. This is due to fact that they were not yet translated. You can add them manually or use a language editor like [POEditor](https://poeditor.com/).
 
