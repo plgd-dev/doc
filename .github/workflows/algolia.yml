@@ -30,10 +30,12 @@ jobs:
           hugo-algolia --config config/_default/config.yaml
 
       - name: Build Go binary
-        run: go build -o adjust-algolia-output tools/adjust-algolia-output/main.go
+        run: |
+          cd tools/adjust-algolia-output
+          go build -o /usr/local/bin/adjust-algolia-output 
 
       - name: Adjust algolia.json using binary
-        run: ./adjust-algolia-output < ./public/algolia.json | jq > public/algolia_final.json
+        run: adjust-algolia-output < ./public/algolia.json | jq > public/algolia_final.json
 
       - name: Install Node.js
         uses: actions/setup-node@v2
