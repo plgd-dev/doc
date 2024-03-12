@@ -38,12 +38,13 @@ jobs:
         run: adjust-algolia-output < ./public/algolia.json | jq > public/algolia_final.json
 
       - name: Install Node.js
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/setup-node@v2
         with:
           node-version: '14'
 
       - name: Push to Algolia
-        if: github.event_name == 'push' && github.ref == 'refs/heads/lukas-docs-search-algolia'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           cd scripts
           npm install algoliasearch
