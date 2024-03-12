@@ -5,8 +5,13 @@ const fs = require('fs');
 const client = algoliasearch(process.env.APPLICATION_ID, process.env.API_KEY);
 const index = client.initIndex('doc');
 
+
+process.argv.forEach((val, index) => {
+  console.log(`args ${index}: ${val}`);
+});
+
 // Read JSON file
-const jsonData = fs.readFileSync(process.argv[1], 'utf8');
+const jsonData = fs.readFileSync(process.argv[2], 'utf8');
 
 // Parse JSON data
 const records = JSON.parse(jsonData);
