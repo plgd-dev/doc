@@ -2,11 +2,11 @@ const algoliasearch = require('algoliasearch');
 const fs = require('fs');
 
 // Initialize Algolia client
-const client = algoliasearch('42D6VHXINQ', '16bcaaf3bbf281af8c223e692457336c');
+const client = algoliasearch(process.env.APPLICATION_ID, process.env.API_KEY);
 const index = client.initIndex('doc');
 
 // Read JSON file
-const jsonData = fs.readFileSync('algolia_final.json', 'utf8');
+const jsonData = fs.readFileSync(process.argv[1], 'utf8');
 
 // Parse JSON data
 const records = JSON.parse(jsonData);

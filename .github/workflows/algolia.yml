@@ -13,36 +13,27 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install npm dependencies
-        run: npm install --legacy-peer-deps hugo-algolia
+        run: npm install -g --legacy-peer-deps hugo-algolia
 
       - name: Check if hugo-algolia is installed
-        run: command -v hugo-algolia
-
-      - name: Find hugo-algolia
-        run: find / -name "hugo-algolia" -type f 2>/dev/null
+        run: hugo-algolia --version
 
       - name: Generate algolia.json
         run: hugo-algolia --config config/_default/config.yaml
 
-      - name: Copy algolia.json to tools/adjust-algolia-output
-        run: cp algolia.json tools/adjust-algolia-output/
-
       - name: Build Go binary
-        run: go build
+        run: go build -o adjust-algolia-output tools/adjust-algolia-output/main.go
 
       - name: Adjust algolia.json using binary
-        run: ./adjust-algolia-output < ./algolia.json | jq > adjusted-algolia.json
-
-      - name: Move adjusted algolia.json to scripts folder
-        run: mv adjusted-algolia.json scripts/
+        run: ./adjust-algolia-output < ./public/algolia.json | jq > scripts/algolia.json
 
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14'
 
-      - name: Install node dependencies
-        run: npm install
-
       - name: Push to Algolia
-        run: node push-to-algolia.json
+        run: |
+          cd scripts
+          npm install
+          APPLICATION_ID=${{ secrets.ALGOLIA_API_KEY }} API_KEY=${{ secrets.ALGOLIA_API_KEY }} node push-to-algolia.json scripts/algolia.json 
