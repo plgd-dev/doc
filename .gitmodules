@@ -1,6 +1,3 @@
 [submodule "themes/plgd"]
 	path = themes/plgd
 	url = git@github.com:plgd-dev/www-theme.git
-[submodule "themes/hugo-algolia"]
-	path = themes/hugo-algolia
-	url = https://github.com/replicatedhq/hugo-algolia.git
