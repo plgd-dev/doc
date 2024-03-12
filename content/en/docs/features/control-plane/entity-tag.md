@@ -2,7 +2,7 @@
 title: 'Entity-tag (ETAG)'
 description: 'What is ETAG?'
 docsOthersDisplay: true
-date: '2021-05-13'
+date: '2024-01-29'
 categories: [features]
 keywords: [twin, twin, cache, history]
 weight: 31
@@ -15,6 +15,12 @@ For more information about ETAG, refer to the [RFC7252 Section 5.10.6](https://d
 {{< /note >}}
 
 ## IoTivity-lite
+
+{{< note >}}
+
+To enable the ETAG feature in IoTivity-lite, use the CMake option `-DOC_ETAG_ENABLED=ON`.
+
+{{< /note >}}
 
 ### Definitions
 
@@ -177,6 +183,12 @@ oc_main_shutdown();
 ## Efficient Device Twin Synchronization
 
 In order to monitor resource changes and determine if a resource has been modified on the device, the CoAP gateway utilizes the Entity Tag (ETAG) mechanism.
+
+{{< note >}}
+
+To enable the use of ETAGs in the plgd CoAP gateway, activate it by setting the value in the Helm chart: `.coapgateway.deviceTwin.useETags: true`.
+
+{{< /note >}}
 
 For **Batch Observation**, the ETAG is associated with the overall state of resources. Prior to initiating resource observation, the CoAP gateway retrieves the latest ETAG for numbers of resource(`N-latest ETAGs`) among all device resources from the Hub Database. When initiating the resource observation, the CoAP gateway sends the ETAGs to the device with the query `incChanges`. If the received highest ETAG matches the highest ETAG among the device resources, the device responds with a code `VALID`. However, if the received ETAG does not match, the device responds with a code `CONTENT` and includes the current ETAG. Consequently, when a resource changes, the device sends the updated ETAG back to the CoAP gateway via a notification. The CoAP gateway transmits the ETAGs together with the Content by using the `NotifyResourceChanged` method to the resource-aggregate. This command is then converted into a `ResourceChanged` event, which is saved in a database and distributed through the event bus.
 
