@@ -45,5 +45,5 @@ jobs:
       - name: Push to Algolia
         run: |
           cd scripts
-          npm install
+          npm install algoliasearch
           APPLICATION_ID=${{ secrets.ALGOLIA_APPLICATION_ID }} API_KEY=${{ secrets.ALGOLIA_API_KEY }} node push-to-algolia.js public/algolia_final.json
