@@ -83,4 +83,8 @@ taxonomies:
   category: categories
 params:
   githubRepository: 'https://github.com/plgd-dev/doc/'
+  algolia:
+    indexName: 'doc'
+    apiKey: '31dbe24685b8a1a7025c12098b32df37'
+    appId: '42D6VHXINQ'
 ---
