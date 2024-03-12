@@ -43,6 +43,7 @@ jobs:
           node-version: '14'
 
       - name: Push to Algolia
+        if: github.event_name == 'push' && github.ref == 'refs/heads/lukas-docs-search-algolia'
         run: |
           cd scripts
           npm install algoliasearch
