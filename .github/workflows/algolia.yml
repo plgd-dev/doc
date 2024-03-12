@@ -46,4 +46,4 @@ jobs:
         run: |
           cd scripts
           npm install
-          APPLICATION_ID=${{ secrets.ALGOLIA_API_KEY }} API_KEY=${{ secrets.ALGOLIA_API_KEY }} node push-to-algolia.json public/algolia_final.json
+          APPLICATION_ID=${{ secrets.ALGOLIA_API_KEY }} API_KEY=${{ secrets.ALGOLIA_API_KEY }} node push-to-algolia.js public/algolia_final.json
