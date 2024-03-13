@@ -1,0 +1,51 @@
+name: Algolia Push
+
+#tmp just for developing
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # fetch branches and history so `git merge-base` in check-format-on-diff works correctly
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "^1.20" # The Go version to download (if necessary) and use.
+          check-latest: true
+
+      - name: Install npm dependencies
+        run: npm install -g --legacy-peer-deps hugo-algolia
+
+      - name: Check if hugo-algolia is installed
+        run: hugo-algolia --version
+
+      - name: Generate algolia.json
+        run: |
+          mkdir -p public
+          hugo-algolia --config config/_default/config.yaml
+
+      - name: Build Go binary
+        run: |
+          cd tools/adjust-algolia-output
+          go build -o /usr/local/bin/adjust-algolia-output 
+
+      - name: Adjust algolia.json using binary
+        run: adjust-algolia-output < ./public/algolia.json | jq > public/algolia_final.json
+
+      - name: Install Node.js
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Push to Algolia
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          cd scripts
+          npm install algoliasearch
+          APPLICATION_ID=${{ secrets.ALGOLIA_APPLICATION_ID }} API_KEY=${{ secrets.ALGOLIA_API_KEY }} node push-to-algolia.js ../public/algolia_final.json

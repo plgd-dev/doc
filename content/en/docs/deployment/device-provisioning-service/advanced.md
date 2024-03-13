@@ -47,43 +47,43 @@ In the process of acquiring a device access token from the OAuth server, the Dev
 1. Create an OAuth client for DPS in KeyCloak with the following configuration:
 
    - Settings:
-     - Enabled: On
-     - Client Protocol: openid-connect
-     - Access Type: confidential
-     - Service Accounts Enabled: On
-     - Authorization Enabled: On
+      - Enabled: On
+      - Client Protocol: openid-connect
+      - Access Type: confidential
+      - Service Accounts Enabled: On
+      - Authorization Enabled: On
 
    - Credentials:
-     - Client Authenticator: Client Id and Secret
-     - Secret: `<MY_DPS_CLIENT_SECRET>`
+      - Client Authenticator: Client Id and Secret
+      - Secret: `<MY_DPS_CLIENT_SECRET>`
 
    - Mapper:
-     - Create a custom `Hardcoded claim` mapper:
-       - Token Claim Name: `<OWNER_CLAIM>`
-       - Claim value: `<OWNER>`
-       - Claim JSON Type: String
-       - Add to access token: On
-       - Add to userinfo: On
+      - Create a custom `Hardcoded claim` mapper:
+         - Token Claim Name: `<OWNER_CLAIM>`
+         - Claim value: `<OWNER>`
+         - Claim JSON Type: String
+         - Add to access token: On
+         - Add to userinfo: On
 
 2. Create a WWW OAuth client with a mapper that adds the `<OWNER_CLAIM>` claim to the user JWT token. You can use the `User Property` mapper with the following configuration to map the `id` property to the `<OWNER_CLAIM>` claim:
 
    - Settings:
-     - Enabled: On
-     - Client Protocol: openid-connect
-     - Access Type: public
-     - Standard Flow Enabled: On
-     - Valid Redirect URIs: `[ https://www.example.com/*,... ]`
-     - Backchannel Logout Session Required: On
-     - OpenID Connect Compatibility Modes:
-       - Use Refresh Tokens: On
+      - Enabled: On
+      - Client Protocol: openid-connect
+      - Access Type: public
+      - Standard Flow Enabled: On
+      - Valid Redirect URIs: `[ https://www.example.com/*,... ]`
+      - Backchannel Logout Session Required: On
+      - OpenID Connect Compatibility Modes:
+         - Use Refresh Tokens: On
 
    - Mapper:
-     - Property: id
-     - Token Claim Name: `<OWNER_CLAIM>`
-     - Claim JSON Type: String
-     - Add to ID token: On
-     - Add to access token: On
-     - Add to userinfo: On
+      - Property: id
+      - Token Claim Name: `<OWNER_CLAIM>`
+      - Claim JSON Type: String
+      - Add to ID token: On
+      - Add to access token: On
+      - Add to userinfo: On
 
 In the helm chart, add the following configuration:
 

@@ -181,7 +181,7 @@ certmanager:
     cert:
       duration: 876000h # 100 years for intermediate CA used to sign device certificates
     ca: # CA to signing services(in default) and device certificates
-      issuerRef: 
+      issuerRef:
         kind: "ClusterIssuer" # or "Issuer"
         name: "plgd-ca-issuer"
         group: cert-manager.io
