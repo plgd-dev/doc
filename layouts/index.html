@@ -11,7 +11,7 @@
 <!--    </header>-->
     <main>
         <!-- Your home page content goes here -->
-        {{ with .GetPage "docs/" }}{{ .Render }}{{ end }}
+        {{ with .GetPage "docs/" }}{{ .Render "list"}}{{ end }}
     </main>
     <footer>
         <!-- Footer content goes here -->
