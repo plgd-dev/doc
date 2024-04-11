@@ -2,8 +2,8 @@
 title: 'gRPC API'
 description: 'Certificate Authority gRPC API'
 date: '2023-06-14'
-categories: [certificate]
-keywords: [identity-certificate, certificate]
+categories: [ certificate ]
+keywords: [ identity-certificate, certificate ]
 weight: 20
 ---
 
