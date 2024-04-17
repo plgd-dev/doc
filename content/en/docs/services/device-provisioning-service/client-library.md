@@ -32,11 +32,23 @@ The API is defined in the public header files provided in the distributed packag
 A DPS client device is an extension of an [IoTivity](https://github.com/iotivity/iotivity-lite) device. Define your desired device and add DPS code to automatically provision the device.
 
 Start up the DPS initialization by calling the `plgd_dps_init` function, which allocates and initializes required data structures.
-Use setters `plgd_dps_set_endpoint`, `plgd_dps_set_manager_callbacks`, `plgd_dps_set_skip_verify`, `plgd_dps_set_configuration_resource`, `plgd_dps_time_configure`, `plgd_dps_set_retry_configuration`, `plgd_dps_set_cloud_observer_configuration` and `plgd_dps_pki_set_expiring_limit` to configure the device.
+Use setters `plgd_dps_set_manager_callbacks`, `plgd_dps_set_skip_verify`, `plgd_dps_set_configuration_resource`, `plgd_dps_time_configure`, `plgd_dps_set_retry_configuration`, `plgd_dps_set_cloud_observer_configuration` and `plgd_dps_pki_set_expiring_limit` to configure the device.
 
 ### Set DPS Endpoint
 
-To set the DPS endpoint call the `plgd_dps_set_endpoint(plgd_dps_context_t *ctx, const char *endpoint)` function.
+DPS endpoints are stored in a list ordered by priority. (ie. the first endpoint has the highest priority and should be tried first.)
+
+- To add an endpoint to the list of DPS server endpoints use `plgd_dps_add_endpoint_address(plgd_dps_context_t *ctx, const char *uri, size_t uri_len, const char *name, size_t name_len)` function.
+- To remove an endpoint use `plgd_dps_remove_endpoint_address(plgd_dps_context_t *ctx, const oc_endpoint_address_t *address)`
+- To iterate over the list use `plgd_dps_iterate_server_addresses(const plgd_dps_context_t *ctx, oc_endpoint_addresses_iterate_fn_t iterate_fn, void *iterate_fn_data)`
+- To select an endpoint from the list to be used during DPS provisioning use `plgd_dps_select_endpoint_address(plgd_dps_context_t *ctx, const oc_endpoint_address_t *address)` (by default the first endpoint added is selected)
+- To get the currently selected endpoint use `plgd_dps_selected_endpoint_address(const plgd_dps_context_t *ctx)`
+
+Function `plgd_dps_set_endpoint` used to previously configure the DPS server endpoint when it was a single element has been deprecated. Use the functions above to work with the list of endpoints.
+
+{{< note >}}
+On repeated DPS provisioning failure with the currently selected endpoint, the default retry mechanism changes the selected endpoint to the next one in the list of endpoints. For details, go [here](/docs/services/device-provisioning-service/retry-mechanism)
+{{< /note >}}
 
 ### Set status callbacks
 
@@ -101,6 +113,12 @@ dps_status_handler(plgd_dps_context_t *ctx, plgd_dps_status_t status, void *data
   if ((status & PLGD_DPS_HAS_OWNER) != 0) {
     PRINT("\t\t-Has owner\n");
   }
+  if ((status & PLGD_DPS_GET_CLOUD) != 0) {
+    PRINT("\t\t-Get cloud configuration\n");
+  }
+  if ((status & PLGD_DPS_HAS_CLOUD) != 0) {
+    PRINT("\t\t-Has cloud configuration\n");
+  }
   if ((status & PLGD_DPS_GET_CREDENTIALS) != 0) {
     PRINT("\t\t-Get credentials\n");
   }
@@ -112,12 +130,6 @@ dps_status_handler(plgd_dps_context_t *ctx, plgd_dps_status_t status, void *data
   }
   if ((status & PLGD_DPS_HAS_ACLS) != 0) {
     PRINT("\t\t-Has set acls\n");
-  }
-  if ((status & PLGD_DPS_GET_CLOUD) != 0) {
-    PRINT("\t\t-Get cloud configuration\n");
-  }
-  if ((status & PLGD_DPS_HAS_CLOUD) != 0) {
-    PRINT("\t\t-Has cloud configuration\n");
   }
   if ((status & PLGD_DPS_CLOUD_STARTED) != 0) {
     PRINT("\t\t-Started cloud\n");
@@ -142,9 +154,11 @@ The resource type of the DPS configuration resource is `x.plgd.dps.conf` and the
 
 | Property Title | Property Name | Type | Access Mode | Mandatory | Description |
 | -------------- | ------------- | -----| ----------- | --------- | ----------- |
-| Endpoint | endpoint | string | RW | No | Device provisioning server endpoint in format `coaps+tcp://{domain}:{port}` |
+| Endpoint | endpoint | string | RW | No | Selected device provisioning server endpoint in format `coaps+tcp://{domain}:{port}` |
+| Endpoint name | endpointName | string | RW | No | Name associated with the selected device provisioning server endpoint (currently unused)  |
+| Endpoints | endpoints | array of objects | RW | No | Array of device provisioning server endpoints. Each item is a pair of (`uri`, `name`) values, where `uri` is the endpoint address in the format `coaps+tcp://{domain}:{port}` and `name` is a string name associated with the endpoint. (Note: the property is generated only if there are at least 2 endpoints set) |
 | Last error code | lastErrorCode | string | R | No | Provides last error code when provision status is in `failed` state (see list below for possible values). |
-| Force reprovision | forceReprovision | bool | RW | No | Connect to dps service and reprovision credentials, acls and cloud configuration. |
+| Force reprovision | forceReprovision | bool | RW | No | Connect to dps service and reprovision time, owner, cloud configuration, credentials and acls. |
 | Provisioning status | provisionStatus | enum(string) | R | No | String representation of the provisioning status (see list below for possible values). |
 
 Last error code values:
@@ -157,6 +171,7 @@ Last error code values:
 - `5` (`PLGD_DPS_ERROR_SET_CLOUD`): cannot apply cloud configuration
 - `6` (`PLGD_DPS_ERROR_START_CLOUD`): cannot start cloud
 - `7` (`PLGD_DPS_ERROR_GET_OWNER`): cannot retrieve device owner
+- `8` (`PLGD_DPS_ERROR_GET_TIME`): cannot retrieve current time
 
 Provisioning status values:
 
@@ -170,6 +185,8 @@ Provisioning status values:
 - `provisioned acls`: acls are provisioned
 - `provisioning cloud`: provisioning of cloud configuration has been started
 - `provisioned cloud`: cloud configuration is provisioned
+- `provisioning time`: time synchronization has been started
+- `provisioned time`: time is synchronized
 - `provisioned`: device is fully provisioned and configured
 - `renew credentials`: renewing expired or expiring certificates
 - `transient failure`: provisioning failed with a transient error and the failed step is being retried
@@ -390,8 +407,13 @@ manufacturer_setup(plgd_dps_context_t *dps_ctx)
     oc_free_string(&dev->name);
     oc_new_string(&dev->name, dps_device_name, strlen(dps_device_name));
   }
-  plgd_dps_set_manager_callbacks(dps_ctx, dps_status_handler, /* on_change_data */ NULL, cloud_status_handler,
-                                 /* on_cloud_change_data */ NULL);
+  plgd_dps_manager_callbacks_t callbacks = {
+    .on_status_change = dps_status_handler,
+    .on_status_change_data = NULL,
+    .on_cloud_status_change = cloud_status_handler,
+    .on_cloud_status_change_data = NULL,
+  };
+  plgd_dps_set_manager_callbacks(dps_ctx, callbacks);
   if (g_expiration_limit != -1) {
     plgd_dps_pki_set_expiring_limit(dps_ctx, (uint16_t)g_expiration_limit);
   }
@@ -399,7 +421,11 @@ manufacturer_setup(plgd_dps_context_t *dps_ctx)
     plgd_dps_set_cloud_observer_configuration(dps_ctx, (uint8_t)g_observer_max_retry, 1);
   }
   plgd_dps_set_skip_verify(dps_ctx, g_skip_ca_verification != 0);
-  plgd_dps_set_endpoint(dps_ctx, dps_endpoint);
+  size_t dps_endpoint_len = strlen(g_dps_endpoint);
+  if (dps_endpoint_len > 0 && !plgd_dps_add_endpoint_address(dps_ctx, g_dps_endpoint, dps_endpoint_len, /*name*/NULL, /*name_len*/0)) {
+    printf("ERROR: failed to add endpoint address\n");
+    return -1;
+  }
   if (dps_add_certificates(dps_ctx, dps_cert_dir) != 0) {
     DPS_ERR("failed to add initial certificates on factory reset");
     return -1;
