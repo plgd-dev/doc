@@ -155,7 +155,7 @@ The resource type of the DPS configuration resource is `x.plgd.dps.conf` and the
 | Property Title | Property Name | Type | Access Mode | Mandatory | Description |
 | -------------- | ------------- | -----| ----------- | --------- | ----------- |
 | Endpoint | endpoint | string | RW | No | Selected device provisioning server endpoint in format `coaps+tcp://{domain}:{port}` |
-| Endpoint name | endpointName | string | RW | No | Name associated with the selected device provisioning server endpoint (currently unused)  |
+| Endpoint name | endpointName | string | RW | No | Name associated with the selected device provisioning server endpoint (currently unused by DPS). |
 | Endpoints | endpoints | array of objects | RW | No | Array of device provisioning server endpoints. Each item is a pair of (`uri`, `name`) values, where `uri` is the endpoint address in the format `coaps+tcp://{domain}:{port}` and `name` is a string name associated with the endpoint. (Note: the property is generated only if there are at least 2 endpoints set) |
 | Last error code | lastErrorCode | string | R | No | Provides last error code when provision status is in `failed` state (see list below for possible values). |
 | Force reprovision | forceReprovision | bool | RW | No | Connect to dps service and reprovision time, owner, cloud configuration, credentials and acls. |
