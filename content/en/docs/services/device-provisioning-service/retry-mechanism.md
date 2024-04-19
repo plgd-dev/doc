@@ -49,7 +49,7 @@ Each failure or timeout triggers a retry action that calculates the retry delay 
 
   timeout = take the timeout value from configuration array indexed by the retry counter
 
-  delay = timeout * / 2;
+  delay = timeout / 2;
   // Include a random delay to prevent multiple devices from attempting to
   // connect or make requests simultaneously.
   delay += random value % delay;
@@ -58,20 +58,24 @@ Each failure or timeout triggers a retry action that calculates the retry delay 
 
 Moreover, once the retry counter reaches higher value than the maximal index of the configuration array, not only is the counter reset back to zero, but the library attempts to change the selected DPS endpoint. If the are more than one DPS endpoint servers configured, then the selected endpoint is changed to the next in the list (the list is considered circular, so the next endpoint after the last endpoint is the first endpoint).
 
-To setup a custom retry action use `plgd_dps_set_schedule_action`.
+To set up a custom retry action use `plgd_dps_set_schedule_action`.
 
 ## Failures of cloud manager connection and authentication
 
-After a successful provisioning, the device disconnects from the DPS service and starts up the cloud manager in `IoTivity-lite`. If the cloud manager fails to start, then a full reprovisioning is triggered. If the cloud manager starts successfully, then a cloud status observer also starts to operate.
+After successfully provisioning, the device disconnects from the DPS service and initiates the cloud manager within `IoTivity-lite`. If the cloud manager fails to start, it triggers a full reprovisioning process. Conversely, if the cloud manager starts successfully, a cloud status observer also activates.
 
-Cloud status observer is a simple polling mechanism which examines the cloud status value 30 times in 1 second intervals. The observer checks the cloud status and waits for the status to have both `OC_CLOUD_REGISTERED` and `OC_CLOUD_LOGGED_IN` flags sets. If the flags are set, then the polling stops. If the limit of polling checks is reached and the flags are still not set, then the cloud manager is stopped and a full reprovisioning is forced. The polling mechanism is restarted as soon as the connection to the plgd hub is lost.
+The cloud status observer operates as a simple polling mechanism, checking the cloud status value 30 times at 1-second intervals. It waits for the status to have both `OC_CLOUD_REGISTERED` and `OC_CLOUD_LOGGED_IN` flags set. Once these flags are set, the polling stops. The observer restarts the polling mechanism if the connection to the PLGD hub is lost.
 
-The limit of polling checks (default: 30) and the interval (default: 1 second) can be configured by the `plgd_dps_set_cloud_observer_configuration` function.
+You can configure the limit of polling checks (default: 30) and the interval (default: 1 second) using the `plgd_dps_set_cloud_observer_configuration` function.
 
 {{< note >}}
-Valid authentication of cloud manager depends on a valid access token. If the access token retrieved during provisioning is not permanent, it will eventually expire. It must be refreshed, because otherwise #plgd hub will close the connection to the device. This is handled internally by IoTivity-lite library, which schedules a refresh token operation before the access token expires.
+Successful authentication of the cloud manager relies on a valid access token. If the access token retrieved during provisioning is not permanent, it will eventually expire. To prevent the PLGD hub from closing the connection to the device, the access token must be refreshed. This refresh operation is handled internally by the `IoTivity-lite` library, which schedules a token refresh operation before the access token expires.
 {{< /note >}}
 
-### Changing the cloud server on repeated failures
+### Changing cloud servers on repeated failures
 
-TODO
+If the limit of polling checks is reached and the required flags are still not set, the cloud manager attempts to connect using other cloud server addresses available in the configuration. When attempting different cloud server addresses, some DPS steps may need to be redone.
+
+If the IDs of the cloud servers in the configuration differ, it implies that certificates and ACLs might also be different. Therefore, reprovisioning of credentials and ACLs is triggered. If the IDs are the same, DPS provisioning is not triggered, and the cloud manager is simply restarted with the new address.
+
+If the observer goes through all the addresses without establishing a successful connection, the cloud manager is stopped, and a full DPS reprovisioning is forced.
