@@ -71,18 +71,16 @@ d -> dps: **4** Get DPS service time to sync clocks
 dps --> d
 d -> dps: **5** Get owner of the device
 dps --> d
-d -> dps: **6** Send Identity Certificate Signing Request
+d -> dps: **6** Get plgd hub connection configuration
 dps --> d
-d -> dps: **7** Retrieve ACL configuration
+d -> dps: **7** Send Identity Certificate Signing Request
 dps --> d
-d -> dps: **8** Get initial configuration
-dps --> d
-d -> dps: **9** Get plgd hub connection configuration
+d -> dps: **8** Retrieve ACL configuration
 dps --> d
 d ->x dps: Disconnect
 deactivate dps
 deactivate d
-d -> hub: **10** Connect and authenticate
+d -> hub: **9** Connect and authenticate
 activate d
 
 @enduml
@@ -94,16 +92,15 @@ activate d
 3. The DPS finds the Enrollment Group with matching Manufacturer Certificate CA or TPM's endorsement key.
 4. In order to validate TLS certificates and rotate them, the device synchronizes its clock with the DPS by obtaining the current time.
 5. The device's owner is granted access by the DPS, enabling the device to operate in Device-to-Device scenarios.
-6. The device issues Certificate Signing Request (CSR) for the unique device Identity and requests the DPS to sign it. The CSR is signed by the separate service, running next to the DPS or within the plgd hub deployment. Custom Identity CA can be used. Identity Certificate is then securely stored on the device and used to for unique identification and secure connection to the plgd hub.
-7. The device requests resources' ACLs for the Device-to-Device as well as Device-to-Cloud communication and applies them.
-8. If the operator provided initial configuration for device resources, the devices retrieves and applies it.
-9. The device retrieves connection configuration and OAuth2.0 access token which authorizes the device to communicate with the plgd hub APIs.
-10. The device connects to the configured plgd hub instance, authenticates and encrypts the session using Identity Certificate and authorizes using the OAuth2.0 access token.
+6. The device retrieves connection configuration and OAuth2.0 access token which authorizes the device to communicate with the plgd hub APIs.
+7. The device issues Certificate Signing Request (CSR) for the unique device Identity and requests the DPS to sign it. The CSR is signed by the separate service, running next to the DPS or within the plgd hub deployment. Custom Identity CA can be used. Identity Certificate is then securely stored on the device and used to for unique identification and secure connection to the plgd hub.
+8. The device requests resources' ACLs for the Device-to-Device as well as Device-to-Cloud communication and applies them.
+9. The device connects to the configured plgd hub instance, authenticates and encrypts the session using Identity Certificate and authorizes using the OAuth2.0 access token.
 
 {{< note >}}
-Step number 4 and 10 are optional.
+Step number 4 and 9 are optional.
 
 4. Time synchronization is not required when device is synchronized time by another method like NTP. In such a case, the device can skip this step.
-10. Device provisioning doesn't require to connect the device to the plgd hub. In such a case, device is ready to be securely used for your Device-to-Device scenarios.
+9. Device provisioning doesn't require to connect the device to the plgd hub. In such a case, device is ready to be securely used for your Device-to-Device scenarios.
 
 {{< /note >}}
