@@ -20,7 +20,6 @@ weight: 2
 ### Planned features
 
 - **&#x2610; Device attestation via TPM:** This upcoming feature will enable devices to attest their identity using Trusted Platform Modules (TPM).
-- **&#x2610; Initial device configuration:** This planned feature aims to provide users with a mechanism to perform the initial configuration of devices during the provisioning process.
 - **&#x2610; Blacklisting and whitelisting devices:** With this feature, users will have the ability to blacklist or whitelist specific devices for enhanced access control.
 - **&#x2610; Manual approval for device configuration:** This planned feature enables a mechanism where devices require manual approval from the user in order to receive configuration settings. Instead of automatic configuration, users will have control over granting permission for device configuration.
-- **&#x2610; Verify Common Name:** Verify that the Common Name of DPS endpoint certificate matches the name of the selected endpoint.
+- **&#x2610; Verify Common Name:** Verify that the Common Name of DPS endpoint certificate matches the name of the selected endpoint by dps client.

@@ -2,6 +2,7 @@
 title: 'Retry mechanism'
 description: 'How is recoverable failure handled?'
 date: '2022-06-28'
+lastmod: '2024-04-22'
 categories: [zero-touch, provisioning]
 keywords: [retry, recovery, failure]
 weight: 5
@@ -27,13 +28,13 @@ The configuration can be changed by the `plgd_dps_set_retry_configuration` funct
 
 ## Failures during provisioning
 
-Provisioning consists of 3 main steps:
+Provisioning consists of 5 main steps:
 
 * synchronization of time
 * requesting and set of device owner
+* requesting and applying of plgd hub connection configuration
 * sending of signing certificate request
 * requesting and applying of ACLs
-* requesting and applying of plgd hub connection configuration
 
 Each step sends a request to the DPS service and waits for response. After a request is sent, then the retry interval is used as a deadline. If the response is not received before this deadline, the operation timeouts and the request is resend. If the response is received in time, then its status code is checked. We distinguish between transient and non-transient errors.
 
@@ -79,3 +80,7 @@ If the limit of polling checks is reached and the required flags are still not s
 If the IDs of the cloud servers in the configuration differ, it implies that certificates and ACLs might also be different. Therefore, reprovisioning of credentials and ACLs is triggered. If the IDs are the same, DPS provisioning is not triggered, and the cloud manager is simply restarted with the new address.
 
 If the observer goes through all the addresses without establishing a successful connection, the cloud manager is stopped, and a full DPS reprovisioning is forced.
+
+{{< note >}}
+To lean how to set up multiple cloud server addresses in an `IoTivity-lite` device [see Cloud: support for multiple servers](https://github.com/iotivity/iotivity-lite/wiki/Cloud:-support-for-multiple-servers)
+{{< /note >}}
