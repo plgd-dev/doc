@@ -180,8 +180,9 @@ void plgd_dps_set_manager_callbacks(plgd_dps_context_t *ctx, plgd_dps_manager_ca
  * Meaning that the first retry is scheduled after 10 seconds after a failure, the second retry after 20 seconds, etc.
  * After the interval reaches the maximal value (120 seconds) it resets back to the first value (10 seconds).
  *
- * @note Before starting the DPS manager, an endpoint must be set using plgd_dps_set_endpoint. Without an endpoint set
- * the provisioning will not start.
+ * @note Before starting the DPS manager, an endpoint must be added by plgd_dps_add_endpoint_address (if you add
+ * multiple endpoints then use plgd_dps_select_endpoint_address to select the endpoint that will be used to provision).
+ * Without an endpoint selected the provisioning will not start.
  *
  * @note The function examines the state of storage and some provisioning steps might be skipped if the stored data is
  * evaluated as still valid. To force full reprovisioning call plgd_force_reprovision before this function. At the end
@@ -284,40 +285,6 @@ DPS_EXPORT
 bool plgd_dps_get_skip_verify(const plgd_dps_context_t *ctx) OC_NONNULL();
 
 /**
- * @brief Set endpoint of the DPS service.
- *
- * Expected format of the endpoint is "coaps+tcp://${HOST}:${PORT}". For example: coaps+tcp://localhost:40030
- *
- * @param ctx dps context (cannot be NULL)
- * @param endpoint endpoint of the provisioning server (cannot be NULL)
- */
-DPS_EXPORT
-void plgd_dps_set_endpoint(plgd_dps_context_t *ctx, const char *endpoint) OC_NONNULL();
-
-/**
- * @brief Copy endpoint of the DPS service to output buffer.
- *
- * @param ctx dps context (cannot be NULL)
- * @param[out] buffer output buffer (cannot be NULL and must be large enough to contain the endpoint in a string format)
- * @param buffer_size size of output buffer
- * @return >0 on success, number of copied bytes to buffer
- * @return 0 endpoint is not set, thus nothing was copied
- * @return <0 on error
- */
-DPS_EXPORT
-int plgd_dps_get_endpoint(const plgd_dps_context_t *ctx, char *buffer, size_t buffer_size) OC_NONNULL();
-
-/**
- * @brief Check if the value of the DPS service endpoint is an empty string.
- *
- * @param ctx dps context (cannot be NULL)
- * @return true if the endpoint value is an empty string
- * @return false otherwise
- */
-DPS_EXPORT
-bool plgd_dps_endpoint_is_empty(const plgd_dps_context_t *ctx) OC_NONNULL();
-
-/**
  * @brief Force all steps of the provisioning process to be executed.
  *
  * A step that was successfully executed stores data in the storage and on the next start this data is still valid the
@@ -367,7 +334,7 @@ void plgd_dps_set_configuration_resource(plgd_dps_context_t *ctx, bool create) O
 /**
  * @brief Maximal size of the retry configuration array
  */
-#define PLGD_DPS_MAX_RETRY_VALUES_SIZE (8)
+enum { PLGD_DPS_MAX_RETRY_VALUES_SIZE = 8 };
 
 /**
  * @brief Configure retry counter.
@@ -464,8 +431,10 @@ bool plgd_dps_has_been_provisioned_since_reset(const plgd_dps_context_t *ctx) OC
 
 typedef struct
 {
-  uint8_t max_count;  ///< the maximal number of retries before retrying is stopped and client is fully reprovisioned
-                      ///< (default: 30)
+  uint8_t max_count;  ///< the maximal number of retries with the same endpoint before retrying is stopped; if a
+                      ///< previously untried endpoint is available then it is selected and the retrying is restarted
+                      ///< with it; if no previously untried endpoint is available then a full reprovisioning of the
+                      ///< client is triggered (default: 30)
   uint8_t interval_s; ///< retry interval in seconds (default: 1)
 } plgd_cloud_status_observer_configuration_t;
 
@@ -624,6 +593,129 @@ DPS_EXPORT
 plgd_dps_dhcp_set_values_t plgd_dps_dhcp_set_values_from_vendor_encapsulated_options(
   plgd_dps_context_t *ctx, const uint8_t *vendor_encapsulated_options, size_t vendor_encapsulated_options_size)
   OC_NONNULL();
+
+/**
+ * \defgroup dps_endpoints Support for multiple DPS endpoint addresses
+ * @{
+ */
+
+/**
+ * @brief Set endpoint address of the DPS service.
+ *
+ * Expected format of the endpoint is "coaps+tcp://${HOST}:${PORT}". For example: coaps+tcp://localhost:40030
+ *
+ * If there are multiple endpoint addresses set then a successful call to this function will remove all other
+ * endpoint addresses and set the new endpoint address as the only one in the list of DPS endpoint addresses.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param endpoint endpoint of the provisioning server (cannot be NULL)
+ *
+ * @deprecated Use plgd_dps_add_endpoint_address instead.
+ */
+DPS_EXPORT
+void plgd_dps_set_endpoint(plgd_dps_context_t *ctx, const char *endpoint) OC_NONNULL()
+  OC_DEPRECATED("Use plgd_dps_add_endpoint_address instead.");
+
+/**
+ * @brief Copy the selected endpoint address of the DPS service to output buffer.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param[out] buffer output buffer (cannot be NULL and must be large enough to contain the endpoint in a string format)
+ * @param buffer_size size of output buffer
+ * @return >0 on success, number of copied bytes to buffer
+ * @return 0 endpoint is not set, thus nothing was copied
+ * @return <0 on error
+ */
+DPS_EXPORT
+int plgd_dps_get_endpoint(const plgd_dps_context_t *ctx, char *buffer, size_t buffer_size) OC_NONNULL();
+
+/**
+ * @brief Check if no DPS service endpoint is set.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @return true if no endpoint is set
+ * @return false otherwise
+ */
+DPS_EXPORT
+bool plgd_dps_endpoint_is_empty(const plgd_dps_context_t *ctx) OC_NONNULL();
+
+/**
+ * @brief Allocate and add an address to the list of DPS endpoint addresses.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param uri endpoint address (cannot be NULL; the uri must be at least 1 character long and less than
+ * OC_ENDPOINT_MAX_ENDPOINT_URI_LENGTH characters long, otherwise the call will fail)
+ * @param uri_len length of \p uri
+ * @param name name of the DPS endpoint
+ * @param name_len length of \p name
+ *
+ * @return oc_endpoint_address_t* pointer to the allocated DPS endpoint address
+ * @return NULL on failure
+ */
+DPS_EXPORT
+oc_endpoint_address_t *plgd_dps_add_endpoint_address(plgd_dps_context_t *ctx, const char *uri, size_t uri_len,
+                                                     const char *name, size_t name_len) OC_NONNULL(1, 2);
+
+/**
+ * @brief Remove an address from the list of DPS endpoint addresses.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param address endpoint address to remove
+ *
+ * @return true if the endpoint address was removed from the list of DPS endpoints
+ * @return false on failure
+ *
+ * @note The endpoints are stored in a list. If the selected server address is removed, then next server address in the
+ * list will be selected. If the selected server address is the last item in the list, then the first server address in
+ * the list will be selected (if it exists).
+ *
+ * @note The server is cached in the DPS context, so if you remove the selected endpoint address during provisioning
+ * then it might be necessary to restart the DPS manager for the change to take effect.
+ * @see plgd_dps_manager_restart
+ */
+DPS_EXPORT
+bool plgd_dps_remove_endpoint_address(plgd_dps_context_t *ctx, const oc_endpoint_address_t *address) OC_NONNULL();
+
+/**
+ * @brief Iterate over DPS endpoint addresses.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param iterate_fn callback function invoked for each DPS endpoint address (cannot be NULL)
+ * @param iterate_fn_data custom user data provided to \p iterate_fn
+ *
+ * @note The callback function \p iterate_fn must not modify the list of DPS endpoint addresses.
+ */
+DPS_EXPORT
+void plgd_dps_iterate_server_addresses(const plgd_dps_context_t *ctx, oc_endpoint_addresses_iterate_fn_t iterate_fn,
+                                       void *iterate_fn_data) OC_NONNULL(1, 2);
+
+/**
+ * @brief Select an address from the list of DPS endpoint addresses.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @param address DPS endpoint address to select (cannot be NULL; must be in the list of DPS endpoints)
+ *
+ * @return true if the address was selected
+ * @return false on failure to select the address, because it is not in the list of DPS endpoint addresses
+ *
+ * @note The server is cached in the DPS context, so if you remove the selected endpoint address during provisioning
+ * then it might be necessary to restart the DPS manager for the change to take effect.
+ * @see plgd_dps_manager_restart
+ */
+OC_API
+bool plgd_dps_select_endpoint_address(plgd_dps_context_t *ctx, const oc_endpoint_address_t *address) OC_NONNULL();
+
+/**
+ * @brief Get the selected DPS endpoint address.
+ *
+ * @param ctx dps context (cannot be NULL)
+ * @return oc_endpoint_address_t* pointer to the selected DPS endpoint address
+ * @return NULL if no DPS endpoint address is selected
+ */
+DPS_EXPORT
+const oc_endpoint_address_t *plgd_dps_selected_endpoint_address(const plgd_dps_context_t *ctx) OC_NONNULL();
+
+/** @} */ // end of dps_endpoints
 
 #ifdef __cplusplus
 }
