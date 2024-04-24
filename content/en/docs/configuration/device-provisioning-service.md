@@ -134,7 +134,7 @@ Defines configuration of the plgd hub where the device connects after it's succe
 | `enrollmentGroups.[].hub.caPool` | string | `File path to the root certificate in PEM format. Multiple certificates in a single file are supported.` |  `""` |
 | `enrollmentGroups.[].hub.hubID` | string | `Uniqhe id of the plgd hub instance.` |  `""` |
 | `enrollmentGroups.[].hub.coapGateway` | string | `plgd hub CoAP gateway endpoint where the devices should connect to after successful provisioning.Format <IP:PORT>.` |  `""` |
-| `enrollmentGroups.[].hub.gateways` | []string | `plgd hub gateway multiple endpoints where the devices should connect to after successful provisioning. Format <SCHEME>://<IP:PORT>, for example coaps+tcp://plgd.cloud:1234` |  `""` |
+| `enrollmentGroups.[].hub.gateways` | []string | `plgd hub gateway multiple endpoints where the devices should connect to after successful provisioning. Format <SCHEME>://<IP:PORT>, for example coaps+tcp://plgd.cloud:1234` |  `[]` |
 | `enrollmentGroups.[].hub.certificateAuthority.grpc.address` | string | `plgd hub Certificate Authority endpoint used to sign device identity CSRs. Format <IP:PORT>.` |  `""` |
 | `enrollmentGroups.[].hub.certificateAuthority.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
 | `enrollmentGroups.[].hub.certificateAuthority.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
