@@ -107,7 +107,7 @@ Step number 4 and 9 are optional.
 
 ### Multiple PLGD Hubs
 
-The DPS supports multiple PLGD hubs or CoAP gateways. This feature enables users to configure multiple PLGD hubs or CoAP gateways for the device through enrollment group configuration.
+The DPS supports multiple PLGD Hubs or CoAP Gateways. This feature enables users to configure multiple PLGD hubs or CoAP gateways for the device through enrollment group configuration.
 
 To configure multiple CoAP gateways, set the helm value `.enrollmentGroups.[].hub.gateways` to the list of CoAP gateways in the format `SCHEME://HOST:PORT`. For example, `[ "coaps+tcp://plgd.cloud:5684", ... ]`.
 
