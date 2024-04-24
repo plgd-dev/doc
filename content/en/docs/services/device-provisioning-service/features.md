@@ -16,6 +16,7 @@ weight: 2
 - **&#x2611; Rotate device certificates:** This feature allows for the [rotation of device certificates](/docs/services/device-provisioning-service/client-library#certificate-renewal), enhancing security and maintaining up-to-date certificates.
 - **&#x2611; HTTP API to configure access devices:** This feature provides an HTTP API that allows users to configure the enrollment groups.
 - **&#x2611; HTTP API to get provisioned configuration to the devices:** This feature offers an HTTP API to retrieve provisioned configurations of the devices.
+- **&#x2611; Multiple plgd hubs:** This feature enables users to configure multiple PLGD hubs or CoAP gateways for the device.
 
 ### Planned features
 
