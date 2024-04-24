@@ -104,3 +104,17 @@ Step number 4 and 9 are optional.
 9. Device provisioning doesn't require to connect the device to the plgd hub. In such a case, device is ready to be securely used for your Device-to-Device scenarios.
 
 {{< /note >}}
+
+### Multiple PLGD Hubs
+
+The DPS supports multiple PLGD Hubs or CoAP Gateways. This feature enables users to configure multiple PLGD hubs or CoAP gateways for the device through enrollment group configuration.
+
+To configure multiple CoAP gateways, set the helm value `.enrollmentGroups.[].hub.gateways` to the list of CoAP gateways in the format `SCHEME://HOST:PORT`. For example, `[ "coaps+tcp://plgd.cloud:5684", ... ]`.
+
+To set multiple PLGD hubs, set the helm value `.enrollmentGroups.[].hubs` to the list of PLGD hub objects, which contain the same values as the `.enrollmentGroups.[].hub` object in the enrollment group configuration.
+
+{{< note >}}
+
+For multiple hubs, it is expected that the hubs are different instances.
+
+{{< /note >}}
