@@ -1,7 +1,7 @@
 ---
 title: 'Contribute'
 description: 'Contribute to development'
-date: '2021-07-09'
+date: '2024-05-10'
 categories: [quickstart]
 keywords: [quickstart, development]
 weight: 5
@@ -81,10 +81,27 @@ These steps are automated in convenience script `hub/tools/install/install-lates
 To automatically generate API clients and server stubs in golang protoc plugins from [gRPC-Gateway](https://github.com/grpc-ecosystem/grpc-gateway) are used. To install them run:
 
 ```shell
-go install github.com/grpc-ecosystem/grpc-gateway/main/protoc-gen-grpc-gateway \
-    github.com/grpc-ecosystem/grpc-gateway/main/protoc-gen-openapiv2 \
-    google.golang.org/protobuf/cmd/protoc-gen-go \
-    google.golang.org/grpc/cmd/protoc-gen-go-grpc
+go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest;
+go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest;
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest;
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+```
+
+### Instal yq to set up environment
+
+`yq` is a tool for manipulating YAML files. It is used in Makefiles to set up environment variables. To install `yq` run:
+
+```shell
+go install github.com/mikefarah/yq/v4@latest
+```
+
+### Setup sysctl
+
+Set up sysctl to allow for more inotify watches and aio requests. Add the following lines to `/etc/sysctl.conf`:
+
+```txt
+fs.inotify.max_user_watches = 5242880
+fs.aio-max-nr = 1048576
 ```
 
 ### Test your environment
@@ -103,4 +120,16 @@ Test protobuf generation:
 
 ```shell
 make proto/generate
+```
+
+To setup development environment run the following command:
+
+```shell
+make env
+```
+
+To clean development environment run the following command:
+
+```shell
+make clean
 ```
