@@ -25,7 +25,7 @@ Bundle deployment hosts core plgd hub services with mocked OAuth Server in a sin
 Bundle version of plgd services should be used only for simple testing and development purposes. Performance evaluations, production environment or other sensitive deployments should deploy plgd services using the plgd HELM chart.
 {{< /warning >}}
 
-### Run on localhost
+### Run on localhost or domain or IP address
 
 To deploy and access plgd hub on your local PC using bundle, run single command:
 
