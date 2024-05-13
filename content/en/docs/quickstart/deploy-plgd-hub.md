@@ -30,10 +30,11 @@ Bundle version of plgd services should be used only for simple testing and devel
 To deploy and access plgd hub on your local PC using bundle, run single command:
 
 ```bash
-docker run -d --name plgd -p 443:443 -p 5683:5683 -p 5684:5684 ghcr.io/plgd-dev/hub/bundle:latest
+docker run -d --name plgd -e FQDN=localhost -p 443:443 -p 5683:5683 -p 5684:5684 ghcr.io/plgd-dev/hub/bundle:latest
 ```
 
-After couple of seconds your plgd hub will become available. The plgd dashboard can be opened in your browser at [https://localhost/](https://localhost/).
+After a couple of seconds, your plgd hub will become available. The plgd dashboard can be opened in your browser at [https://localhost/](https://localhost/). To customize the domain or IP, set the FQDN using `-e FQDN=yourdomain.com` or `-e FQDN=IP`.
+
 >Note that bundle issues it's own **self-signed certificate** which needs to be accepted in the browser.
 
 ### Authorization
