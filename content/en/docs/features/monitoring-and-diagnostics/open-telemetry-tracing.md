@@ -13,7 +13,7 @@ Traces track the progression of a single request, called a trace. The request ma
 > For more information, see the [traces specification](https://opentelemetry.io/docs/reference/specification/overview/#tracing-signal), which covers concepts including: trace, span, parent/child relationship, span context, attributes, events and links.
 
 This example shows open telemetry tracing in action:
-![opentelemetry-update-resource](/docs/features/control-plane/static/opentelemetry-update-resource.png)
+![opentelemetry-update-resource](/docs/features/monitoring-and-diagnostics/static/opentelemetry-update-resource.png)
 
 ## plgd & Open Telemetry
 
