@@ -54,7 +54,7 @@ plgd hub doesn't guarantee delivery of all events to the EventBus. It guarantees
 
 ## Data Management and Failover Strategies
 
-The plgd hub is a stateful event-driven system, meaning that data is stored in the EventStore, which serves as the authoritative source of truth and is implemented using MongoDB. In this section, we will describe how to back up and restore data in a scenario where two clusters are running in different locations (e.g., East US / West US). The first cluster is utilized for normal operations, while the secondary cluster serves as a backup for disaster recovery.
+The plgd hub is a stateful event-driven system, meaning that data is stored in the EventStore, which serves as the authoritative source of truth and is implemented using MongoDB. In this section, we will describe how to back up and restore data in a scenario where two clusters are running in different locations (e.g., East US / West US). The first cluster is utilized for normal operations, while the standby cluster serves as a backup for disaster recovery.
 
 ### Backup Databases
 
@@ -68,9 +68,19 @@ To back up the database, two approaches can be used:
 
 * **Active Backup**
 
-  ![active-backup](/docs/features/monitoring-and-diagnostics/static/disaster-recovery-active-backup.drawio.svg)
+  The database actively synchronizes data between two clusters in real-time. This approach is more complex and resource-intensive but is more reliable for disaster recovery. For MongoDB, use:
 
-  The database actively synchronizes data between two clusters in realtime. This approach is more complex and resource-intensive but is more reliable for disaster recovery. For MongoDB, use `cluster-to-cluster-sync` feature to synchronize data between two MongoDB clusters. For more details on this approach, refer to the [MongoDB documentation](https://www.mongodb.com/docs/cluster-to-cluster-sync/current/connecting/onprem-to-onprem/).
+   * **Replica set synchronization**:
+
+     ![active-backup-replica-set](/docs/features/monitoring-and-diagnostics/static/disaster-recovery-active-replica-set-backup.drawio.svg)
+
+     The primary and standby cluster MongoDB members are in the same MongoDB replica set. The standby cluster members are configured as [hidden](https://www.mongodb.com/docs/manual/core/replica-set-hidden-member), [delayed](https://www.mongodb.com/docs/manual/core/replica-set-delayed-member/), and with [zero priority](https://www.mongodb.com/docs/manual/core/replica-set-priority-0-member/). When the primary cluster goes down, the standby cluster MongoDB members are promoted to standby state—one of them will become primary. After the primary is back online, the primary cluster members will be demoted to hidden. For switching back, the primary cluster members will be promoted to standby MongoDB members and standby cluster members will be demoted. **This approach is supported by the plgd hub helm chart because it complies with the MongoDB Community Server license.** For setup instructions, please refer to this [tutorial]().
+
+   * **Cluster to cluster synchronization**
+
+     ![active-backup](/docs/features/monitoring-and-diagnostics/static/disaster-recovery-active-backup.drawio.svg)
+
+     A feature to synchronize data between two MongoDB clusters. For more details on this approach, refer to the [MongoDB documentation](https://www.mongodb.com/docs/cluster-to-cluster-sync/current/connecting/onprem-to-onprem/).
 
 {{< warning >}}
 
@@ -86,11 +96,11 @@ Devices connected to the hub have access tokens used to authorize device access.
 
 ![certificates](/docs/features/monitoring-and-diagnostics/static/disaster-recovery-certificates.drawio.svg)
 
-The CoAP-Gateway and Device Provisioning Service depend on certificates validated by devices, and these certificates must be signed in the certificates chain by the same Root CAs. It is crucial that the Root CAs used for the primary and secondary clusters are identical. Additionally, the hub ID configured through the [plgd helm chart](https://github.com/plgd-dev/hub/blob/4c4861a4bc483ba4080a1d448063da392eff4026/charts/plgd-hub/values.yaml#L6) must remain consistent.
+The CoAP-Gateway and Device Provisioning Service depend on certificates validated by devices, and these certificates must be signed in the certificates chain by the same Root CAs. It is crucial that the Root CAs used for the primary and standby clusters are identical. Additionally, the hub ID configured through the [plgd helm chart](https://github.com/plgd-dev/hub/blob/4c4861a4bc483ba4080a1d448063da392eff4026/charts/plgd-hub/values.yaml#L6) must remain consistent.
 
 ### Devices
 
-If a primary cluster failure occurs and you cannot dynamically modify the endpoint on the devices, they will be unable to establish a connection with the hub. Devices are set up with a single endpoint to link with either the CoAP-Gateway or the Device Provisioning Service, which may include an IP address or DNS address. To guarantee connectivity to the secondary cluster, adopt one of the provided options:
+If a primary cluster failure occurs and you cannot dynamically modify the endpoint on the devices, they will be unable to establish a connection with the hub. Devices are set up with a single endpoint to link with either the CoAP-Gateway or the Device Provisioning Service, which may include an IP address or DNS address. To guarantee connectivity to the standby cluster, adopt one of the provided options:
 
 * **DNS Address as endpoint**
 
@@ -100,11 +110,11 @@ If a primary cluster failure occurs and you cannot dynamically modify the endpoi
 
   ![load-balancer](/docs/features/monitoring-and-diagnostics/static/disaster-recovery-load-balancer.drawio.svg)
 
-  Changing the IP address could be challenging in case of primary cluster failure, as the public IP address is often assigned to the Internet Service Provider (ISP). However, using an IP load balancer near devices allows changing the IP address of the load balancer to the secondary cluster. For this, you can use HAProxy, which supports layer 4 load balancing. For more information, refer to the [HAProxy documentation](https://www.haproxy.com/documentation/haproxy-configuration-tutorials/load-balancing/tcp/) and [Failover & Worst Case Management With HAProxy](https://www.haproxy.com/blog/failover-and-worst-case-management-with-haproxy).
+  Changing the IP address could be challenging in case of primary cluster failure, as the public IP address is often assigned to the Internet Service Provider (ISP). However, using an IP load balancer near devices allows changing the IP address of the load balancer to the standby cluster. For this, you can use HAProxy, which supports layer 4 load balancing. For more information, refer to the [HAProxy documentation](https://www.haproxy.com/documentation/haproxy-configuration-tutorials/load-balancing/tcp/) and [Failover & Worst Case Management With HAProxy](https://www.haproxy.com/blog/failover-and-worst-case-management-with-haproxy).
 
 * **Update Device Provisioning Service endpoint**
 
-  Under these circumstances, you have the option to update the DPS endpoint to the secondary cluster by utilizing the DHCP server to supply the devices with the updated endpoint. The device retrieves a new configuration from the DPS service, obtaining updated:
+  Under these circumstances, you have the option to update the DPS endpoint to the standby cluster by utilizing the DHCP server to supply the devices with the updated endpoint. The device retrieves a new configuration from the DPS service, obtaining updated:
   * Time(optional)
   * Owner
   * Credentials - Identity certificate, root CA certificate and Pre-shared key(optional)
