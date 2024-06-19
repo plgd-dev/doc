@@ -29,9 +29,9 @@ The `mongodb.primary.plgd.cloud` is used for external access to the MongoDB repl
 This DNS needs to be resolved to the external IP address of the LoadBalancer. The external IP address of the LoadBalancer is used to connect to the MongoDB replica set from the other cluster. For clouds, you can use the [external-dns](https://github.com/kubernetes-sigs/external-dns/) tool to create DNS records in AWS Route53 / Google Cloud DNS / Azure DNS.
 In this tutorial, we show how to get the IPs of MongoDB services, and we will set them manually in /etc/hosts, then restart the dnsmasq daemon to load these changes on the computer with IP 192.168.1.1.
 
-{{< note >}}
+{{< warning >}}
 It is also recommended to set up a firewall between clusters with source IP address filtering to mitigate DDOS attacks on MongoDB. The default port for MongoDB is 27017. Alternatively, use a VPN to interconnect clusters.
-{{< /note >}}
+{{< /warning >}}
 
 ## Installation
 
@@ -588,9 +588,9 @@ echo "
 sudo systemctl restart dnsmasq
 ```
 
-<< note >>
+{{< note >}}
 It is important that the `global.standby` flag is set to `true`, which means that plgd pods are not running on the standby cluster.
-<< /note >>
+{{< /note >}}
 
 Once the MongoDB pods are running, we need to run the `mongodb-standby-tool` job to configure the MongoDB replica set. This configuration demotes the secondary members to hidden members.
 
@@ -602,9 +602,9 @@ Now the job will create the pod and configure the MongoDB replica set.
 
 ## Disaster Recovery
 
-<< note >>
-This steps could be used in case of planned maintenance.
-<< /note >>
+{{< note >}}
+These steps could be used in case of planned maintenance.
+{{< /note >}}
 
 ### How to Switch to the Standby Cluster
 
