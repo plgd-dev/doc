@@ -19,6 +19,7 @@ The goal is to ensure that only MongoDBs from the primary and standby clusters c
 
 | For the primary cluster we have | For the standby cluster we have |
 | --- | --- |
+| `primary.plgd.cloud` | `standby.plgd.cloud` |
 | `mongodb-0.primary.plgd.cloud` | `mongodb-0.standby.plgd.cloud` |
 | `mongodb-1.primary.plgd.cloud` | `mongodb-1.standby.plgd.cloud` |
 | `mongodb-2.primary.plgd.cloud` | `mongodb-2.standby.plgd.cloud` |
@@ -138,6 +139,12 @@ To create certificates, you can use the cert-tool Docker image to generate root 
         --cmd.generateRootCA --outCert=/certs/tls.crt --outKey=/certs/tls.key \
         --cert.subject.cn=standby.storage.root.ca --cert.validFor=876000h
    ```
+
+### Preparing Device Provisioning Service dependencies
+
+The Device Provisioning Service (DPS) requires a certificate for the manufacturer. The certificate is used to authenticate the manufacturer when enrolling devices which need to stored in the file `.tmp/certs/manufacturer/tls.crt`.
+
+To download proprietary device provisioning service docker image, you need to have a token for the GitHub Container Registry. The token need to stored in the file `.tmp/tokens/plgd-docker-auth-token.txt`.
 
 ### Setting up cert-manager on the Primary Cluster
 
@@ -291,15 +298,15 @@ DOMAIN="primary.plgd.cloud"
 HUB_ID="d03a1bb4-0a77-428c-b78c-1c46efe6a38e"
 OWNER_CLAIM="https://plgd.dev/owner"
 STANDBY=false
-DOCKER_AUTH_TOKEN="<DOCKER_AUTH_TOKEN>"
 
 # Read certificate files
-AUTHORIZATION_CA_IN_PEM=$(cat .tmp/certs/external/tls.crt)
-INTERNAL_CA_IN_PEM=$(cat .tmp/primary/certs/internal/tls.crt)
-EXTERNAL_CA_IN_PEM=$(cat .tmp/certs/external/tls.crt)
-STORAGE_PRIMARY_CA_IN_PEM=$(cat .tmp/primary/certs/storage/tls.crt)
-STORAGE_STANDBY_CA_IN_PEM=$(cat .tmp/standby/certs/storage/tls.crt)
-MANUFACTURER_CERTIFICATE_CA="<MANUFACTURER_CERTIFICATE_CA>"
+AUTHORIZATION_CA_IN_PEM=.tmp/certs/external/tls.crt
+INTERNAL_CA_IN_PEM=.tmp/primary/certs/internal/tls.crt
+EXTERNAL_CA_IN_PEM=.tmp/certs/external/tls.crt
+STORAGE_PRIMARY_CA_IN_PEM=.tmp/primary/certs/storage/tls.crt
+STORAGE_STANDBY_CA_IN_PEM=.tmp/standby/certs/storage/tls.crt
+MANUFACTURER_CERTIFICATE_CA=.tmp/certs/manufacturer/tls.crt
+DOCKER_AUTH_TOKEN=.tmp/tokens/plgd-docker-auth-token.txt
 
 # Create values.yaml file
 cat <<EOF > values.yaml
@@ -310,15 +317,15 @@ global:
   standby: $STANDBY
   extraCAPool:
     authorization: |
-      $AUTHORIZATION_CA_IN_PEM
+$(sed 's/^/      /' $AUTHORIZATION_CA_IN_PEM)
     internal: |
-      $INTERNAL_CA_IN_PEM
-      $STORAGE_PRIMARY_CA_IN_PEM
-      $EXTERNAL_CA_IN_PEM
+$(sed 's/^/      /' $INTERNAL_CA_IN_PEM)
+$(sed 's/^/      /' $STORAGE_PRIMARY_CA_IN_PEM)
+$(sed 's/^/      /' $EXTERNAL_CA_IN_PEM)
     storage: |
-      $STORAGE_PRIMARY_CA_IN_PEM
-      $STORAGE_STANDBY_CA_IN_PEM
-      $INTERNAL_CA_IN_PEM
+$(sed 's/^/      /' $STORAGE_PRIMARY_CA_IN_PEM)
+$(sed 's/^/      /' $STORAGE_STANDBY_CA_IN_PEM)
+$(sed 's/^/      /' $INTERNAL_CA_IN_PEM)
 mockoauthserver:
   enabled: true
   oauth:
@@ -386,7 +393,7 @@ deviceProvisioningService:
       {
         "auths": {
           "ghcr.io": {
-              "auth": "$DOCKER_AUTH_TOKEN"
+              "auth": "$(cat $DOCKER_AUTH_TOKEN)"
           }
         }
       }
@@ -396,7 +403,7 @@ deviceProvisioningService:
       attestationMechanism:
         x509:
           certificateChain: |-
-            $MANUFACTURER_CERTIFICATE_CA
+$(sed 's/^/            /' $MANUFACTURER_CERTIFICATE_CA)
       hub:
         coapGateway: "$DOMAIN:15684"
         certificateAuthority:
@@ -437,7 +444,7 @@ After some time for the pods to start, you can access the Hub at `https://primar
 
 ### Deploy plgd on Standby Cluster
 
-Deploying plgd to the standby cluster is similar to deploying it to the primary cluster. The differences are that the domain is `standby.plgd.cloud`, different internal and storage certificates are used, the standby flag is set to `true`, MongoDB is configured to use the master DB at `mongodb.primary.plgd.cloud`, and the `mongodb-standby-tool` job is enabled to configure the MongoDB replica set.
+Deploying plgd to the standby cluster is similar to deploying it to the primary cluster. The differences are that the domain is `standby.plgd.cloud`, different internal and storage certificates are used, the standby flag is set to `true`, NATs is disabled and MongoDB is configured to use the master DB at `mongodb.primary.plgd.cloud`, and the `mongodb-standby-tool` job is enabled to configure the MongoDB replica set.
 
 ```bash
 # Set variables
@@ -446,15 +453,15 @@ PRIMARY_MONGO_DB="mongodb.primary.plgd.cloud"
 HUB_ID="d03a1bb4-0a77-428c-b78c-1c46efe6a38e"
 OWNER_CLAIM="https://plgd.dev/owner"
 STANDBY=true
-DOCKER_AUTH_TOKEN="<DOCKER_AUTH_TOKEN>"
 
 # Read certificate files
-AUTHORIZATION_CA_IN_PEM=$(cat .tmp/certs/external/tls.crt)
-EXTERNAL_CA_IN_PEM=$(cat .tmp/certs/external/tls.crt)
-INTERNAL_CA_IN_PEM=$(cat .tmp/standby/certs/internal/tls.crt)
-STORAGE_PRIMARY_CA_IN_PEM=$(cat .tmp/primary/certs/storage/tls.crt)
-STORAGE_STANDBY_CA_IN_PEM=$(cat .tmp/standby/certs/storage/tls.crt)
-MANUFACTURER_CERTIFICATE_CA="<MANUFACTURER_CERTIFICATE_CA>"
+AUTHORIZATION_CA_IN_PEM=.tmp/certs/external/tls.crt
+INTERNAL_CA_IN_PEM=.tmp/primary/certs/internal/tls.crt
+EXTERNAL_CA_IN_PEM=.tmp/certs/external/tls.crt
+STORAGE_PRIMARY_CA_IN_PEM=.tmp/primary/certs/storage/tls.crt
+STORAGE_STANDBY_CA_IN_PEM=.tmp/standby/certs/storage/tls.crt
+MANUFACTURER_CERTIFICATE_CA=.tmp/certs/manufacturer/tls.crt
+DOCKER_AUTH_TOKEN=.tmp/tokens/plgd-docker-auth-token.txt
 
 # Create values.yaml file
 cat <<EOF > values.yaml
@@ -465,15 +472,15 @@ global:
   standby: $STANDBY
   extraCAPool:
     authorization: |
-      $AUTHORIZATION_CA_IN_PEM
+$(sed 's/^/      /' $AUTHORIZATION_CA_IN_PEM)
     internal: |
-      $INTERNAL_CA_IN_PEM
-      $STORAGE_STANDBY_CA_IN_PEM
-      $EXTERNAL_CA_IN_PEM
+$(sed 's/^/      /' $INTERNAL_CA_IN_PEM)
+$(sed 's/^/      /' $STORAGE_STANDBY_CA_IN_PEM)
+$(sed 's/^/      /' $EXTERNAL_CA_IN_PEM)
     storage: |
-      $STORAGE_PRIMARY_CA_IN_PEM
-      $STORAGE_STANDBY_CA_IN_PEM
-      $INTERNAL_CA_IN_PEM
+$(sed 's/^/      /' $STORAGE_PRIMARY_CA_IN_PEM)
+$(sed 's/^/      /' $STORAGE_STANDBY_CA_IN_PEM)
+$(sed 's/^/      /' $INTERNAL_CA_IN_PEM)
 mockoauthserver:
   enabled: true
   oauth:
@@ -513,6 +520,8 @@ mongodb:
         - external-dns.alpha.kubernetes.io/hostname: "mongodb-0.$DOMAIN"
         - external-dns.alpha.kubernetes.io/hostname: "mongodb-1.$DOMAIN"
         - external-dns.alpha.kubernetes.io/hostname: "mongodb-2.$DOMAIN"
+nats:
+  enabled: false
 certmanager:
   storage:
     issuer:
@@ -549,7 +558,7 @@ deviceProvisioningService:
       {
         "auths": {
           "ghcr.io": {
-              "auth": "$DOCKER_AUTH_TOKEN"
+              "auth": "$(cat $DOCKER_AUTH_TOKEN)"
           }
         }
       }
@@ -559,7 +568,7 @@ deviceProvisioningService:
       attestationMechanism:
         x509:
           certificateChain: |-
-            $MANUFACTURER_CERTIFICATE_CA
+$(sed 's/^/            /' $MANUFACTURER_CERTIFICATE_CA)
       hub:
         coapGateway: "$DOMAIN:15684"
         certificateAuthority:
@@ -595,7 +604,7 @@ It is important that the `global.standby` flag is set to `true`, which means tha
 Once the MongoDB pods are running, we need to run the `mongodb-standby-tool` job to configure the MongoDB replica set. This configuration demotes the secondary members to hidden members.
 
 ```bash
-kubectl -n plgd patch job/$(kubectl -n standby-mock-plgd-cloud get jobs | grep mongodb-standby-tool | awk '{print $1}') --type=strategic --patch '{"spec":{"suspend":false}}'
+kubectl -n plgd patch job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}') --type=strategic --patch '{"spec":{"suspend":false}}'
 ```
 
 Now the job will create the pod and configure the MongoDB replica set.
@@ -612,35 +621,35 @@ When the primary cluster is down, you need to switch to the standby cluster.
 
 #### Promote the Standby Cluster
 
-First, promote the hidden members to secondary members. To do this, upgrade the Helm chart with the `mongodb.standbyTool.mode` set to `active`. The active mode reconfigures the MongoDB replica set, promoting hidden members to secondary members and demoting the previous members to hidden.
-
-```bash
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=active hub plgd/plgd-hub
-```
-
-Next, delete the `mongodb-standby-tool` job and resume it to configure the MongoDB replica set.
+First, promote the hidden members to secondary members. To do this, upgrade the Helm chart with the `mongodb.standbyTool.mode` set to `active`. The active mode reconfigures the MongoDB replica set, promoting hidden members to secondary members and demoting the previous members to hidden. To do that we need to delete the `mongodb-standby-tool` job and upgrade the Helm chart which will create a new job.
 
 ```bash
 kubectl -n plgd delete job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}')
+helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=active hub plgd/plgd-hub
+```
+
+Next, resume the job to configure the MongoDB replica set.
+
+```bash
 kubectl -n plgd patch job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}') --type=strategic --patch '{"spec":{"suspend":false}}'
 ```
 
-The final step is to run plgd pods on the standby cluster. Set the `global.standby` flag to `false` and upgrade the Helm chart.
+The final step is to run plgd pods on the standby cluster. Set the `global.standby` flag to `false`, enable NATs via `nats.enabled=true` and upgrade the Helm chart.
 
 ```bash
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=false hub plgd/plgd-hub
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=false dps plgd/plgd-dps
+helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=active --set global.standby=false --set nats.enabled=true hub plgd/plgd-hub
+helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=active --set global.standby=false --set nats.enabled=true dps plgd/plgd-dps
 ```
 
 After rotating the device provisioning endpoints, the devices will connect to the standby cluster.
 
 #### Turn Off plgd Pods on the Primary Cluster
 
-When the primary cluster is back up, set the `global.standby` flag to `true` and upgrade the Helm chart.
+When the primary cluster is back up, set the `global.standby` flag to `true`, disable NATs via `nats.enabled=false` and upgrade the Helm chart.
 
 ```bash
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=true hub plgd/plgd-hub
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=true dps plgd/plgd-dps
+helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=true --set nats.enabled=false hub plgd/plgd-hub
+helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=true --set nats.enabled=false dps plgd/plgd-dps
 ```
 
 ### How to Switch Back to the Primary Cluster
@@ -649,33 +658,33 @@ When the primary cluster is ready for devices, switch back to the primary cluste
 
 #### Demote the Standby Cluster
 
-First, promote the primary cluster's MongoDB hidden members to secondary members and demote the standby cluster's MongoDB secondary members to hidden. Upgrade the Helm chart with the `mongodb.standbyTool.mode` set to `standby`.
+First, promote the primary cluster's MongoDB hidden members to secondary members and demote the standby cluster's MongoDB secondary members to hidden. Upgrade the Helm chart with the `mongodb.standbyTool.mode` set to `standby`. To do that we need to delete the `mongodb-standby-tool` job and upgrade the Helm chart which will create a new job.
 
 ```bash
+kubectl -n plgd delete job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}')
 helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=standby hub plgd/plgd-hub
 ```
 
 Next, delete the `mongodb-standby-tool` job and resume it to configure the MongoDB replica set.
 
 ```bash
-kubectl -n plgd delete job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}')
 kubectl -n plgd patch job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}') --type=strategic --patch '{"spec":{"suspend":false}}'
 ```
 
-The final step is to run plgd pods on the standby cluster. Set the `global.standby` flag to `true` and upgrade the Helm chart.
+The final step is to run plgd pods on the standby cluster. Set the `global.standby` flag to `true`, disable NATs via `nats.enabled=false`  and upgrade the Helm chart.
 
 ```bash
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=true hub plgd/plgd-hub
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=true dps plgd/plgd-dps
+helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=standby --set global.standby=true --set nats.enabled=false hub plgd/plgd-hub
+helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=standby --set global.standby=true --set nats.enabled=false dps plgd/plgd-dps
 ```
 
 #### Turn On plgd Pods on the Primary Cluster
 
-When the standby cluster is ready for devices, switch back to the primary cluster. Set the `global.standby` flag to `false` and upgrade the Helm chart.
+When the standby cluster is ready for devices, switch back to the primary cluster. Set the `global.standby` flag to `false`, enable NATs via `nats.enabled=true` and upgrade the Helm chart.
 
 ```bash
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=false hub plgd/plgd-hub
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=false dps plgd/plgd-dps
+helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=false --set nats.enabled=true hub plgd/plgd-hub
+helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=false --set nats.enabled=true dps plgd/plgd-dps
 ```
 
 After rotating the device provisioning endpoints, the devices will connect to the primary cluster.
