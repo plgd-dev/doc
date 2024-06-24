@@ -1,19 +1,21 @@
 ---
+
 title: 'Disaster Recovery via Replica Set'
 description: 'How to perform disaster recovery with a Replica Set?'
 date: '2024-06-17'
 categories: [architecture, d2c, provisioning, disaster-recovery]
 keywords: [architecture, d2c, provisioning, disaster-recovery]
 weight: 15
+
 ---
 
-The plgd-hub Helm charts support disaster recovery via a MongoDB replica set because the source of truth is stored in the MongoDB database. It is required that devices have configured **device provisioning endpoints** for both clusters' device provisioning services. In this tutorial, we have two MicroK8s clusters: primary and standby. Each of them uses three root CA certificates:
+The plgd-hub Helm charts support disaster recovery via a MongoDB replica set, as the source of truth is stored in the MongoDB database. Devices need to have configured **device provisioning endpoints** for both clusters' device provisioning services. In this tutorial, we have two MicroK8s clusters: primary and standby. Each cluster uses three root CA certificates:
 
 - `external CA certificate pair`: Used for public APIs (CoAP, HTTPS, gRPC) and is the same for both clusters.
 - `internal CA certificate pair`: Used for plgd services to communicate with each other, MongoDB, and NATs. Each cluster has its own internal CA certificate.
 - `storage CA certificate pair`: Used for MongoDB. Each cluster has its own storage CA certificate.
 
-We also use an `authorization CA certificate` to communicate with the OAuth2 authorization server. In this tutorial, `mock-oauth-server` and its certificate are signed by the `external CA certificate pair`. Thus, we have only one `authorization CA certificate` for both clusters, which is the `external CA certificate`.
+We also use an `authorization CA certificate` to communicate with the OAuth2 authorization server. In this tutorial, `mock-oauth-server` and its certificate are signed by the `external CA certificate pair`. Therefore, we have only one `authorization CA certificate` for both clusters, which is the `external CA certificate`.
 
 The goal is to ensure that only MongoDBs from the primary and standby clusters can communicate with each other, while plgd services can only connect to the MongoDB in their respective clusters. All APIs will be available on the root domain `primary.plgd.cloud` for the primary cluster and `standby.plgd.cloud` for the standby cluster. Additionally, MongoDB members are exposed via the LoadBalancer service type, and each member needs its own DNS name.
 
@@ -27,8 +29,7 @@ The goal is to ensure that only MongoDBs from the primary and standby clusters c
 
 The `mongodb.primary.plgd.cloud` is used for external access to the MongoDB replica set for the standby cluster. This DNS record is an alias for all members of the primary cluster.
 
-This DNS needs to be resolved to the external IP address of the LoadBalancer. The external IP address of the LoadBalancer is used to connect to the MongoDB replica set from the other cluster. For clouds, you can use the [external-dns](https://github.com/kubernetes-sigs/external-dns/) tool to create DNS records in AWS Route53 / Google Cloud DNS / Azure DNS.
-In this tutorial, we show how to get the IPs of MongoDB services, and we will set them manually in /etc/hosts, then restart the dnsmasq daemon to load these changes on the computer with IP 192.168.1.1.
+This DNS needs to be resolved to the external IP address of the LoadBalancer. The external IP address of the LoadBalancer is used to connect to the MongoDB replica set from the other cluster. For cloud environments, you can use the [external-dns](https://github.com/kubernetes-sigs/external-dns/) tool to create DNS records in AWS Route53, Google Cloud DNS, or Azure DNS. In this tutorial, we will show how to get the IPs of MongoDB services and manually set them in /etc/hosts. Then, we will restart the dnsmasq daemon to load these changes on a computer with the IP 192.168.1.1.
 
 {{< warning >}}
 It is also recommended to set up a firewall between clusters with source IP address filtering to mitigate DDOS attacks on MongoDB. The default port for MongoDB is 27017. Alternatively, use a VPN to interconnect clusters.
@@ -38,7 +39,7 @@ It is also recommended to set up a firewall between clusters with source IP addr
 
 ### MicroK8s Prerequisites
 
-The following addons are expected to be enabled on both clusters, with **Kubernetes v1.24+** installed.
+The following addons should be enabled on both clusters, with **Kubernetes v1.24+** installed:
 
 ```yaml
 addons:
@@ -53,14 +54,14 @@ addons:
     metallb              # (core) Loadbalancer for your Kubernetes cluster
 ```
 
-The [dns](https://microk8s.io/docs/addon-dns) addon is configured to use a DNS server that hosts all records for `primary.plgd.cloud` and `standby.plgd.cloud` domains. To configure DNS in MicroK8s, you can use the following command:
+The [dns](https://microk8s.io/docs/addon-dns) addon is configured to use a DNS server that hosts all records for the `primary.plgd.cloud` and `standby.plgd.cloud` domains. To configure DNS in MicroK8s, you can use the following commands:
 
 ```bash
 microk8s disable dns
 microk8s enable dns:192.168.1.1
 ```
 
-For [metallb](https://microk8s.io/docs/addon-metallb), we need to set up the IP address pool for the LoadBalancer service type. The IP address pool needs to be accessible from the network where the MicroK8s is running. It is important that the IP address is not used by any other device in the network and that the DHCP server is not assigning this IP address to any device.
+For [metallb](https://microk8s.io/docs/addon-metallb), we need to set up the IP address pool for the LoadBalancer service type. The IP address pool needs to be accessible from the network where MicroK8s is running. Ensure the IP address is not used by any other device in the network and that the DHCP server is not assigning this IP address to any device.
 
 Example for the primary cluster:
 
@@ -78,7 +79,7 @@ microk8s enable metallb:192.168.1.220-192.168.1.239
 
 ### Creating Certificates
 
-To create certificates, you can use the cert-tool Docker image to generate root CA certificates for the services.
+To create certificates, you can use the `cert-tool` Docker image to generate root CA certificates for the services.
 
 1. Create the external CA certificate pair (same for both clusters):
 
@@ -140,13 +141,13 @@ To create certificates, you can use the cert-tool Docker image to generate root 
         --cert.subject.cn=standby.storage.root.ca --cert.validFor=876000h
    ```
 
-### Preparing Device Provisioning Service dependencies
+### Preparing Device Provisioning Service Dependencies
 
-The Device Provisioning Service (DPS) requires a certificate for the manufacturer. The certificate is used to authenticate the manufacturer when enrolling devices which need to stored in the file `.tmp/certs/manufacturer/tls.crt`.
+The Device Provisioning Service (DPS) requires a certificate for the manufacturer. This certificate is used to authenticate the manufacturer when enrolling devices, and it needs to be stored in the file `.tmp/certs/manufacturer/tls.crt`.
 
-To download proprietary device provisioning service docker image, you need to have a token for the GitHub Container Registry. The token need to stored in the file `.tmp/tokens/plgd-docker-auth-token.txt`.
+To download the proprietary device provisioning service Docker image, you need to have a token for the GitHub Container Registry. This token needs to be stored in the file `.tmp/tokens/plgd-docker-auth-token.txt`.
 
-### Setting up cert-manager on the Primary Cluster
+### Setting Up cert-manager on the Primary Cluster
 
 Ensure that you have cert-manager installed.
 
@@ -216,7 +217,7 @@ Ensure that you have cert-manager installed.
    EOF
    ```
 
-### Setting up cert-manager on the Standby Cluster
+### Setting Up cert-manager on the Standby Cluster
 
 Ensure that you have cert-manager installed on the standby cluster as well.
 
@@ -286,7 +287,7 @@ Ensure that you have cert-manager installed on the standby cluster as well.
    EOF
    ```
 
-### Deploy plgd on Primary Cluster
+### Deploy plgd on the Primary Cluster
 
 The primary cluster will deploy the Hub with all APIs exposed on the `primary.plgd.cloud` domain. The CoAP gateway listens on NodePort `15684`, and the device provisioning service listens on NodePort `5684`. The MongoDB replica set is exposed via a LoadBalancer service type, requiring a client certificate (mTLS) to connect to MongoDB.
 
@@ -442,9 +443,9 @@ sudo systemctl restart dnsmasq
 
 After some time for the pods to start, you can access the Hub at `https://primary.plgd.cloud`.
 
-### Deploy plgd on Standby Cluster
+### Deploy plgd on the Standby Cluster
 
-Deploying plgd to the standby cluster is similar to deploying it to the primary cluster. The differences are that the domain is `standby.plgd.cloud`, different internal and storage certificates are used, the standby flag is set to `true`, NATs is disabled and MongoDB is configured to use the master DB at `mongodb.primary.plgd.cloud`, and the `mongodb-standby-tool` job is enabled to configure the MongoDB replica set.
+Deploying plgd to the standby cluster is similar to deploying it to the primary cluster. The differences are that the domain is `standby.plgd.cloud`, different internal and storage certificates are used, the standby flag is set to `true`, NATs is disabled, and MongoDB is configured to use the master DB at `mongodb.primary.plgd.cloud`. Additionally, the `mongodb-standby-tool` job is enabled to configure the MongoDB replica set.
 
 ```bash
 # Set variables
@@ -621,7 +622,7 @@ When the primary cluster is down, you need to switch to the standby cluster.
 
 #### Promote the Standby Cluster
 
-First, promote the hidden members to secondary members. To do this, upgrade the Helm chart with the `mongodb.standbyTool.mode` set to `active`. The active mode reconfigures the MongoDB replica set, promoting hidden members to secondary members and demoting the previous members to hidden. To do that we need to delete the `mongodb-standby-tool` job and upgrade the Helm chart which will create a new job.
+First, promote the hidden members to secondary members. To do this, upgrade the Helm chart with the `mongodb.standbyTool.mode` set to `active`. The active mode reconfigures the MongoDB replica set, promoting hidden members to secondary members and demoting the previous members to hidden. To do this, delete the `mongodb-standby-tool` job and upgrade the Helm chart, which will create a new job.
 
 ```bash
 kubectl -n plgd delete job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}')
@@ -634,7 +635,7 @@ Next, resume the job to configure the MongoDB replica set.
 kubectl -n plgd patch job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}') --type=strategic --patch '{"spec":{"suspend":false}}'
 ```
 
-The final step is to run plgd pods on the standby cluster. Set the `global.standby` flag to `false`, enable NATs via `nats.enabled=true` and upgrade the Helm chart.
+The final step is to run plgd pods on the standby cluster. Set the `global.standby` flag to `false`, enable NATs via `nats.enabled=true`, and upgrade the Helm chart.
 
 ```bash
 helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=active --set global.standby=false --set nats.enabled=true hub plgd/plgd-hub
@@ -645,7 +646,7 @@ After rotating the device provisioning endpoints, the devices will connect to th
 
 #### Turn Off plgd Pods on the Primary Cluster
 
-When the primary cluster is back up, set the `global.standby` flag to `true`, disable NATs via `nats.enabled=false` and upgrade the Helm chart.
+When the primary cluster is back up, set the `global.standby` flag to `true`, disable NATs via `nats.enabled=false`, and upgrade the Helm chart.
 
 ```bash
 helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=true --set nats.enabled=false hub plgd/plgd-hub
@@ -658,20 +659,20 @@ When the primary cluster is ready for devices, switch back to the primary cluste
 
 #### Demote the Standby Cluster
 
-First, promote the primary cluster's MongoDB hidden members to secondary members and demote the standby cluster's MongoDB secondary members to hidden. Upgrade the Helm chart with the `mongodb.standbyTool.mode` set to `standby`. To do that we need to delete the `mongodb-standby-tool` job and upgrade the Helm chart which will create a new job.
+First, promote the primary cluster's MongoDB hidden members to secondary members and demote the standby cluster's MongoDB secondary members to hidden. Upgrade the Helm chart with the `mongodb.standbyTool.mode` set to `standby`. To do this, delete the `mongodb-standby-tool` job and upgrade the Helm chart, which will create a new job.
 
 ```bash
 kubectl -n plgd delete job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}')
 helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=standby hub plgd/plgd-hub
 ```
 
-Next, delete the `mongodb-standby-tool` job and resume it to configure the MongoDB replica set.
+Next, patch the `mongodb-standby-tool` job to resume it and configure the MongoDB replica set.
 
 ```bash
 kubectl -n plgd patch job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}') --type=strategic --patch '{"spec":{"suspend":false}}'
 ```
 
-The final step is to run plgd pods on the standby cluster. Set the `global.standby` flag to `true`, disable NATs via `nats.enabled=false`  and upgrade the Helm chart.
+The final step is to run plgd pods on the standby cluster. Set the `global.standby` flag to `true`, disable NATs via `nats.enabled=false`, and upgrade the Helm chart.
 
 ```bash
 helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=standby --set global.standby=true --set nats.enabled=false hub plgd/plgd-hub
@@ -680,7 +681,7 @@ helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyT
 
 #### Turn On plgd Pods on the Primary Cluster
 
-When the standby cluster is ready for devices, switch back to the primary cluster. Set the `global.standby` flag to `false`, enable NATs via `nats.enabled=true` and upgrade the Helm chart.
+When the standby cluster is ready for devices, switch back to the primary cluster. Set the `global.standby` flag to `false`, enable NATs via `nats.enabled=true`, and upgrade the Helm chart.
 
 ```bash
 helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=false --set nats.enabled=true hub plgd/plgd-hub
