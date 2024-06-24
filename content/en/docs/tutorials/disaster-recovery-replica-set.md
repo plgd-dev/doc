@@ -25,9 +25,9 @@ The goal is to ensure that only MongoDBs from the primary and standby clusters c
 | `mongodb-0.primary.plgd.cloud` | `mongodb-0.standby.plgd.cloud` |
 | `mongodb-1.primary.plgd.cloud` | `mongodb-1.standby.plgd.cloud` |
 | `mongodb-2.primary.plgd.cloud` | `mongodb-2.standby.plgd.cloud` |
-| `mongodb.primary.plgd.cloud` | `----` |
+| `mongodb.primary.plgd.cloud` | `mongodb.standby.plgd.cloud` |
 
-The `mongodb.primary.plgd.cloud` is used for external access to the MongoDB replica set for the standby cluster. This DNS record is an alias for all members of the primary cluster.
+The `mongodb.primary.plgd.cloud` and `mongodb.standby.plgd.cloud` are aliases for all members of the primary and standby clusters, respectively. Also the `mongodb.primary.plgd.cloud` is used for external access to the MongoDB replica set for the standby cluster.
 
 This DNS needs to be resolved to the external IP address of the LoadBalancer. The external IP address of the LoadBalancer is used to connect to the MongoDB replica set from the other cluster. For cloud environments, you can use the [external-dns](https://github.com/kubernetes-sigs/external-dns/) tool to create DNS records in AWS Route53, Google Cloud DNS, or Azure DNS. In this tutorial, we will show how to get the IPs of MongoDB services and manually set them in /etc/hosts. Then, we will restart the dnsmasq daemon to load these changes on a computer with the IP 192.168.1.1.
 
@@ -316,6 +316,7 @@ global:
   hubId: "$HUB_ID"
   ownerClaim: "$OWNER_CLAIM"
   standby: $STANDBY
+  mongoUri: "mongodb://mongodb.$DOMAIN:27017/?replicaSet=rs0"
   extraCAPool:
     authorization: |
 $(sed 's/^/      /' $AUTHORIZATION_CA_IN_PEM)
@@ -457,7 +458,7 @@ STANDBY=true
 
 # Read certificate files
 AUTHORIZATION_CA_IN_PEM=.tmp/certs/external/tls.crt
-INTERNAL_CA_IN_PEM=.tmp/primary/certs/internal/tls.crt
+INTERNAL_CA_IN_PEM=.tmp/standby/certs/internal/tls.crt
 EXTERNAL_CA_IN_PEM=.tmp/certs/external/tls.crt
 STORAGE_PRIMARY_CA_IN_PEM=.tmp/primary/certs/storage/tls.crt
 STORAGE_STANDBY_CA_IN_PEM=.tmp/standby/certs/storage/tls.crt
@@ -471,6 +472,7 @@ global:
   hubId: "$HUB_ID"
   ownerClaim: "$OWNER_CLAIM"
   standby: $STANDBY
+  mongoUri: "mongodb://mongodb.$DOMAIN:27017/?replicaSet=rs0"
   extraCAPool:
     authorization: |
 $(sed 's/^/      /' $AUTHORIZATION_CA_IN_PEM)
@@ -498,6 +500,9 @@ mockoauthserver:
       scopes: ['openid']
       useInUi: true
 mongodb:
+  tls:
+    extraDnsNames:
+      - "mongodb.$DOMAIN"
   standbyTool:
     enabled: true
     replicaSet:
@@ -591,9 +596,9 @@ Next, we need to get the IP addresses of the MongoDB members and set them to the
 ```bash
 kubectl -n plgd get services | grep mongodb | grep LoadBalancer | awk '{print $1 ":" $4}'
 echo "
-192.168.1.222 mongodb-0.standby.plgd.cloud
-192.168.1.220 mongodb-1.standby.plgd.cloud
-192.168.1.221 mongodb-2.standby.plgd.cloud
+192.168.1.222 mongodb-0.standby.plgd.cloud mongodb.standby.plgd.cloud
+192.168.1.220 mongodb-1.standby.plgd.cloud mongodb.standby.plgd.cloud
+192.168.1.221 mongodb-2.standby.plgd.cloud mongodb.standby.plgd.cloud
 " | sudo tee -a /etc/hosts
 sudo systemctl restart dnsmasq
 ```
