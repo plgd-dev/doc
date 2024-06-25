@@ -19,13 +19,13 @@ We also use an `authorization CA certificate` to communicate with the OAuth2 aut
 
 The goal is to ensure that only MongoDBs from the primary and standby clusters can communicate with each other, while plgd services can only connect to the MongoDB in their respective clusters. All APIs will be available on the root domain `primary.plgd.cloud` for the primary cluster and `standby.plgd.cloud` for the standby cluster. Additionally, MongoDB members are exposed via the LoadBalancer service type, and each member needs its own DNS name.
 
-| For the primary cluster we have | For the standby cluster we have |
-| --- | --- |
-| `primary.plgd.cloud` | `standby.plgd.cloud` |
-| `mongodb-0.primary.plgd.cloud` | `mongodb-0.standby.plgd.cloud` |
-| `mongodb-1.primary.plgd.cloud` | `mongodb-1.standby.plgd.cloud` |
-| `mongodb-2.primary.plgd.cloud` | `mongodb-2.standby.plgd.cloud` |
-| `mongodb.primary.plgd.cloud` | `mongodb.standby.plgd.cloud` |
+| For the primary cluster we have | For the standby cluster we have | Purpose |
+| --- | --- | --- |
+| `primary.plgd.cloud` | `standby.plgd.cloud` | Public access to the cluster |
+| `mongodb-0.primary.plgd.cloud` | `mongodb-0.standby.plgd.cloud` | The MongoDB member |
+| `mongodb-1.primary.plgd.cloud` | `mongodb-1.standby.plgd.cloud` | The MongoDB member |
+| `mongodb-2.primary.plgd.cloud` | `mongodb-2.standby.plgd.cloud` | The MongoDB member |
+| `mongodb.primary.plgd.cloud` | `mongodb.standby.plgd.cloud` | Alias for all MongoDB members |
 
 The `mongodb.primary.plgd.cloud` and `mongodb.standby.plgd.cloud` are aliases for all members of the primary and standby clusters, respectively. Also, the `mongodb.primary.plgd.cloud` is used for external access to the MongoDB replica set for the standby cluster.
 
