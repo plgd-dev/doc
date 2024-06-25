@@ -9,7 +9,7 @@ weight: 15
 
 ---
 
-The plgd-hub Helm charts support disaster recovery via a MongoDB replica set, as the source of truth is stored in the MongoDB database. Devices need to have configured **device provisioning endpoints** for both clusters' device provisioning services. In this tutorial, we have two MicroK8s clusters: primary and standby. Each cluster uses three root CA certificates:
+The plgd-hub Helm charts support disaster recovery via a MongoDB replica set, as the source of truth is stored in the MongoDB database. In this tutorial, we have two MicroK8s clusters: primary and standby. Devices need to have configured **device provisioning endpoints** for both clusters' device provisioning services(`coaps+tcp://primary.plgd.cloud:5684` and `coaps+tcp://standby.plgd.cloud:5684`). Each cluster uses three root CA certificates:
 
 - `external CA certificate pair`: Used for public APIs (CoAP, HTTPS, gRPC) and is the same for both clusters.
 - `internal CA certificate pair`: Used for plgd services to communicate with each other, MongoDB, and NATs. Each cluster has its own internal CA certificate.
@@ -27,7 +27,7 @@ The goal is to ensure that only MongoDBs from the primary and standby clusters c
 | `mongodb-2.primary.plgd.cloud` | `mongodb-2.standby.plgd.cloud` |
 | `mongodb.primary.plgd.cloud` | `mongodb.standby.plgd.cloud` |
 
-The `mongodb.primary.plgd.cloud` and `mongodb.standby.plgd.cloud` are aliases for all members of the primary and standby clusters, respectively. Also the `mongodb.primary.plgd.cloud` is used for external access to the MongoDB replica set for the standby cluster.
+The `mongodb.primary.plgd.cloud` and `mongodb.standby.plgd.cloud` are aliases for all members of the primary and standby clusters, respectively. Also, the `mongodb.primary.plgd.cloud` is used for external access to the MongoDB replica set for the standby cluster.
 
 This DNS needs to be resolved to the external IP address of the LoadBalancer. The external IP address of the LoadBalancer is used to connect to the MongoDB replica set from the other cluster. For cloud environments, you can use the [external-dns](https://github.com/kubernetes-sigs/external-dns/) tool to create DNS records in AWS Route53, Google Cloud DNS, or Azure DNS. In this tutorial, we will show how to get the IPs of MongoDB services and manually set them in /etc/hosts. Then, we will restart the dnsmasq daemon to load these changes on a computer with the IP 192.168.1.1.
 
@@ -633,7 +633,7 @@ When the primary cluster is down, you need to switch to the standby cluster.
 
 #### Promote the Standby Cluster
 
-First, promote the hidden members to secondary members. To do this, upgrade the Helm chart with the `mongodb.standbyTool.mode` set to `active`. The active mode reconfigures the MongoDB replica set, promoting hidden members to secondary members and demoting the previous members to hidden. To do this, delete the `mongodb-standby-tool` job and upgrade the Helm chart, which will create a new job.
+First, promote the hidden members to secondary members by upgrading the Helm chart with the `mongodb.standbyTool.mode` set to `active`. The active mode reconfigures the MongoDB replica set, promoting hidden members to secondary members and demoting the previous members to hidden. Begin by deleting the `mongodb-standby-tool` job, then upgrade the Helm chart to initiate a new job.
 
 ```bash
 kubectl -n plgd delete job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}')
