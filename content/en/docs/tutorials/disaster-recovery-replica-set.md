@@ -624,7 +624,7 @@ Now the job will create the pod and configure the MongoDB replica set.
 ## Disaster Recovery
 
 {{< note >}}
-These steps could be used in case of planned maintenance.
+These steps can be used in case of planned maintenance.
 {{< /note >}}
 
 ### How to Switch to the Standby Cluster
