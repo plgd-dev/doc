@@ -9,7 +9,7 @@ weight: 15
 
 ---
 
-The plgd-hub Helm charts support disaster recovery via a MongoDB replica set, as the source of truth is stored in the MongoDB database. In this tutorial, we have two MicroK8s clusters: primary and standby. Devices need to have configured **device provisioning endpoints** for both clusters' device provisioning services(`coaps+tcp://primary.plgd.cloud:5684` and `coaps+tcp://standby.plgd.cloud:5684`). Each cluster uses three root CA certificates:
+The plgd-hub Helm charts support disaster recovery via a MongoDB replica set, as the source of truth is stored in the MongoDB database. In this tutorial, we have two MicroK8s clusters: primary and standby. Devices need to have [configured device provisioning endpoints](/docs/services/device-provisioning-service/client-library/#set-dps-endpoint) for both clusters' device provisioning services(`coaps+tcp://primary.plgd.cloud:5684` and `coaps+tcp://standby.plgd.cloud:5684`). Each cluster uses three root CA certificates:
 
 - `external CA certificate pair`: Used for public APIs (CoAP, HTTPS, gRPC) and is the same for both clusters.
 - `internal CA certificate pair`: Used for plgd services to communicate with each other, MongoDB, and NATs. Each cluster has its own internal CA certificate.
