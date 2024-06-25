@@ -595,6 +595,12 @@ Next, we need to get the IP addresses of the MongoDB members and set them to the
 
 ```bash
 kubectl -n plgd get services | grep mongodb | grep LoadBalancer | awk '{print $1 ":" $4}'
+mongodb-0-external:192.168.1.222
+mongodb-1-external:192.168.1.220
+mongodb-2-external:192.168.1.221
+```
+
+```bash
 echo "
 192.168.1.222 mongodb-0.standby.plgd.cloud mongodb.standby.plgd.cloud
 192.168.1.220 mongodb-1.standby.plgd.cloud mongodb.standby.plgd.cloud
