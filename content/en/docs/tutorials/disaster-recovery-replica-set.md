@@ -446,7 +446,7 @@ After some time for the pods to start, you can access the Hub at `https://primar
 
 ### Deploy plgd on the Standby Cluster
 
-Deploying plgd to the standby cluster is similar to deploying it to the primary cluster. The differences are that the domain is `standby.plgd.cloud`, different internal and storage certificates are used, the standby flag is set to `true`, NATs is disabled, and MongoDB is configured to use the master DB at `mongodb.primary.plgd.cloud`. Additionally, the `mongodb-standby-tool` job is enabled to configure the MongoDB replica set.
+Deploying plgd to the standby cluster is similar to deploying it to the primary cluster. The differences are that the domain is `standby.plgd.cloud`, different internal and storage certificates are used, the standby flag is set to `true`, NATs is disabled, and MongoDB is configured to use the master DB at `mongodb.primary.plgd.cloud`. Additionally, the [mongodb-standby-tool](/docs/configuration/mongodb-standby-tool) job is enabled to configure the MongoDB replica set.
 
 ```bash
 # Set variables
@@ -613,7 +613,7 @@ sudo systemctl restart dnsmasq
 It is important that the `global.standby` flag is set to `true`, which means that plgd pods are not running on the standby cluster.
 {{< /note >}}
 
-Once the MongoDB pods are running, we need to run the `mongodb-standby-tool` job to configure the MongoDB replica set. This configuration demotes the secondary members to hidden members.
+Once the MongoDB pods are running, we need to run the [mongodb-standby-tool](/docs/configuration/mongodb-standby-tool) job to configure the MongoDB replica set. This configuration demotes the secondary members to hidden members.
 
 ```bash
 kubectl -n plgd patch job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}') --type=strategic --patch '{"spec":{"suspend":false}}'
@@ -633,7 +633,7 @@ When the primary cluster is down, you need to switch to the standby cluster.
 
 #### Promote the Standby Cluster
 
-First, promote the hidden members to secondary members by upgrading the Helm chart with the `mongodb.standbyTool.mode` set to `active`. The active mode reconfigures the MongoDB replica set, promoting hidden members to secondary members and demoting the previous members to hidden. Begin by deleting the `mongodb-standby-tool` job, then upgrade the Helm chart to initiate a new job.
+First, promote the hidden members to secondary members by upgrading the Helm chart with the `mongodb.standbyTool.mode` set to `active`. The active mode reconfigures the MongoDB replica set, promoting hidden members to secondary members and demoting the previous members to hidden. Begin by deleting the [mongodb-standby-tool](/docs/configuration/mongodb-standby-tool) job, then upgrade the Helm chart to initiate a new job.
 
 ```bash
 kubectl -n plgd delete job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}')
@@ -670,14 +670,14 @@ When the primary cluster is ready for devices, switch back to the primary cluste
 
 #### Demote the Standby Cluster
 
-First, promote the primary cluster's MongoDB hidden members to secondary members and demote the standby cluster's MongoDB secondary members to hidden. Upgrade the Helm chart with the `mongodb.standbyTool.mode` set to `standby`. To do this, delete the `mongodb-standby-tool` job and upgrade the Helm chart, which will create a new job.
+First, promote the primary cluster's MongoDB hidden members to secondary members and demote the standby cluster's MongoDB secondary members to hidden. Upgrade the Helm chart with the `mongodb.standbyTool.mode` set to `standby`. To do this, delete the [mongodb-standby-tool](/docs/configuration/mongodb-standby-tool) job and upgrade the Helm chart, which will create a new job.
 
 ```bash
 kubectl -n plgd delete job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}')
 helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=standby hub plgd/plgd-hub
 ```
 
-Next, patch the `mongodb-standby-tool` job to resume it and configure the MongoDB replica set.
+Next, patch the [mongodb-standby-tool](/docs/configuration/mongodb-standby-tool) job to resume it and configure the MongoDB replica set.
 
 ```bash
 kubectl -n plgd patch job/$(kubectl -n plgd get jobs | grep mongodb-standby-tool | awk '{print $1}') --type=strategic --patch '{"spec":{"suspend":false}}'
