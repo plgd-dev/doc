@@ -43,7 +43,7 @@ When the tool is started, it is in standby mode by default. In this mode, all me
 | Property | Type | Description | Default |
 |----------|------|-------------|---------|
 | `replicaSet.forceUpdate` | bool | `Update the replica set configuration with the force flag. More info [here](https://www.mongodb.com/docs/manual/reference/method/rs.reconfig/#std-label-rs-reconfig-method-force).` | `false` |
-| `replicaSet.maxReadyWaits` | int | `Set the maximum number of retries for members to be ready.` | `10` |
+| `replicaSet.maxWaitsForReady` | int | `Set the maximum number of retries for members to be ready.` | `30` |
 | `replicaSet.standby.members` | []string | `List of the MongoDB members in the replica set which are used as hidden (mode == "standby") or secondary (mode == "active") members. All other members are reconfigured to the opposite.` | `[]` |
 | `replicaSet.standby.delays` | string | `Set the delay for syncing the hidden members with the secondary/primary members.` | `6m` |
 | `replicaSet.secondary.priority` | int | `Used to configure the secondary members' priority.` | `10` |
