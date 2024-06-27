@@ -47,11 +47,12 @@ used by plgd hub services. For including custom authorization CA pool into autho
 
 ```yaml
 global:
-  # -- Custom CA certificate for authorization endpoint in PEM format
-  authorizationCAPool: |-
-    -----BEGIN CERTIFICATE-----
-    your custom authorization CA pool in PEM format
-    -----END CERTIFICATE-----
+  extraCAPool:
+    # -- Custom CA certificate for authorization endpoint in PEM format
+    authorization: |-
+      -----BEGIN CERTIFICATE-----
+      your custom authorization CA pool in PEM format
+      -----END CERTIFICATE-----
 ```
 
 {{< warning >}}
