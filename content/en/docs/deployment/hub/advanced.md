@@ -40,6 +40,19 @@ helm upgrade -i -n plgd --create-namespace -f withMock.yaml hub plgd/plgd-hub
 
 To configure the OAuth server, it is necessary to enable a redirect URL that permits any redirect within the domain for the web client. The web client utilizes redirects to display pages within the user interface (UI). For instance, when accessing `https://example.com/devices/{deviceId}` in the UI, the OAuth flow utilizes the opened URL as the redirect_uri. Therefore, it is essential to authorize `https://example.com/*` as a valid redirect URL to enable access to any subpage within the UI.
 
+## Enable OAuth Service Client in m2m-oauth-server
+
+To enable the OAuth service client for the m2m-oauth-server, provide the secret as follows:
+
+```yaml
+global:
+  m2mOAuthServer:
+    clientServiceSecret: |-
+      <OAUTH_CLIENT_SECRET>
+```
+
+This configuration creates an OAuth client with the ID `service`, as defined in the [helm values file](https://github.com/plgd-dev/hub/blob/fcf769cd3fe4b2e7a8e49fc27cc3c20ccb8b0153/charts/plgd-hub/values.yaml#L2630).
+
 ## Custom Authorization CA pool
 
 By default, the plgd hub Helm chart expect that certificate used by OAuth 2.0 server is signed by the same CA as rest of certificates
