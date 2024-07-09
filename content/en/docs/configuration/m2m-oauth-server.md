@@ -44,7 +44,35 @@ HTTP API of the OAuth Server service as defined [here](https://github.com/plgd-d
 | `apis.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.http.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
-| `oauthSigner.clients[].secret` | string | `client secret which is used by oauth clients. It can be empty when .jwtPrivateKey is set` | `""` |
+### OAuth Signer
+
+Signer configuration to access tokens of OAuth provider for services.
+
+| Property | Type | Description | Default |
+| ---------- | -------- | -------------- | ------- |
+| `oauthSigner.privateKeyFile` | string | `File path to a private ECDSA key in PEM format required for access token signing.` | `""` |
+| `oauthSigner.domain` | string | `Domain address <host>:<port> for OAuth APIs.` | `""` 
+| `oauthSigner.ownerClaim` | string | `Claim name in the token which contains the owner of the token.` | `"sub"` |
+| `oauthSigner.deviceIDClaim` | string | `Claim name in the token which contains the deviceID of the token.` | `""` |
+| `oauthSigner.clients[].id` | string | `client id which is used by oauth clients.` | `"test"` |
+| `oauthSigner.clients[].secret` | string | `client secret which is used by oauth clients. Can be empty when .jwtPrivateKey is set` | `""` |
+| `oauthSigner.clients[].accessTokenLifetime` | string | `validity of generated access token lifetime. 0s means forever.` | `"0s"` |
+| `oauthSigner.clients[].allowedGrantTypes` | []string | `grant types which are allowed for the client. Only 'client_credentials' is supported.` | `[ "client_credentials" ]` |
+| `oauthSigner.clients[].allowedAudiences` | []string | `audiences which are allowed for the client.` | `[]` |
+| `oauthSigner.clients[].allowedScopes` | []string | `scopes which are allowed for the client.` | `[]` |
+| `oauthSigner.clients[].insertTokenClaims` | object | `claims which are added to the token.` | `{}` |
+| `oauthSigner.clients[].jwtPrivateKey.enabled` | bool | `allow JWT private key for client` | `false` |
+| `oauthSigner.clients[].jwtPrivateKey.authorization.endpoints[].authority` | string | `address to OAuth authority` | `""` |
+| `oauthSigner.clients[].jwtPrivateKey.authorization.endpoints[].maxIdleConns` | int | `It controls the maximum number of idle (keep-alive) connections across all hosts. Zero means no limit.` | `16` |
+| `oauthSigner.clients[].jwtPrivateKey.authorization.endpoints[].maxConnsPerHost` | int | `It optionally limits the total number of connections per host, including connections in the dialing, active, and idle states. On limit violation, dials will block. Zero means no limit.` | `32` |
+| `oauthSigner.clients[].jwtPrivateKey.authorization.endpoints[].maxIdleConnsPerHost` | int | `If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used.` | `16` |
+| `oauthSigner.clients[].jwtPrivateKey.authorization.endpoints[].idleConnTimeout` | string | `The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit.` | `30s` |
+| `oauthSigner.clients[].jwtPrivateKey.authorization.endpoints[].timeout` | string | `A time limit for requests made by this Client. A Timeout of zero means no timeout.` | `10s` |
+| `oauthSigner.clients[].jwtPrivateKey.authorization.endpoints[].tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `oauthSigner.clients[].jwtPrivateKey.authorization.endpoints[].tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
+| `oauthSigner.clients[].jwtPrivateKey.authorization.endpoints[].tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
+| `oauthSigner.clients[].jwtPrivateKey.authorization.endpoints[].tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+
 {{< note >}}
 
 Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
