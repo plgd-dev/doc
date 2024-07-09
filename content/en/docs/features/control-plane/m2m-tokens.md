@@ -7,7 +7,7 @@ keywords: [oauth, m2m, token]
 weight: 70
 ---
 
-The Machine to Machine OAuth Server (M2M OAuth Server) is used for generating API tokens to access plgd services by other services. These tokens are acquired via the client credentials flow with the client assertion type JWT or secret in the case of service. The tokens are exclusively used with plgd services.
+The Machine to Machine OAuth Server (M2M OAuth Server) is used to generate API tokens to access the plgd services by other services. These tokens are acquired via the client credentials flow with the client assertion type JWT or secret in the case of service. The tokens are exclusively used with plgd services.
 
 ## Why Use M2M Tokens?
 
