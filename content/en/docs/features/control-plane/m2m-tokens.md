@@ -23,7 +23,7 @@ Machine to Machine tokens are crucial for secure and efficient communication bet
 In plgd, M2M tokens can be used for various purposes to enhance the functionality and security of your services. Here are some practical applications:
 
 - **Device Provisioning**: M2M tokens are used for [automatic device provisioning](/docs/features/secured-onboarding-devices/secured-onboarding-devices/#automatic-device-provisioning), allowing you to onboard devices securely and efficiently.
-- **Device Configuration**: After a device has been onboarded, M2M tokens enable you to [preconfigure devices](TODO) with the necessary settings.
+- **Device Pre-Configuration**: After a device has been onboarded, M2M tokens enable you to [pre-configure devices](TODO) with the necessary settings.
 - **Service Access**: If you have a service that needs to access plgd services, M2M tokens ensure secure and authorized interactions.
 
 To start using M2M tokens, follow these steps:
