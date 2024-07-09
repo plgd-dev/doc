@@ -7,7 +7,7 @@ keywords: [configuration]
 weight: 10
 ---
 
-Machine to Machine OAuth Server(M2M OAuth Server) is used for generate API tokens to access the plgd services by another services. These tokens is acquired via client credentials flow with client assertion type JWT or secret in case of service.
+Machine to Machine OAuth Server (M2M OAuth Server) is used to generate API tokens to access the plgd services by other services. These tokens are acquired via client credentials flow with client assertion type JWT or secret in the case of service.
 
 ## Docker Image
 
