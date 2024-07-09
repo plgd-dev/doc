@@ -44,6 +44,7 @@ HTTP API of the OAuth Server service as defined [here](https://github.com/plgd-d
 | `apis.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.http.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
+
 ### OAuth Signer
 
 Signer configuration to access tokens of OAuth provider for services.
@@ -51,7 +52,7 @@ Signer configuration to access tokens of OAuth provider for services.
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
 | `oauthSigner.privateKeyFile` | string | `File path to a private ECDSA key in PEM format required for access token signing.` | `""` |
-| `oauthSigner.domain` | string | `Domain address <host>:<port> for OAuth APIs.` | `""` 
+| `oauthSigner.domain` | string | `Domain address <host>:<port> for OAuth APIs.` | `""` |
 | `oauthSigner.ownerClaim` | string | `Claim name in the token which contains the owner of the token.` | `"sub"` |
 | `oauthSigner.deviceIDClaim` | string | `Claim name in the token which contains the deviceID of the token.` | `""` |
 | `oauthSigner.clients[].id` | string | `client id which is used by oauth clients.` | `"test"` |
