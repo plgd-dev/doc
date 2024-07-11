@@ -90,6 +90,21 @@ These configurations are for `plgd Dashboard` as described in [here](https://git
 | `ui.webConfiguration.deviceOAuthClient.audience` | string | `Identifier of the API configured in your OAuth provider.` | `""` |
 | `ui.webConfiguration.deviceOAuthClient.scopes` | string array | `List of required scopes.` | `""` |
 | `ui.webConfiguration.deviceOAuthClient.providerName` | string | `Name of provider, which needs to be set to cloud resource during cloud provisioning.` | `"plgd"` |
+| `ui.webConfiguration.visibility.mainSidebar.certificates` | bool | `Show certificates in the main sidebar.` | `true` |
+| `ui.webConfiguration.visibility.mainSidebar.chatRoom` | bool | `Show chat room in the main sidebar.` | `true` |
+| `ui.webConfiguration.visibility.mainSidebar.configuration` | bool | `Show configuration in the main sidebar.` | `true` |
+| `ui.webConfiguration.visibility.mainSidebar.deviceProvisioning` | bool | `Show device provisioning in the main sidebar.` | `true` |
+| `ui.webConfiguration.visibility.mainSidebar.devices` | bool | `Show devices in the main sidebar.` | `true` |
+| `ui.webConfiguration.visibility.mainSidebar.docs` | bool | `Show docs in the main sidebar.` | `true` |
+| `ui.webConfiguration.visibility.mainSidebar.pendingCommands` | bool | `Show pending commands in the main sidebar.` | `true` |
+| `ui.webConfiguration.visibility.mainSidebar.remoteClients` | bool | `Show remote clients in the main sidebar.` | `true` |
+| `ui.webConfiguration.visibility.mainSidebar.snippetService` | bool | `Show snippet service in the main sidebar.` | `true` |
+| `ui.webConfiguration.visibility.mainSidebar.dashboard` | bool | `Show dashboard in the main sidebar.` | `false` |
+| `ui.webConfiguration.visibility.mainSidebar.integrations` | bool | `Show integrations in the main sidebar.` | `false` |
+| `ui.webConfiguration.visibility.mainSidebar.deviceFirmwareUpdate` | bool | `Show device firmware update in the main sidebar.` | `false` |
+| `ui.webConfiguration.visibility.mainSidebar.deviceLogs` | bool | `Show device logs in the main sidebar.` | `false` |
+| `ui.webConfiguration.visibility.mainSidebar.apiTokens` | bool | `Show api tokens in the main sidebar.` | `false` |
+| `ui.webConfiguration.visibility.mainSidebar.schemaHub` | bool | `Show schema hub in the main sidebar.` | `false` |
 
 {{< note >}}
 
