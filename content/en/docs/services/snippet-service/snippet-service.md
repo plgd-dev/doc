@@ -14,13 +14,13 @@ The Snippet Service offers a streamlined solution for managing device configurat
 
 ## Overview
 
-Designed to meet the needs of modern device management, the Snippet Service allows users to define configuration profiles that specify desired device settings. These profiles are applied seamlessly in response to events such as device connections or changes in resources, ensuring consistent and up-to-date configurations across all managed devices.
+Designed to meet the needs of modern device management, the Snippet Service allows users to define configurations that specify desired device settings. These configurations are applied seamlessly in response to changes events in resources.
 
 ## Key Features
 
-- **Automated Configuration Application:** Predefined configuration profiles are automatically applied when triggered by events, ensuring devices are promptly and consistently configured.
+- **Automated Configuration Application:** Predefined configurations are automatically applied when triggered by events, ensuring devices are promptly and consistently configured.
 - **Event-Driven Management:** Configurations are triggered by ResourceChanged events, optimizing device management efficiency.
-- **User-Friendly Interface:** A straightforward user interface simplifies the creation and management of configuration profiles, making it accessible for users of varying technical expertise.
+- **User-Friendly Interface:** A straightforward user interface simplifies the creation and management of configurations, making it accessible for users of varying technical expertise.
 - **Extensible API Support:** Provides both gRPC and HTTP APIs, enabling seamless integration with existing systems and workflows.
 
 The Snippet Service is designed to enhance device management by automating configuration tasks, thereby improving operational efficiency and reliability across diverse device environments.
