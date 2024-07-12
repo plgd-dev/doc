@@ -14,7 +14,7 @@ The Snippet Service offers a streamlined solution for managing device configurat
 
 ## Overview
 
-Designed to meet the needs of modern device management, the Snippet Service allows users to define configurations that specify desired device settings. These configurations are applied seamlessly in response to changes events in resources.
+Designed to meet the needs of modern device management, the Snippet Service allows users to define configurations that specify desired device settings. These configurations are applied seamlessly in response to changes in events in resources.
 
 ## Key Features
 
