@@ -5,7 +5,7 @@ description: 'MongoDB Standby Tool overview'
 date: '2024-06-26'
 categories: [configuration, deployment, disaster recovery]
 keywords: [configuration, mongodb, disaster recovery]
-weight: 11
+weight: 12
 ---
 
 MongoDB Standby Tool is used to reconfigure some of the MongoDB replica set members to be in a hidden and secondary state. For example, you can have a replica set where members are running in multiple regions for disaster recovery purposes.

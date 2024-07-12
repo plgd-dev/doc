@@ -4,14 +4,18 @@ description: 'Running hub on Kubernetes'
 docsOthersDisplay: true
 date: '2021-11-01'
 categories:
-  - deployment
-  - kubernetes
+
+- deployment
+- kubernetes
+
 keywords:
-  - deployment
-  - kubernetes
-  - k8s
-  - helm
-  - chart
+
+- deployment
+- kubernetes
+- k8s
+- helm
+- chart
+
 weight: 10
 isMainSectionPage: true
 ---
