@@ -16,9 +16,9 @@ global:
     url: 'https://plgd.dev/contact/'
 highlighted:
   - name: 'Request a demo'
-    url: '/meetings/team/'
+    url: 'https://plgd.dev/meetings/team/'
 footer:
   - name: 'Terms & Conditions'
-    url: ''
+    url: 'https://plgd.dev/legal/terms-of-use'
   - name: 'Privacy Notice'
-    url: '/legal/privacy-notice'
+    url: 'https://plgd.dev/legal/privacy-notice'
