@@ -1,10 +1,10 @@
 ---
 title: 'Snippet service'
 description: 'Service configuration overview'
-date: '2024-10-12'
+date: '2024-07-12'
 categories: [configuration, deployment]
 keywords: [configuration]
-weight: 11
+weight: 4
 ---
 
 Snippet service is used to automatically update resources in the device when conditions are satisfied or on-demand by the user.

@@ -54,4 +54,4 @@ The Device to Device (D2D) feature enables users to control devices directly fro
 
 Ensure devices are always set up correctly and efficiently with the Snippet Service. Predefined configurations are automatically applied in response to events like changes in resources. This automation minimizes manual intervention, enhances operational reliability, and ensures consistent device settings across your environment.
 
-[Learn more about Automated Device Configuration](/docs/services/snippet-service/)
+[Learn more about Automated Device Configuration](docs/services/snippet-service/snippet-service/)
