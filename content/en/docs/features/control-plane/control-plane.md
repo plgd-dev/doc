@@ -49,3 +49,9 @@ Each command issued is converted into an event and placed in a pending state, aw
 The Device to Device (D2D) feature enables users to control devices directly from their local network. It allows users to access devices without going through the cloud, which is useful for performing maintenance tasks and managing devices conveniently. The D2D feature is built on top of the `plgd d2d client`, which handle communication with the devices.
 
 [Learn more about Device to device](/docs/device-to-device-client/)
+
+## Automated Device Configuration
+
+Ensure devices are always set up correctly and efficiently with the Snippet Service. Predefined configuration profiles are automatically applied in response to events like changes in resources. This automation minimizes manual intervention, enhances operational reliability, and ensures consistent device settings across your environment.
+
+[Learn more about Automated Device Configuration](/docs/services/snippet-service/)
