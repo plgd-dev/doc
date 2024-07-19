@@ -96,6 +96,7 @@ plgd hub uses NATS messaging system as an event bus.
 | `clients.eventBus.nats.tls.keyFile` | string | `File name of private key in PEM format.` | `""` |
 | `clients.eventBus.nats.tls.certFile` | string | `File name of certificate in PEM format.` | `""` |
 | `clients.eventBus.nats.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `clients.eventBus.nats.leadResourceType.enabled` | bool | `If true, subscribe to NATS with lead resource type subject token included.` | `false` |
 
 ### GRPC Gateway Client
 
