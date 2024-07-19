@@ -37,9 +37,9 @@ gRPC API of the Certificate Authority service as defined [here](https://github.c
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `apis.grpc.address` | string | `Listen specification <host>:<port> for grpc client connection.` | `"0.0.0.0:9100"` |
-| `apis.grpc.sendMsgSize` | int32 | `Set the max message size in bytes the server can send. 0 means 2147483647` | `4194304` |
-| `apis.grpc.recvMsgSize` | int32 | `Set the max message size in bytes the server can receive. 0 means 4194304` | `4194304` |
+| `apis.grpc.address` | string | `Listening address in the format <host>:<port> for accepting gRPC client connections.` | `"0.0.0.0:9100"` |
+| `apis.grpc.sendMsgSize` | int32 | `Set the max message size in bytes the server can send. 0 means 2147483647.` | `4194304` |
+| `apis.grpc.recvMsgSize` | int32 | `Set the max message size in bytes the server can receive. 0 means 4194304.` | `4194304` |
 | `apis.grpc.enforcementPolicy.minTime` | string | `The minimum amount of time a client should wait before sending a keepalive ping. Otherwise, the server closes the connection.` | `5s`|
 | `apis.grpc.enforcementPolicy.permitWithoutStream` | bool |  `If true, the server allows keepalive pings even when there are no active streams (RPCs). Otherwise, the server closes the connection.`  | `true` |
 | `apis.grpc.keepAlive.maxConnectionIdle` | string | `A duration for the amount of time after which an idle connection would be closed by sending a GoAway. 0s means infinity.` | `0s` |

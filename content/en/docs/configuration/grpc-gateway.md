@@ -35,9 +35,9 @@ gRPC API of the gRPC Gateway service as defined [here](https://github.com/plgd-d
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `apis.grpc.address` | string | `Listen specification <host>:<port> for grpc client connection.` | `"0.0.0.0:9100"` |
-| `apis.grpc.sendMsgSize` | int32 | `Set the max message size in bytes the server can send. 0 means 2147483647` | `4194304` |
-| `apis.grpc.recvMsgSize` | int32 | `Set the max message size in bytes the server can receive. 0 means 4194304` | `4194304` |
+| `apis.grpc.address` | string | `Listening address in the format <host>:<port> for accepting gRPC client connections.` | `"0.0.0.0:9100"` |
+| `apis.grpc.sendMsgSize` | int32 | `Set the max message size in bytes the server can send. 0 means 2147483647.` | `4194304` |
+| `apis.grpc.recvMsgSize` | int32 | `Set the max message size in bytes the server can receive. 0 means 4194304.` | `4194304` |
 | `apis.grpc.ownerCacheExpiration` | string | `Time limit of how long to keep subscribed to device updates after last use of the given cache item.` | `1m` |
 | `apis.grpc.subscriptionBufferSize` | int | `The maximum buffer size for one events subscription.` | `1000` |
 | `apis.grpc.enforcementPolicy.minTime` | string | `The minimum amount of time a client should wait before sending a keepalive ping. Otherwise, the server closes the connection.` | `5s`|
