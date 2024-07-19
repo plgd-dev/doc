@@ -1,23 +1,23 @@
 ---
-title: 'gRPC Gateway'
+title: 'Snippet service'
 description: 'Service configuration overview'
-date: '2021-10-01'
+date: '2024-07-12'
 categories: [configuration, deployment]
 keywords: [configuration]
-weight: 3
+weight: 4
 ---
 
-gRPC Gateway exposes the client's gRPC API to manage user's devices.
+Snippet service is used to automatically update resources in the device when conditions are satisfied or on-demand by the user.
 
 ## Docker Image
 
 ```bash
-docker pull ghcr.io/plgd-dev/hub/grpc-gateway:latest
+docker pull ghcr.io/plgd-dev/hub/snippet-service:latest
 ```
 
 ## YAML Configuration
 
-A configuration template is available on [grpc-gateway/config.yaml](https://github.com/plgd-dev/hub/blob/main/grpc-gateway/config.yaml).
+A configuration template is available on [snippet-service/config.yaml](https://github.com/plgd-dev/hub/blob/main/snippet-service/config.yaml).
 
 ### Logging
 
@@ -31,15 +31,13 @@ A configuration template is available on [grpc-gateway/config.yaml](https://gith
 
 ### gRPC API
 
-gRPC API of the gRPC Gateway service as defined [here](https://github.com/plgd-dev/hub/blob/main/grpc-gateway/pb/service_grpc.pb.go#L19).
+gRPC API of the Snippet service as defined [here](https://github.com/plgd-dev/hub/blob/main/snippet-service/pb/service.proto).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
 | `apis.grpc.address` | string | `Listening address in the format <host>:<port> for accepting gRPC client connections.` | `"0.0.0.0:9100"` |
 | `apis.grpc.sendMsgSize` | int32 | `Set the max message size in bytes the server can send. 0 means 2147483647.` | `4194304` |
 | `apis.grpc.recvMsgSize` | int32 | `Set the max message size in bytes the server can receive. 0 means 4194304.` | `4194304` |
-| `apis.grpc.ownerCacheExpiration` | string | `Time limit of how long to keep subscribed to device updates after last use of the given cache item.` | `1m` |
-| `apis.grpc.subscriptionBufferSize` | int | `The maximum buffer size for one events subscription.` | `1000` |
 | `apis.grpc.enforcementPolicy.minTime` | string | `The minimum amount of time a client should wait before sending a keepalive ping. Otherwise, the server closes the connection.` | `5s`|
 | `apis.grpc.enforcementPolicy.permitWithoutStream` | bool |  `If true, the server allows keepalive pings even when there are no active streams (RPCs). Otherwise, the server closes the connection.`  | `true` |
 | `apis.grpc.keepAlive.maxConnectionIdle` | string | `A duration for the amount of time after which an idle connection would be closed by sending a GoAway. 0s means infinity.` | `0s` |
@@ -64,28 +62,25 @@ gRPC API of the gRPC Gateway service as defined [here](https://github.com/plgd-d
 | `apis.grpc.authorization.endpoints[].http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.grpc.authorization.endpoints[].http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
 
-### Identity Store Client
+### HTTP API
 
-Client configurations to internally connect to Identity Store service.
+HTTP Snippet service APIs as defined by [swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/plgd-dev/hub/main/snippet-service/pb/service.swagger.json).
+The configurations `apis.http.tls` and `apis.http.authorization` are inherited from the gRPC API.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.identityStore.grpc.address` | string | `Identity Store service address.` | `"127.0.0.1:9100"` |
-| `clients.identityStore.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `clients.identityStore.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `clients.identityStore.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `clients.identityStore.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
-| `clients.identityStore.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
-| `clients.identityStore.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
-| `clients.identityStore.grpc.keepAlive.permitWithoutStream` | bool | `If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent.` | `false` |
+| `apis.http.address` | string | `Listen specification <host>:<port> for http client connection.` | `"0.0.0.0:9101"` |
+| `apis.http.readTimeout` | string | `The maximum duration for reading the entire request, including the body by the server. A zero or negative value means there will be no timeout.` | `8s` |
+| `apis.http.readHeaderTimeout` | string | `The amount of time allowed to read request headers by the server. If readHeaderTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `4s` |
+| `apis.http.writeTimeout` | string | `The maximum duration before the server times out writing of the response. A zero or negative value means there will be no timeout.` | `16s` |
+| `apis.http.idleTimeout` | string | `The maximum amount of time the server waits for the next request when keep-alives are enabled. If idleTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `30s` |
 
 ### Event Bus
 
-plgd hub uses NATS messaging system as a event bus.
+plgd hub uses NATS messaging system as an event bus to be notified about device changes to trigger conditions evaluation.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.eventBus.goPoolSize` | int | `Number of routines to process events in projection.` | `16` |
 | `clients.eventBus.nats.url` | string | `URL to nats messaging system.` | `"nats://localhost:4222"` |
 | `clients.eventBus.nats.pendingLimits.msgLimit` | int | `Limit number of messages in queue. -1 means unlimited` | `524288` |
 | `clients.eventBus.nats.pendingLimits.bytesLimit` | int | `Limit buffer size of queue. -1 means unlimited` | `67108864` |
@@ -94,35 +89,42 @@ plgd hub uses NATS messaging system as a event bus.
 | `clients.eventBus.nats.tls.certFile` | string | `File name of certificate in PEM format.` | `""` |
 | `clients.eventBus.nats.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
 
-### Resource Aggregate Client
+### Storage
 
-Client configurations to internally connect to Resource Aggregate service.
+plgd hub uses MongoDB database as a storage for conditions, configurations and applied configurations.
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.resourceAggregate.grpc.address` | string | `Resource Aggregate service address.` | `"127.0.0.1:9100"` |
+| `clients.storage.cleanUpExpiredUpdates` | string | `Cron expression to clean up expired updates.` | `"0 * * * *"` |
+| `clients.storage.mongoDB.uri` | string | `URI to mongo database.` | `"mongodb://localhost:27017"` |
+| `clients.storage.mongoDB.database` | string | `Name of database` | `"snippetService"` |
+| `clients.storage.mongoDB.maxPoolSize` | int | `Limits number of connections.` | `16` |
+| `clients.storage.mongoDB.maxConnIdleTime` | string | `Close connection when idle time reach the value.` | `4m` |
+| `clients.storage.mongoDB.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `clients.storage.mongoDB.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
+| `clients.storage.mongoDB.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
+| `clients.storage.mongoDB.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+
+### Resource Aggregate Client
+
+Resource Aggregate client is responsible for updating resources in the device when conditions are satisfied or on-demand by the user.
+
+| Property | Type | Description | Default |
+| ---------- | -------- | -------------- | ------- |
+| `clients.resourceAggregate.grpc.address` | string | `Address of the Resource Aggregate.` | `""` |
+| `clients.resourceAggregate.grpc.sendMsgSize` | int32 | `Set the max message size in bytes the server can send. 0 means 2147483647.` | `4194304` |
+| `clients.resourceAggregate.grpc.recvMsgSize` | int32 | `Set the max message size in bytes the server can receive. 0 means 4194304.` | `4194304` |
+| `clients.resourceAggregate.grpc.enforcementPolicy.minTime` | string | `The minimum amount of time a client should wait before sending a keepalive ping. Otherwise, the server closes the connection.` | `5s`|
+| `clients.resourceAggregate.grpc.enforcementPolicy.permitWithoutStream` | bool |  `If true, the server allows keepalive pings even when there are no active streams (RPCs). Otherwise, the server closes the connection.`  | `true` |
+| `clients.resourceAggregate.grpc.keepAlive.maxConnectionIdle` | string | `A duration for the amount of time after which an idle connection would be closed by sending a GoAway. 0s means infinity.` | `0s` |
+| `clients.resourceAggregate.grpc.keepAlive.maxConnectionAge` | string | `A duration for the maximum amount of time a connection may exist before it will be closed by sending a GoAway. 0s means infinity.` | `0s` |
+| `clients.resourceAggregate.grpc.keepAlive.maxConnectionAgeGrace` | string | `An additive period after MaxConnectionAge, after which the connection will be forcibly closed. 0s means infinity.` | `0s` |
+| `clients.resourceAggregate.grpc.keepAlive.time` | string | `After a duration of this time if the server doesn't see any activity it pings the client to see if the transport is still alive.` | `2h` |
+| `clients.resourceAggregate.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
 | `clients.resourceAggregate.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.resourceAggregate.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `clients.resourceAggregate.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `clients.resourceAggregate.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
-| `clients.resourceAggregate.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
-| `clients.resourceAggregate.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
-| `clients.resourceAggregate.grpc.keepAlive.permitWithoutStream` | bool | `If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent.` | `false` |
-
-### Resource Directory Client
-
-Client configurations to internally connect to Resource Directory service.
-
-| Property | Type | Description | Default |
-| ---------- | -------- | -------------- | ------- |
-| `clients.resourceDirectory.grpc.address` | string | `Resource Directory service address.` | `"127.0.0.1:9100"` |
-| `clients.resourceDirectory.grpc.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
-| `clients.resourceDirectory.grpc.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `clients.resourceDirectory.grpc.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `clients.resourceDirectory.grpc.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
-| `clients.resourceDirectory.grpc.keepAlive.time` | string | `After a duration of this time if the client doesn't see any activity it pings the server to see if the transport is still alive.` | `10s` |
-| `clients.resourceDirectory.grpc.keepAlive.timeout` | string | `After having pinged for keepalive check, the client waits for a duration of Timeout and if no activity is seen even after that the connection is closed.` | `20s` |
-| `clients.resourceDirectory.grpc.keepAlive.permitWithoutStream` | bool | `If true, client sends keepalive pings even with no active RPCs. If false, when there are no active RPCs, Time and Timeout will be ignored and no keepalive pings will be sent.` | `false` |
 
 ### Open telemetry exporter
 
