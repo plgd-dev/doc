@@ -38,8 +38,8 @@ gRPC API of the Snippet service as defined [here](https://github.com/plgd-dev/hu
 | `apis.grpc.address` | string | `Listen specification <host>:<port> for grpc client connection.` | `"0.0.0.0:9100"` |
 | `apis.grpc.sendMsgSize` | int32 | `Set the max message size in bytes the server can send. 0 means 2147483647` | `4194304` |
 | `apis.grpc.recvMsgSize` | int32 | `Set the max message size in bytes the server can receive. 0 means 4194304` | `4194304` |
-| `apis.grpc.enforcementPolicy.minTime` | string | `The minimum amount of time a client should wait before sending a keepalive ping. Otherwise, the server close connection.` | `5s`|
-| `apis.grpc.enforcementPolicy.permitWithoutStream` | bool |  `If true, server allows keepalive pings even when there are no active streams(RPCs). Otherwise, the server close connection.`  | `true` |
+| `apis.grpc.enforcementPolicy.minTime` | string | `The minimum amount of time a client should wait before sending a keepalive ping. Otherwise, the server closes the connection.` | `5s`|
+| `apis.grpc.enforcementPolicy.permitWithoutStream` | bool |  `If true, the server allows keepalive pings even when there are no active streams (RPCs). Otherwise, the server closes the connection.`  | `true` |
 | `apis.grpc.keepAlive.maxConnectionIdle` | string | `A duration for the amount of time after which an idle connection would be closed by sending a GoAway. 0s means infinity.` | `0s` |
 | `apis.grpc.keepAlive.maxConnectionAge` | string | `A duration for the maximum amount of time a connection may exist before it will be closed by sending a GoAway. 0s means infinity.` | `0s` |
 | `apis.grpc.keepAlive.maxConnectionAgeGrace` | string | `An additive period after MaxConnectionAge, after which the connection will be forcibly closed. 0s means infinity.` | `0s` |
@@ -114,8 +114,8 @@ Resource Aggregate client is responsible for updating resources in the device wh
 | `clients.resourceAggregate.grpc.address` | string | `Address of the Resource Aggregate.` | `""` |
 | `clients.resourceAggregate.grpc.sendMsgSize` | int32 | `Set the max message size in bytes the server can send. 0 means 2147483647` | `4194304` |
 | `clients.resourceAggregate.grpc.recvMsgSize` | int32 | `Set the max message size in bytes the server can receive. 0 means 4194304` | `4194304` |
-| `clients.resourceAggregate.grpc.enforcementPolicy.minTime` | string | `The minimum amount of time a client should wait before sending a keepalive ping. Otherwise, the server close connection.` | `5s`|
-| `clients.resourceAggregate.grpc.enforcementPolicy.permitWithoutStream` | bool |  `If true, server allows keepalive pings even when there are no active streams(RPCs). Otherwise, the server close connection.`  | `true` |
+| `clients.resourceAggregate.grpc.enforcementPolicy.minTime` | string | `The minimum amount of time a client should wait before sending a keepalive ping. Otherwise, the server closes the connection.` | `5s`|
+| `clients.resourceAggregate.grpc.enforcementPolicy.permitWithoutStream` | bool |  `If true, the server allows keepalive pings even when there are no active streams (RPCs). Otherwise, the server closes the connection.`  | `true` |
 | `clients.resourceAggregate.grpc.keepAlive.maxConnectionIdle` | string | `A duration for the amount of time after which an idle connection would be closed by sending a GoAway. 0s means infinity.` | `0s` |
 | `clients.resourceAggregate.grpc.keepAlive.maxConnectionAge` | string | `A duration for the maximum amount of time a connection may exist before it will be closed by sending a GoAway. 0s means infinity.` | `0s` |
 | `clients.resourceAggregate.grpc.keepAlive.maxConnectionAgeGrace` | string | `An additive period after MaxConnectionAge, after which the connection will be forcibly closed. 0s means infinity.` | `0s` |
