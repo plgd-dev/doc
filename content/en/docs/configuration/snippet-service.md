@@ -95,6 +95,7 @@ plgd hub uses MongoDB database as a storage for conditions, configurations and a
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
+| `clients.storage.cleanUpExpiredUpdates` | string | `Cron expression to clean up expired updates.` | `"0 * * * *"` |
 | `clients.storage.mongoDB.uri` | string | `URI to mongo database.` | `"mongodb://localhost:27017"` |
 | `clients.storage.mongoDB.database` | string | `Name of database` | `"snippetService"` |
 | `clients.storage.mongoDB.maxPoolSize` | int | `Limits number of connections.` | `16` |
@@ -110,7 +111,6 @@ Resource Aggregate client is responsible for updating resources in the device wh
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `clients.resourceAggregate.cleanUpExpiredUpdates` | string | `Cron expression to clean up expired updates.` | `"0 * * * *"` |
 | `clients.resourceAggregate.grpc.address` | string | `Address of the Resource Aggregate.` | `""` |
 | `clients.resourceAggregate.grpc.sendMsgSize` | int32 | `Set the max message size in bytes the server can send. 0 means 2147483647` | `4194304` |
 | `clients.resourceAggregate.grpc.recvMsgSize` | int32 | `Set the max message size in bytes the server can receive. 0 means 4194304` | `4194304` |
