@@ -70,11 +70,15 @@ plgd hub uses NATS messaging system as a event bus.
 | ---------- | -------- | -------------- | ------- |
 | `clients.eventBus.nats.url` | string | `URL to nats messaging system.` | `"nats://localhost:4222"` |
 | `clients.eventBus.nats.flusherTimeout` | string | `Define flush timeout for publishing message.` | `"30s"` |
-| `clients.eventBus.nats.jetstream`| bool | `If true, events will be published to jetstream.` | `false` |
 | `clients.eventBus.nats.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
 | `clients.eventBus.nats.tls.keyFile` | string | `File name of private key in PEM format.` | `""` |
 | `clients.eventBus.nats.tls.certFile` | string | `File name of certificate in PEM format.` | `""` |
 | `clients.eventBus.nats.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `clients.eventBus.nats.jetstream`| bool | `If true, events will be published to jetstream.` | `false` |
+| `clients.eventBus.nats.leadResourceType.enabled` | bool | `If true, publish events to NATS with lead resource type subject token included.` | `false` |
+| `clients.eventBus.nats.leadResourceType.regexFilter` | []string | `List of regex expressions used to find resouce type that will be used as the lead resource type subject for resource-level events. The expressions are iterated in order and the first matched resource type of the resource associated with the event is used in the NATS subject.` | `[]` |
+`clients.eventBus.nats.leadResourceType.filter` | string | `Can contain values "first", "last" or be kept empty (""). If "first" is used, the first resource type of the resource associated with the event will be used as the lead resource type in the NATS subject. If "last" is used, the last resource type is used in the NATS subject. If both "regexFilter" and "filter" properties are set, "regexFilter" takes precedence and "filter" is only examined if no resource type is matched by "regexFilter". If neither are set, the NATS subject will not have a lead resource type, but it will just have the "leadrt" token if the feature is enabled.` | `""` |
+| `clients.eventBus.nats.leadResourceType.useUUID` | bool | `If true then do not use the selected resource type as a token directly, but encode it into a UUID string.` | `false` |
 
 ### Event Store
 

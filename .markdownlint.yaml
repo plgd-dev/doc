@@ -1,0 +1,12 @@
+# configuration for markdownlint vscode extension
+# something is broken about yaml front-matter detection
+MD002: false
+MD041: false
+# enable long lines
+MD013: false # line-length
+# enable ordered lists indexed by letters (a, b, c)
+MD029: false
+MD033: false
+# in mdl the default is 3 spaces
+MD007: # ul-indent
+  indent: 3

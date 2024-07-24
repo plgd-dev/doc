@@ -17,62 +17,6 @@ There are still some edge-cases when the plgd event couldn't be published to the
 More information about the JetStream can be found [here](https://docs.nats.io/jetstream).
 {{< /note >}}
 
-## NATS subjects overview
-
-### Definitions
-
-- `ownerID` is the owner of the device. It is calculated as `uuid.NewV5(uuid.NamespaceURL, value of JWT ownerClaim)`.
-- `deviceID` is the UUID of the device.
-- `hrefID` is the identifier of resource. It is calculated as `uuid.NewV5(uuid.NamespaceURL, href)`, where the `href` is a resource path. (eg "/oic/d").
-
-### Device events
-
-Each event is compressed by [snappy](https://github.com/google/snappy) and encoded in protobuf [devices event envelope](https://github.com/plgd-dev/hub/blob/main/resource-aggregate/cqrs/eventbus/pb/eventbus.proto). The event envelope consist of `Event.data` containing the event and `Event.event_type` describing the type of the event.
-
-#### Resource links
-
-- `plgd.owners.{ownerID}.devices.{deviceID}.resource-links.{eventType}` publishes resource-links events of types `resourcelinkspublished`, `resourcelinksunpublished`, `resourcelinkssnapshottaken` for device `deviceID` and `ownerID`
-
-#### Metadata events
-
-- `plgd.owners.{ownerID}.devices.{deviceID}.metadata.{eventType}` publishes metadata events of types `devicemetadataupdatepending`,`devicemetadataupdated`, `devicemetadatasnapshottaken` for device `deviceID` and `ownerID`
-
-#### Resources events
-
-- `plgd.owners.{ownerID}.devices.{deviceID}.resources.{hrefID}.{eventType}` publishes resources events of types `resourcechanged`, `resourcecreated`, `resourcecreatepending`, `resourcedeleted` `resourcedeletepending`, `resourceretrieved`, `resourceretrievepending`, `resourcestatesnapshottaken`, `resourceupdated`, `resourceupdatepending` for resource `hrefID`, `deviceID` and `ownerID`.
-
-### Owner events
-
-Each event is encoded in protobuf [event envelope](https://github.com/plgd-dev/hub/blob/main/authorization/pb/events.proto) and then compressed by [snappy](https://github.com/google/snappy).
-
-#### Registration events
-
-- `plgd.owners.{ownerID}.registrations.{eventType}` publishes owner events of types `devicesregistered`,`devicesunregistered` for `ownerID`.
-
-### Consumer subscriptions options
-
-For the consumers of events you can subscribe to:
-
-- `plgd.owners.>` retrieves all events of the hub.
-- `plgd.owners.{ownerId}.>` retrieves all events of the owner with the `ownerId`.
-- `plgd.owners.*.devices.{deviceId}.>` retrieves all events of the device with the `deviceId`.
-- `plgd.owners.*.devices.{deviceId}.resource-links.>` retrieves all resource link events of the device with the `deviceId`.
-- `plgd.owners.*.devices.{deviceId}.resource-links.resourcelinkspublished` retrieves the `resourcelinkspublished` event of the device with the `deviceId`.
-- `plgd.owners.*.devices.*.resource-links.>` retrieves all resource link events of all devices.
-- `plgd.owners.{ownerId}.devices.*.resource-links.>` retrieves all resource link events of all devices belonging to the owner with the `ownerId`.
-- `plgd.owners.*.devices.{deviceId}.metadata.>` retrieves all metadata events of the device with the `deviceId`.
-- `plgd.owners.*.devices.{deviceId}.metadata.devicemetadataupdated` retrieves the `devicemetadataupdated` event of the device with the `deviceId`.
-- `plgd.owners.*.devices.*.metadata.>` retrieves all metadata events of all devices.
-- `plgd.owners.{ownerId}.devices.*.metadata.>` retrieves all metadata events of all devices belonging to the owner with the `ownerId`.
-- `plgd.owners.*.devices.{deviceId}.resources.>` retrieves all resource events of the device with the `deviceId`.
-- `plgd.owners.*.devices.{deviceId}.resources.{hrefId}.>` retrieves all events of the resource with the `hrefId` for the device with the `deviceId`.
-- `plgd.owners.*.devices.{deviceId}.resources.{hrefId}.resourcechanged` retrieves the `resourcechanged` events of the resource with the `hrefId` for the device with the `deviceId`.
-- `plgd.owners.*.devices.{deviceId}.resources.*.resourcechanged` retrieves the `resourcechanged` events of all resources for the device with the `deviceId`.
-- `plgd.owners.*.devices.*.resources.*.resourcechanged` retrieves the `resourcechanged` events of all resources for all devices.
-- `plgd.owners.*.devices.*.resources.{hrefId}.resourcechanged` retrieves the `resourcechanged` events of the resource with the `hrefId` for all devices.
-- `plgd.owners.{ownerId}.devices.*.resources.*.resourcechanged` retrieves the `resourcechanged` events of all resources for all devices belonging to the owner with the `ownerId`.
-- `plgd.owners.{ownerId}.devices.*.resources.{hrefId}.resourcechanged` retrieves the `resourcechanged` events of the resource with the `hrefId` for all devices belonging to the owner with the `ownerId`.
-
 ## Enable JetStream
 
 {{< note >}}
