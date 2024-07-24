@@ -150,7 +150,7 @@ Each event is encoded in protobuf [event envelope](https://github.com/plgd-dev/h
 
 ### Consumer subscriptions options
 
-For the consumers of events you can subscribe to:
+For the consumers of events, you can subscribe to:
 
 - `plgd.owners.>` retrieves all events of the hub.
 - `plgd.owners.{ownerId}.>` retrieves all events of the owner with the `ownerId`.
