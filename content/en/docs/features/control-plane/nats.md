@@ -15,9 +15,9 @@ Plgd hub services use NATS as an EventBus and MongoDB as an EventStore.
 
 - `ownerID`: The owner of the device, calculated as `uuid.NewV5(uuid.NamespaceURL, value of JWT ownerClaim)`.
 - `deviceID`: The UUID of the device.
-- `hrefID`: The identifier of a resource, calculated as `uuid.NewV5(uuid.NamespaceURL, href)`, where `href` is a resource path (e.g., "/oic/d").
+- `hrefID`: The identifier of a resource, calculated as `uuid.NewV5(uuid.NamespaceURL, href)`, where `href` is a resource path (e.g. "/oic/d").
 - `leadResourceType`: The selected resource type for resource events.
-- `leadResourceTypeID`: The identifier of the selected resource type, calculated as `uuid.NewV5(uuid.NamespaceURL, resourceType)`, where `resourceType` is a resource type (e.g., "oic.wk.d").
+- `leadResourceTypeID`: The identifier of the selected resource type, calculated as `uuid.NewV5(uuid.NamespaceURL, resourceType)`, where `resourceType` is a resource type (e.g. "oic.wk.d").
 
 ### Device Events
 
@@ -168,25 +168,20 @@ For the consumers of events you can subscribe to:
 
 If the Lead Resource Type feature is disabled:
 
-- `plgd.owners.*.devices.{deviceId}.resources.{hrefId}.resourcechanged` retrieves the `resourcechanged` events of the resource with the `hrefId` for the device with the `deviceId`.
-- `plgd.owners.*.devices.{deviceId}.resources.*.resourcechanged` retrieves the `resourcechanged` events of all resources for the device with the `deviceId`.
-- `plgd.owners.*.devices.*.resources.*.resourcechanged` retrieves the `resourcechanged` events of all resources for all devices.
-- `plgd.owners.*.devices.*.resources.{hrefId}.resourcechanged` retrieves the `resourcechanged` events of the resource with the `hrefId` for all devices.
-- `plgd.owners.{ownerId}.devices.*.resources.*.resourcechanged` retrieves the `resourcechanged` events of all resources for all devices belonging to the owner with the `ownerId`.
-- `plgd.owners.{ownerId}.devices.*.resources.{hrefId}.resourcechanged` retrieves the `resourcechanged` events of the resource with the `hrefId` for all devices belonging to the owner with the `ownerId`.
+- `plgd.owners.*.devices.{deviceId}.resources.{hrefId}.{eventType}` retrieves the `eventType` events of the resource with the `hrefId` for the device with the `deviceId`.
+- `plgd.owners.*.devices.{deviceId}.resources.*.{eventType}` retrieves the `eventType` events of all resources for the device with the `deviceId`.
+- `plgd.owners.*.devices.*.resources.*.{eventType}` retrieves the `eventType` events of all resources for all devices.
+- `plgd.owners.*.devices.*.resources.{hrefId}.{eventType}` retrieves the `eventType` events of the resource with the `hrefId` for all devices.
+- `plgd.owners.{ownerId}.devices.*.resources.*.{eventType}` retrieves the `eventType` events of all resources for all devices belonging to the owner with the `ownerId`.
+- `plgd.owners.{ownerId}.devices.*.resources.{hrefId}.{eventType}` retrieves the `eventType` events of the resource with the `hrefId` for all devices belonging to the owner with the `ownerId`.
 
 With the Lead Resource Type feature enabled, the equivalent subjects are modified to:
 
-- `plgd.owners.*.devices.{deviceId}.resources.{hrefId}.resourcechanged.leadrt.{leadResourceType}`
-- `plgd.owners.*.devices.{deviceId}.resources.*.resourcechanged.>`
-- `plgd.owners.*.devices.*.resources.*.resourcechanged.>`
-- `plgd.owners.*.devices.*.resources.{hrefId}.resourcechanged.>`
-- `plgd.owners.{ownerId}.devices.*.resources.*.resourcechanged.>`
-- `plgd.owners.{ownerId}.devices.*.resources.{hrefId}.resourcechanged.>`
+- `plgd.owners.*.devices.{deviceId}.resources.{hrefId}.{eventType}.leadrt.{leadResourceType}`
+- `plgd.owners.*.devices.{deviceId}.resources.*.{eventType}.>`
+- `plgd.owners.*.devices.*.resources.*.{eventType}.>`
+- `plgd.owners.*.devices.*.resources.{hrefId}.{eventType}.>`
+- `plgd.owners.{ownerId}.devices.*.resources.*.{eventType}.>`
+- `plgd.owners.{ownerId}.devices.*.resources.{hrefId}.{eventType}.>`
 
 These subscription options provide flexibility for consumers to filter events based on specific criteria, such as device ID, owner ID, and resource ID, and they also support wildcard subscriptions for broader event capture.
-
-## Conclusion
-
-This documentation provides an overview of how plgd hub services utilize NATS for publishing and subscribing to events. By understanding the structure of NATS subjects and the configuration options available, users can effectively manage and consume events within the plgd ecosystem.
-The Lead Resource Type feature adds an additional layer of control, enabling more precise event handling based on resource types.
