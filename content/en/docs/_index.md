@@ -9,4 +9,5 @@ otherTopicsTitle: 'Other topics'
 recentlyUpdatedTitle: 'Recently updated'
 needHelpTitle: 'Need help?'
 contactUsButtonText: 'Contact us'
+isRootPage: true
 ---
