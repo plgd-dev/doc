@@ -1,3 +1,4 @@
+# configuration for mdl linter
 all
 # something is broken about yaml front-matter detection
 exclude_rule 'MD002'

@@ -90,16 +90,16 @@ The lead resource type for a given resource is selected based on the following c
 
 - **Regex Filter:**
 
-  - `regexFilter` is an array of regex expressions used to match resource types.
-  - The first matching resource type in the array is used.
+   - `regexFilter` is an array of regex expressions used to match resource types.
+   - The first matching resource type in the array is used.
 
 - **Filter:**
 
-  - `filter` is an enumeration of string values ("first", "last").
-  - If `regexFilter` does not match any resource type, the `filter` property determines which resource type to use:
-    - If `filter` is "first", the first resource type is used.
-    - If `filter` is "last", the last resource type is used.
-    - Otherwise, no resource type is used.
+   - `filter` is an enumeration of string values ("first", "last").
+   - If `regexFilter` does not match any resource type, the `filter` property determines which resource type to use:
+      - If `filter` is "first", the first resource type is used.
+      - If `filter` is "last", the last resource type is used.
+      - Otherwise, no resource type is used.
 
 The algorithm for selecting the lead resource type is as follows:
 
