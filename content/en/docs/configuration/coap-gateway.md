@@ -79,6 +79,7 @@ OAuth2.0 Client is used to issuing an authorization code used by the Onboarding 
 | `apis.coap.authorization.providers[].http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.coap.authorization.providers[].http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.coap.authorization.providers[].http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `apis.coap.authorization.tokenTrustVerification.cacheExpiration` | string | `Duration for which a valid token is kept in a runtime cache before re-verification is required.` | `30s` |
 
 {{< tip >}}
 

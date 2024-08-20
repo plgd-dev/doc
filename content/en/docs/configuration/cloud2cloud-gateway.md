@@ -53,6 +53,7 @@ A configuration template is available in [cloud2cloud-gateway/config.yaml](https
 | `apis.http.authorization.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.http.authorization.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.http.authorization.http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `apis.http.authorization.tokenTrustVerification.cacheExpiration` | string | `Duration for which a valid token is kept in a runtime cache before re-verification is required.` | `30s` |
 
 ### Event Bus
 
