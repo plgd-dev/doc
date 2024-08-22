@@ -75,8 +75,8 @@ These steps will enable you to generate the necessary certificates and configure
    ```sh
    cd "$HOME"
    cat ./withMock.yaml | yq -e ".deviceProvisioningService.enrollmentGroups[0].attestationMechanism.x509.certificateChain=\"$(cat ./plgd_certs/intermediate_ca.crt)\"" > ./withUpdatedMock.yaml
-   helm upgrade -i -n plgd --create-namespace -f withUpdatedMock.yaml dps plgd/plgd-dps
-   kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "dps-plgd")
+   helm upgrade -i -n plgd --create-namespace -f withUpdatedMock.yaml hub plgd/plgd-hub
+   kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "hub-plgd")
    ```
 
 Now, you can test the Device Provisioning Service with the following methods depending on the network trust level:
@@ -94,7 +94,7 @@ To set up a Zero Trust network, it is essential for the device to authenticate t
 2. Run the example device with the device manufacturer certificate (IDevId):
 
    ```sh
-   docker run -it --rm -v $HOME/plgd_certs/device/pki_certs:/dps/bin/pki_certs ghcr.io/plgd-dev/device-provisioning-client/dps-cloud-server-debug:latest test-device "coaps+tcp://example.com:15684"
+   docker run -it --rm -v $HOME/plgd_certs/device/pki_certs:/dps/pki_certs ghcr.io/iotivity/iotivity-lite/dps-cloud-server-debug:latest test-device "coaps+tcp://example.com:15684"
    ```
 
 {{< note >}}
@@ -122,7 +122,7 @@ In Trusted network device can skip validation of the Device Provisioning Service
 1. Run the example device with the device manufacturer certificate (IDevId):
 
    ```sh
-   docker run -it --rm -v $HOME/plgd_certs/device/pki_certs:/dps/bin/pki_certs ghcr.io/plgd-dev/device-provisioning-client/dps-cloud-server-debug:latest test-device "coaps+tcp://example.com:15684" --no-verify-ca
+   docker run -it --rm -v $HOME/plgd_certs/device/pki_certs:/dps/pki_certs ghcr.io/iotivity/iotivity-lite/dps-cloud-server-debug:latest test-device "coaps+tcp://example.com:15684" --no-verify-ca
    ```
 
 {{< warning >}}

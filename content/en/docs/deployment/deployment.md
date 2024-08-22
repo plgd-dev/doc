@@ -37,7 +37,6 @@ plgd    https://charts.plgd.dev
 
 // helm search repo plgd
 NAME            CHART VERSION   APP VERSION     DESCRIPTION
-plgd/plgd-dps   0.9.0           0.9.0           A Helm chart for plgd device provisioning service
 plgd/plgd-hub   2.7.15          2.7.15          A Helm chart for plgd-hub
 
 ```
