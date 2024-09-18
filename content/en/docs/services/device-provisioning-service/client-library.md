@@ -7,32 +7,20 @@ keywords: [provisioning]
 weight: 2
 ---
 
-## Get Package
-
-{{< note >}}
-Are you interested in testing out the zero-touch provisioning? [Reach out](https://plgd.dev/contact/) to us!
-{{< /note >}}
-
-The Device Provisioning Service is distributed as a `tar.gz` package, which contains the dps shared library, public C headers and an example application.
-
-{{< warning >}}
-Please examine the contents of the provided pkg-config (`.pc`) file and install required dependencies.
-{{< /warning >}}
+The Device Provisioning Service is part of the [IoTivity-lite client-server library](https://github.com/iotivity/iotivity-lite/wiki/Device-Provisioning-Service).
 
 ## DPS Client API
 
-The API is defined in the public header files provided in the distributed package.
+The API is defined in the public header file.
 
-- [dps.h](/docs/services/device-provisioning-service/static/dps-release/dps.h)
-- [dps_export.h](/docs/services/device-provisioning-service/static/dps-release/dps_export.h)
-- [dps_log.h](/docs/services/device-provisioning-service/static/dps-release/dps_log.h)
+- [plgd_dps.h](https://github.com/iotivity/iotivity-lite/blob/master/include/plgd/plgd_dps.h)
 
 ### Initialize DPS
 
 A DPS client device is an extension of an [IoTivity](https://github.com/iotivity/iotivity-lite) device. Define your desired device and add DPS code to automatically provision the device.
 
 Start up the DPS initialization by calling the `plgd_dps_init` function, which allocates and initializes required data structures.
-Use setters `plgd_dps_set_manager_callbacks`, `plgd_dps_set_skip_verify`, `plgd_dps_set_configuration_resource`, `plgd_dps_time_configure`, `plgd_dps_set_retry_configuration`, `plgd_dps_set_cloud_observer_configuration` and `plgd_dps_pki_set_expiring_limit` to configure the device.
+Use setters `plgd_dps_set_manager_callbacks`, `plgd_dps_set_skip_verify`, `plgd_dps_set_configuration_resource`, `plgd_dps_set_retry_configuration`, `plgd_dps_set_cloud_observer_configuration` and `plgd_dps_pki_set_expiring_limit` to configure the device.
 
 ### Set DPS Endpoint
 
@@ -78,7 +66,6 @@ typedef enum {
   PLGD_DPS_RENEW_CREDENTIALS = 1 << 9,
   PLGD_DPS_GET_OWNER = 1 << 10,
   PLGD_DPS_HAS_OWNER = 1 << 11,
-  PLGD_DPS_TRANSIENT_FAILURE = 1 << 14,
   PLGD_DPS_GET_TIME = 1 << 12,
   PLGD_DPS_HAS_TIME = 1 << 13,
   PLGD_DPS_TRANSIENT_FAILURE = 1 << 29,
@@ -218,7 +205,8 @@ The application uses the following retry intervals [10s, 20s, 40s, 80s, 120s] an
 
 ### Time synchronization
 
-In order for the TLS handshake to verify the server certificate and for certificate rotation to occur, the device must have the correct time. Time synchronization can be achieved by utilizing DPS clients to synchronize with the DPS server. To enable time synchronization, the function `plgd_dps_time_configure(true)` should be called. It's important to note that IoTivity-Lite needs to be compiled with the cmake option `-DPLGD_DEV_TIME_ENABLED=ON` in order to enable the [time synchronization feature](/docs/services/device-provisioning-service/time-synchronization) in the IoTivity-Lite library, and initialized with `plgd_time_init`.
+In order for the TLS handshake to verify the server certificate and for certificate rotation to occur, the device must have the correct time. Time synchronization is achieved by utilizing DPS clients to synchronize with the DPS server over a connection that does not verify the validity interval of the certificates.
+It's important to note that IoTivity-Lite needs to be compiled with the cmake option `-DPLGD_DEV_TIME_ENABLED=ON` in order to enable the [time synchronization feature](/docs/services/device-provisioning-service/time-synchronization) in the IoTivity-Lite library, and initialized with `plgd_time_configure`.
 
 {{< note >}}
 To compensate for the disabled time verification during the TLS handshake, time synchronization is established through a separate connection. Once synchronization is completed, the connection is terminated and the device's time is adjusted to bring it back into alignment. While this approach may not provide pinpoint accuracy, it is adequate for verifying the server certificate during the TLS handshake and for certificate rotation. For more precise time synchronization, utilizing NTP or another time synchronization protocol would be recommended.
@@ -287,7 +275,7 @@ The algorithm can fail, and the possible failures are handled in the following w
 
 ## Example application - dps_cloud_server
 
-Part of the package is an example application called `dps_cloud_server`. The following sections describe how DPS client library is integrated in the binary (with code examples). And the finally section shows how to run it.
+An example application called `dps_cloud_server` is available among [Iotivity-lite's examples](https://github.com/iotivity/iotivity-lite/tree/master/apps). The following sections describe how DPS client library is integrated in the binary (with code examples). And the final section shows how to run it.
 
 ### Bootstrapping device with manufacturer certificates
 
@@ -313,73 +301,74 @@ In code, the application uses [IoTivity's PKI functions to load the certificates
 static int
 dps_add_certificates(plgd_dps_context_t *dps_ctx, const char *cert_dir)
 {
-  oc_assert(dps_ctx != NULL);
-  oc_assert(cert_dir != NULL);
+  assert(dps_ctx != NULL);
+  assert(cert_dir != NULL);
 #define CERT_BUFFER_SIZE 4096
 
   char path[PATH_MAX];
-  int dpsca_credit = -1;
+  int dpsca_credid = -1;
   int mfg_credid = -1;
-  if (plgd_dps_get_skip_verify(dps_ctx)) {
-    DPS_DBG("adding of manufacturer trusted root ca skipped");
+  if (plgd_dps_get_skip_verify(dps_ctx) || g_dhcp_enabled) {
+    DPSCS_DBG("adding of manufacturer trusted root ca skipped\n");
   } else {
     unsigned char dps_ca[CERT_BUFFER_SIZE];
-    size_t dps_ca_len = sizeof(dps_ca);
-    memset(path, 0, sizeof(path));
-    strncpy(path, cert_dir, sizeof(path));
-    strcat(path, "/dpsca.pem");
-    if (dps_read_pem(path, (char *)dps_ca, &dps_ca_len) < 0) {
-      DPS_ERR("ERROR: unable to read %s", path);
+    size_t dps_ca_size = sizeof(dps_ca) / sizeof(unsigned char);
+    dps_concat_paths(path, sizeof(path), cert_dir, "/dpsca.pem");
+    if (dps_read_pem(path, (char *)dps_ca, &dps_ca_size) < 0) {
+      printf("ERROR: unable to read %s\n", path);
       goto error;
     }
-    dpsca_credid = oc_pki_add_mfg_trust_anchor(plgd_dps_get_device(dps_ctx), dps_ca, dps_ca_size);
+    dpsca_credid = oc_pki_add_mfg_trust_anchor(plgd_dps_get_device(dps_ctx),
+                                               dps_ca, dps_ca_size);
     if (dpsca_credid < 0) {
-      DPS_ERR("ERROR: installing manufacturer trusted root ca");
+      printf("ERROR: installing manufacturer trusted root ca\n");
       goto error;
     }
-    DPS_DBG("manufacturer trusted root ca credid=%d", dpsca_credid);
+    DPSCS_DBG("manufacturer trusted root ca credid=%d\n", dpsca_credid);
   }
 
   unsigned char mfg_crt[CERT_BUFFER_SIZE];
-  size_t mfg_crt_len = sizeof(mfg_crt);
-  memset(path, 0, sizeof(path));
-  strncpy(path, cert_dir, sizeof(path));
-  strcat(path, "/mfgcrt.pem");
-  if (dps_read_pem(path, (char *)mfg_crt, &mfg_crt_len) < 0) {
-    DPS_ERR("ERROR: unable to read %s", path);
+  size_t mfg_crt_size = sizeof(mfg_crt) / sizeof(unsigned char);
+  dps_concat_paths(path, sizeof(path), cert_dir, "/mfgcrt.pem");
+  if (dps_read_pem(path, (char *)mfg_crt, &mfg_crt_size) < 0) {
+    printf("ERROR: unable to read %s\n", path);
     goto error;
   }
   unsigned char mfg_key[CERT_BUFFER_SIZE];
-  size_t mfg_key_len = sizeof(mfg_key);
-  memset(path, 0, sizeof(path));
-  strncpy(path, cert_dir, sizeof(path));
-  strcat(path, "/mfgkey.pem");
-  if (dps_read_pem(path, (char *)mfg_key, &mfg_key_len) < 0) {
-    DPS_ERR("ERROR: unable to read %s", path);
+  size_t mfg_key_size = sizeof(mfg_key) / sizeof(unsigned char);
+  dps_concat_paths(path, sizeof(path), cert_dir, "/mfgkey.pem");
+  if (dps_read_pem(path, (char *)mfg_key, &mfg_key_size) < 0) {
+    printf("ERROR: unable to read %s\n", path);
     goto error;
   }
-  mfg_credid = oc_pki_add_mfg_cert(plgd_dps_get_device(dps_ctx), mfg_crt, mfg_crt_len, mfg_key, mfg_key_len);
+  mfg_credid = oc_pki_add_mfg_cert(plgd_dps_get_device(dps_ctx), mfg_crt,
+                                   mfg_crt_size, mfg_key, mfg_key_size);
   if (mfg_credid < 0) {
-    DPS_ERR("ERROR: installing manufacturer certificate");
+    printf("ERROR: installing manufacturer certificate\n");
     goto error;
   }
-  DPS_DBG("manufacturer certificate credid=%d", mfg_credid);
-  oc_pki_set_security_profile(plgd_dps_get_device(dps_ctx), OC_SP_BLACK, OC_SP_BLACK, mfg_credid);
+  DPSCS_DBG("manufacturer certificate credid=%d\n", mfg_credid);
+  oc_pki_set_security_profile(plgd_dps_get_device(dps_ctx), OC_SP_BLACK,
+                              OC_SP_BLACK, mfg_credid);
   return 0;
 
 error:
-  if (dpsca_credit != -1) {
-    if (oc_sec_remove_cred_by_credid(dpsca_credit, plgd_dps_get_device(dps_ctx))) {
-      DPS_DBG("certificate(%d) removed", dpsca_credit);
+  if (dpsca_credid != -1) {
+    if (oc_sec_remove_cred_by_credid(dpsca_credid,
+                                     plgd_dps_get_device(dps_ctx))) {
+      DPSCS_DBG("certificate(%d) removed\n", dpsca_credid);
     } else {
-      DPS_WRN("failed to remove trusted root certificate(%d)", dpsca_credit);
+      printf("WARNING: failed to remove manufacturer trusted root ca(%d)\n",
+             dpsca_credid);
     }
   }
   if (mfg_credid != -1) {
-    if (oc_sec_remove_cred_by_credid(mfg_credid, plgd_dps_get_device(dps_ctx))) {
-      DPS_DBG("certificate(%d) removed", mfg_credid);
+    if (oc_sec_remove_cred_by_credid(mfg_credid,
+                                     plgd_dps_get_device(dps_ctx))) {
+      DPSCS_DBG("certificate(%d) removed\n", mfg_credid);
     } else {
-      DPS_WRN("failed to remove manufacturer certificate(%d)", mfg_credid);
+      printf("WARNING: failed to remove manufacturer certificate(%d)\n",
+             mfg_credid);
     }
   }
   return -1;
@@ -405,7 +394,7 @@ manufacturer_setup(plgd_dps_context_t *dps_ctx)
   oc_device_info_t *dev = oc_core_get_device_info(plgd_dps_get_device(dps_ctx));
   if (dev != NULL) {
     oc_free_string(&dev->name);
-    oc_new_string(&dev->name, dps_device_name, strlen(dps_device_name));
+    oc_new_string(&dev->name, g_dps_device_name, strlen(g_dps_device_name));
   }
   plgd_dps_manager_callbacks_t callbacks = {
     .on_status_change = dps_status_handler,
@@ -418,16 +407,21 @@ manufacturer_setup(plgd_dps_context_t *dps_ctx)
     plgd_dps_pki_set_expiring_limit(dps_ctx, (uint16_t)g_expiration_limit);
   }
   if (g_observer_max_retry != -1) {
-    plgd_dps_set_cloud_observer_configuration(dps_ctx, (uint8_t)g_observer_max_retry, 1);
+    plgd_dps_set_cloud_observer_configuration(dps_ctx,
+                                              (uint8_t)g_observer_max_retry, 1);
   }
   plgd_dps_set_skip_verify(dps_ctx, g_skip_ca_verification != 0);
-  size_t dps_endpoint_len = strlen(g_dps_endpoint);
-  if (dps_endpoint_len > 0 && !plgd_dps_add_endpoint_address(dps_ctx, g_dps_endpoint, dps_endpoint_len, /*name*/NULL, /*name_len*/0)) {
-    printf("ERROR: failed to add endpoint address\n");
-    return -1;
+  for (int i = 0; i < g_dps_endpoint_count; i++) {
+    size_t dps_endpoint_len = strlen(g_dps_endpoint[i]);
+    if (dps_endpoint_len > 0 &&
+        !plgd_dps_add_endpoint_address(dps_ctx, g_dps_endpoint[i],
+                                       dps_endpoint_len, NULL, 0)) {
+      printf("ERROR: failed to add endpoint address\n");
+      return -1;
+    }
   }
-  if (dps_add_certificates(dps_ctx, dps_cert_dir) != 0) {
-    DPS_ERR("failed to add initial certificates on factory reset");
+  if (dps_add_certificates(dps_ctx, g_dps_cert_dir) != 0) {
+    printf("ERROR: failed to add initial certificates on factory reset\n");
     return -1;
   }
   plgd_dps_force_reprovision(dps_ctx);
@@ -452,20 +446,20 @@ factory_presets_cb(size_t device_id, void *data)
   (void)data;
   plgd_dps_context_t *dps_ctx = plgd_dps_get_context(device_id);
   if (dps_ctx == NULL) {
-    DPS_DBG("skip factory reset handling: empty context");
+    DPSCS_DBG("skip factory reset handling: empty context\n");
     return;
   }
 
   if (plgd_dps_on_factory_reset(dps_ctx) != 0) {
-    DPS_ERR("cannot handle factory reset");
+    printf("ERROR: cannot handle factory reset\n");
     return;
   }
   if (manufacturer_setup(dps_ctx) != 0) {
-    DPS_ERR("failed to configure device");
+    printf("ERROR: failed to configure device\n");
     return;
   }
   if (plgd_dps_manager_start(dps_ctx) != 0) {
-    DPS_ERR("failed to start dps manager");
+    printf("ERROR: failed to start dps manager\n");
     return;
   }
 }
@@ -485,17 +479,21 @@ Now we have all the parts necessary to do the full initialization of the DPS cli
 
   plgd_dps_context_t *dps_ctx = plgd_dps_get_context(g_device_id);
   if (dps_ctx == NULL) {
-    DPS_ERR("cannot start dps manager: empty context");
-    ret = -1;
-    goto finish;
+    printf("ERROR: cannot start dps manager: empty context\n");
+    ... // cleanup
+    return -1;
   }
   if (parsed_options.retry_configuration_size > 0 &&
-      !plgd_dps_set_retry_configuration(dps_ctx, parsed_options.retry_configuration,
-                                        parsed_options.retry_configuration_size)) {
-    DPS_ERR("cannot start dps manager: invalid retry configuration");
-    ret = -1;
-    goto finish;
+      !plgd_dps_set_retry_configuration(
+        dps_ctx, parsed_options.retry_configuration,
+        parsed_options.retry_configuration_size)) {
+    printf("ERROR: cannot start dps manager: invalid retry configuration\n");
+    ... // cleanup
+    return -1;
   }
+
+  ...
+
   if (!plgd_dps_manager_is_started(dps_ctx)) {
     if (g_expiration_limit != -1) {
       plgd_dps_pki_set_expiring_limit(dps_ctx, (uint16_t)g_expiration_limit);
@@ -504,16 +502,22 @@ Now we have all the parts necessary to do the full initialization of the DPS cli
       plgd_dps_set_cloud_observer_configuration(dps_ctx, (uint8_t)g_observer_max_retry, 1);
     }
     plgd_dps_set_skip_verify(dps_ctx, g_skip_ca_verification != 0);
-    plgd_dps_set_manager_callbacks(dps_ctx, dps_status_handler, /* on_change_data */ NULL, cloud_status_handler,
-                                   /* on_cloud_change_data */ NULL);
+    plgd_dps_manager_callbacks_t callbacks = {
+      .on_status_change = dps_status_handler,
+      .on_status_change_data = NULL,
+      .on_cloud_status_change = cloud_status_handler,
+      .on_cloud_status_change_data = NULL,
+    };
+    plgd_dps_set_manager_callbacks(dps_ctx, callbacks);
     if (plgd_dps_manager_start(dps_ctx) != 0) {
-      DPS_ERR("failed to start dps manager");
-      ret = -1;
-      goto finish;
+      printf("ERROR: failed to start dps manager\n");
+      ... // cleanup
+      return -1;
     }
   }
+
+  ...
   run(); // start run loop
-finish:
   ...
 ```
 
@@ -530,9 +534,14 @@ OPTIONS:
   -h | --help                       print help
   -c | --create-conf-resource       create DPS configuration resource
   -e | --expiration-limit           set certificate expiration limit (in seconds)
-  -h | --no-verify-ca               skip loading of the DPS certificate authority
-  -r | --retry-configuration        retry timeout configuration (array of non-zero values delimited by ',', maximum of 8 values is accepted; example: 1,2,4,8,16)
+  -l | --log-level                  set runtime log-level of the DPS library (supported values: disabled, trace, debug, info, notice, warning, error)
+     | --oc-log-level               set runtime log-level of the IoTivity library (supported values: disabled, trace, debug, info, notice, warning, error)
+  -n | --no-verify-ca               skip loading of the DPS certificate authority
+  -f | --dhcp-leases-file           path to the dhcp leases file (default: /var/lib/dhcp/dhclient.leases)
+  -x | --dhcp-enabled               pull dhcp leases file every 5sec
   -o | --cloud-observer-max-retry   maximal number of retries by cloud observer before forcing reprovisioning
+  -r | --retry-configuration        retry timeout configuration (array of non-zero values delimited by ',', maximum of 8 values is accepted; example: 1,2,4,8,16)
+  -s | --set-system-time            use plgd time to set system time (root required)
   -w | --wait-for-reset             don\'t start right away, but wait for SIGHUP signal
 
 

@@ -32,7 +32,7 @@ If you encounter issues with the Device Provisioning Service or Hub, follow thes
 3. Restart the pods by deleting them:
 
    ```sh
-   kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "hub-plgd")
+   kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "plgd-hub")
    ```
 
 These steps will enable debug logging and restart the necessary components, providing more detailed information for troubleshooting the issues with the Device Provisioning Service or Hub.

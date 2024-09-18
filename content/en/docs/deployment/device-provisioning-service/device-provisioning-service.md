@@ -137,7 +137,7 @@ helm upgrade -i -n plgd --create-namespace -f withMock.yaml hub plgd/plgd-hub
 You can execute these commands multiple times to update the configuration. In such cases, you will need to restart the pods by deleting them:
 
 ```sh
-kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "hub-plgd")
+kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "plgd-hub")
 ```
 
 ## Final configuration with mock oauth server

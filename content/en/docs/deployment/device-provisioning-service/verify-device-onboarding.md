@@ -76,7 +76,7 @@ These steps will enable you to generate the necessary certificates and configure
    cd "$HOME"
    cat ./withMock.yaml | yq -e ".deviceProvisioningService.enrollmentGroups[0].attestationMechanism.x509.certificateChain=\"$(cat ./plgd_certs/intermediate_ca.crt)\"" > ./withUpdatedMock.yaml
    helm upgrade -i -n plgd --create-namespace -f withUpdatedMock.yaml hub plgd/plgd-hub
-   kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "hub-plgd")
+   kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "plgd-hub")
    ```
 
 Now, you can test the Device Provisioning Service with the following methods depending on the network trust level:
