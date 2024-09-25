@@ -27,14 +27,12 @@ If you encounter issues with the Device Provisioning Service or Hub, follow thes
 
    ```sh
    helm upgrade -i -n plgd --create-namespace -f ./withUpdatedMock.yaml hub plgd/plgd-hub
-   helm upgrade -i -n plgd --create-namespace -f ./withUpdatedMock.yaml dps plgd/plgd-dps
    ```
 
 3. Restart the pods by deleting them:
 
    ```sh
-   kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "hub-plgd")
-   kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "dps-plgd")
+   kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "plgd-hub")
    ```
 
 These steps will enable debug logging and restart the necessary components, providing more detailed information for troubleshooting the issues with the Device Provisioning Service or Hub.
@@ -46,7 +44,7 @@ If your device is unable to connect to DPS, follow these steps:
 1. Check the DPS logs by running the following command:
 
    ```sh
-   kubectl -n plgd logs $(kubectl -n plgd get pods -o name | grep "dps-plgd")
+   kubectl -n plgd logs $(kubectl -n plgd get pods -o name | grep "plgd-hub-device-provisioning-service")
    ```
 
 2. Check the device logs in the console.

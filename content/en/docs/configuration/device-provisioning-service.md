@@ -14,12 +14,12 @@ The Device Provisioning Service provides API to provision device to the [plgd/hu
 Before you use the image you need to setup [K8s access to private registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry).
 
 ```bash
-docker pull ghcr.io/plgd-dev/device-provisioning-service/device-provisioning-service:latest
+docker pull ghcr.io/plgd-dev/hub/device-provisioning-service:latest
 ```
 
 ## YAML Configuration
 
-A configuration template is available on [config.yaml](https://github.com/plgd-dev/device-provisioning-service/blob/main/config.yaml).
+A configuration template is available on [config.yaml](https://github.com/plgd-dev/hub/blob/main/device-provisioning-service/config.yaml).
 
 ### Logging
 
@@ -38,7 +38,7 @@ CoAP API as specified in the [workflow](./workflow.puml).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
-| `apis.coap.address` | string | `Listen specification <host>:<port> for coap client connection.` | `"0.0.0.0:5688"` |
+| `apis.coap.address` | string | `Listening specification <host>:<port> for coap client connection.` | `"0.0.0.0:15684"` |
 | `apis.coap.protocols` | []string | `Protocol for coap connection. The supported values are: "tcp", "udp" .` | `["tcp"]` |
 | `apis.coap.maxMessageSize` | int | `Max message size which can be sent/received via coap. i.e. 256*1024 = 262144 bytes.` | `262144` |
 | `apis.coap.messagePoolSize` | int | `Defines the maximum preallocated messages in the pool for parse/create coap messages.` | `1000` |
@@ -50,27 +50,30 @@ CoAP API as specified in the [workflow](./workflow.puml).
 
 ### HTTP API
 
-The plgd device provisioning service REST API is defined by [swagger](https://raw.githubusercontent.com/plgd-dev/device-provisioning-service/main/pb/service.swagger.json).
+The plgd device provisioning service REST API is defined by [swagger](https://raw.githubusercontent.com/plgd-dev/hub/main/device-provisioning-service/pb/service.swagger.json).
 
 | Property | Type | Description | Default |
 | ---------- | -------- | -------------- | ------- |
 | `apis.http.enabled` | bool | `Enable HTTP API.` | `false` |
-| `apis.http.address` | string | `Listen specification <host>:<port> for http client connection.` | `"0.0.0.0:9100"` |
+| `apis.http.address` | string | `Listening specification <host>:<port> for http client connection.` | `"0.0.0.0:9100"` |
 | `apis.http.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
 | `apis.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.http.tls.clientCertificateRequired` | bool | `If true, require client certificate.` | `true` |
 | `apis.http.authorization.authority` | string | `Authority is the address of the token-issuing authentication server. Services will use this URI to find and retrieve the public key that can be used to validate the token’s signature.` | `""` |
+| `apis.http.authorization.ownerClaim` | string | `Claim used to identify owner of the device.` | `"sub"` |
 | `apis.http.authorization.audience` | string | `Identifier of the API configured in your OAuth provider.` | `""` |
-| `apis.http.authorization.http.maxIdleConns` | int | `It controls the maximum number of idle (keep-alive) connections across all hosts. Zero means no limit.` | `16` |
-| `apis.http.authorization.http.maxConnsPerHost` | int | `It optionally limits the total number of connections per host, including connections in the dialing, active, and idle states. On limit violation, dials will block. Zero means no limit.` | `32` |
-| `apis.http.authorization.http.maxIdleConnsPerHost` | int | `If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used.` | `16` |
-| `apis.http.authorization.http.idleConnTimeout` | string | `The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit.` | `30s` |
-| `apis.http.authorization.http.timeout` | string | `A time limit for requests made by this Client. A Timeout of zero means no timeout.` | `10s` |
-| `apis.http.authorization.http.tls.caPool` | string | `File path to the root certificate in PEM format which might contain multiple certificates in a single file.` |  `""` |
-| `apis.http.authorization.http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
-| `apis.http.authorization.http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
-| `apis.http.authorization.http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `apis.http.authorization.endpoints[].authority` | string | `Authority is the address of the token-issuing authentication server. Services will use this URI to find and retrieve the public key that can be used to validate the token’s signature.` | `""` |
+| `apis.http.authorization.endpoints[].http.maxIdleConns` | int | `It controls the maximum number of idle (keep-alive) connections across all hosts. Zero means no limit.` | `16` |
+| `apis.http.authorization.endpoints[].http.maxConnsPerHost` | int | `It optionally limits the total number of connections per host, including connections in the dialing, active, and idle states. On limit violation, dials will block. Zero means no limit.` | `32` |
+| `apis.http.authorization.endpoints[].http.maxIdleConnsPerHost` | int | `If non-zero, controls the maximum idle (keep-alive) connections to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used.` | `16` |
+| `apis.http.authorization.endpoints[].http.idleConnTimeout` | string | `The maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit.` | `30s` |
+| `apis.http.authorization.endpoints[].http.timeout` | string | `A time limit for requests made by this Client. A Timeout of zero means no timeout.` | `10s` |
+| `apis.http.authorization.endpoints[].http.tls.caPool` | []string | `File paths to the root certificates in PEM format. The file may contain multiple certificates.` |  `[]` |
+| `apis.http.authorization.endpoints[].http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
+| `apis.http.authorization.endpoints[].http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
+| `apis.http.authorization.endpoints[].http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `apis.http.authorization.tokenTrustVerification.cacheExpiration` | string | `Duration for which a valid token is kept in a runtime cache before re-verification is required.` | `30s` |
 | `apis.http.readTimeout` | string | `The maximum duration for reading the entire request, including the body by the server. A zero or negative value means there will be no timeout.` | `8s` |
 | `apis.http.readHeaderTimeout` | string | `The amount of time allowed to read request headers by the server. If readHeaderTimeout is zero, the value of readTimeout is used. If both are zero, there is no timeout.` | `4s` |
 | `apis.http.writeTimeout` | string | `The maximum duration before the server times out writing of the response. A zero or negative value means there will be no timeout.` | `16s` |
@@ -172,17 +175,3 @@ OAuth2.0 Client is used to obtain JWT with ownerClaim an deviceIDClaim via the c
 You might have one client, but multiple APIs registered in the OAuth2.0 Server. What you might want to prevent is to be able to contact all the APIs of your system with one token. This audience allows you to request the token for a specific API. If you configure it to myplgdc2c.api in the Auth0, you have to set it here if you want to also validate it.
 
 {{< /tip >}}
-
-### Task Queue
-
-| Property | Type | Description | Default |
-| ---------- | -------- | -------------- | ------- |
-| `taskQueue.goPoolSize` | int | `Maximum number of running goroutine instances.` | `1600` |
-| `taskQueue.size` | int | `Size of queue. If it exhausted, submit returns error.` | `2097152` |
-| `taskQueue.maxIdleTime` | string | `Sets up the interval time of cleaning up goroutines. Zero means never cleanup.` | `10m` |
-
-{{< note >}}
-
-Note that the string type related to time (i.e. timeout, idleConnTimeout, expirationTime) is decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us", "ms", "s", "m", "h".
-
-{{< /note >}}

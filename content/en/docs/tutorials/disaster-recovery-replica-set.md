@@ -291,7 +291,7 @@ Ensure that you have cert-manager installed on the standby cluster as well.
 
 The primary cluster will deploy the Hub with all APIs exposed on the `primary.plgd.cloud` domain. The CoAP gateway listens on NodePort `15684`, and the device provisioning service listens on NodePort `5684`. The MongoDB replica set is exposed via a LoadBalancer service type, requiring a client certificate (mTLS) to connect to MongoDB.
 
-To deploy the plgd-hub and plgd-dps Helm charts on the primary cluster, use the following Helm command:
+To deploy the plgd-hub Helm charts on the primary cluster, use the following Helm command:
 
 ```bash
 # Set variables
@@ -387,6 +387,7 @@ resourcedirectory:
   publicConfiguration:
     coapGateway: "coaps+tcp://$DOMAIN:15684"
 deviceProvisioningService:
+  enabled: true
   apiDomain: "$DOMAIN"
   service:
     type: NodePort
@@ -419,7 +420,6 @@ $(sed 's/^/            /' $MANUFACTURER_CERTIFICATE_CA)
             audience: "https://$DOMAIN"
 EOF
 helm upgrade -i -n plgd --create-namespace -f values.yaml hub plgd/plgd-hub
-helm upgrade -i -n plgd --create-namespace -f values.yaml dps plgd/plgd-dps
 ```
 
 Now we need to get the IP addresses of the MongoDB members and set them to the DNS. The external IP address of the LoadBalancer is used to connect to the MongoDB replica set from the other cluster.
@@ -556,6 +556,7 @@ resourcedirectory:
   publicConfiguration:
     coapGateway: "coaps+tcp://$DOMAIN:15684"
 deviceProvisioningService:
+  enabled: true
   apiDomain: "$DOMAIN"
   service:
     type: NodePort
@@ -588,7 +589,6 @@ $(sed 's/^/            /' $MANUFACTURER_CERTIFICATE_CA)
             audience: "https://$DOMAIN"
 EOF
 helm upgrade -i -n plgd --create-namespace -f values.yaml hub plgd/plgd-hub
-helm upgrade -i -n plgd --create-namespace -f values.yaml dps plgd/plgd-dps
 ```
 
 Next, we need to get the IP addresses of the MongoDB members and set them to the DNS server running on `192.168.1.1`, similar to the primary cluster.
@@ -650,7 +650,6 @@ The final step is to run plgd pods on the standby cluster. Set the `global.stand
 
 ```bash
 helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=active --set global.standby=false --set nats.enabled=true hub plgd/plgd-hub
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=active --set global.standby=false --set nats.enabled=true dps plgd/plgd-dps
 ```
 
 After rotating the device provisioning endpoints, the devices will connect to the standby cluster.
@@ -661,7 +660,6 @@ When the primary cluster is back up, set the `global.standby` flag to `true`, di
 
 ```bash
 helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=true --set nats.enabled=false hub plgd/plgd-hub
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=true --set nats.enabled=false dps plgd/plgd-dps
 ```
 
 ### How to Switch Back to the Primary Cluster
@@ -687,7 +685,6 @@ The final step is to run plgd pods on the standby cluster. Set the `global.stand
 
 ```bash
 helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=standby --set global.standby=true --set nats.enabled=false hub plgd/plgd-hub
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set mongodb.standbyTool.mode=standby --set global.standby=true --set nats.enabled=false dps plgd/plgd-dps
 ```
 
 #### Turn On plgd Pods on the Primary Cluster
@@ -696,7 +693,6 @@ When the standby cluster is ready for devices, switch back to the primary cluste
 
 ```bash
 helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=false --set nats.enabled=true hub plgd/plgd-hub
-helm upgrade -i -n plgd --create-namespace -f values.yaml --set global.standby=false --set nats.enabled=true dps plgd/plgd-dps
 ```
 
 After rotating the device provisioning endpoints, the devices will connect to the primary cluster.

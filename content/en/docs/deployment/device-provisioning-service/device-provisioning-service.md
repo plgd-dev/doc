@@ -21,7 +21,7 @@ The basic deployment uses Mock OAuth Server, so it shall be used only for test/d
 Before deploying the Device Provisioning Service on Kubernetes, make sure to follow the steps in [Hub](/docs/deployment/device-provisioning-service/hub) first. Then apply the changes from this page to the configuration. Once done, you can deploy the hub with the Device Provisioning Service.
 {{< /note >}}
 
-For Device Provisioning Service, all configuration values are documented [here](https://github.com/plgd-dev/device-provisioning-service/blob/main/charts/device-provisioning-service/README.md#values).
+For Device Provisioning Service, all configuration values are documented [here](https://github.com/plgd-dev/hub/blob/main/charts/plgd-hub/README.md#values). Look for values starting with `deviceProvisioningService`.
 
 ## Device provider for Device Provisioning Service
 
@@ -60,29 +60,6 @@ mockoauthserver:
 {{< warning >}}
 
 For production, you need to set the OAuth server client credential flow, as is described in [Customize OAuth server client credential flow](/docs/deployment/device-provisioning-service/advanced).
-
-{{< /warning >}}
-
-To allow download the Device Provisioning Service docker image by k8s, the following configuration needs to extend the configuration:
-
-```yaml
-deviceProvisioningService:
-  image:
-    dockerConfigSecret: |
-      {
-        "auths": {
-          "ghcr.io": {
-              "auth": "<DOCKER_AUTH_TOKEN>"
-          }
-        }
-      }
-```
-
-{{< note >}}
-
-To access ghcr.io, please reach out to us at [connect@plgd.dev](mailto:connect@plgd.dev) in order to request permission for your GitHub account to access the plgd device provisioning server images. You can refer to the [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) for instructions on how to allow access.
-
-{{< /note >}}
 
 ## Configure Enrollment Groups
 
@@ -155,14 +132,12 @@ To deploy the hub with the Device Provisioning Service, apply the following comm
 
 ```sh
 helm upgrade -i -n plgd --create-namespace -f withMock.yaml hub plgd/plgd-hub
-helm upgrade -i -n plgd --create-namespace -f withMock.yaml dps plgd/plgd-dps
 ```
 
 You can execute these commands multiple times to update the configuration. In such cases, you will need to restart the pods by deleting them:
 
 ```sh
-kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "hub-plgd")
-kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "dps-plgd")
+kubectl -n plgd delete $(kubectl -n plgd get pods -o name | grep "plgd-hub")
 ```
 
 ## Final configuration with mock oauth server

@@ -61,6 +61,7 @@ gRPC API of the Identity Store service as defined [here](https://github.com/plgd
 | `apis.grpc.authorization.endpoints[].http.tls.keyFile` | string | `File path to private key in PEM format.` | `""` |
 | `apis.grpc.authorization.endpoints[].http.tls.certFile` | string | `File path to certificate in PEM format.` | `""` |
 | `apis.grpc.authorization.endpoints[].http.tls.useSystemCAPool` | bool | `If true, use system certification pool.` | `false` |
+| `apis.grpc.authorization.tokenTrustVerification.cacheExpiration` | string | `Duration for which a valid token is kept in a runtime cache before re-verification is required.` | `30s` |
 
 ### Event Bus
 
