@@ -1,5 +1,5 @@
-const algoliasearch = require('algoliasearch');
-const fs = require('fs');
+import { algoliasearch } from 'algoliasearch';
+import * as fs from 'node:fs';
 
 // Initialize Algolia client
 const client = algoliasearch(process.env.APPLICATION_ID, process.env.API_KEY);
