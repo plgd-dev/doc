@@ -44,8 +44,8 @@ jobs:
           node-version: '14'
 
       - name: Push to Algolia
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           cd scripts
-          npm install algoliasearch
+          npm install
           APPLICATION_ID=${{ secrets.ALGOLIA_APPLICATION_ID }} API_KEY=${{ secrets.ALGOLIA_API_KEY }} node push-to-algolia.js ../public/algolia_final.json
