@@ -35,9 +35,11 @@ jobs:
           go build -o /usr/local/bin/adjust-algolia-output
           popd
           adjust-algolia-output < ./public/algolia.json | jq > public/algolia_final.json
+          echo "Final Algolia JSON:"
+          cat public/algolia_final.json
 
       - name: Build push-to-algolia and push to Algolia
-        # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           pushd tools/push-to-algolia
           go build -o /usr/local/bin/push-to-algolia
