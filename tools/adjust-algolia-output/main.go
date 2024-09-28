@@ -90,7 +90,13 @@ func main() {
 		}
 		data[idx] = item
 	}
-	err = WriteTo(os.Stdout, data)
+	newData := make([]map[string]interface{}, 0, len(data))
+	for _, item := range data {
+		if len(item["content"].(string)) > 0 {
+			newData = append(newData, item)
+		}
+	}
+	err = WriteTo(os.Stdout, newData)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
