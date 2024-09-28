@@ -29,23 +29,19 @@ jobs:
           mkdir -p public
           hugo-algolia --config config/_default/config.yaml
 
-      - name: Build Go binary
+      - name: Build adjust-algolia-output and adjust algolia.json
         run: |
-          cd tools/adjust-algolia-output
-          go build -o /usr/local/bin/adjust-algolia-output 
+          pushd tools/adjust-algolia-output
+          go build -o /usr/local/bin/adjust-algolia-output
+          popd
+          adjust-algolia-output < ./public/algolia.json | jq > public/algolia_final.json
+          echo "Final Algolia JSON:"
+          cat public/algolia_final.json
 
-      - name: Adjust algolia.json using binary
-        run: adjust-algolia-output < ./public/algolia.json | jq > public/algolia_final.json
-
-      - name: Install Node.js
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Push to Algolia
+      - name: Build push-to-algolia and push to Algolia
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          cd scripts
-          npm install algoliasearch
-          APPLICATION_ID=${{ secrets.ALGOLIA_APPLICATION_ID }} API_KEY=${{ secrets.ALGOLIA_API_KEY }} node push-to-algolia.js ../public/algolia_final.json
+          pushd tools/push-to-algolia
+          go build -o /usr/local/bin/push-to-algolia
+          popd
+          APPLICATION_ID=${{ secrets.ALGOLIA_APPLICATION_ID }} API_KEY=${{ secrets.ALGOLIA_API_KEY }} push-to-algolia ./public/algolia_final.json
