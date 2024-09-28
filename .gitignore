@@ -15,4 +15,5 @@ trace.out
 .idea
 node_modules
 .hugo_build.lock
-adjust-algolia-output
+tools/adjust-algolia-output/adjust-algolia-output
+tools/push-to-algolia/push-to-algolia
