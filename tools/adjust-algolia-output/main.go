@@ -15,7 +15,7 @@ import (
 type arrayFlags []string
 
 func (i *arrayFlags) String() string {
-	return "my string representation"
+	return strings.Join(*i, ", ")
 }
 
 func (i *arrayFlags) Set(value string) error {
@@ -23,83 +23,101 @@ func (i *arrayFlags) Set(value string) error {
 	return nil
 }
 
-// WriteTo writes v to writer.
-func WriteTo(w io.Writer, v interface{}) error {
+// JSON encoding and decoding helpers
+func writeJSON(w io.Writer, v interface{}) error {
 	var h codec.JsonHandle
 	h.BasicHandle.Canonical = true
-	err := codec.NewEncoder(w, &h).Encode(v)
-	if err != nil {
-		return fmt.Errorf("JSON encoder failed: %w", err)
-	}
-	return nil
+	return codec.NewEncoder(w, &h).Encode(v)
 }
 
-// ReadFrom reads and stores the result in v.
-func ReadFrom(w io.Reader, v interface{}) error {
+func readJSON(r io.Reader, v interface{}) error {
 	var h codec.JsonHandle
-	err := codec.NewDecoder(w, &h).Decode(v)
-	if err != nil {
-		return fmt.Errorf("JSON decoder failed: %w", err)
-	}
-	return nil
+	return codec.NewDecoder(r, &h).Decode(v)
 }
 
+// getParentID returns the parent directory of the objectID
 func getParentID(objectID string) string {
 	return filepath.Dir(objectID)
 }
 
-func main() {
-	rootObjectIDRegex := flag.String("root-object-id", "[a-z0-9A-Z]+/docs$", "Root object ID for the adjust title - if empty, no adjustment is made, if set the string will be used as separator")
-	adjustTitle := flag.String("adjust-title", " / ", "Adjust title - if empty, no adjustment is made, if set the string will be used as separator")
-	trimPrefixesInURI := arrayFlags{"en/"}
-	flag.Var(&trimPrefixesInURI, "trim-prefixes-in-uri", "Remove the given prefixes in the URI")
-	flag.Parse()
-
-	var data []map[string]interface{}
-	err := ReadFrom(os.Stdin, &data)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
-	}
-	var regexpRootObjectID *regexp.Regexp
-	if *rootObjectIDRegex != "" && *adjustTitle != "" {
-		regexpRootObjectID = regexp.MustCompile(*rootObjectIDRegex)
-	}
-	mapping := make(map[string]map[string]interface{})
+// adjustURIs removes prefixes from the "uri" field in each item
+func adjustURIs(data []map[string]interface{}, prefixes arrayFlags) {
 	for _, item := range data {
-		objectID := item["objectID"].(string)
-		mapping[objectID] = item
-	}
-	for idx, item := range data {
-		for _, prefix := range trimPrefixesInURI {
+		for _, prefix := range prefixes {
 			item["uri"] = strings.TrimPrefix(item["uri"].(string), prefix)
 		}
-		if regexpRootObjectID != nil {
-			parentID := getParentID(item["objectID"].(string))
-			for {
-				if regexpRootObjectID.Match([]byte(parentID)) {
-					break
-				}
-				parent, ok := mapping[parentID]
-				if !ok {
-					break
-				}
-				item["title"] = fmt.Sprintf("%v%s%v", parent["title"], *adjustTitle, item["title"])
-				parentID = getParentID(parentID)
-			}
-		}
-		data[idx] = item
 	}
-	newData := make([]map[string]interface{}, 0, len(data))
+}
+
+// adjustTitles recursively adjusts the title field for objects that match the given regex
+func adjustTitles(data []map[string]interface{}, regex *regexp.Regexp, adjustTitle string, mapping map[string]map[string]interface{}) {
+	for _, item := range data {
+		if regex == nil {
+			continue
+		}
+		parentID := getParentID(item["objectID"].(string))
+		for {
+			if regex.MatchString(parentID) {
+				break
+			}
+			parent, exists := mapping[parentID]
+			if !exists {
+				break
+			}
+			item["title"] = fmt.Sprintf("%v%s%v", parent["title"], adjustTitle, item["title"])
+			parentID = getParentID(parentID)
+		}
+	}
+}
+
+// filterNonEmptyContent filters items that have non-empty "content"
+func filterNonEmptyContent(data []map[string]interface{}) []map[string]interface{} {
+	filtered := []map[string]interface{}{}
 	for _, item := range data {
 		if len(item["content"].(string)) > 0 {
-			newData = append(newData, item)
+			filtered = append(filtered, item)
 		}
 	}
-	err = WriteTo(os.Stdout, newData)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+	return filtered
+}
+
+func main() {
+	// Parse flags
+	rootObjectIDRegex := flag.String("root-object-id", "[a-z0-9A-Z]+/docs$", "Regex to match root object IDs for title adjustment")
+	adjustTitle := flag.String("adjust-title", " / ", "String to use as separator when adjusting titles")
+	trimPrefixesInURI := arrayFlags{"en/"}
+	flag.Var(&trimPrefixesInURI, "trim-prefixes-in-uri", "Prefixes to remove from URI")
+	flag.Parse()
+
+	// Read input data
+	var data []map[string]interface{}
+	if err := readJSON(os.Stdin, &data); err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading JSON: %v\n", err)
 		os.Exit(1)
 	}
 
+	// Create regex if needed
+	var regex *regexp.Regexp
+	if *rootObjectIDRegex != "" && *adjustTitle != "" {
+		regex = regexp.MustCompile(*rootObjectIDRegex)
+	}
+
+	// Create objectID to item map
+	mapping := make(map[string]map[string]interface{})
+	for _, item := range data {
+		mapping[item["objectID"].(string)] = item
+	}
+
+	// Adjust URIs and titles
+	adjustURIs(data, trimPrefixesInURI)
+	adjustTitles(data, regex, *adjustTitle, mapping)
+
+	// Filter items with non-empty content
+	filteredData := filterNonEmptyContent(data)
+
+	// Write output
+	if err := writeJSON(os.Stdout, filteredData); err != nil {
+		fmt.Fprintf(os.Stderr, "Error writing JSON: %v\n", err)
+		os.Exit(1)
+	}
 }

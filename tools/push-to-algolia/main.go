@@ -25,12 +25,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error initializing Algolia client: %v", err)
 	}
-	//index := client.InitIndex("doc")
-
-	// Print command-line arguments
-	for i, arg := range os.Args {
-		fmt.Printf("args %d: %s\n", i, arg)
-	}
 
 	// Check if file path is provided
 	if len(os.Args) < 2 {
